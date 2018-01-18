@@ -1,0 +1,3 @@
+#!/bin/bash
+
+lualatex article.tex
