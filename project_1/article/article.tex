@@ -291,6 +291,22 @@
                 &= -4\alpha r_i\vf{e}_{{r_i}}.
             \end{align}
 
+        \subsubsection{The full system}
+            Moving to the full system allowing $\beta$ to vary and setting $a
+            \neq 0$ we write the trial wavefunction as
+            \begin{align}
+                \bra{\vf{r}}\ket{\Psi_T}
+                &= \prod_i^N \phi(\vf{r}_i)
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr),
+            \end{align}
+            where $r_{ij} = |\vf{r}_i - \vf{r}_j|$ and
+            \begin{align}
+                u(r_{ij}) = \ln\bigl[f(a, \vf{r}_i, \vf{r}_j)\bigr],
+            \end{align}
+            we wish to compute the local energy.
+
 
 
 \end{document}
