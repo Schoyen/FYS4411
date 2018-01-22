@@ -132,7 +132,7 @@
     \end{align}
     where $\alpha$ and $\beta$ are variational parameters and
     \begin{align}
-        \vf{r} = (\vf{r}_1, \vf{r}_2, \dots, \vf{r}_N).
+        \vf{r} = (\vf{r}_1, \vf{r}_2, \dots, \vf{r}_N, \alpha, \beta).
     \end{align}
     Here $g$ are the single-particle wavefunctions given by
     \begin{align}
@@ -152,5 +152,22 @@
             \Bigr) & |\vf{r}_i - \vf{r}_j| > a.
         \end{cases}
     \end{align}
+
+    \subsection{Local energy}
+        As the many-body wavefunction creates a very large configuration space,
+        where much of the wavefunction is small, we use the Metropolis algorithm
+        in order to move towards regions in configuration space with
+        ``sensible'' values. We define the \textit{local energy}, $E_L{\vf{r}}$,
+        by
+        \begin{align}
+            E_L(\vf{r})
+            &= \frac{\bra{\vf{r}}H\ket{\Psi_T}}{\bra{\vf{r}}\ket{\Psi_T}}.
+        \end{align}
+        If $\ket{\Psi_T}$ is an exact eigenfunction of the Hamiltonian, $E_L$
+        will be constant. The closer $\ket{\Psi_T}$ is to the exact wave
+        function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
+        One of the most computationally intensive part of the VMC algorithm will
+        be to compute $E_L$. We therefore find an analytical expression for
+        $E_L$ in terms of the trial wavefunction.
 
 \end{document}
