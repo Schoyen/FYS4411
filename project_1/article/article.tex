@@ -71,6 +71,8 @@
 % Macro for expectation value
 \newcommand{\expv}[1]{\langle #1 \rangle}
 
+\newcommand{\half}{\frac{1}{2}}
+
 
 
 
@@ -89,5 +91,37 @@
     We will in this project study the Variational Monte Carlo (VMC) method, and
     use it to evaluate the ground state energy of a trapped, hard sphere Bose
     gas.
+
+\section{Theory}
+    To model the trapped bosonic gas particles we use the potential
+    \begin{align}
+        V_{\text{ext}}(\vf{r})
+        &=
+        \begin{cases}
+            \half m\omega^2r^2 & (\text{S}), \\
+            \half m [
+                \omega^2(x^2 + y^2) + \omega_z^2z^2
+            ] & (\text{E}),
+        \end{cases}
+    \end{align}
+    where we can choose between a spherical (S) or an elliptical (E) harmonic
+    trap. The two-body Hamiltonian of the system is given by
+    \begin{align}
+        H = \sum_{i}^{N}h(\vf{r}_i) + \sum_{i < j}^{N}w(\vf{r}_i, \vf{r}_j),
+    \end{align}
+    where the single particle one body operator, $h$, is given by
+    \begin{align}
+        h(\vf{r}_i) = -\frac{\hbar^2}{2m}\nabla_i^2
+        + V_{\text{ext}}(\vf{r}_i),
+    \end{align}
+    and the two-body interaction operator, $w$, is
+    \begin{align}
+        w(\vf{r}_i, \vf{r}_j)
+        = \begin{cases}
+            \infty & |\vf{r}_i - \vf{r}_j| \leq a, \\
+            0 & |\vf{r}_i - \vf{r}_j| > a,
+        \end{cases}
+    \end{align}
+    where $a$ is the hard sphere of the particle.
 
 \end{document}
