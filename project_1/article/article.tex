@@ -305,7 +305,93 @@
             \begin{align}
                 u(r_{ij}) = \ln\bigl[f(a, \vf{r}_i, \vf{r}_j)\bigr],
             \end{align}
-            we wish to compute the local energy.
+            we wish to compute the local energy. The gradient is thus given by
+            \begin{align}
+                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
+                &= \nabla_k\brac{
+                    \prod_i^N\phi(\vf{r}_i)
+                    \exp\Biggl(
+                        \sum_{i < j}^N u(r_{ij})
+                    \Biggr)
+                } \\
+                &=
+                \Biggl\{
+                    \nabla_k
+                    \prod_i^N\phi(\vf{r}_i)
+                \Biggr\}
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &\qquad
+                +
+                \prod_i^N\phi(\vf{r}_i)
+                \nabla_k
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &=
+                \nabla_k\phi(\vf{r}_k)
+                \prod_{i \neq k}^N \phi(\vf{r}_i)
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &\qquad
+                +
+                \prod_i^N\phi(\vf{r}_i)
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &\qquad
+                \times
+                \nabla_k
+                \Biggl(
+                    \sum_{i < l}^N u(r_{il})
+                \Biggr).
+            \end{align}
+            The last term is extracted from the chain rule and can be evaluated
+            as
+            \begin{align}
+                \nabla_k
+                \Biggl(
+                    \sum_{i < l}^N u(r_{il})
+                \Biggr)
+                &= \begin{cases}
+                    \nabla_k u(r_{ik}) & i < k, \\
+                    \sum_{k < l}^N \nabla_k u(r_{kl}) & i = k.
+                \end{cases}
+            \end{align}
+            As $r_{ij} = r_{ji}$ we can rewrite the first case to
+            \begin{align}
+                \nabla_k u(r_{ik}) = \nabla_k u(r_{ki}).
+            \end{align}
+            Here $i$ varies with the product thus we get
+            \begin{align}
+                \nabla_k
+                \Biggl(
+                    \sum_{i < l}^N u(r_{il})
+                \Biggr)
+                &=
+                \sum_{l \neq k}^N\nabla_k u(r_{kl}).
+            \end{align}
+            We are thus left with
+            \begin{align}
+                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
+                &=
+                \nabla_k\phi(\vf{r}_k)
+                \prod_{i \neq k}^N \phi(\vf{r}_i)
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &\qquad
+                +
+                \prod_i^N\phi(\vf{r}_i)
+                \exp\Biggl(
+                    \sum_{i < j}^N u(r_{ij})
+                \Biggr) \\
+                &\qquad
+                \times
+                \sum_{l \neq k}^N\nabla_k u(r_{kl}).
+            \end{align}
 
 
 
