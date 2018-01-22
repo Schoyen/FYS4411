@@ -99,9 +99,9 @@
         &=
         \begin{cases}
             \half m\omega^2r^2 & (\text{S}), \\
-            \half m [
+            \half m \bigl[
                 \omega^2(x^2 + y^2) + \omega_z^2z^2
-            ] & (\text{E}),
+            \bigr] & (\text{E}),
         \end{cases}
     \end{align}
     where we can choose between a spherical (S) or an elliptical (E) harmonic
@@ -122,6 +122,35 @@
             0 & |\vf{r}_i - \vf{r}_j| > a,
         \end{cases}
     \end{align}
-    where $a$ is the hard sphere of the particle.
+    where $a$ is the hard sphere of the particle. The trial wavefunction we will
+    be looking at is given by
+    \begin{align}
+        \Psi_T(\vf{r})
+        &= \bra{\vf{r}}\ket{\Psi_T}
+        = \prod_i^N g(\alpha, \beta, \vf{r}_i)
+        \prod_{i < j}^N f(a, \vf{r}_i, \vf{r}_j),
+    \end{align}
+    where $\alpha$ and $\beta$ are variational parameters and
+    \begin{align}
+        \vf{r} = (\vf{r}_1, \vf{r}_2, \dots, \vf{r}_N).
+    \end{align}
+    Here $g$ are the single-particle wavefunctions given by
+    \begin{align}
+        g(\alpha, \beta, \vf{r}_i)
+        = \exp\bigl[
+            -\alpha(x_i^2 + y_i^2 + \beta z_i^2)
+        \bigr] \equiv \phi(\vf{r}_i),
+    \end{align}
+    and the correlation wavefunction, $f$, is
+    \begin{align}
+        f(a, \vf{r}_i, \vf{r}_j)
+        &=
+        \begin{cases}
+            0 & |\vf{r}_i - \vf{r}_j| \leq a, \\
+            \Bigl(
+                1 - \frac{a}{|\vf{r}_i - \vf{r}_j|}
+            \Bigr) & |\vf{r}_i - \vf{r}_j| > a.
+        \end{cases}
+    \end{align}
 
 \end{document}
