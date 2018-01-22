@@ -170,4 +170,25 @@
         be to compute $E_L$. We therefore find an analytical expression for
         $E_L$ in terms of the trial wavefunction.
 
+        \subsubsection{Non-interacting harmonic oscillator}
+            We start by finding an analytical expression for $a = 0$ and $\beta
+            = 1$, i.e., a non-interaction harmonic oscillator given by the
+            wavefunction
+            \begin{align}
+                \bra{\vf{r}}\ket{\Psi_T}
+                = \prod_i^N \exp\bigl[
+                    -\alpha |\vf{r}_i|^2
+                \bigr],
+            \end{align}
+            where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
+            $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
+            (in the spherical case)
+            \begin{align}
+                H &= \sum_i^N h(\vf{r}_i)
+                = \sum_i^N \Bigl(
+                    -\frac{\hbar^2}{2m}\nabla_i^2
+                    + \half m \omega^2 r_i^2.
+                \Bigr)
+            \end{align}
+
 \end{document}
