@@ -114,6 +114,7 @@
         h(\vf{r}_i) = -\frac{\hbar^2}{2m}\nabla_i^2
         + V_{\text{ext}}(\vf{r}_i),
     \end{align}
+    (we assume equal mass)
     and the two-body interaction operator, $w$, is
     \begin{align}
         w(\vf{r}_i, \vf{r}_j)
@@ -187,8 +188,32 @@
                 H &= \sum_i^N h(\vf{r}_i)
                 = \sum_i^N \Bigl(
                     -\frac{\hbar^2}{2m}\nabla_i^2
-                    + \half m \omega^2 r_i^2.
-                \Bigr)
+                    + \half m \omega^2 r_i^2
+                \Bigr).
+            \end{align}
+            Working in spherical coordinates the gradient and the Laplace
+            operator (applied to a function) becomes
+            \begin{align}
+                \nabla_if
+                &= \vf{e}_r\tpl{r}f
+                + \vf{e}_{\theta}\frac{1}{r}\tpl{\theta}f
+                + \vf{e}_{\phi}\frac{1}{r\sin(\theta)}\tpl{\phi}f, \\
+                \nabla_i^2f
+                &= \frac{1}{r^2}\tpl{r}
+                \bigl[
+                    r^2\tpl{r}f
+                \bigr]
+                + \frac{1}{r^2\sin(\theta)}\tpl{\theta}
+                \bigl[
+                    \sin(\theta)\tpl{\theta}f
+                \bigr] \nonumber\\
+                &\qquad
+                + \frac{1}{r^2\sin^2(\theta)}\tpl{\phi}^2f,
+            \end{align}
+            where $\vf{e}_r$ signifies the unit vector in the radial direction
+            and we use the shorthand notation
+            \begin{align}
+                \tpl{r}f \equiv \dpd[]{f}{r}.
             \end{align}
 
 \end{document}
