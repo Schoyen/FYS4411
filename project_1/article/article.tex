@@ -235,7 +235,7 @@
             \end{align}
             The gradient then becomes
             \begin{align}
-                \bra{\vf{r}}\nabla_i\ket{\Psi_T}
+                \nabla_i\bra{\vf{r}}\ket{\Psi_T}
                 &= \vf{e}_{{r_i}}\tpl{{r_i}}\prod_j^N\exp\bigl[
                     -\alpha r_j^2
                 \bigr] \\
@@ -248,7 +248,7 @@
             \end{align}
             The Laplacian is given by
             \begin{align}
-                \bra{\vf{r}}\nabla_i^2\ket{\Psi_T}
+                \nabla_i^2\bra{\vf{r}}\ket{\Psi_T}
                 &= \frac{1}{r_i^2}\tpl{{r_i}}
                 \biggl\{
                     r_i^2\tpl{{r_i}}
@@ -294,7 +294,7 @@
             \begin{align}
                 \vf{F}_i
                 &=
-                \frac{2\bra{\vf{r}}\nabla_i\ket{\Psi_T}}
+                \frac{2\nabla_i\bra{\vf{r}}\ket{\Psi_T}}
                 {\bra{\vf{r}}\ket{\Psi_T}} \\
                 &= -4\alpha r_i\vf{e}_{{r_i}}.
             \end{align}
@@ -325,7 +325,7 @@
             We wish to find an analytical expression for the local energy.
             Beginning with the gradient we get
             \begin{align}
-                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
+                \nabla_k\bra{\vf{r}}\ket{\Psi_T}
                 &= \nabla_k\Bigl[
                     \bra{\vf{r}}\ket{\Phi_T}
                     J(\vf{r})
