@@ -359,35 +359,35 @@
                         \sum_{m < n}^N u(r_{mn})
                     \Biggr).
                 \end{align}
-            The last term is extracted from the chain rule and can be evaluated
-            as
-            \begin{align}
-                \nabla_k
-                    \sum_{m < n}^N u(r_{mn})
-                &=
-                \sum_{m = 1}^{k - 1}
-                \nabla_k u(r_{mk})
-                +
-                \sum_{n = k + 1}^N
-                \nabla_k u(r_{kn}) \\
-                &=
-                \sum_{m \neq k}^N\nabla_k u(r_{km}),
-            \end{align}
-            as $r_{ij} = r_{ji}$.  We are thus left with
-            \begin{align}
-                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
-                &=
-                \Biggl\{
-                    \nabla_k\phi(\vf{r}_k)
-                    \prod_{i \neq k}^N \phi(\vf{r}_i)
-                \Biggr\}
-                \exp\Biggl(
-                    \sum_{j < k}^N u(r_{jk})
-                \Biggr)
-                +
-                \bra{\vf{r}}\ket{\Psi_T}
-                \sum_{m \neq k}^N\nabla_k u(r_{km}).
-            \end{align}
+                The last term is extracted from the chain rule and can be
+                evaluated as
+                \begin{align}
+                    \nabla_k
+                        \sum_{m < n}^N u(r_{mn})
+                    &=
+                    \sum_{m = 1}^{k - 1}
+                    \nabla_k u(r_{mk})
+                    +
+                    \sum_{n = k + 1}^N
+                    \nabla_k u(r_{kn}) \\
+                    &=
+                    \sum_{m \neq k}^N\nabla_k u(r_{km}),
+                \end{align}
+                as $r_{ij} = r_{ji}$.  We are thus left with
+                \begin{align}
+                    \bra{\vf{r}}\nabla_k\ket{\Psi_T}
+                    &=
+                    \Biggl\{
+                        \nabla_k\phi(\vf{r}_k)
+                        \prod_{i \neq k}^N \phi(\vf{r}_i)
+                    \Biggr\}
+                    \exp\Biggl(
+                        \sum_{j < k}^N u(r_{jk})
+                    \Biggr)
+                    +
+                    \bra{\vf{r}}\ket{\Psi_T}
+                    \sum_{m \neq k}^N\nabla_k u(r_{km}).
+                \end{align}
             \end{widetext}
 
 
