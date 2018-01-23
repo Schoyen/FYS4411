@@ -128,29 +128,35 @@
     \begin{align}
         \Psi_T(\vf{r})
         &= \bra{\vf{r}}\ket{\Psi_T}
-        = \prod_i^N g(\alpha, \beta, \vf{r}_i)
-        \prod_{i < j}^N f(a, \vf{r}_i, \vf{r}_j),
+        = \bra{\vf{r}}\ket{\Phi_T}
+        \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k) \\
+        &= \Biggl(
+            \prod_i^N g(\alpha, \beta, \vf{r}_i)
+        \Biggr)
+        \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k),
     \end{align}
     where $\alpha$ and $\beta$ are variational parameters and
     \begin{align}
         \vf{r} = (\vf{r}_1, \vf{r}_2, \dots, \vf{r}_N, \alpha, \beta).
     \end{align}
-    Here $g$ are the single-particle wavefunctions given by
+    Here $g$ are the single particle wavefunctions given by
     \begin{align}
         g(\alpha, \beta, \vf{r}_i)
         = \exp\bigl[
             -\alpha(x_i^2 + y_i^2 + \beta z_i^2)
         \bigr] \equiv \phi(\vf{r}_i),
     \end{align}
-    and the correlation wavefunction, $f$, is
+    and $\ket{\Phi_T}$ the \textit{Slater permanent} consisting of the $N$ first
+    single particle wavefunctions, and the correlation wavefunction, $f$, given
+    by
     \begin{align}
-        f(a, \vf{r}_i, \vf{r}_j)
+        f(a, \vf{r}_j, \vf{r}_k)
         &=
         \begin{cases}
-            0 & |\vf{r}_i - \vf{r}_j| \leq a, \\
+            0 & |\vf{r}_j - \vf{r}_k| \leq a, \\
             \Bigl(
-                1 - \frac{a}{|\vf{r}_i - \vf{r}_j|}
-            \Bigr) & |\vf{r}_i - \vf{r}_j| > a.
+                1 - \frac{a}{|\vf{r}_j - \vf{r}_k|}
+            \Bigr) & |\vf{r}_j - \vf{r}_k| > a.
         \end{cases}
     \end{align}
 
@@ -172,11 +178,12 @@
         $E_L$ in terms of the trial wavefunction.
 
         \subsubsection{Non-interacting harmonic oscillator}
-            We start by finding an analytical expression for $a = 0$ and $\beta
-            = 1$, i.e., a non-interaction harmonic oscillator given by the
-            wavefunction
+            We start by finding an analytical expression for the local energy
+            with a system where we set $a = 0$ and $\beta = 1$, i.e., a system
+            of non-interacting harmonic oscillators.
             \begin{align}
                 \bra{\vf{r}}\ket{\Psi_T}
+                = \bra{\vf{r}}\ket{\Phi_T}
                 = \prod_i^N \exp\bigl[
                     -\alpha |\vf{r}_i|^2
                 \bigr],
@@ -186,13 +193,13 @@
             (in the spherical case)
             \begin{align}
                 H &= \sum_i^N h(\vf{r}_i)
-                = \sum_i^N \Bigl(
+                = \sum_i^N \biggl(
                     -\frac{\hbar^2}{2m}\nabla_i^2
                     + \half m \omega^2 r_i^2
-                \Bigr).
+                \biggr).
             \end{align}
             Working in spherical coordinates the gradient and the Laplace
-            operator (applied to a function) becomes
+            operator (applied to a scalar function) becomes
             \begin{align}
                 \nabla f
                 &= \vf{e}_r\tpl{r}f
@@ -220,7 +227,7 @@
             \begin{align}
                 r^2 =
                 \begin{cases}
-                    x & \text{one dimension}, \\
+                    x^2 & \text{one dimension}, \\
                     x^2 + y^2 & \text{two dimensions}, \\
                     x^2 + y^2 + z^2 & \text{three dimensions}.
                 \end{cases}
@@ -296,103 +303,92 @@
             \neq 0$ we write the trial wavefunction as
             \begin{align}
                 \bra{\vf{r}}\ket{\Psi_T}
-                &= \prod_i^N \phi(\vf{r}_i)
+                &=
+                \bra{\vf{r}}\ket{\Phi_T}
                 \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
+                    \sum_{j < k}^N u(r_{jk})
+                \Biggr) \\
+                &=
+                \Biggl(
+                    \prod_i^N \phi(\vf{r}_i)
+                \Biggr)
+                \exp\Biggl(
+                    \sum_{j < k}^N u(r_{jk})
                 \Biggr),
             \end{align}
-            where $r_{ij} = |\vf{r}_i - \vf{r}_j|$ and
+            where $r_{jk} = |\vf{r}_j - \vf{r}_k|$ and
             \begin{align}
-                u(r_{ij}) = \ln\bigl[f(a, \vf{r}_i, \vf{r}_j)\bigr],
+                u(r_{jk}) = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr],
             \end{align}
             we wish to compute the local energy. The gradient is thus given by
-            \begin{align}
-                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
-                &= \nabla_k\brac{
-                    \prod_i^N\phi(\vf{r}_i)
+            \begin{widetext}
+                \begin{align}
+                    \bra{\vf{r}}\nabla_k\ket{\Psi_T}
+                    &= \nabla_k\brac{
+                        \bra{\vf{r}}\ket{\Phi_T}
+                        \exp\Biggl(
+                            \sum_{j < l}^N u(r_{jl})
+                        \Biggr)
+                    } \\
+                    &=
+                    \Biggl\{
+                        \nabla_k
+                        \prod_i^N\phi(\vf{r}_i)
+                    \Biggr\}
                     \exp\Biggl(
-                        \sum_{i < j}^N u(r_{ij})
+                        \sum_{j < l}^N u(r_{jl})
                     \Biggr)
-                } \\
-                &=
-                \Biggl\{
+                    +
+                    \bra{\vf{r}}\ket{\Phi_T}
                     \nabla_k
-                    \prod_i^N\phi(\vf{r}_i)
-                \Biggr\}
-                \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &\qquad
-                +
-                \prod_i^N\phi(\vf{r}_i)
-                \nabla_k
-                \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &=
-                \nabla_k\phi(\vf{r}_k)
-                \prod_{i \neq k}^N \phi(\vf{r}_i)
-                \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &\qquad
-                +
-                \prod_i^N\phi(\vf{r}_i)
-                \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &\qquad
-                \times
-                \nabla_k
-                \Biggl(
-                    \sum_{i < l}^N u(r_{il})
-                \Biggr).
-            \end{align}
+                    \exp\Biggl(
+                        \sum_{j < l}^N u(r_{jl})
+                    \Biggr) \\
+                    &=
+                    \Biggl\{
+                        \nabla_k\phi(\vf{r}_k)
+                        \prod_{i \neq k}^N \phi(\vf{r}_i)
+                    \Biggr\}
+                    \exp\Biggl(
+                        \sum_{j < l}^N u(r_{jl})
+                    \Biggr)
+                    +
+                    \bra{\vf{r}}\ket{\Psi_T}
+                    \nabla_k
+                    \Biggl(
+                        \sum_{m < n}^N u(r_{mn})
+                    \Biggr).
+                \end{align}
             The last term is extracted from the chain rule and can be evaluated
             as
             \begin{align}
                 \nabla_k
-                \Biggl(
-                    \sum_{i < l}^N u(r_{il})
-                \Biggr)
-                &= \begin{cases}
-                    \nabla_k u(r_{ik}) & i < k, \\
-                    \sum_{k < l}^N \nabla_k u(r_{kl}) & i = k.
-                \end{cases}
-            \end{align}
-            As $r_{ij} = r_{ji}$ we can rewrite the first case to
-            \begin{align}
-                \nabla_k u(r_{ik}) = \nabla_k u(r_{ki}).
-            \end{align}
-            Here $i$ varies with the product thus we get
-            \begin{align}
-                \nabla_k
-                \Biggl(
-                    \sum_{i < l}^N u(r_{il})
-                \Biggr)
+                    \sum_{m < n}^N u(r_{mn})
                 &=
-                \sum_{l \neq k}^N\nabla_k u(r_{kl}).
+                \sum_{m = 1}^{k - 1}
+                \nabla_k u(r_{mk})
+                +
+                \sum_{n = k + 1}^N
+                \nabla_k u(r_{kn}) \\
+                &=
+                \sum_{m \neq k}^N\nabla_k u(r_{km}),
             \end{align}
-            We are thus left with
+            as $r_{ij} = r_{ji}$.  We are thus left with
             \begin{align}
                 \bra{\vf{r}}\nabla_k\ket{\Psi_T}
                 &=
-                \nabla_k\phi(\vf{r}_k)
-                \prod_{i \neq k}^N \phi(\vf{r}_i)
+                \Biggl\{
+                    \nabla_k\phi(\vf{r}_k)
+                    \prod_{i \neq k}^N \phi(\vf{r}_i)
+                \Biggr\}
                 \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &\qquad
+                    \sum_{j < k}^N u(r_{jk})
+                \Biggr)
                 +
-                \prod_i^N\phi(\vf{r}_i)
-                \exp\Biggl(
-                    \sum_{i < j}^N u(r_{ij})
-                \Biggr) \\
-                &\qquad
-                \times
-                \sum_{l \neq k}^N\nabla_k u(r_{kl}).
+                \bra{\vf{r}}\ket{\Psi_T}
+                \sum_{m \neq k}^N\nabla_k u(r_{km}).
             \end{align}
-
+            \end{widetext}
 
 
 \end{document}
