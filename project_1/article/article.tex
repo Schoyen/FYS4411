@@ -469,6 +469,43 @@
                     \Biggr)^2
                 \end{align}
             \end{widetext}
+            To go from here we have to find the gradient and the Laplacian of
+            the single particle functions, $\phi(\vf{r}_k)$, and the interaction
+            functions $u(r_{km})$. For the single particle functions we use
+            Cartesian coordinates when finding the derivatives whereas we for
+            the interaction functions will use spherical coordinates and do a
+            variable substitution. Beginning with the gradient of the single
+            particle functions we get
+            \begin{align}
+                \nabla_k\phi(\vf{r}_k)
+                &=
+                \nabla_k\exp\bigl[
+                    -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
+                \bigr] \\
+                &=
+                -2\alpha
+                (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+                \phi(\vf{r}_k),
+            \end{align}
+            note that the subscripts on the unit vectors $\vf{e}_i$ are
+            \textit{not} the same as the subscripts used for its components. The
+            Laplacian yields
+            \begin{align}
+                \nabla_k^2\phi(\vf{r}_k)
+                &=
+                -2\alpha
+                \big(
+                    2 + \beta
+                \bigr)
+                \phi(\vf{r}_k)
+                \nonumber \\
+                &\qquad
+                + 4\alpha^2
+                \bigl(
+                    x_k^2 + y_k^2 + \beta^2z_k^2
+                \bigr)
+                \phi(\vf{r}_k).
+            \end{align}
 
 
 \end{document}
