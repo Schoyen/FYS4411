@@ -308,7 +308,7 @@
                 \bra{\vf{r}}\ket{\Phi_T}
                 J(\vf{r}),
             \end{align}
-            where $\ket{\Phi_T}$ is the same Slater permament as in
+            where $\ket{\Phi_T}$ is the same Slater permanent as in
             \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
             \textit{Jastrow factor} given by
             \begin{align}
@@ -339,7 +339,7 @@
                 + \bra{\vf{r}}\ket{\Phi_T}
                 \nabla_k J(\vf{r}).
             \end{align}
-            The gradient of the Slater permament gives
+            The gradient of the Slater permanent gives
             \begin{align}
                 \nabla_k
                 \bra{\vf{r}}\ket{\Phi_T}
@@ -349,94 +349,126 @@
                 &= \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
                 \bra{\vf{r}}\ket{\Phi_T}.
             \end{align}
-            The gradient of the Jastrow factor is given by
-            \begin{align}
-                \nabla_k J(\vf{r})
-                &=
-                J(\vf{r})
-                \nabla_k\sum_{m < n}^N u(r_{mn}) \\
-                &=
-                J(\vf{r})
-                \Biggl(
-                    \sum_{m = 1}^{k - 1}
-                    \nabla_k u(r_{mk}) \nonumber \\
+            \begin{widetext}
+                The gradient of the Jastrow factor is given by
+                \begin{align}
+                    \nabla_k J(\vf{r})
+                    &=
+                    J(\vf{r})
+                    \nabla_k\sum_{m < n}^N u(r_{mn}) \\
+                    &=
+                    J(\vf{r})
+                    \Biggl(
+                        \sum_{m = 1}^{k - 1}
+                        \nabla_k u(r_{mk})
+                        +
+                        \sum_{n = k + 1}^N
+                        \nabla_k u(r_{kn})
+                    \Biggr) \\
+                    &=
+                    J(\vf{r})
+                    \sum_{m \neq k}^N\nabla_k u(r_{km}),
+                \end{align}
+                as $r_{ij} = r_{ji}$.  We are thus left with
+                \begin{align}
+                    \nabla_k\bra{\vf{r}}\ket{\Psi_T}
+                    &=
+                    \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                    \bra{\vf{r}}\ket{\Psi_T}
+                    + \bra{\vf{r}}\ket{\Psi_T}
+                    \sum_{m \neq k}^N\nabla_k u(r_{km}) \\
+                    &=
+                    \Biggl(
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        +
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)
+                    \bra{\vf{r}}\ket{\Psi_T}.
+                \end{align}
+                We can now find the Laplacian of the trial wavefunction. This
+                gives
+                \begin{align}
+                    \nabla_k^2\bra{\vf{r}}\ket{\Psi_T}
+                    &= \nabla_k\nabla_k\bra{\vf{r}}\ket{\Psi_T}
+                    = \nabla_k
+                    \Biggl(
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        +
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)
+                    \bra{\vf{r}}\ket{\Psi_T} \\
+                    &=
+                    \Biggl(
+                        \frac{\nabla_k^2\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        + \left[
+                            \nabla\frac{1}{\phi(\vf{r}_k)}
+                        \right]
+                        \nabla_k\phi(\vf{r}_k)
+                        +
+                        \sum_{m \neq k}^N\nabla_k^2 u(r_{km})
+                    \Biggr)
+                    \bra{\vf{r}}\ket{\Psi_T}
+                    \\
                     &\qquad
                     +
-                    \sum_{n = k + 1}^N
-                    \nabla_k u(r_{kn})
-                \Biggr) \\
-                &=
-                J(\vf{r})
-                \sum_{m \neq k}^N\nabla_k u(r_{km}),
-            \end{align}
-%            \begin{align}
-%                &=
-%                \Biggl\{
-%                    \nabla_k
-%                    \prod_i^N\phi(\vf{r}_i)
-%                \Biggr\}
-%                \exp\Biggl(
-%                    \sum_{j < l}^N u(r_{jl})
-%                \Biggr)
-%                +
-%                \bra{\vf{r}}\ket{\Phi_T}
-%                \nabla_k
-%                \exp\Biggl(
-%                    \sum_{j < l}^N u(r_{jl})
-%                \Biggr) \\
-%                &=
-%                \Biggl\{
-%                    \nabla_k\phi(\vf{r}_k)
-%                    \prod_{i \neq k}^N \phi(\vf{r}_i)
-%                \Biggr\}
-%                \exp\Biggl(
-%                    \sum_{j < l}^N u(r_{jl})
-%                \Biggr)
-%                +
-%                \bra{\vf{r}}\ket{\Psi_T}
-%                \nabla_k
-%                \Biggl(
-%                    \sum_{m < n}^N u(r_{mn})
-%                \Biggr).
-%            \end{align}
-%            The last term is extracted from the chain rule and can be
-%            evaluated as
-%            \begin{align}
-%                \nabla_k
-%                    \sum_{m < n}^N u(r_{mn})
-%                &=
-%                \sum_{m = 1}^{k - 1}
-%                \nabla_k u(r_{mk})
-%                +
-%                \sum_{n = k + 1}^N
-%                \nabla_k u(r_{kn}) \\
-%                &=
-%                \sum_{m \neq k}^N\nabla_k u(r_{km}),
-%            \end{align}
-            as $r_{ij} = r_{ji}$.  We are thus left with
-            \begin{align}
-                \nabla_k\bra{\vf{r}}\ket{\Psi_T}
-                &=
-                \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
-                \bra{\vf{r}}\ket{\Psi_T} \nonumber \\
-                &\qquad
-                + \bra{\vf{r}}\ket{\Psi_T}
-                \sum_{m \neq k}^N\nabla_k u(r_{km})
-            \end{align}
-%            \begin{align}
-%                \bra{\vf{r}}\nabla_k\ket{\Psi_T}
-%                &=
-%                \Biggl\{
-%                    \nabla_k\phi(\vf{r}_k)
-%                    \prod_{i \neq k}^N \phi(\vf{r}_i)
-%                \Biggr\}
-%                \exp\Biggl(
-%                    \sum_{j < k}^N u(r_{jk})
-%                \Biggr)
-%                +
-%                \bra{\vf{r}}\ket{\Psi_T}
-%                \sum_{m \neq k}^N\nabla_k u(r_{km}).
-%            \end{align}
+                    \Biggl(
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        +
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)
+                    \nabla_k\bra{\vf{r}}\ket{\Psi_T} \\
+                    &=
+                    \Biggl(
+                        \frac{\nabla_k^2\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        - \left[
+                            \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        \right]^2
+                        +
+                        \sum_{m \neq k}^N\nabla_k^2 u(r_{km})
+                    \Biggr)
+                    \bra{\vf{r}}\ket{\Psi_T}
+                    \\
+                    &\qquad
+                    +
+                    \Biggl(
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        +
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)^2
+                    \bra{\vf{r}}\ket{\Psi_T}.
+                \end{align}
+                We now divide by the trial wavefunction. This simplifies the
+                calculations and is more similar to the expression for the local
+                energy.
+                \begin{align}
+                    \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+                    {\bra{\vf{r}}\ket{\Psi_T}}
+                    &=
+                    \frac{\nabla_k^2\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                    - \left[
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                    \right]^2
+                    +
+                    \sum_{m \neq k}^N\nabla_k^2 u(r_{km})
+                    +
+                    \Biggl(
+                        \frac{\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                        +
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)^2 \\
+                    &=
+                    \frac{\nabla_k^2\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                    +
+                    \sum_{m \neq k}^N\nabla_k^2 u(r_{km})
+                    +
+                    \frac{2\nabla_k\phi(\vf{r}_k)}{\phi(\vf{r}_k)}
+                    \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    +
+                    \Biggl(
+                        \sum_{m \neq k}^N\nabla_k u(r_{km})
+                    \Biggr)^2
+                \end{align}
+            \end{widetext}
 
 
 \end{document}
