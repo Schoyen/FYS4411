@@ -520,6 +520,33 @@
                 \dpd[]{r_{km}}{r_k}
                 = \frac{r_k - r_m}{|r_k - r_m|}.
             \end{gather}
+            Working in spherical coordinates we see that $u(r_{km})$ will only
+            be a function of radii of particles $k$ and $m$. The gradient thus
+            simplifies to the radial contribution giving
+            \begin{align}
+                \nabla_k u(r_{km})
+                &=
+                \vf{e}_{r}\tpl{{r_k}}u(r_{km})
+                \\
+                &=
+                \vf{e}_r\dpd[]{r_{km}}{r_k}\tpl{{r_{km}}}u(r_{km})
+                \\
+                &= \vf{e}_r\frac{r_k - r_m}{r_{km}}
+                \tpl{{r_{km}}}u(r_{km}).
+            \end{align}
+            Using this expression we find the Laplacian to be
+            \begin{align}
+                \nabla_k^2 u(r_{km})
+                &=
+                \frac{1}{r_{km}} \tpl{{r_{km}}} u(r_{km})
+                \nonumber \\
+                &\qquad
+                + \frac{(r_k - r_m)^2}{r_{km}^3} \tpl{{r_{km}}} u(r_{km})
+                \nonumber \\
+                &\qquad
+                +
+                \frac{r_k - r_m}{r_{km}}\tpl{{r_{km}}}^2 u(r_{km})
+            \end{align}
 
 
 \end{document}
