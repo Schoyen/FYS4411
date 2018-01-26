@@ -18,11 +18,11 @@ double harmonic_osc_local_energy_sum (double alpha, arma::vec x) {
 
     }
 
-    return energy; 
+    return energy;
 
 }
 
-// Computes local energy for given x and alpha 
+// Computes local energy for given x and alpha
 double harmonic_osc_local_energy (double alpha, double x) {
 
     return alpha * x*x *(0.5 - 2* alpha*alpha);
@@ -57,7 +57,7 @@ double metropolis (arma::vec x, int no_samples, double alpha, double step=0.05) 
     // Filling sampling_array with possible indices of x-array (workers)
     for (int i = 0; i < no_samples; i++) {
         sampling_array(i) = (int) rand() % x.size();
-    } 
+    }
 
 
     // Sampling.
@@ -87,7 +87,7 @@ double metropolis (arma::vec x, int no_samples, double alpha, double step=0.05) 
 int main() {
 
     // alpha space to scan.
-    arma::vec alphas = arma::linspace(0.1, 1.6, 11); 
+    arma::vec alphas = arma::linspace(0.1, 1.6, 11);
     int N = alphas.size();
 
     // Samples to take.
@@ -102,9 +102,9 @@ int main() {
 
         // Randomising RNG seed
         arma::arma_rng::set_seed_random();
-        
+
         // Initial walker positions.
-        arma::vec x; 
+        arma::vec x;
         x.randu(number_of_walkers);
         x.for_each( [](arma::mat::elem_type& val) {val -= 0.5;} );
 
@@ -123,5 +123,5 @@ int main() {
     // Printing energies to terminal
     std::cout << metropolis_energies;
 
-    return 0; 
+    return 0;
 }
