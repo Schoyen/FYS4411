@@ -1,6 +1,6 @@
 # Define the force removal command. This lets the clean-recipe remove the
 # build-directory with all its subfolders
-RM=rf -f
+RM=rm -r
 
 # Define the target directories
 SDIR=src
