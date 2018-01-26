@@ -72,8 +72,6 @@ double metropolis (arma::vec x, int no_samples, double alpha, double step=0.05) 
         double delta_x = step * 2 * (random_number_1 - 0.5);
         double x_new = x(j) + delta_x;
 
-        std::cout << "New x: " << x_new << std::endl;
-
         // The Metropolis-Hastings test.
         double ratio = exp(-alpha*(x_new*x_new - x(j)*x(j)));
         if (ratio >= random_number_2) {
