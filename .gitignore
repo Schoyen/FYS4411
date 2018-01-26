@@ -4,3 +4,4 @@
 *.out
 *.bib
 .ipynb_checkpoints
+.DS_store
