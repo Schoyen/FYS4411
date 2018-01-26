@@ -6,16 +6,17 @@ RM=rf -f
 SDIR=src
 IDIR=include
 BDIR=build
-ODIR=obj
+ODIR=$(BDIR)/obj
 
 # Define the compiler to use
 CXX=g++
 
-# Add compiler flags.
+# Define compiler flags
 #
 #  -I$(IDIR) => Look in include-directory for header files
 #  -g => Debug flag, this lets us debug with Valgrind and gdb
 #  -Wall => Include all compiler warnings
 #  -std=c++11 => Compiler as C++11
 #  -O3 => Optimize as much as possible
-CFLAGS=-I$(IDIR) -g -Wall -std=c++11 -O3
+CXXFLAGS=-I$(IDIR) -g -Wall -std=c++11 -O3
+
