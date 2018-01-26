@@ -4,9 +4,10 @@
 
 #include <iostream>
 #include <math.h>
-#include <armadillo>
 #include <cstdlib>
 #include <fstream>
+
+#include "simple_vmc.h"
 
 // Computes sum of local energy across vector x of workers, and value of alpha.
 double harmonic_osc_local_energy_sum (double alpha, arma::vec x) {
