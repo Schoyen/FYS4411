@@ -1,20 +1,22 @@
+/*
+    Simple Variational Monte Carlo in 1D modelled after Thijssen.
+*/
+
 #include <iostream>
 #include <math.h>
 #include <armadillo>
 #include <cstdlib>
 #include <fstream>
 
+// Takes
 double harmonic_osc_local_energy_sum (double alpha, arma::vec x) {
 
     double energy = 0;
-    for (int i = 1; i <= x.size(); i++) {
+    for (int i = 0; i < x.size(); i++) {
 
-        std::cout << "hei" << std::endl;
         energy += alpha * x(i)*x(i) *(0.5 - 2* alpha*alpha);
 
     }
-
-    std::cout << x << std::endl;
 
     return energy; 
 
@@ -47,52 +49,52 @@ double metropolis (arma::vec x, int no_samples, double alpha, double step=0.05) 
 
     arma::vec sampling_array = arma::zeros(no_samples);
 
-    // Filling sampling_array
-    for (int i = 1; i < no_samples; i++) {
+    // Filling sampling_array with possible indices of x-array (workers)
+    for (int i = 0; i < no_samples; i++) {
         sampling_array(i) = (int) rand() % x.size();
     } 
 
-    for (int i = 1; i < no_samples; i ++) {
-        std::cout << no_samples - i << std::endl; 
+
+    for (int i = 0; i < no_samples; i ++) {
         double random_number_1 = ((double) rand() / (RAND_MAX));
         double random_number_2 = ((double) rand() / (RAND_MAX));
 
+        // Random x position from sampling array
+        int j = sampling_array(i);
+
         double delta_x = step * 2 * (random_number_1 - 0.5);
-        double x_new = x(i) + delta_x;
+        double x_new = x(j) + delta_x;
 
         // The test
-        double ratio = exp(-alpha*(x_new*x_new - x(i)*x(i)));
+        double ratio = exp(-alpha*(x_new*x_new - x(j)*x(j)));
         if (ratio >= random_number_2) {
-            delta_energy = delta_energy - harmonic_osc_local_energy(alpha, x(i));
-            x(i) = x_new;
+            delta_energy = delta_energy - harmonic_osc_local_energy(alpha, x(j));
+            x(j) = x_new;
             delta_energy = delta_energy + harmonic_osc_local_energy(alpha, x_new);
         }
     }
-
-    std::cout << delta_energy << std::endl;
 
     return delta_energy;
 }
 
 int main() {
 
+
     arma::vec alphas = arma::linspace(0.1, 1.6, 11); 
     int N = alphas.size();
-    int number_of_samples = 1000000;
+    int number_of_samples = 1e6;
     int number_of_walkers = 2;
 
     arma::vec energies = arma::zeros(N);
     arma::vec metropolis_energies = arma::zeros(N);
 
-    for (int i = 1; i < N; i++) {
-        
-        std::cout << alphas(i) << std::endl;
+    for (int i = 0; i < N; i++) {
+        std::cout << "Rem alphas: " << N - i << std::endl;
+        std::cout << "alpha val: " << alphas(i) << std::endl;
         arma::arma_rng::set_seed_random();
         arma::vec x; 
         x.randu(2);
         x.for_each( [](arma::mat::elem_type& val) {val -= 0.5;} );
-
-        std::cout << x.size() << std::endl;
 
         double initial_energy = harmonic_osc_local_energy_sum(alphas(i), x);
         double metropolis_energy = metropolis(x, number_of_samples, alphas(i));

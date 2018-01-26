@@ -4,4 +4,13 @@
 *.out
 *.bib
 .ipynb_checkpoints
+
+# Stupid mac folder file
 .DS_store
+
+# Executable
+*.x
+
+# Data file
+*.dat
+
