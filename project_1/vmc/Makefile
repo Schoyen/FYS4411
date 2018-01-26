@@ -32,3 +32,9 @@ HEADERS=$(patsubst %, $(IDIR)/%, $(_HEADERS))
 _OBJECTS=simple_vmc.o
 # Tell make to look in $(ODIR) for the object files defined $(_OBJECTS)
 OBJECTS=$(patsubst %, $(ODIR)/%, $(_OBJECTS))
+
+$(ODIR)/%.o: $(SDIR)/%.c $(HEADERS) | build
+	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
+
+simple_vmc.x: $(OBJECTS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
