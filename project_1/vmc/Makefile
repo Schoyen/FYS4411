@@ -40,7 +40,10 @@ $(ODIR)/%.o: $(SDIR)/%.c $(HEADERS) | build
 simple_vmc.x: $(OBJECTS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
-.PHONY: clean
+.PHONY: clean build
+
+build:
+	$(MK) $(BDIR) $(ODIR)
 
 clean:
 	$(RM) $(BDIR) simple_vmc.x
