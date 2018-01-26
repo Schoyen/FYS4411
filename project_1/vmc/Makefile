@@ -20,3 +20,6 @@ CXX=g++
 #  -O3 => Optimize as much as possible
 CXXFLAGS=-I$(IDIR) -g -Wall -std=c++11 -O3
 
+# Define libraries to use
+LIBS=-larmadillo
+
