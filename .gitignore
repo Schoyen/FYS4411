@@ -1,8 +1,13 @@
+# Vim poop
 *.swp
+
+# Latex logs and *tex compiler output
 *.aux
 *.log
 *.out
 *.bib
+
+# Jupyter notebook intermediate files
 .ipynb_checkpoints
 
 # Stupid mac folder file
