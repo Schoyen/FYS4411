@@ -2,6 +2,6 @@
 
 #include "metropolis_sampling.h"
 
-double perform_metropolis_step(step_length)
+double perform_metropolis_step(double step_length)
 {
 }
