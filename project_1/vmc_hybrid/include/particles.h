@@ -12,6 +12,7 @@ typedef struct particle {
 
 
 typedef struct particles {
+    unsigned int num_particles;
     particle_t *particles;
 } particles_t;
 

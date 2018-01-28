@@ -6,4 +6,5 @@ cdef extern from "particles.h":
         double position[DIMENSIONALITY]
 
     cdef struct particles:
+        unsigned int num_particles
         particle *particles
