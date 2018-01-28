@@ -1,8 +1,12 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
+enum {
+    DIMENSIONALITY = 3
+};
+
 struct particle {
-    double *position;
+    double position[DIMENSIONALITY];
 };
 
 
