@@ -9,3 +9,6 @@ cdef class Particles:
 
         if not self.m_particles.particles:
             raise Exception("particles-array was not allocated")
+
+    def __dealloc__(self):
+        free(self.m_particles.particles)
