@@ -4,7 +4,9 @@ from Cython.Build import cythonize
 
 import numpy as np
 
-source_files = []
+source_files = [
+    "vmc/particles.pyx"
+]
 
 
 include_dirs = [
@@ -15,7 +17,15 @@ include_dirs = [
 
 libraries = []
 
-extensions = []
+extensions = [
+    Extension(
+        name="vmc_hybrid",
+        sources=source_files,
+        language="c",
+        include_dirs=include_dirs,
+        libraries=libraries
+    )
+]
 
 setup(
     name="Bosonic vmc",
