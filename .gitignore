@@ -21,3 +21,6 @@
 
 # Build directory
 build
+
+# Shared library
+*.so
