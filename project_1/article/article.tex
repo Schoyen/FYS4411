@@ -598,5 +598,104 @@
                 &=
                 - \frac{2a(r_{km} - 1)}{r_{km}^2(r_{km} - a)^2}.
             \end{align}
+            Using this we are now able to write the closed form expression of
+            the Laplacian of the trial wavefunction.
+            \begin{widetext}
+                \begin{align}
+                    \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+                    {\bra{\vf{r}}\ket{\Psi_T}}
+                    &=
+                    -2\alpha
+                    \big(
+                        2 + \beta
+                    \bigr)
+                    + 4\alpha^2
+                    \bigl(
+                        x_k^2 + y_k^2 + \beta^2z_k^2
+                    \bigr)
+                    %\nonumber \\
+                    %&\qquad
+                    +
+                    2a
+                    \sum_{m \neq k}^N
+                    \Biggl[
+                        \frac{1}{r_{km}^2(r_{km} - a)}
+                        - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
+                    \Biggr]
+                    \nonumber \\
+                    &\qquad
+                    -4\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+                    \cdot
+                    a\sum_{m \neq k}^N
+                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
+                    + \Biggl[
+                        a\sum_{m \neq k}^N
+                        \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
+                    \Biggr]^2.
+                \end{align}
+            \end{widetext}
+            To ease the load on the CPU we try to restrict the number of times
+            we evaluate the sums. For brevity we introduce the following
+            functions
+            \begin{align}
+                \xi_k(\vf{r}, a)
+                &= \sum_{m \neq k}^N
+                \Biggl[
+                    \frac{1}{r_{km}^2(r_{km} - a)}
+                    - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
+                \Biggr] \\
+                &=
+                \sum_{m \neq k}^N
+                \frac{1 - a}{r_{km}^2(r_{km} - a)^2}, \\
+                \vfg{\zeta}_k(\vf{r}, a)
+                &=
+                \sum_{m \neq k}^N
+                \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}.
+            \end{align}
+            We can then rewrite the expression for the Laplacian to
+            \begin{widetext}
+                \begin{align}
+                    \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+                    {\bra{\vf{r}}\ket{\Psi_T}}
+                    &=
+                    -2\alpha
+                    \big(
+                        2 + \beta
+                    \bigr)
+                    + 4\alpha^2
+                    \bigl(
+                        x_k^2 + y_k^2 + \beta^2z_k^2
+                    \bigr)
+                    %\nonumber \\
+                    %&\qquad
+                    +
+                    2a\xi_k(\vf{r}, a)
+                    \nonumber \\
+                    &\qquad
+                    -4a\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+                    \cdot
+                    \vfg{\zeta}_k(\vf{r}, a)
+                    + a^2\vfg{\zeta}_k(\vf{r}, a)^2.
+                \end{align}
+                Both $\xi_k$ and $\vfg{\zeta}_k$ can be evaluated in a common
+                loop. Using this expression for the Laplacian we can find the
+                local energy from
+                \begin{align}
+                    E_L(\vf{r})
+                    &=
+                    \frac{\bra{\vf{r}}H\ket{\Psi_T}}
+                    {\bra{\vf{r}}\ket{\Psi_T}}
+                    =
+                    \sum_{k}^N
+                    \Biggl(
+                        -\frac{\hbar^2}{2m}
+                        \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+                        {\bra{\vf{r}}\ket{\Psi_T}}
+                        + V_{\text{ext}}(\vf{r})
+                    \Biggr)
+                    +
+                    \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j).
+                \end{align}
+            \end{widetext}
 
 \end{document}
