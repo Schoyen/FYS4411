@@ -1,15 +1,16 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
-#define DIMENSIONALITY 3
+struct particle {
+    double *position;
+};
 
-typedef struct particle {
-    double position[DIMENSIONALITY];
-} particle_t;
 
-typedef struct particles {
-    particle_t *particles;
-} particles_t;
+
+struct particles {
+    struct particle *particles;
+};
+
 
 
 #endif
