@@ -5,7 +5,8 @@ from Cython.Build import cythonize
 import numpy as np
 
 source_files = [
-    "vmc/particles.pyx"
+    "vmc/particles.pyx",
+    "src/metropolis_sampling.c"
 ]
 
 
