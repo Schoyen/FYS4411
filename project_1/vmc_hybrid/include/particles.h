@@ -5,15 +5,15 @@ enum {
     DIMENSIONALITY = 3
 };
 
-struct particle {
+typedef struct particle {
     double position[DIMENSIONALITY];
-};
+} particle_t;
 
 
 
-struct particles {
-    struct particle *particles;
-};
+typedef struct particles {
+    particle_t *particles;
+} particles_t;
 
 
 
