@@ -2,16 +2,22 @@
 
 double perform_metropolis_step(particles_t *particles, double step_length)
 {
+    unsigned int particle_index, dimension_index;
+    double step, proposed_position;
+    particle_t *particle;
+
     /* Draw a random particle */
-    unsigned int particle_index = arc4random_uniform(particles->num_particles);
+    particle_index = arc4random_uniform(particles->num_particles);
     /* Choose random dimension */
-    unsigned int dimension_index = arc4random_uniform(DIMENSIONALITY);
+    dimension_index = arc4random_uniform(DIMENSIONALITY);
+
     /* Create a pointer to the drawn particle */
-    particle_t *particle = &particles->particles[particle_index];
+    particle = &particles->particles[particle_index];
+
     /* Do a step from [-step_length, step_length) */
-    double step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
+    step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
     /* Propose a new position */
-    double proposed_position = particle->position[dimension_index] + step;
+    proposed_position = particle->position[dimension_index] + step;
 
     return step;
 }
