@@ -6,5 +6,10 @@ cdef class Wavefunction:
     def __cinit__(self):
         self.m_parameters = get_variational_parameters()
 
+    def get_parameter_list(self):
+        cdef unsigned int i
+        return [self.m_parameters.parameters[i] for i in range(
+            self.m_parameters.num_parameters)]
+
     def __dealloc__(self):
         free_parameters_struct(self.m_parameters)
