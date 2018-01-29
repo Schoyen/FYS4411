@@ -20,7 +20,7 @@ libraries = []
 
 extensions = [
     Extension(
-        name="vmc_hybrid",
+        name="particles",
         sources=source_files,
         language="c",
         include_dirs=include_dirs,
