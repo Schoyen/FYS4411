@@ -5,7 +5,21 @@
 double local_energy(
         parameters_t *parameters, double position[DIMENSIONALITY])
 {
-    return 0.0;
+    double position_squared, alpha;
+    unsigned int i;
+
+    /* Calculate the position squared */
+    position_squared = 0.0;
+
+    for (i = 0; i < DIMENSIONALITY; i++) {
+        position_squared += position[i]*position[i];
+    }
+
+    /* Fetch the variational parameter */
+    alpha = parameters->parameters[i];
+
+    /* Return the local energy */
+    return alpha + position_squared*(0.5 - 2*alpha*alpha);
 }
 
 double ratio(
