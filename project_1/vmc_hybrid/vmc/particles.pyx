@@ -18,9 +18,9 @@ cdef class Particles:
         cdef unsigned int i
 
         for i in range(self.m_particles.num_particles):
-            self.initialize_particles(self.m_particles.particles[i], spread)
+            self.initialize_particle(&(self.m_particles.particles[i]), spread)
 
-    cdef inline intialize_particle(self, particle *particle, double spread):
+    cdef inline initialize_particle(self, particle *particle, double spread):
         cdef int i
 
         for i in range(DIMENSIONALITY):
