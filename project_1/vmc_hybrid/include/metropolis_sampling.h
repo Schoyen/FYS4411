@@ -11,7 +11,10 @@
     (((((unsigned long) arc4random() << 32) | arc4random()) \
      / ((double) UINT64_MAX)))
 
-double perform_metropolis_step(particles_t *particles, double step_length);
+double perform_metropolis_step(
+        particles_t *particles, double step_length,
+        double (*local_energy)(double position),
+        double (*ratio)(double new_position, double old_position));
 void metropolis_sampling(void);
 
 #endif
