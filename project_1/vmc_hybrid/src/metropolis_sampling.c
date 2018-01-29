@@ -1,12 +1,14 @@
 #include "metropolis_sampling.h"
 
+
 double perform_metropolis_step(
-        particles_t *particles, double step_length,
-        double (*local_energy)(double position),
-        double (*ratio)(double new_position, double old_position))
+        particles_t *particles,
+        parameters_t *parameters,
+        double step_length)
 {
-    unsigned int particle_index, dimension_index;
-    double step, old_position, new_position, weight, delta_energy;
+    unsigned int particle_index, dimension_index, i;
+    double step, weight, delta_energy;
+    double old_position[DIMENSIONALITY], new_position[DIMENSIONALITY];
     particle_t *particle;
 
     delta_energy = 0;
@@ -21,21 +23,29 @@ double perform_metropolis_step(
 
     /* Do a step from [-step_length, step_length) */
     step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
+
     /* Get the previous position */
-    old_position = particle->position[dimension_index];
+    for (i = 0; i < DIMENSIONALITY; i++) {
+        old_position[i] = particle->position[i];
+        new_position[i] = particle->position[i];
+    }
+
     /* Propose a new position */
-    new_position = old_position + step;
+    new_position[dimension_index] += step;
 
     /* Compute the ratio between the new and the old position */
-    weight = (*ratio)(new_position, old_position);
+    weight = ratio(parameters, new_position, old_position);
 
     /* See if the new position should be accepted */
     if (weight >= RANDOM_UNIFORM_DOUBLE) {
         /* Compute the change in energy for the new position */
-        delta_energy = (*local_energy)(new_position) \
-            - (*local_energy)(old_position);
+        delta_energy = local_energy(parameters, new_position)
+            - local_energy(parameters, old_position);
+
         /* Update the position of the particle */
-        particle->position[dimension_index] = new_position;
+        for (i = 0; i < DIMENSIONALITY; i++) {
+            particle->position[i] = new_position[i];
+        }
     }
 
     /* Return the change in energy */
