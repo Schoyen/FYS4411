@@ -1,6 +1,6 @@
 cdef extern from "particles.h":
     cdef enum:
-        DIMENSIONALITY = 3
+        DIMENSIONALITY
 
     cdef struct particle:
         double position[DIMENSIONALITY]
