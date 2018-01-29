@@ -6,7 +6,8 @@ import numpy as np
 
 source_files = [
     "vmc/particles.pyx",
-    "src/metropolis_sampling.c"
+    "src/metropolis_sampling.c",
+    "src/bosonic_hard_sphere.c"
 ]
 
 
