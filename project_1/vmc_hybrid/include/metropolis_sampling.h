@@ -5,6 +5,7 @@
 #include <limits.h>
 
 #include "particles.h"
+#include "wavefunction.h"
 
 /* Create a macro for creating a uniform double in the interval [0, 1) */
 #define RANDOM_UNIFORM_DOUBLE \
@@ -12,9 +13,10 @@
      / ((double) UINT64_MAX)))
 
 double perform_metropolis_step(
-        particles_t *particles, double step_length,
-        double (*local_energy)(double position),
-        double (*ratio)(double new_position, double old_position));
+        particles_t *particles,
+        parameters_t *parameters,
+        double step_length);
+
 void metropolis_sampling(void);
 
 #endif
