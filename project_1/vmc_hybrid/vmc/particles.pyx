@@ -14,6 +14,19 @@ cdef class Particles:
         if not self.m_particles.particles:
             raise Exception("particles-array was not allocated")
 
+    def get_particles(self):
+        cdef np.ndarray[ndim=2, dtype=double, mode="c"] particles
+        cdef unsigned int i
+        cdef int j
+
+        particles = np.zeros((self.m_particles.num_particles, DIMENSIONALITY))
+
+        for i in range(self.m_particles.num_particles):
+            for j in range(DIMENSIONALITY):
+                particles[i][j] = self.m_particles.particles[i].position[j]
+
+        return particles
+
     def initialize_particles(self, double spread):
         cdef unsigned int i
 
