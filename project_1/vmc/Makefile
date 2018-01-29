@@ -19,7 +19,7 @@ CXX=g++
 #  -Wall => Include all compiler warnings
 #  -std=c++11 => Compiler as C++11
 #  -O3 => Optimize as much as possible
-CXXFLAGS=-I$(IDIR) -g -Wall -std=c++11 -O3
+CXXFLAGS=-I$(IDIR) -I /usr/local/include/eigen3/ -g -Wall -std=c++11 -O3
 
 # Define libraries to use
 LIBS=-larmadillo
