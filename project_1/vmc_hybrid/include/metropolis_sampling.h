@@ -17,6 +17,10 @@ double perform_metropolis_step(
         parameters_t *parameters,
         double step_length);
 
-void metropolis_sampling(void);
+double metropolis_sampling(
+        particles_t *particles,
+        parameters_t *parameters,
+        double step_length,
+        unsigned int num_samples);
 
 #endif

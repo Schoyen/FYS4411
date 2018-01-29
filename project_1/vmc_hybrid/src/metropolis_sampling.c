@@ -52,6 +52,26 @@ double perform_metropolis_step(
     return delta_energy;
 }
 
-void metropolis_sampling(void)
+double metropolis_sampling(
+        particles_t *particles,
+        parameters_t *parameters,
+        double step_length,
+        unsigned int num_samples)
 {
+    double energy;
+    unsigned int i;
+
+    /* Compute initial energy */
+    energy = 0;
+
+    for (i = 0; i < particles->num_particles; i++) {
+        energy += local_energy(parameters, particles->particles[i].position);
+    }
+
+    /* Perform num_samples metropolis steps */
+    for (i = 0; i < num_samples; i++) {
+        energy += perform_metropolis_step(particles, parameters, step_length);
+    }
+
+    return energy;
 }
