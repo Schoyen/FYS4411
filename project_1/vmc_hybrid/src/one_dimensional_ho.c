@@ -1,6 +1,37 @@
-#include <cmath.h>
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "wavefunction.h"
+
+parameters_t *get_variational_parameters(void)
+{
+    parameters_t *parameters;
+
+    /* Allocate memory for struct plus array of size 1 */
+    parameters = (parameters_t *) malloc(
+            sizeof(parameters_t) + sizeof(double));
+
+    /* Check if the allocation succeeded */
+    if (!parameters) {
+        fprintf(stderr, "Allocation of parameters struct failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Set the number of parameters in the system, i.e., only alpha */
+    parameters->num_parameters = 1;
+    /* Set alpha to 0 */
+    parameters->parameters[0] = 0.0;
+
+    /* Return the parameters struct */
+    return parameters;
+}
+
+void free_parameters_struct(parameters_t *parameters)
+{
+    /* Free the parameters struct */
+    free(parameters);
+}
 
 double local_energy(
         parameters_t *parameters, double position[DIMENSIONALITY])

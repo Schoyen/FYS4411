@@ -9,6 +9,9 @@ typedef struct parameters {
 } parameters_t;
 
 
+parameters_t *get_variational_parameters(void);
+void free_parameters_struct(parameters_t *parameters);
+
 double local_energy(
         parameters_t *parameters, double position[DIMENSIONALITY]);
 
