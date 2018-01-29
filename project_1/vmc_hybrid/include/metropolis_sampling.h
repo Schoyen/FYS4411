@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
+#include "wavefunction_config.h"
 #include "particles.h"
 #include "wavefunction.h"
 

@@ -1,7 +1,7 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
-#include "particles.h"
+#include "wavefunction_config.h"
 
 typedef struct parameters {
     unsigned int num_parameters;

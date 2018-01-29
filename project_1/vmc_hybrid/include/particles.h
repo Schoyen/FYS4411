@@ -1,9 +1,7 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
-enum {
-    DIMENSIONALITY = 3
-};
+#include "wavefunction_config.h"
 
 typedef struct particle {
     double position[DIMENSIONALITY];
