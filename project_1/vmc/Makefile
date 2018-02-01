@@ -19,25 +19,25 @@ CXX=g++
 #  -Wall => Include all compiler warnings
 #  -std=c++11 => Compiler as C++11
 #  -O3 => Optimize as much as possible
-CXXFLAGS=-I$(IDIR) -g -Wall -std=c++11 -O3
+CXXFLAGS=-I$(IDIR) -I /usr/local/include/eigen3/ -g -Wall -std=c++11 -O3
 
 # Define libraries to use
 LIBS=-larmadillo
 
 # Add headers as seen in $(IDIR)
-_HEADERS=simple_vmc.h
+_HEADERS=particles.h
 # Tell make to look in $(IDIR) for the header-files defined in $(_HEADERS)
 HEADERS=$(patsubst %, $(IDIR)/%, $(_HEADERS))
 
 # Add object files to be generated
-_OBJECTS=simple_vmc.o
+_OBJECTS=particles.o teststuff.o
 # Tell make to look in $(ODIR) for the object files defined $(_OBJECTS)
 OBJECTS=$(patsubst %, $(ODIR)/%, $(_OBJECTS))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(HEADERS) | build
 	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
 
-simple_vmc.x: $(OBJECTS)
+particles.x: $(OBJECTS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 .PHONY: clean build
@@ -46,4 +46,4 @@ build:
 	$(MK) $(BDIR) $(ODIR)
 
 clean:
-	$(RM) $(BDIR) simple_vmc.x
+	$(RM) $(BDIR) particles.x
