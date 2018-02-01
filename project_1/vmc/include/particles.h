@@ -13,9 +13,9 @@ class Particles {
         Particles(int dimensions, int number_of_walkers, double distribution_spread);
         ~Particles();
 
-        void set_distribution_spread(double new_spread);
+        void setDistributionSpread(double new_spread);
         
         // Getters
         MatrixDN get_walkers() {return m_walkers;};
-        double get_distribution_spread() {return m_distribution_spread;};
+        double getDistributionSpread() {return m_distribution_spread;};
 };

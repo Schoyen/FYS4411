@@ -19,7 +19,7 @@ Particles::Particles(int dimensions, int number_of_walkers, double distribution_
     m_walkers = m_walkers * m_distribution_spread;
 }
 
-void Particles::set_distribution_spread(double new_spread) {
+void Particles::setDistributionSpread(double new_spread) {
     // De-spreading with old spread, applying new spread
     m_walkers = m_walkers / m_distribution_spread;
     m_walkers = m_walkers * new_spread;
