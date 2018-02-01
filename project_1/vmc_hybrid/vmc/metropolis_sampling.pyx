@@ -72,8 +72,24 @@ cdef class Particles:
     def __dealloc__(self):
         free(self.m_particles.particles)
 
-cdef class MetropolisSampling:
 
-    def __cinit__(self):
-        m_wavefunction = Wavefunction()
-        m_particles = Particles()
+def perform_metropolis(
+        Wavefunction wavefunction, Particles particles, double step_length,
+        unsigned int num_samples):
+
+    cdef double energy
+
+    energy = metropolis_sampling(
+        &particles.m_particles,
+        wavefunction.m_parameters,
+        step_length,
+        num_samples
+    )
+
+    return energy
+
+def normalize_energies(
+        np.ndarray[double, ndim=1] energies, unsigned int num_samples,
+        unsigned int num_particles):
+
+    return energies/(num_samples*num_particles)
