@@ -11,11 +11,27 @@ cdef class Wavefunction:
 
     def get_parameter_list(self):
         cdef unsigned int i
-        return [self.m_parameters.parameters[i] for i in range(
-            self.m_parameters.num_parameters)]
+
+        return [
+            self.m_parameters.parameters[i]
+            for i in range(self.m_parameters.num_parameters)]
+
+    def set_parameter_values(self, list values):
+        cdef double value
+        cdef unsigned int i
+
+        if len(values) != self.m_parameters.num_parameters:
+            raise Exception(
+                "Specify same number of parameters to change as " \
+                + "there are parameters")
+
+        for i, value in enumerate(values):
+            self.m_parameters.parameters[i] = value
 
     def __dealloc__(self):
         free_parameters_struct(self.m_parameters)
+
+
 
 cdef class Particles:
     cdef particles m_particles
