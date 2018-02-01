@@ -2,7 +2,7 @@
 #define WAVEFUNCTION_CONFIG_H
 
 enum {
-    DIMENSIONALITY = 3
+    DIMENSIONALITY = 1
 };
 
 #endif
