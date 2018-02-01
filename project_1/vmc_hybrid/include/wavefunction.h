@@ -2,6 +2,7 @@
 #define WAVEFUNCTION_H
 
 #include "wavefunction_config.h"
+#include "particles.h"
 
 typedef struct parameters {
     unsigned int num_parameters;
@@ -14,6 +15,9 @@ void free_parameters_struct(parameters_t *parameters);
 
 double local_energy(
         parameters_t *parameters, double position[DIMENSIONALITY]);
+
+double local_energy_total(
+        parameters_t *parameters, particles_t *particles);
 
 double ratio(
         parameters_t *parameters, double new_position[DIMENSIONALITY],
