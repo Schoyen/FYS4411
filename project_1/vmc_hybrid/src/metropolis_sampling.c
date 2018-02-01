@@ -11,6 +11,7 @@ double perform_metropolis_step(
     double old_position[DIMENSIONALITY], new_position[DIMENSIONALITY];
     particle_t *particle;
 
+    /* Assume no change */
     delta_energy = 0;
 
     /* Draw a random particle */
@@ -37,20 +38,22 @@ double perform_metropolis_step(
     weight = ratio(parameters, new_position, old_position);
 
     /* See if the new position should be accepted */
-    if (weight >= RANDOM_UNIFORM_DOUBLE) {
-        /* Compute the change in energy for the new position */
-        delta_energy = local_energy(parameters, new_position)
-            - local_energy(parameters, old_position);
+    if (weight*weight >= RANDOM_UNIFORM_DOUBLE) {
 
         /* Update the position of the particle */
         for (i = 0; i < DIMENSIONALITY; i++) {
             particle->position[i] = new_position[i];
         }
+
+        /* Compute the change in energy for the new position */
+        delta_energy = local_energy_total(parameters, particles);
     }
 
     /* Return the change in energy */
     return delta_energy;
 }
+
+
 
 double metropolis_sampling(
         particles_t *particles,
@@ -62,11 +65,7 @@ double metropolis_sampling(
     unsigned int i;
 
     /* Compute initial energy */
-    energy = 0;
-
-    for (i = 0; i < particles->num_particles; i++) {
-        energy += local_energy(parameters, particles->particles[i].position);
-    }
+    energy = local_energy_total(parameters, particles);
 
     /* Perform num_samples metropolis steps */
     for (i = 0; i < num_samples; i++) {
