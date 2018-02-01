@@ -53,6 +53,24 @@ double local_energy(
     return alpha + position_squared*(0.5 - 2*alpha*alpha);
 }
 
+double local_energy_total(
+        parameters_t *parameters, particles_t *particles)
+{
+    double energy;
+    unsigned int i;
+
+    /* Initialize energy */
+    energy = 0.0;
+
+    /* Add all the energy contribution */
+    for (i = 0; i < particles->num_particles; i++) {
+        energy += local_energy(parameters, particles->particles[i].position);
+    }
+
+    /* Return the total local energy (unormalized) */
+    return energy;
+}
+
 double ratio(
         parameters_t *parameters, double new_position[DIMENSIONALITY],
         double old_position[DIMENSIONALITY])
