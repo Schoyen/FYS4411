@@ -1,4 +1,4 @@
-from particles import Particles
+from metropolis_sampling import Particles
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np

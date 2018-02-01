@@ -1,4 +1,4 @@
-from wavefunction import Wavefunction
+from metropolis_sampling import Wavefunction
 
 wf = Wavefunction()
 
