@@ -73,7 +73,7 @@ double ratio(
     alpha = parameters->parameters[0];
 
     /* Return the ratio */
-    return exp(-alpha*(new_position_squared - old_position_squared));
+    return exp(-2*alpha*(new_position_squared - old_position_squared));
 }
 
 double wavefunction(
