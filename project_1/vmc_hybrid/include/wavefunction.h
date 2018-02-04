@@ -5,10 +5,6 @@ typedef struct particle {
     double *position;
 } particle_t;
 
-typedef struct particles {
-    particle_t *particles;
-} particles_t;
-
 typedef struct parameters {
     unsigned int num_parameters;
     double *parameters;
@@ -17,8 +13,9 @@ typedef struct parameters {
 typedef struct wavefunction {
     unsigned int num_particles;
     unsigned int dimensionality;
+    double last_value;
     parameters_t *parameters;
-    particles_t *particles;
+    particle_t *particles;
 } wavefunction_t;
 
 

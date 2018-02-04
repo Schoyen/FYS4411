@@ -2,9 +2,6 @@ cdef extern from "wavefunction.h":
     cdef struct particle:
         double *position
 
-    cdef struct particles:
-        particle *particles
-
     cdef struct parameters:
         unsigned int num_parameters
         double *parameters
@@ -12,8 +9,9 @@ cdef extern from "wavefunction.h":
     cdef struct wavefunction:
         unsigned int num_particles
         unsigned int dimensionality
+        double last_value
         parameters *parameters
-        particles *particles
+        particle *particles
 
     void allocate_variational_parameters(wavefunction *wavefunction)
     void free_variational_parameters(wavefunction *wavefunction)

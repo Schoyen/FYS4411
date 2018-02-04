@@ -1,5 +1,3 @@
-from libc.stdlib cimport malloc, free
-
 import numpy as np
 cimport numpy as np
 
@@ -16,6 +14,11 @@ cdef class Wavefunction:
 
         allocate_variational_parameters(&self.m_wavefunction)
         allocate_particles(&self.m_wavefunction)
+
+    def initialize_wavefunction(self, double spread):
+        # TODO: Distribute particles
+        # TODO: Evaluate wavefunction and store in last_value
+        pass
 
     def get_parameters(self):
         cdef unsigned int i, num_parameters
