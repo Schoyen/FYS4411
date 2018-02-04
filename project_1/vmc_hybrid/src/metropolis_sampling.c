@@ -1,76 +1,67 @@
 #include "metropolis_sampling.h"
 
 
+
+
 double perform_metropolis_step(
-        particles_t *particles,
-        parameters_t *parameters,
-        double step_length)
+        wavefunction_t *wavefunction, double step_length)
 {
     unsigned int particle_index, dimension_index, i;
-    double step, weight, delta_energy;
-    double old_position[DIMENSIONALITY], new_position[DIMENSIONALITY];
+    double step, weight,
+           old_position[wavefunction->dimensionality];
     particle_t *particle;
 
-    /* Assume no change */
-    delta_energy = 0;
-
     /* Draw a random particle */
-    particle_index = arc4random_uniform(particles->num_particles);
+    particle_index = arc4random_uniform(wavefunction->num_particles);
     /* Choose random dimension */
-    dimension_index = arc4random_uniform(DIMENSIONALITY);
+    dimension_index = arc4random_uniform(wavefunction->dimensionality);
 
     /* Create a pointer to the drawn particle */
-    particle = &particles->particles[particle_index];
+    particle = &wavefunction->particles[particle_index];
+
+    /* Store the previous position */
+    for (i = 0; i < wavefunction->dimensionality; i++) {
+        old_position[i] = particle->position[i];
+    }
 
     /* Do a step from [-step_length, step_length) */
     step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
-
-    /* Get the previous position */
-    for (i = 0; i < DIMENSIONALITY; i++) {
-        old_position[i] = particle->position[i];
-        new_position[i] = particle->position[i];
-    }
-
     /* Propose a new position */
-    new_position[dimension_index] += step;
+    particle->position[dimension_index] += step;
 
     /* Compute the ratio between the new and the old position */
-    weight = ratio(parameters, new_position, old_position);
+    weight = ratio(wavefunction);
 
-    /* See if the new position should be accepted */
-    if (weight*weight >= RANDOM_UNIFORM_DOUBLE) {
-
-        /* Update the position of the particle */
-        for (i = 0; i < DIMENSIONALITY; i++) {
-            particle->position[i] = new_position[i];
-        }
-
-        /* Compute the change in energy for the new position */
-        delta_energy = local_energy_total(parameters, particles);
+    /* Check if we should accept the new state */
+    if (weight >= RANDOM_UNIFORM_DOUBLE) {
+        /* Store accepted state as the last evaluated value */
+        wavefunction->last_value = evaluate_wavefunction(wavefunction);
+    } else {
+        /* Reset position of particle as we rejected the new state */
+        particle->position[dimension_index] = old_position[dimension_index];
     }
 
-    /* Return the change in energy */
-    return delta_energy;
+    /* Return the local energy */
+    return local_energy(wavefunction);
 }
 
 
 
 double metropolis_sampling(
-        particles_t *particles,
-        parameters_t *parameters,
-        double step_length,
+        wavefunction_t *wavefunction, double step_length,
         unsigned int num_samples)
 {
     double energy;
     unsigned int i;
 
-    /* Compute initial energy */
-    energy = local_energy_total(parameters, particles);
+    /* Set initial energy */
+    energy = 0;
 
     /* Perform num_samples metropolis steps */
     for (i = 0; i < num_samples; i++) {
-        energy += perform_metropolis_step(particles, parameters, step_length);
+        energy += perform_metropolis_step(wavefunction, step_length);
     }
 
+    /* Return the total energy (without normalization) */
     return energy;
 }
