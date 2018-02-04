@@ -4,6 +4,15 @@
 
 #include "wavefunction.h"
 
+
+/* */
+void allocate_variational_parameters(wavefunction_t *wavefunction)
+{
+    /* Allocate memory for struct plus array of size 1 */
+    wavefunction->parameters = (parameters_t *) malloc(
+            sizeof(parameters_t) + sizeof(double));
+}
+
 parameters_t *get_variational_parameters(void)
 {
     parameters_t *parameters;

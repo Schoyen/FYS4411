@@ -7,7 +7,7 @@ import numpy as np
 source_files = [
     "vmc/metropolis_sampling.pyx",
     "src/metropolis_sampling.c",
-    "src/one_dimensional_ho.c"
+    "src/harmonic_oscillator.c"
 ]
 
 
