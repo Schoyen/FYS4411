@@ -13,8 +13,11 @@ typedef struct parameters {
 typedef struct wavefunction {
     unsigned int num_particles;
     unsigned int dimensionality;
+    unsigned int num_parameters;
+
     double last_value;
-    parameters_t *parameters;
+
+    double *parameters;
     particle_t *particles;
 } wavefunction_t;
 

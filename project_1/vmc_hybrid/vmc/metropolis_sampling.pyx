@@ -23,19 +23,19 @@ cdef class Wavefunction:
     def get_parameters(self):
         cdef unsigned int i, num_parameters
 
-        num_parameters = self.m_wavefunction.parameters.num_parameters
+        num_parameters = self.m_wavefunction.num_parameters
 
         return [
-            self.m_wavefunction.parameters.parameters[i]
+            self.m_wavefunction.parameters[i]
             for i in range(num_parameters)]
 
     def set_parameters(self, list values):
         cdef unsigned int i, num_parameters
 
-        num_parameters = self.m_wavefunction.parameters.num_parameters
+        num_parameters = self.m_wavefunction.num_parameters
 
         for i in range(num_parameters):
-            self.m_wavefunction.parameters.parameters[i] = <double> values[i]
+            self.m_wavefunction.parameters[i] = <double> values[i]
 
 
     def __dealloc__(self):
