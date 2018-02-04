@@ -1,8 +1,0 @@
-#ifndef WAVEFUNCTION_CONFIG_H
-#define WAVEFUNCTION_CONFIG_H
-
-enum {
-    DIMENSIONALITY = 1
-};
-
-#endif
