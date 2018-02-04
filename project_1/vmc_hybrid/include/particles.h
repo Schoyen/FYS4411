@@ -1,19 +1,14 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
-#include "wavefunction_config.h"
-
 typedef struct particle {
-    double position[DIMENSIONALITY];
+    double position[];
 } particle_t;
-
-
 
 typedef struct particles {
     unsigned int num_particles;
+    unsigned int dimensionality;
     particle_t *particles;
 } particles_t;
-
-
 
 #endif
