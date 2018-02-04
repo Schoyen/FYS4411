@@ -5,41 +5,22 @@
 #include "wavefunction.h"
 
 
-/* */
+/* This system uses a single variational parameter alpha */
 void allocate_variational_parameters(wavefunction_t *wavefunction)
 {
-    /* Allocate memory for struct plus array of size 1 */
-    wavefunction->parameters = (parameters_t *) malloc(
-            sizeof(parameters_t) + sizeof(double));
-}
-
-parameters_t *get_variational_parameters(void)
-{
-    parameters_t *parameters;
-
-    /* Allocate memory for struct plus array of size 1 */
-    parameters = (parameters_t *) malloc(
-            sizeof(parameters_t) + sizeof(double));
+    /* Allocate memory for alpha */
+    wavefunction->parameters = (double *) malloc(sizeof(double));
 
     /* Check if the allocation succeeded */
-    if (!parameters) {
-        fprintf(stderr, "Allocation of parameters struct failed\n");
+    if (!wavefunction->parameters) {
+        fprintf(stderr, "Allocation of parameters failed\n");
         exit(EXIT_FAILURE);
     }
 
     /* Set the number of parameters in the system, i.e., only alpha */
-    parameters->num_parameters = 1;
-    /* Set alpha to 0 */
-    parameters->parameters[0] = 0.0;
-
-    /* Return the parameters struct */
-    return parameters;
-}
-
-void free_parameters_struct(parameters_t *parameters)
-{
-    /* Free the parameters struct */
-    free(parameters);
+    wavefunction->num_parameters = 1;
+    /* Set initial value for alpha */
+    wavefunction->parameters[0] = 1.0;
 }
 
 double local_energy(
