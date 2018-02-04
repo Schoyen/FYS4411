@@ -22,14 +22,12 @@ typedef struct wavefunction {
 } wavefunction_t;
 
 
-parameters_t *get_variational_parameters(void);
-void free_parameters_struct(parameters_t *parameters);
 
-double local_energy(
-        parameters_t *parameters, double position[DIMENSIONALITY]);
+void allocate_variational_parameters(wavefunction_t *wavefunction);
+void free_variational_parameters(wavefunction_t *wavefunction);
 
-double local_energy_total(
-        parameters_t *parameters, particles_t *particles);
+void allocate_particles(wavefunction_t *wavefunction);
+void free_particles(wavefunction_t *wavefunction);
 
 double ratio(
         parameters_t *parameters, double new_position[DIMENSIONALITY],
