@@ -29,11 +29,12 @@ void free_variational_parameters(wavefunction_t *wavefunction);
 void allocate_particles(wavefunction_t *wavefunction);
 void free_particles(wavefunction_t *wavefunction);
 
+double local_energy(wavefunction_t *wavefunction);
+
 double ratio(
-        parameters_t *parameters, double new_position[DIMENSIONALITY],
-        double old_position[DIMENSIONALITY]);
+        wavefunction_t *wavefunction_new, wavefunction_t *wavefunction_old);
 
 double wavefunction(
-        parameters_t *parameters, double position[DIMENSIONALITY]);
+        wavefunction_t *wavefunction);
 
 #endif
