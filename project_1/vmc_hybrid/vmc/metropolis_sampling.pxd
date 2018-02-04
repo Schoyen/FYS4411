@@ -3,11 +3,15 @@ cdef extern from "wavefunction.h":
         double *position
 
     cdef struct particles:
-        unsigned int num_particles
-        unsigned int dimensionality
         particle_t *particles
 
+    cdef struct parameters:
+        unsigned int num_parameters
+        double *parameters
+
     cdef struct wavefunction:
+        unsigned int num_particles
+        unsigned int dimensionality
         parameters *parameters
         particles *particles
 
