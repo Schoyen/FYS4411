@@ -1,16 +1,24 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
-#include "particles.h"
+typedef struct particle {
+    double *position;
+} particle_t;
+
+typedef struct particles {
+    unsigned int num_particles;
+    unsigned int dimensionality;
+    particle_t *particles;
+} particles_t;
 
 typedef struct parameters {
     unsigned int num_parameters;
-    double parameters[];
+    double *parameters;
 } parameters_t;
 
 typedef struct wavefunction {
-    parameters_t parameters;
-    particles_t particles;
+    parameters_t *parameters;
+    particles_t *particles;
 } wavefunction_t;
 
 
