@@ -2,7 +2,7 @@
 #define PARTICLES_H
 
 typedef struct particle {
-    double position[];
+    double *position;
 } particle_t;
 
 typedef struct particles {
