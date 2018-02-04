@@ -1,13 +1,17 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
-#include "wavefunction_config.h"
 #include "particles.h"
 
 typedef struct parameters {
     unsigned int num_parameters;
     double parameters[];
 } parameters_t;
+
+typedef struct wavefunction {
+    parameters_t parameters;
+    particles_t particles;
+} wavefunction_t;
 
 
 parameters_t *get_variational_parameters(void);
