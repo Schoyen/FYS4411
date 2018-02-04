@@ -3,57 +3,41 @@ from libc.stdlib cimport malloc, free
 import numpy as np
 cimport numpy as np
 
+np.import_array()
+
 cdef class Wavefunction:
-    cdef parameters *m_parameters
+    cdef wavefunction m_wavefunction
 
-    def __cinit__(self):
-        self.m_parameters = get_variational_parameters()
+    def __cinit__(
+            self, unsigned int num_particles, unsigned int dimensionality):
 
-    def get_parameter_list(self):
-        cdef unsigned int i
+        self.m_wavefunction.num_particles = num_particles
+        self.m_wavefunction.dimensionality = dimensionality
+
+        allocate_variational_parameters(&self.m_wavefunction)
+        allocate_particles(&self.m_wavefunction)
+
+    def get_parameters(self):
+        cdef unsigned int i, num_parameters
+
+        num_parameters = self.m_wavefunction.parameters.num_parameters
 
         return [
-            self.m_parameters.parameters[i]
-            for i in range(self.m_parameters.num_parameters)]
+            self.m_wavefunction.parameters.parameters[i]
+            for i in range(num_parameters)]
 
-    def set_parameter_values(self, list values):
-        cdef double value
-        cdef unsigned int i
+    def set_parameters(self, list values):
+        cdef unsigned int i, num_parameters
 
-        if len(values) != self.m_parameters.num_parameters:
-            raise Exception(
-                "Specify same number of parameters to change as " \
-                + "there are parameters")
+        num_parameters = self.m_wavefunction.parameters.num_parameters
 
-        for i, value in enumerate(values):
-            self.m_parameters.parameters[i] = value
+        for i in range(num_parameters):
+            self.m_wavefunction.parameters.parameters[i] = <double> values[i]
+
 
     def __dealloc__(self):
-        free_parameters_struct(self.m_parameters)
-
-
-
-cdef class Particles:
-    cdef particles m_particles
-
-    def __cinit__(self, unsigned int num_particles):
-        self.m_particles.num_particles = num_particles
-        self.m_particles.particles = \
-            <particle *> malloc(sizeof(particle)*num_particles)
-
-        if not self.m_particles.particles:
-            raise Exception("particles-array was not allocated")
-
-    def get_particles(self):
-        cdef np.ndarray[ndim=2, dtype=double, mode="c"] particles
-        cdef unsigned int i
-        cdef int j
-
-        particles = np.zeros((self.m_particles.num_particles, DIMENSIONALITY))
-
-        for i in range(self.m_particles.num_particles):
-            for j in range(DIMENSIONALITY):
-                particles[i][j] = self.m_particles.particles[i].position[j]
+        free_variational_parameters(&self.m_wavefunction)
+        free_particles(&self.m_wavefunction)
 
         return particles
 
