@@ -39,38 +39,34 @@ cdef class Wavefunction:
         free_variational_parameters(&self.m_wavefunction)
         free_particles(&self.m_wavefunction)
 
-        return particles
+def perform_varying_metropolis(
+        Wavefunction wavefunction, double step_length,
+        unsigned int num_samples, np.ndarray[double, ndim=2] parameters):
 
-    def initialize_particles(self, double spread):
-        cdef unsigned int i
+    cdef np.ndarray[double, ndim=1] energies
+    cdef unsigned int i
 
-        for i in range(self.m_particles.num_particles):
-            self.initialize_particle(&(self.m_particles.particles[i]), spread)
+    energies = np.zeros(len(parameters))
 
-    cdef inline initialize_particle(self, particle *particle, double spread):
-        cdef int i
+    for i in range(len(parameters)):
+        wavefunction.set_parameters(parameters[i])
+        energies[i] = _perform_metropolis(
+                wavefunction, step_length, num_samples)
 
-        for i in range(DIMENSIONALITY):
-            particle.position[i] = spread*(2.0*np.random.random() - 1.0)
+    return energies
 
-    def __dealloc__(self):
-        free(self.m_particles.particles)
-
-
-def perform_metropolis(
-        Wavefunction wavefunction, Particles particles, double step_length,
+cdef double _perform_metropolis(
+        Wavefunction wavefunction, double step_length,
         unsigned int num_samples):
 
-    cdef double energy
+    return metropolis_sampling(
+            &wavefunction.m_wavefunction, step_length, num_samples)
 
-    energy = metropolis_sampling(
-        &particles.m_particles,
-        wavefunction.m_parameters,
-        step_length,
-        num_samples
-    )
+def perform_metropolis(
+        Wavefunction wavefunction, double step_length,
+        unsigned int num_samples):
 
-    return energy
+    return _perform_metropolis(wavefunction, step_length, num_samples)
 
 def normalize_energies(
         np.ndarray[double, ndim=1] energies, unsigned int num_samples,
