@@ -1,6 +1,8 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
+#define SQUARE(x) (x*x)
+
 typedef struct wavefunction {
     unsigned int num_particles;
     unsigned int dimensionality;
