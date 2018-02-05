@@ -1,11 +1,6 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
-typedef struct particle {
-    double *position;
-} particle_t;
-
-
 typedef struct wavefunction {
     unsigned int num_particles;
     unsigned int dimensionality;
@@ -14,7 +9,7 @@ typedef struct wavefunction {
     double last_value;
 
     double *parameters;
-    particle_t *particles;
+    double **particles;
 } wavefunction_t;
 
 
