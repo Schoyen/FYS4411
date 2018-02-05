@@ -28,6 +28,21 @@ cdef class Wavefunction:
         self.m_wavefunction.last_value = \
                 evaluate_wavefunction(&self.m_wavefunction)
 
+    def get_particles(self):
+        cdef unsigned int i, j
+        cdef np.ndarray[double, ndim=2] particles
+
+        particles = np.zeros(
+                (self.m_wavefunction.num_particles,
+                    self.m_wavefunction.dimensionality))
+
+        for i in range(self.m_wavefunction.num_particles):
+            for j in range(self.m_wavefunction.dimensionality):
+                particles[i][j] = self.m_wavefunction.particles[i][j]
+
+        return particles
+
+
     def get_parameters(self):
         cdef unsigned int i, num_parameters
 
