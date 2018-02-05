@@ -52,13 +52,13 @@ cdef class Wavefunction:
             self.m_wavefunction.parameters[i]
             for i in range(num_parameters)]
 
-    def set_parameters(self, list values):
+    def set_parameters(self, np.ndarray[double, ndim=1] values):
         cdef unsigned int i, num_parameters
 
         num_parameters = self.m_wavefunction.num_parameters
 
         for i in range(num_parameters):
-            self.m_wavefunction.parameters[i] = <double> values[i]
+            self.m_wavefunction.parameters[i] = values[i]
 
 
     def __dealloc__(self):
