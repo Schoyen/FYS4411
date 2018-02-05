@@ -7,10 +7,12 @@ cdef class Wavefunction:
     cdef wavefunction m_wavefunction
 
     def __cinit__(
-            self, unsigned int num_particles, unsigned int dimensionality):
+            self, unsigned int num_particles, unsigned int dimensionality,
+            unsigned int num_parameters):
 
         self.m_wavefunction.num_particles = num_particles
         self.m_wavefunction.dimensionality = dimensionality
+        self.m_wavefunction.num_parameters = num_parameters
 
         allocate_variational_parameters(&self.m_wavefunction)
         allocate_particles(&self.m_wavefunction)
