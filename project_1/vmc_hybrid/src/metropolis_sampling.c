@@ -6,28 +6,24 @@
 double perform_metropolis_step(
         wavefunction_t *wavefunction, double step_length)
 {
-    unsigned int particle_index, dimension_index, i;
+    unsigned int particle_index, dimension_index, j;
     double step, weight,
            old_position[wavefunction->dimensionality];
-    particle_t *particle;
 
     /* Draw a random particle */
     particle_index = arc4random_uniform(wavefunction->num_particles);
     /* Choose random dimension */
     dimension_index = arc4random_uniform(wavefunction->dimensionality);
 
-    /* Create a pointer to the drawn particle */
-    particle = &wavefunction->particles[particle_index];
-
     /* Store the previous position */
-    for (i = 0; i < wavefunction->dimensionality; i++) {
-        old_position[i] = particle->position[i];
+    for (j = 0; j < wavefunction->dimensionality; j++) {
+        old_position[j] = wavefunction->particles[particle_index][j];
     }
 
     /* Do a step from [-step_length, step_length) */
     step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
     /* Propose a new position */
-    particle->position[dimension_index] += step;
+    wavefunction->particles[particle_index][dimension_index] += step;
 
     /* Compute the ratio between the new and the old position */
     weight = ratio(wavefunction);
@@ -35,10 +31,13 @@ double perform_metropolis_step(
     /* Check if we should accept the new state */
     if (weight >= RANDOM_UNIFORM_DOUBLE) {
         /* Store accepted state as the last evaluated value */
+        /* TODO: By computing the ratio in this function we can avoid computing
+         * the wavefunction twice. */
         wavefunction->last_value = evaluate_wavefunction(wavefunction);
     } else {
         /* Reset position of particle as we rejected the new state */
-        particle->position[dimension_index] = old_position[dimension_index];
+        wavefunction->particles[particle_index][dimension_index] =
+            old_position[dimension_index];
     }
 
     /* Return the local energy */
