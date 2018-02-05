@@ -5,82 +5,59 @@
 
 
 double local_energy(
-        parameters_t *parameters, double position[DIMENSIONALITY])
+        wavefunction_t *wavefunction)
 {
-    double position_squared, alpha;
-    unsigned int i;
+    double position_squared_sum, alpha;
+    unsigned int i, j;
 
-    /* Calculate the position squared */
-    position_squared = 0.0;
+    /* Initialize position squared sum */
+    position_squared_sum = 0.0;
 
-    for (i = 0; i < DIMENSIONALITY; i++) {
-        position_squared += position[i]*position[i];
+    /* Calculate the position squared sum */
+    for (i = 0; i < wavefunction->num_particles; i++) {
+        for (j = 0; j < wavefunction->dimensionality; j++) {
+            position_squared_sum += SQUARE(wavefunction->particles[i][j]);
+        }
     }
 
     /* Fetch the variational parameter */
-    alpha = parameters->parameters[i];
+    alpha = wavefunction->parameters[0];
 
     /* Return the local energy */
-    return alpha + position_squared*(0.5 - 2*alpha*alpha);
-}
-
-double local_energy_total(
-        parameters_t *parameters, particles_t *particles)
-{
-    double energy;
-    unsigned int i;
-
-    /* Initialize energy */
-    energy = 0.0;
-
-    /* Add all the energy contribution */
-    for (i = 0; i < particles->num_particles; i++) {
-        energy += local_energy(parameters, particles->particles[i].position);
-    }
-
-    /* Return the total local energy (unormalized) */
-    return energy;
+    return alpha + position_squared_sum*(0.5 - 2*alpha*alpha);
 }
 
 double ratio(
-        parameters_t *parameters, double new_position[DIMENSIONALITY],
-        double old_position[DIMENSIONALITY])
+        wavefunction_t *wavefunction)
 {
-    double new_position_squared, old_position_squared, alpha;
-    unsigned int i;
+    double current_value;
 
-    /* Calculate the positions squared */
-    new_position_squared = 0.0;
-    old_position_squared = 0.0;
+    /* Get the current value of the wavefunction */
+    current_value = evaluate_wavefunction(wavefunction);
 
-    for (i = 0; i < DIMENSIONALITY; i++) {
-        new_position_squared += new_position[i]*new_position[i];
-        old_position_squared += old_position[i]*old_position[i];
-    }
-
-    /* Fetch the variational parameter */
-    alpha = parameters->parameters[0];
-
-    /* Return the ratio */
-    return exp(-2*alpha*(new_position_squared - old_position_squared));
+    /* Return the ratio of the old and the new wavefunction */
+    return SQUARE(current_value)/SQUARE(wavefunction->last_value);
 }
 
-double wavefunction(
-        parameters_t *parameters, double position[DIMENSIONALITY])
+double evaluate_wavefunction(
+        wavefunction_t *wavefunction)
 {
-    double position_squared, alpha;
-    unsigned int i;
+    double position_squared_sum, alpha;
+    unsigned int i, j;
 
-    /* Calculate the radius/position squared */
-    position_squared = 0.0;
+    /* Initialize position squared sum */
+    position_squared_sum = 0.0;
 
-    for (i = 0; i < DIMENSIONALITY; i++) {
-        position_squared += position[i]*position[i];
+    /* Calculate position squared sum */
+    for (i = 0; i < wavefunction->num_particles; i++) {
+        for (j = 0; j < wavefunction->dimensionality; j++) {
+            position_squared_sum += SQUARE(wavefunction->particles[i][j]);
+        }
     }
 
     /* Fetch the variational parameter */
-    alpha = parameters->parameters[0];
+    alpha = wavefunction->parameters[0];
 
     /* Return the trial wavefunction */
-    return exp(-alpha*position_squared);
+    return exp(-alpha*position_squared_sum);
 }
