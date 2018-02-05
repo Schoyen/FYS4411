@@ -5,11 +5,11 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 num_particles = 1
-dimensionality = 2
+dimensionality = 3
 num_parameters = 1
-spread = 0.5
-step_length = 0.1
-num_samples = 1000000
+spread = 1.0
+step_length = 0.5
+num_samples = 100000
 
 parameters = np.array([[alpha] for alpha in np.linspace(0.1, 2, 101)])
 
@@ -24,9 +24,9 @@ particle_array = wavefunction.get_particles()
 #plt.show()
 
 # Three dimensional plotting for DIMENSIONALITY = 3
-#ax = plt.figure().add_subplot(111, projection="3d")
-#ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
-#plt.show()
+ax = plt.figure().add_subplot(111, projection="3d")
+ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
+plt.show()
 
 
 energies = perform_varying_metropolis(
@@ -35,9 +35,9 @@ energies = perform_varying_metropolis(
 energies = normalize_energies(energies, num_samples, num_particles)
 
 particle_array = wavefunction.get_particles()
-#ax = plt.figure().add_subplot(111, projection="3d")
-#ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
-#plt.show()
+ax = plt.figure().add_subplot(111, projection="3d")
+ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
+plt.show()
 
 plt.plot(parameters[:, 0], energies)
 plt.show()
