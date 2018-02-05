@@ -29,8 +29,7 @@ double local_energy(wavefunction_t *wavefunction)
         + wavefunction->dimensionality*wavefunction->num_particles*alpha;
 }
 
-double ratio(
-        wavefunction_t *wavefunction)
+double ratio(wavefunction_t *wavefunction)
 {
     double current_value;
 
@@ -41,8 +40,7 @@ double ratio(
     return SQUARE(current_value)/SQUARE(wavefunction->last_value);
 }
 
-double evaluate_wavefunction(
-        wavefunction_t *wavefunction)
+double evaluate_wavefunction(wavefunction_t *wavefunction)
 {
     double position_squared_sum, alpha;
     unsigned int i, j;
