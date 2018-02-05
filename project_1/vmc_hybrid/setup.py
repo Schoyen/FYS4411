@@ -6,6 +6,7 @@ import numpy as np
 
 source_files = [
     "vmc/metropolis_sampling.pyx",
+    "src/wavefunction.c",
     "src/metropolis_sampling.c",
     "src/harmonic_oscillator.c"
 ]
