@@ -1,27 +1,8 @@
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 #include "wavefunction.h"
 
-
-/* This system uses a single variational parameter alpha */
-void allocate_variational_parameters(wavefunction_t *wavefunction)
-{
-    /* Allocate memory for alpha */
-    wavefunction->parameters = (double *) malloc(sizeof(double));
-
-    /* Check if the allocation succeeded */
-    if (!wavefunction->parameters) {
-        fprintf(stderr, "Allocation of parameters failed\n");
-        exit(EXIT_FAILURE);
-    }
-
-    /* Set the number of parameters in the system, i.e., only alpha */
-    wavefunction->num_parameters = 1;
-    /* Set initial value for alpha */
-    wavefunction->parameters[0] = 1.0;
-}
 
 double local_energy(
         parameters_t *parameters, double position[DIMENSIONALITY])
