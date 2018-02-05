@@ -7,7 +7,7 @@ double perform_metropolis_step(
         wavefunction_t *wavefunction, double step_length)
 {
     unsigned int particle_index, dimension_index, j;
-    double step, weight,
+    double step, weight, current_wavefunction,
            old_position[wavefunction->dimensionality];
 
     /* Draw a random particle */
@@ -25,15 +25,16 @@ double perform_metropolis_step(
     /* Propose a new position */
     wavefunction->particles[particle_index][dimension_index] += step;
 
+    /* Evaluate the new wavefunction */
+    current_wavefunction = evaluate_wavefunction(wavefunction);
+
     /* Compute the ratio between the new and the old position */
-    weight = ratio(wavefunction);
+    weight = SQUARE(current_wavefunction)/SQUARE(wavefunction->last_value);
 
     /* Check if we should accept the new state */
     if (weight >= RANDOM_UNIFORM_DOUBLE) {
         /* Store accepted state as the last evaluated value */
-        /* TODO: By computing the ratio in this function we can avoid computing
-         * the wavefunction twice. */
-        wavefunction->last_value = evaluate_wavefunction(wavefunction);
+        wavefunction->last_value = current_wavefunction;
     } else {
         /* Reset position of particle as we rejected the new state */
         wavefunction->particles[particle_index][dimension_index] =
