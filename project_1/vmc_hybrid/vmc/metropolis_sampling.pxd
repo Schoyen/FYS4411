@@ -15,6 +15,8 @@ cdef extern from "wavefunction.h":
     void allocate_particles(wavefunction *wavefunction)
     void free_particles(wavefunction *wavefunction)
 
+    double evaluate_wavefunction(wavefunction *wavefunction)
+
 cdef extern from "metropolis_sampling.h":
     double perform_metropolis_step(
             wavefunction *wavefunction, double step_length)
