@@ -18,9 +18,15 @@ cdef class Wavefunction:
         allocate_particles(&self.m_wavefunction)
 
     def initialize_wavefunction(self, double spread):
-        # TODO: Distribute particles
-        # TODO: Evaluate wavefunction and store in last_value
-        pass
+        cdef unsigned int i, j
+
+        for i in range(self.m_wavefunction.num_particles):
+            for j in range(self.m_wavefunction.dimensionality):
+                self.m_wavefunction.particles[i][j] = \
+                        spread*(2*np.random.random() - 1)
+
+        self.m_wavefunction.last_value = \
+                evaluate_wavefunction(&self.m_wavefunction)
 
     def get_parameters(self):
         cdef unsigned int i, num_parameters
