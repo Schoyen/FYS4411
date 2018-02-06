@@ -127,12 +127,12 @@
             0 & |\vf{r}_i - \vf{r}_j| > a,
         \end{cases}
     \end{align}
-    where $a$ is the hard sphere of the particle. The trial wavefunction we will
+    where $a$ is the hard sphere of the particle. The trial wavefunction,
+    $\ket{\Psi_T}$, we will
     be looking at is given by
     \begin{align}
         \Psi_T(\vf{r})
-        &= \bra{\vf{r}}\ket{\Psi_T}
-        = \bra{\vf{r}}\ket{\Phi_T}
+        &= \Phi_T(\vf{r})
         \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k) \\
         &= \Biggl(
             \prod_i^N g(\alpha, \beta, \vf{r}_i)
@@ -173,22 +173,22 @@
         by
         \begin{align}
             E_L(\vf{r})
-            &= \frac{\bra{\vf{r}}H\ket{\Psi_T}}{\bra{\vf{r}}\ket{\Psi_T}}.
+            &= \frac{H\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
         \end{align}
         If $\ket{\Psi_T}$ is an exact eigenfunction of the Hamiltonian, $E_L$
         will be constant. The closer $\ket{\Psi_T}$ is to the exact wave
         function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
-        One of the most computationally intensive part of the VMC algorithm will
-        be to compute $E_L$. We therefore find an analytical expression for
+        One of the most computationally intensive parts of the VMC algorithm
+        will be to compute $E_L$. We therefore find an analytical expression for
         $E_L$ in terms of the trial wavefunction.
 
         \subsubsection{Non-interacting harmonic oscillator}
-            We start by finding an analytical expression for the local energy
-            with a system where we set $a = 0$ and $\beta = 1$, i.e., a system
-            of non-interacting harmonic oscillators.
+            We start by finding an analytical expression for the local energy in
+            a system where we set $a = 0$ and $\beta = 1$, i.e., a system of
+            non-interacting harmonic oscillators.
             \begin{align}
-                \bra{\vf{r}}\ket{\Psi_T}
-                = \bra{\vf{r}}\ket{\Phi_T}
+                \Psi_T(\vf{r})
+                = \Phi_T(\vf{r})
                 = \prod_i^N \exp\bigl[
                     -\alpha |\vf{r}_i|^2
                 \bigr],
@@ -198,110 +198,152 @@
             (in the spherical case)
             \begin{align}
                 H &= \sum_i^N h(\vf{r}_i)
-                = \sum_i^N \biggl(
+                = \sum_i^N \Biggl(
                     -\frac{\hbar^2}{2m}\nabla_i^2
                     + \half m \omega^2 r_i^2
-                \biggr).
+                \Biggr).
             \end{align}
-            Working in spherical coordinates the gradient and the Laplace
-            operator (applied to a scalar function) becomes
+            The hardest part of finding the local energy is computing the
+            kinetic term. Starting with the gradient of the wavefunction in the
+            non-interacting case, we get
             \begin{align}
-                \nabla f
-                &= \vf{e}_r\tpl{r}f
-                + \vf{e}_{\theta}\frac{1}{r}\tpl{\theta}f
-                + \vf{e}_{\phi}\frac{1}{r\sin(\theta)}\tpl{\phi}f, \\
-                \nabla^2 f
-                &= \frac{1}{r^2}\tpl{r}
-                \bigl[
-                    r^2\tpl{r}f
-                \bigr]
-                + \frac{1}{r^2\sin(\theta)}\tpl{\theta}
-                \bigl[
-                    \sin(\theta)\tpl{\theta}f
-                \bigr] \nonumber\\
-                &\qquad
-                + \frac{1}{r^2\sin^2(\theta)}\tpl{\phi}^2f,
+                \nabla_k\Psi_T(\vf{r})
+                &= -2\alpha \vf{r}_k\Psi_T(\vf{r}).
             \end{align}
-            where $\vf{e}_r$ signifies the unit vector in the radial direction
-            and we use the shorthand notation
+            The Laplacian yields
             \begin{align}
-                \tpl{r}f \equiv \dpd[]{f}{r}.
+                \nabla^2_k\Psi_T(\vf{r})
+                &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
             \end{align}
-            As the trial wavefunction for $\beta = 1$ is purely radial we get
-            the same expression in one, two and three dimensions by setting
-            \begin{align}
-                r^2 =
-                \begin{cases}
-                    x^2 & \text{one dimension}, \\
-                    x^2 + y^2 & \text{two dimensions}, \\
-                    x^2 + y^2 + z^2 & \text{three dimensions}.
-                \end{cases}
-            \end{align}
-            The gradient then becomes
-            \begin{align}
-                \nabla_i\bra{\vf{r}}\ket{\Psi_T}
-                &= \vf{e}_{{r_i}}\tpl{{r_i}}\prod_j^N\exp\bigl[
-                    -\alpha r_j^2
-                \bigr] \\
-                &=
-                -2\alpha r_i\prod_j^N\exp\bigl[
-                    -\alpha r_j^2
-                \bigr]\vf{e}_{{r_i}} \\
-                &=
-                -2\alpha r_i\bra{\vf{r}}\ket{\Psi_T}\vf{e}_{{r_i}}.
-            \end{align}
-            The Laplacian is given by
-            \begin{align}
-                \nabla_i^2\bra{\vf{r}}\ket{\Psi_T}
-                &= \frac{1}{r_i^2}\tpl{{r_i}}
-                \biggl\{
-                    r_i^2\tpl{{r_i}}
-                    \prod_j^N\exp\bigl[
-                        -\alpha r_j^2
-                    \bigr]
-                \biggr\} \\
-                &=
-                \frac{1}{r_i^2}\tpl{{r_i}}
-                \biggl\{
-                    -2 \alpha r_i^3
-                    \prod_j^N\exp\bigl[
-                        -\alpha r_j^2
-                    \bigr]
-                \biggr\} \\
-                &=
-                \frac{1}{r_i^2}
-                \Bigl\{
-                    -6 \alpha r_i^2
-                    + 4\alpha^2 r_i^4
-                \Bigr\}
-                \prod_j^N\exp\bigl[
-                    -\alpha r_j^2
-                \bigr]
-                \\
-                &=
-                \Bigl\{
-                    -6 \alpha
-                    + 4\alpha^2 r_i^2
-                \Bigr\}
-                \bra{\vf{r}}\ket{\Psi_T}.
-            \end{align}
-            This gives the analytical expression for the local energy to be
+            where $d$ is the dimensionality of the problem determined by
+            $\vf{r}_k \in \mathbb{R}^d$. This yields the analytical expression
+            for the local energy in the non-interacting case to be
             \begin{align}
                 E_L(\vf{r})
-                &= \frac{\bra{\vf{r}}H\ket{\Psi_T}}{\bra{\vf{r}}\ket{\Psi_T}} \\
-                &= \sum_i^N \Bigl(
-                    4\alpha^2 r_i^2
-                    + \half m \omega^2 r_i^2
-                \Bigr) - 6\alpha.
-            \end{align}
-            The \textit{drift force} of the system is given by
-            \begin{align}
-                \vf{F}_i
                 &=
-                \frac{2\nabla_i\bra{\vf{r}}\ket{\Psi_T}}
-                {\bra{\vf{r}}\ket{\Psi_T}} \\
-                &= -4\alpha r_i\vf{e}_{{r_i}}.
+                \sum_i^N
+                \Biggl(
+                    -\frac{\hbar^2}{2m}
+                    \bigl[
+                        -2d\alpha + 4\alpha^2 r_i^2
+                    \bigr]
+                    + \half m\omega^2 r_i^2
+                \Biggr).
             \end{align}
+            In natural units, with $\hbar = c = m = 1$, this reduces to
+            \begin{align}
+                E_L(\vf{r})
+                &=
+                \alpha dN
+                + \biggl(
+                    \half\omega^2
+                    - 2\alpha^2
+                \biggr)
+                \sum_i^N r_i^2.
+            \end{align}
+            It is worth noting that for $\omega = 1$ we will find a stable value
+            for the local energy when $\alpha = \half$. This happens as the
+            entire sum over all the random walkers disappears.
+
+%            Working in spherical coordinates the gradient and the Laplace
+%            operator (applied to a scalar function) becomes
+%            \begin{align}
+%                \nabla f
+%                &= \vf{e}_r\tpl{r}f
+%                + \vf{e}_{\theta}\frac{1}{r}\tpl{\theta}f
+%                + \vf{e}_{\phi}\frac{1}{r\sin(\theta)}\tpl{\phi}f, \\
+%                \nabla^2 f
+%                &= \frac{1}{r^2}\tpl{r}
+%                \bigl[
+%                    r^2\tpl{r}f
+%                \bigr]
+%                + \frac{1}{r^2\sin(\theta)}\tpl{\theta}
+%                \bigl[
+%                    \sin(\theta)\tpl{\theta}f
+%                \bigr] \nonumber\\
+%                &\qquad
+%                + \frac{1}{r^2\sin^2(\theta)}\tpl{\phi}^2f,
+%            \end{align}
+%            where $\vf{e}_r$ signifies the unit vector in the radial direction
+%            and we use the shorthand notation
+%            \begin{align}
+%                \tpl{r}f \equiv \dpd[]{f}{r}.
+%            \end{align}
+%            As the trial wavefunction for $\beta = 1$ is purely radial we get
+%            the same expression in one, two and three dimensions by setting
+%            \begin{align}
+%                r^2 =
+%                \begin{cases}
+%                    x^2 & \text{one dimension}, \\
+%                    x^2 + y^2 & \text{two dimensions}, \\
+%                    x^2 + y^2 + z^2 & \text{three dimensions}.
+%                \end{cases}
+%            \end{align}
+%            The gradient then becomes
+%            \begin{align}
+%                \nabla_i\bra{\vf{r}}\ket{\Psi_T}
+%                &= \vf{e}_{{r_i}}\tpl{{r_i}}\prod_j^N\exp\bigl[
+%                    -\alpha r_j^2
+%                \bigr] \\
+%                &=
+%                -2\alpha r_i\prod_j^N\exp\bigl[
+%                    -\alpha r_j^2
+%                \bigr]\vf{e}_{{r_i}} \\
+%                &=
+%                -2\alpha r_i\bra{\vf{r}}\ket{\Psi_T}\vf{e}_{{r_i}}.
+%            \end{align}
+%            The Laplacian is given by
+%            \begin{align}
+%                \nabla_i^2\bra{\vf{r}}\ket{\Psi_T}
+%                &= \frac{1}{r_i^2}\tpl{{r_i}}
+%                \biggl\{
+%                    r_i^2\tpl{{r_i}}
+%                    \prod_j^N\exp\bigl[
+%                        -\alpha r_j^2
+%                    \bigr]
+%                \biggr\} \\
+%                &=
+%                \frac{1}{r_i^2}\tpl{{r_i}}
+%                \biggl\{
+%                    -2 \alpha r_i^3
+%                    \prod_j^N\exp\bigl[
+%                        -\alpha r_j^2
+%                    \bigr]
+%                \biggr\} \\
+%                &=
+%                \frac{1}{r_i^2}
+%                \Bigl\{
+%                    -6 \alpha r_i^2
+%                    + 4\alpha^2 r_i^4
+%                \Bigr\}
+%                \prod_j^N\exp\bigl[
+%                    -\alpha r_j^2
+%                \bigr]
+%                \\
+%                &=
+%                \Bigl\{
+%                    -6 \alpha
+%                    + 4\alpha^2 r_i^2
+%                \Bigr\}
+%                \bra{\vf{r}}\ket{\Psi_T}.
+%            \end{align}
+%            This gives the analytical expression for the local energy to be
+%            \begin{align}
+%                E_L(\vf{r})
+%                &= \frac{\bra{\vf{r}}H\ket{\Psi_T}}{\bra{\vf{r}}\ket{\Psi_T}} \\
+%                &= \sum_i^N \Bigl(
+%                    4\alpha^2 r_i^2
+%                    + \half m \omega^2 r_i^2
+%                \Bigr) - 6\alpha.
+%            \end{align}
+%            The \textit{drift force} of the system is given by
+%            \begin{align}
+%                \vf{F}_i
+%                &=
+%                \frac{2\nabla_i\bra{\vf{r}}\ket{\Psi_T}}
+%                {\bra{\vf{r}}\ket{\Psi_T}} \\
+%                &= -4\alpha r_i\vf{e}_{{r_i}}.
+%            \end{align}
 
         \subsubsection{The full system}
             Moving to the full system allowing $\beta$ to vary and setting $a
