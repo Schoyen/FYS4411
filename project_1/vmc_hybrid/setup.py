@@ -22,7 +22,7 @@ libraries = []
 
 extensions = [
     Extension(
-        name="metropolis_sampling",
+        name="vmc.metropolis_sampling",
         sources=source_files,
         language="c",
         include_dirs=include_dirs,

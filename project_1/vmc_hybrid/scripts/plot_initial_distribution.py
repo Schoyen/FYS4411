@@ -1,4 +1,4 @@
-from metropolis_sampling import Wavefunction, perform_varying_metropolis, \
+from vmc.metropolis_sampling import Wavefunction, perform_varying_metropolis, \
         normalize_energies
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D

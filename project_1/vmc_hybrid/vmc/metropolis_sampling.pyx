@@ -1,6 +1,8 @@
 import numpy as np
 cimport numpy as np
 
+cimport vmc.metropolis_sampling
+
 np.import_array()
 
 cdef class Wavefunction:
