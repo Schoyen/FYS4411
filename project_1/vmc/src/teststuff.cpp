@@ -4,7 +4,7 @@
 int main() {
 
     // Create Particle object
-    Particles* some_walkers = new Particles(3, 10, 10);
+    Particles* some_walkers = new Particles(3, 2);
 
     std::cout << some_walkers->get_walkers() << std::endl;
 
