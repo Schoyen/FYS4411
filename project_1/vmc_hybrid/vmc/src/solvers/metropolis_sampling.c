@@ -6,7 +6,8 @@
 
 
 double perform_metropolis_step(
-        wavefunction_t *wavefunction, double step_length)
+        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
+        double step_length)
 {
     unsigned int particle_index, dimension_index, j;
     double step, weight, current_wavefunction,
@@ -44,14 +45,13 @@ double perform_metropolis_step(
     }
 
     /* Return the local energy */
-    return local_energy(wavefunction);
+    return local_energy(wavefunction, hamiltonian);
 }
 
 
-
 double metropolis_sampling(
-        wavefunction_t *wavefunction, double step_length,
-        unsigned int num_samples)
+        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
+        double step_length, unsigned int num_samples)
 {
     double energy;
     unsigned int i;
@@ -61,7 +61,8 @@ double metropolis_sampling(
 
     /* Perform num_samples metropolis steps */
     for (i = 0; i < num_samples; i++) {
-        energy += perform_metropolis_step(wavefunction, step_length);
+        energy += perform_metropolis_step(wavefunction, hamiltonian,
+                step_length);
     }
 
     /* Return the total energy (without normalization) */
