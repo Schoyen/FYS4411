@@ -24,8 +24,6 @@ void free_particles(wavefunction_t *wavefunction);
 
 double local_energy(wavefunction_t *wavefunction);
 
-double ratio(wavefunction_t *wavefunction);
-
 double evaluate_wavefunction(wavefunction_t *wavefunction);
 
 #endif

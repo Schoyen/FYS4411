@@ -29,17 +29,6 @@ double local_energy(wavefunction_t *wavefunction)
         + wavefunction->dimensionality*wavefunction->num_particles*alpha;
 }
 
-double ratio(wavefunction_t *wavefunction)
-{
-    double current_value;
-
-    /* Get the current value of the wavefunction */
-    current_value = evaluate_wavefunction(wavefunction);
-
-    /* Return the ratio of the old and the new wavefunction */
-    return SQUARE(current_value)/SQUARE(wavefunction->last_value);
-}
-
 double evaluate_wavefunction(wavefunction_t *wavefunction)
 {
     double position_squared_sum, alpha;
