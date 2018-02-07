@@ -598,7 +598,20 @@
                 \phi_k.
             \end{align}
             In order to derive the interaction functions we have to do a
-            variable substitution. We replace the derivative of the radial
+            variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
+            then rewrite the $\nabla_k$-operator as
+            \begin{align}
+                \nabla_k
+                &=
+                \nabla_k
+                \dpd[]{r_{km}}{r_{km}}
+                =
+                \nabla_k r_{km} \dpd[]{}{r_{km}}
+                \\
+                &=
+                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
+            \end{align}
+
             component for particle $k$ by
             \begin{align}
                 \tpl{{r_k}}
