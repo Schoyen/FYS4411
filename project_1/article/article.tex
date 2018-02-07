@@ -641,7 +641,8 @@
                     + \dpd[2]{u_{km}}{r_{km}},
                 \end{align}
                 where $d$ is again the dimensionality of the problem. In total
-                we can state an intermediate version of the local energy as
+                we can state an intermediate version of the Laplacian occuring
+                in the local energy as
                 \begin{align}
                     \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
                     &=
@@ -667,195 +668,205 @@
                     \dpd[]{u_{kn}}{r_{kn}}.
                 \end{align}
             \end{widetext}
+            Moving on to the derivatives of the interaction terms, $u_{km}$, to
+            get an explicit expression for the Laplacian.
+            \begin{align}
+                \dpd[]{u_{km}}{r_{km}}
+                &=
+                \frac{a}{r_{km}(r_{km} - a)},
+                \\
+                \dpd[2]{u_{km}}{r_{km}}
+                &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
+            \end{align}
 
-            component for particle $k$ by
-            \begin{align}
-                \tpl{{r_k}}
-                = \dpd[]{r_{km}}{r_k}\tpl{{r_{km}}}.
-            \end{align}
-            The derivative of the distance $r_{km}$ is given by
-            \begin{gather}
-                r_{km} = |\vf{r}_k - \vf{r}_m|
-                \implies
-                \dpd[]{r_{km}}{r_k}
-                = \frac{r_k - r_m}{|\vf{r}_k - \vf{r}_m|},
-            \end{gather}
-            where in spherical coordinates $\vf{r}_k = r_k\vf{e}_r$.  The
-            gradient of $u(r_{km})$ thus simplifies to only include the radial
-            contribution.
-            \begin{align}
-                \nabla_k u(r_{km})
-                &=
-                \vf{e}_{r}\tpl{{r_k}}u(r_{km})
-                \\
-                &=
-                \vf{e}_r\dpd[]{r_{km}}{r_k}\tpl{{r_{km}}}u(r_{km})
-                \\
-                &= \vf{e}_r\frac{r_k - r_m}{r_{km}}
-                \tpl{{r_{km}}}u(r_{km}).
-            \end{align}
-            \begin{widetext}
-                Using this expression we find the Laplacian to be
-                \begin{align}
-                    \nabla_k^2 u(r_{km})
-                    &=
-                    \frac{1}{r_{km}} \tpl{{r_{km}}} u(r_{km})
-                    + \frac{(r_k - r_m)^2}{r_{km}^3} \tpl{{r_{km}}} u(r_{km})
-                    +
-                    \frac{r_k - r_m}{r_{km}}
-                    \dpd[]{r_{km}}{r_k}
-                    \partial_{{r_{km}}}^2 u(r_{km}) \\
-                    &=
-                    \frac{1}{r_{km}} \tpl{{r_{km}}} u(r_{km})
-                    + \frac{r_{km}^2}{r_{km}^3} \tpl{{r_{km}}} u(r_{km})
-                    +
-                    \frac{(r_k - r_m)^2}{r_{km}^2}
-                    \partial_{{r_{km}}}^2 u(r_{km}) \\
-                    &=
-                    \frac{2}{r_{km}}\tpl{{r_{km}}}u(r_{km})
-                    + \partial_{{r_{km}}}^2u(r_{km}).
-                \end{align}
-            \end{widetext}
-            We now take the derivate with respect to $r_{km}$ of the interaction
-            functions $u(r_{km})$ to find the closed form expressions. We get
-            \begin{align}
-                \partial_{r_{km}}u(r_{km})
-                &=
-                \partial_{r_{km}}
-                \ln\Biggl(
-                    1 - \frac{a}{r_{km}}
-                \Biggr) \\
-                &=
-                \partial_{r_{km}}
-                \ln\Biggl(
-                    \frac{1}{r_{km}}
-                    (r_{km} - a)
-                \Biggr) \\
-                &=
-                \partial_{r_{km}}
-                \Bigl[
-                    \ln(r_{km} - a)
-                    - \ln(r_{km})
-                \Bigr] \\
-                &=
-                \frac{1}{r_{km} - a} - \frac{1}{r_{km}} \\
-                &=
-                \frac{a}{r_{km}(r_{km} - a)} \\
-                \partial_{r_{km}}^2u(r_{km})
-                &= a\Bigl(
-                    \partial_{r_{km}}\frac{1}{r_{km}}
-                \Bigr)
-                \partial_{r_{km}}\frac{1}{r_{km} - a}
-                \nonumber \\
-                &\qquad
-                + a\frac{1}{r_{km}}
-                \Bigl(
-                    \partial_{r_{km}}\frac{1}{r_{km} - a}
-                \Bigr) \\
-                &=
-                -\frac{a}{r_{km}^2(r_{km} - a)}
-                -\frac{a}{r_{km}(r_{km} - a)^2} \\
-                &=
-                - \frac{2a(r_{km} - 1)}{r_{km}^2(r_{km} - a)^2}.
-            \end{align}
-            Using this we are now able to write the closed form expression of
-            the Laplacian of the trial wavefunction.
-            \begin{widetext}
-                \begin{align}
-                    \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
-                    {\bra{\vf{r}}\ket{\Psi_T}}
-                    &=
-                    -2\alpha
-                    \big(
-                        2 + \beta
-                    \bigr)
-                    + 4\alpha^2
-                    \bigl(
-                        x_k^2 + y_k^2 + \beta^2z_k^2
-                    \bigr)
-                    %\nonumber \\
-                    %&\qquad
-                    +
-                    2a
-                    \sum_{m \neq k}^N
-                    \Biggl[
-                        \frac{1}{r_{km}^2(r_{km} - a)}
-                        - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
-                    \Biggr]
-                    \nonumber \\
-                    &\qquad
-                    -4\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-                    \cdot
-                    a\sum_{m \neq k}^N
-                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
-                    + \Biggl[
-                        a\sum_{m \neq k}^N
-                        \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
-                    \Biggr]^2.
-                \end{align}
-            \end{widetext}
-            To ease the load on the CPU we try to restrict the number of times
-            we evaluate the sums. For brevity we introduce the following
-            functions
-            \begin{align}
-                \xi_k(\vf{r}, a)
-                &= \sum_{m \neq k}^N
-                \Biggl[
-                    \frac{1}{r_{km}^2(r_{km} - a)}
-                    - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
-                \Biggr] \\
-                &=
-                \sum_{m \neq k}^N
-                \frac{1 - a}{r_{km}^2(r_{km} - a)^2}, \\
-                \vfg{\zeta}_k(\vf{r}, a)
-                &=
-                \sum_{m \neq k}^N
-                \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}.
-            \end{align}
-            We can then rewrite the expression for the Laplacian to
-            \begin{widetext}
-                \begin{align}
-                    \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
-                    {\bra{\vf{r}}\ket{\Psi_T}}
-                    &=
-                    -2\alpha
-                    \big(
-                        2 + \beta
-                    \bigr)
-                    + 4\alpha^2
-                    \bigl(
-                        x_k^2 + y_k^2 + \beta^2z_k^2
-                    \bigr)
-                    %\nonumber \\
-                    %&\qquad
-                    +
-                    2a\xi_k(\vf{r}, a)
-                    \nonumber \\
-                    &\qquad
-                    -4a\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-                    \cdot
-                    \vfg{\zeta}_k(\vf{r}, a)
-                    + a^2\vfg{\zeta}_k(\vf{r}, a)^2.
-                \end{align}
-                Both $\xi_k$ and $\vfg{\zeta}_k$ can be evaluated in a common
-                loop. Using this expression for the Laplacian we can find the
-                local energy from
-                \begin{align}
-                    E_L(\vf{r})
-                    &=
-                    \frac{\bra{\vf{r}}H\ket{\Psi_T}}
-                    {\bra{\vf{r}}\ket{\Psi_T}}
-                    =
-                    \sum_{k}^N
-                    \Biggl(
-                        -\frac{\hbar^2}{2m}
-                        \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
-                        {\bra{\vf{r}}\ket{\Psi_T}}
-                        + V_{\text{ext}}(\vf{r})
-                    \Biggr)
-                    +
-                    \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j).
-                \end{align}
-            \end{widetext}
+            %component for particle $k$ by
+            %\begin{align}
+            %    \tpl{{r_k}}
+            %    = \dpd[]{r_{km}}{r_k}\tpl{{r_{km}}}.
+            %\end{align}
+            %The derivative of the distance $r_{km}$ is given by
+            %\begin{gather}
+            %    r_{km} = |\vf{r}_k - \vf{r}_m|
+            %    \implies
+            %    \dpd[]{r_{km}}{r_k}
+            %    = \frac{r_k - r_m}{|\vf{r}_k - \vf{r}_m|},
+            %\end{gather}
+            %where in spherical coordinates $\vf{r}_k = r_k\vf{e}_r$.  The
+            %gradient of $u(r_{km})$ thus simplifies to only include the radial
+            %contribution.
+            %\begin{align}
+            %    \nabla_k u(r_{km})
+            %    &=
+            %    \vf{e}_{r}\tpl{{r_k}}u(r_{km})
+            %    \\
+            %    &=
+            %    \vf{e}_r\dpd[]{r_{km}}{r_k}\tpl{{r_{km}}}u(r_{km})
+            %    \\
+            %    &= \vf{e}_r\frac{r_k - r_m}{r_{km}}
+            %    \tpl{{r_{km}}}u(r_{km}).
+            %\end{align}
+            %\begin{widetext}
+            %    Using this expression we find the Laplacian to be
+            %    \begin{align}
+            %        \nabla_k^2 u(r_{km})
+            %        &=
+            %        \frac{1}{r_{km}} \tpl{{r_{km}}} u(r_{km})
+            %        + \frac{(r_k - r_m)^2}{r_{km}^3} \tpl{{r_{km}}} u(r_{km})
+            %        +
+            %        \frac{r_k - r_m}{r_{km}}
+            %        \dpd[]{r_{km}}{r_k}
+            %        \partial_{{r_{km}}}^2 u(r_{km}) \\
+            %        &=
+            %        \frac{1}{r_{km}} \tpl{{r_{km}}} u(r_{km})
+            %        + \frac{r_{km}^2}{r_{km}^3} \tpl{{r_{km}}} u(r_{km})
+            %        +
+            %        \frac{(r_k - r_m)^2}{r_{km}^2}
+            %        \partial_{{r_{km}}}^2 u(r_{km}) \\
+            %        &=
+            %        \frac{2}{r_{km}}\tpl{{r_{km}}}u(r_{km})
+            %        + \partial_{{r_{km}}}^2u(r_{km}).
+            %    \end{align}
+            %\end{widetext}
+            %We now take the derivate with respect to $r_{km}$ of the interaction
+            %functions $u(r_{km})$ to find the closed form expressions. We get
+            %\begin{align}
+            %    \partial_{r_{km}}u(r_{km})
+            %    &=
+            %    \partial_{r_{km}}
+            %    \ln\Biggl(
+            %        1 - \frac{a}{r_{km}}
+            %    \Biggr) \\
+            %    &=
+            %    \partial_{r_{km}}
+            %    \ln\Biggl(
+            %        \frac{1}{r_{km}}
+            %        (r_{km} - a)
+            %    \Biggr) \\
+            %    &=
+            %    \partial_{r_{km}}
+            %    \Bigl[
+            %        \ln(r_{km} - a)
+            %        - \ln(r_{km})
+            %    \Bigr] \\
+            %    &=
+            %    \frac{1}{r_{km} - a} - \frac{1}{r_{km}} \\
+            %    &=
+            %    \frac{a}{r_{km}(r_{km} - a)} \\
+            %    \partial_{r_{km}}^2u(r_{km})
+            %    &= a\Bigl(
+            %        \partial_{r_{km}}\frac{1}{r_{km}}
+            %    \Bigr)
+            %    \partial_{r_{km}}\frac{1}{r_{km} - a}
+            %    \nonumber \\
+            %    &\qquad
+            %    + a\frac{1}{r_{km}}
+            %    \Bigl(
+            %        \partial_{r_{km}}\frac{1}{r_{km} - a}
+            %    \Bigr) \\
+            %    &=
+            %    -\frac{a}{r_{km}^2(r_{km} - a)}
+            %    -\frac{a}{r_{km}(r_{km} - a)^2} \\
+            %    &=
+            %    - \frac{2a(r_{km} - 1)}{r_{km}^2(r_{km} - a)^2}.
+            %\end{align}
+            %Using this we are now able to write the closed form expression of
+            %the Laplacian of the trial wavefunction.
+            %\begin{widetext}
+            %    \begin{align}
+            %        \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+            %        {\bra{\vf{r}}\ket{\Psi_T}}
+            %        &=
+            %        -2\alpha
+            %        \big(
+            %            2 + \beta
+            %        \bigr)
+            %        + 4\alpha^2
+            %        \bigl(
+            %            x_k^2 + y_k^2 + \beta^2z_k^2
+            %        \bigr)
+            %        %\nonumber \\
+            %        %&\qquad
+            %        +
+            %        2a
+            %        \sum_{m \neq k}^N
+            %        \Biggl[
+            %            \frac{1}{r_{km}^2(r_{km} - a)}
+            %            - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
+            %        \Biggr]
+            %        \nonumber \\
+            %        &\qquad
+            %        -4\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+            %        \cdot
+            %        a\sum_{m \neq k}^N
+            %        \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
+            %        + \Biggl[
+            %            a\sum_{m \neq k}^N
+            %            \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}
+            %        \Biggr]^2.
+            %    \end{align}
+            %\end{widetext}
+            %To ease the load on the CPU we try to restrict the number of times
+            %we evaluate the sums. For brevity we introduce the following
+            %functions
+            %\begin{align}
+            %    \xi_k(\vf{r}, a)
+            %    &= \sum_{m \neq k}^N
+            %    \Biggl[
+            %        \frac{1}{r_{km}^2(r_{km} - a)}
+            %        - \frac{r_{km} - 1}{r_{km}^2(r_{km} - a)^2}
+            %    \Biggr] \\
+            %    &=
+            %    \sum_{m \neq k}^N
+            %    \frac{1 - a}{r_{km}^2(r_{km} - a)^2}, \\
+            %    \vfg{\zeta}_k(\vf{r}, a)
+            %    &=
+            %    \sum_{m \neq k}^N
+            %    \frac{\vf{r}_k - \vf{r}_m}{r_{km}^2(r_{km} - a)}.
+            %\end{align}
+            %We can then rewrite the expression for the Laplacian to
+            %\begin{widetext}
+            %    \begin{align}
+            %        \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+            %        {\bra{\vf{r}}\ket{\Psi_T}}
+            %        &=
+            %        -2\alpha
+            %        \big(
+            %            2 + \beta
+            %        \bigr)
+            %        + 4\alpha^2
+            %        \bigl(
+            %            x_k^2 + y_k^2 + \beta^2z_k^2
+            %        \bigr)
+            %        %\nonumber \\
+            %        %&\qquad
+            %        +
+            %        2a\xi_k(\vf{r}, a)
+            %        \nonumber \\
+            %        &\qquad
+            %        -4a\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+            %        \cdot
+            %        \vfg{\zeta}_k(\vf{r}, a)
+            %        + a^2\vfg{\zeta}_k(\vf{r}, a)^2.
+            %    \end{align}
+            %    Both $\xi_k$ and $\vfg{\zeta}_k$ can be evaluated in a common
+            %    loop. Using this expression for the Laplacian we can find the
+            %    local energy from
+            %    \begin{align}
+            %        E_L(\vf{r})
+            %        &=
+            %        \frac{\bra{\vf{r}}H\ket{\Psi_T}}
+            %        {\bra{\vf{r}}\ket{\Psi_T}}
+            %        =
+            %        \sum_{k}^N
+            %        \Biggl(
+            %            -\frac{\hbar^2}{2m}
+            %            \frac{\nabla_k^2\bra{\vf{r}}\ket{\Psi_T}}
+            %            {\bra{\vf{r}}\ket{\Psi_T}}
+            %            + V_{\text{ext}}(\vf{r})
+            %        \Biggr)
+            %        +
+            %        \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j).
+            %    \end{align}
+            %\end{widetext}
 
 \end{document}
