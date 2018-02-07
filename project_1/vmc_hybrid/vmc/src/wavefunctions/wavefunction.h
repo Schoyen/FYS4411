@@ -1,7 +1,7 @@
 #ifndef WAVEFUNCTION_H
 #define WAVEFUNCTION_H
 
-#define SQUARE(x) (x*x)
+#include "vmc_macros.h"
 
 typedef struct wavefunction {
     unsigned int num_particles;

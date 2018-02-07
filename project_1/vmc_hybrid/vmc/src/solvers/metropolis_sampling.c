@@ -1,4 +1,6 @@
 #include "metropolis_sampling.h"
+#include "wavefunction.h"
+#include "vmc_macros.h"
 
 
 
