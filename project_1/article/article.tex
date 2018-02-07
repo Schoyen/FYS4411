@@ -424,8 +424,8 @@
                 \Psi_T(\vf{r}).
                 \label{eq:gradient_full_wavefunction}
             \end{align}
-            We now find the Laplacian of the trial wavefunction by taking the
-            gradient of \autoref{eq:gradient_full_wavefunction}.
+            We now find the Laplacian of the trial wavefunction by finding the
+            divergence of \autoref{eq:gradient_full_wavefunction}.
             \begin{align}
                 \nabla_k^2\Psi_T(\vf{r})
                 &=
@@ -611,6 +611,62 @@
                 &=
                 \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
             \end{align}
+            Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
+            \begin{align}
+                \nabla_k u_{km}
+                &=
+                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+                \dpd[]{u_{km}}{r_{km}}.
+            \end{align}
+            For the Laplacian we switch a little back and forth between the two
+            ways of representing the $\nabla_k$-operator. We thus get
+            \begin{widetext}
+                \begin{align}
+                    \nabla_k^2 u_{km}
+                    &=
+                    \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                    + \Biggl[
+                        \nabla_k \frac{1}{r_{km}}
+                    \Biggr]
+                    (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
+                    + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+                    \nabla_k \dpd[]{u_{km}}{r_{km}} \\
+                    &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                    - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
+                    \dpd[]{u_{km}}{r_{km}}
+                    + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
+                    \dpd[2]{u_{km}}{r_{km}} \\
+                    &=
+                    \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                    + \dpd[2]{u_{km}}{r_{km}},
+                \end{align}
+                where $d$ is again the dimensionality of the problem. In total
+                we can state an intermediate version of the local energy as
+                \begin{align}
+                    \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+                    &=
+                    \frac{\nabla_k^2\phi_k}{\phi_k}
+                    + 2\frac{\nabla_k\phi_k}{\phi_k}
+                    \sum_{m \neq k}^N
+                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+                    \dpd[]{u_{km}}{r_{km}}
+                    %\nonumber \\
+                    %&\qquad
+                    + \sum_{m\neq k}^N
+                    \Biggl(
+                        \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                        + \dpd[2]{u_{km}}{r_{km}}
+                    \Biggr)
+                    \nonumber \\
+                    &\qquad
+                    +
+                    \sum_{m, n \neq k}^N
+                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+                    \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
+                    \dpd[]{u_{km}}{r_{km}}
+                    \dpd[]{u_{kn}}{r_{kn}}.
+                \end{align}
+            \end{widetext}
 
             component for particle $k$ by
             \begin{align}
