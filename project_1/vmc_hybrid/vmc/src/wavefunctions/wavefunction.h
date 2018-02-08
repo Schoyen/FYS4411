@@ -4,7 +4,7 @@ class Wavefunction
 {
     protected:
         unsigned int m_num_particles;
-        unsigned int m_dimensions;
+        unsigned int m_num_dimensions;
         unsigned int m_num_parameters;
 
         /* This refers to the last value from the evaluation function */
@@ -21,7 +21,7 @@ class Wavefunction
         /* We use single pointer in order to allow for allocation from NumPy.
          * This array will thus be indexed as:
          *
-         *      m_particles[j + i*m_dimensions] = m_particles[i][j],
+         *      m_particles[j + i*m_num_dimensions] = m_particles[i][j],
          *
          * where i is the particle index and j is the position index. */
         double *m_particles;
@@ -29,7 +29,7 @@ class Wavefunction
     public:
         Wavefunction(
                 unsigned int num_particles,
-                unsigned int dimensions,
+                unsigned int num_dimensions,
                 unsigned int num_parameters,
                 double *parameters,
                 double *particles);

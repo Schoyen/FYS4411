@@ -2,13 +2,13 @@
 
 Wavefunction::Wavefunction(
         unsigned int num_particles,
-        unsigned int dimensions,
+        unsigned int num_dimensions,
         unsigned int num_parameters,
         double *parameters,
         double *particles)
 {
     m_num_particles = num_particles;
-    m_dimensions = dimensions;
+    m_num_dimensions = num_dimensions;
     m_num_parameters = num_parameters;
 
     m_parameters = parameters;
@@ -38,8 +38,8 @@ double inline Wavefunction::compute_position_squared_sum()
 
     /* Compute the squared sum */
     for (i = 0; i < m_num_particles; i++) {
-        for (j = 0; j < m_dimensions; j++) {
-            position_squared_sum += SQUARE(m_particles[j + i*m_dimensions]);
+        for (j = 0; j < m_num_dimensions; j++) {
+            position_squared_sum += SQUARE(m_particles[j + i*m_num_dimensions]);
         }
     }
 
