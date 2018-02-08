@@ -16,9 +16,11 @@ class Particles {
         ~Particles();
 
         void setDistributionSpread(double newSpread);
+
+        double rSquaredOfParticleN(int paricleN);
         
         // Getters
-        MatrixDN get_walkers() {return m_particles;};
+        MatrixDN getPositions() {return m_particles;};
         double getDistributionSpread() {return m_distributionSpread;};
         int getNumberOfWalkers() {return m_numberOfParticles}
         int getNumberOfDimensions() {return m_numberOfDimensions;}

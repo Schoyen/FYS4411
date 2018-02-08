@@ -3,6 +3,7 @@
 */
 
 #include "../include/particles.h"
+#include <cmath>
 
 // Default constructor that makes one walker in 1D
 Particles::Particles() 
@@ -23,6 +24,26 @@ Particles::Particles(int dimensions, int numberOfParticles, double distributionS
     m_particles = m_particles * m_distributionSpread;
     m_numberOfParticles = numberOfParticles;
     m_numberOfDimensions = dimensions;
+}
+
+double Particles::rSquaredOfParticleN(int particleN) {
+
+    /*
+        I want to;
+            1. pick row of m_particles,
+            2. dot with self. this is r**2
+            3 return
+    */
+
+    // What is here is unimportant, I think.
+    double r_squared = 0; 
+
+    // Naiive way
+    for (int i = 0; i < m_numberOfDimensions; i++) {
+        r_squared = 0; // Some number 
+    };
+
+    return r_squared;
 }
 
 // Method to change the distribution spread of walkers
