@@ -1,4 +1,5 @@
 #include "wavefunction.h"
+#include "math_macros.h"
 
 Wavefunction::Wavefunction(
         unsigned int num_particles,
@@ -16,11 +17,6 @@ Wavefunction::Wavefunction(
 
     m_valid_position_squared_sum = false;
     compute_position_squared_sum();
-
-    // TODO: Check if this works, i.e., we call a virtual method from the
-    // constructor of the superclass.
-    m_valid_last_value = false;
-    evaluate();
 }
 
 double inline Wavefunction::compute_position_squared_sum()
@@ -54,7 +50,7 @@ double inline Wavefunction::compute_position_squared_sum()
 }
 
 void inline Wavefunction::reset_particle_position(
-        double position[m_num_dimensions], unsigned int particle_index)
+        double position[], unsigned int particle_index)
 {
     unsigned int i;
 
@@ -64,7 +60,7 @@ void inline Wavefunction::reset_particle_position(
 }
 
 void inline Wavefunction::copy_particle_position(
-        double position[m_num_dimensions], unsigned int particle_index)
+        double position[], unsigned int particle_index)
 {
     unsigned int i;
 
