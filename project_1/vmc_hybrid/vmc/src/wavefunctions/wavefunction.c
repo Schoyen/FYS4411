@@ -52,3 +52,31 @@ double inline Wavefunction::compute_position_squared_sum()
     /* Return the valid squared sum */
     return m_valid_position_squared_sum;
 }
+
+void inline Wavefunction::reset_particle_position(
+        double position[m_num_dimensions], unsigned int particle_index)
+{
+    unsigned int i;
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        m_particles[i + particle_index*m_num_dimensions] = position[i];
+    }
+}
+
+void inline Wavefunction::copy_particle_position(
+        double position[m_num_dimensions], unsigned int particle_index)
+{
+    unsigned int i;
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        position[i] = m_particles[i + particle_index*m_num_dimensions];
+    }
+}
+
+void Wavefunction::add_step(
+        double step, unsigned int particle_index,
+        unsigned int coordinate)
+{
+    m_particles[coordinate + particle_index*m_num_dimensions] += step;
+    m_valid_position_squared_sum = false;
+}
