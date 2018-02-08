@@ -4,22 +4,22 @@ typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> MatrixDN;
 
 class Particles {
     private:
-        MatrixDN m_walkers;
+        MatrixDN m_particles;
         double m_distributionSpread = 1.0;
-        int m_numberOfWalkers = 0 ;
+        int m_numberOfParticles = 0 ;
         int m_numberOfDimensions = 1;
 
     public:
         Particles();
-        Particles(int dimensions, int numberOfWalkers);
-        Particles(int dimensions, int numberOfWalkers, double distributionSpread);
+        Particles(int dimensions, int m_numberOfParticles);
+        Particles(int dimensions, int numberOfParticles, double distributionSpread);
         ~Particles();
 
         void setDistributionSpread(double newSpread);
         
         // Getters
-        MatrixDN get_walkers() {return m_walkers;};
+        MatrixDN get_walkers() {return m_particles;};
         double getDistributionSpread() {return m_distributionSpread;};
-        int getNumberOfWalkers() {return m_numberOfWalkers;}
+        int getNumberOfWalkers() {return m_numberOfParticles}
         int getNumberOfDimensions() {return m_numberOfDimensions;}
 };

@@ -17,8 +17,8 @@ void System::runMetropolis(int numberOfSteps) {
     }
 };
 
-void System::setWalkers(Particles* walkers) {
-    m_walkers = walkers;
+void System::setParticles(Particles* particles) {
+    m_particles = particles;
 };
 
 void System::setHamiltonian(Hamiltonian* hamiltonian) {
