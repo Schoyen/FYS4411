@@ -1,10 +1,11 @@
 /*
- * Class that defines that system, also contains solver
+ * Class that defines that system, also contains solver.
+ * 
+ * Needed: Hamiltonian, WaveFunction, Particles/Walkers
  *
  */
 
 #include "../include/system.h"
-
 
 void System::runMetropolis(int numberOfSteps) {
     m_numberOfMetropolisSteps = numberOfSteps;
@@ -22,5 +23,9 @@ void System::setWalkers(Particles* walkers) {
 
 void System::setHamiltonian(Hamiltonian* hamiltonian) {
     m_hamiltonian = hamiltonian;
-}
+};
+
+void System::setWaveFunction(WaveFunction* wavefunction) {
+    m_wavefunction = wavefunction;
+};
 
