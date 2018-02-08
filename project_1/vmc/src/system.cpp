@@ -21,6 +21,6 @@ void System::setWalkers(Particles* walkers) {
 };
 
 void System::setHamiltonian(Hamiltonian* hamiltonian) {
-    // Stuff
+    m_hamiltonian = hamiltonian;
 }
 
