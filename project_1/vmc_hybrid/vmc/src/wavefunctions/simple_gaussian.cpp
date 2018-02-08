@@ -28,7 +28,7 @@ double SimpleGaussian::compute_laplacian()
     /* Compute the position squared sum */
     position_squared_sum = compute_position_squared_sum();
 
-    return -2*m_dimensions*m_num_particles*alpha
+    return -2*m_num_dimensions*m_num_particles*alpha
         + 4*SQUARE(alpha)*position_squared_sum;
 }
 
