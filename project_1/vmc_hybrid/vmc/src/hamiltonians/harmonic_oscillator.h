@@ -1,12 +1,14 @@
-#ifndef HARMONIC_OSCILLATOR_H
-#define HARMONIC_OSCILLATOR_H
+#pragma once
 
 #include "hamiltonian.h"
 
-typedef struct hamiltonian {
-    double hbar;
-    double mass;
-    double omega;
-} hamiltonian_t;
+class HarmonicOscillator : public Hamiltonian
+{
+    public:
+        HarmonicOscillator(double mass, double omega);
+        double compute_local_energy(Wavefunction *wavefunction);
 
-#endif
+    private:
+        double m_omega = 0;
+        double m_mass = 1;
+};
