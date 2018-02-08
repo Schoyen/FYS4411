@@ -1,3 +1,5 @@
+from libcpp cimport bool
+
 cdef extern from "constants.h":
     cdef unsigned int HBAR
 
@@ -48,3 +50,11 @@ cdef extern from "harmonic_oscillator.h":
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
         MonteCarloMethod(unsigned int num_particles) except +
+
+cdef extern from "metropolis_algorithm.h":
+    cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
+        bool step(Wavefunction *wavefunction, double step_length)
+
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples)

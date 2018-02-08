@@ -22,7 +22,8 @@ source_files = [
         os.path.join(*wavefunctions_path, "wavefunction.cpp"),
         os.path.join(*wavefunctions_path, "simple_gaussian.cpp"),
         os.path.join(*hamiltonians_path, "harmonic_oscillator.cpp"),
-        os.path.join(*solvers_path, "monte_carlo_method.cpp")
+        os.path.join(*solvers_path, "monte_carlo_method.cpp"),
+        os.path.join(*solvers_path, "metropolis_algorithm.cpp")
 ]
 
 
