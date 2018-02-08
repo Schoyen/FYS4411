@@ -13,6 +13,9 @@
 # Stupid mac folder file
 .DS_store
 
+# VS Code config file
+.vscode
+
 # Executable
 *.x
 
