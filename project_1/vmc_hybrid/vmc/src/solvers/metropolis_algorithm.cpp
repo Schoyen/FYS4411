@@ -1,13 +1,13 @@
-#include "metropolis_sampling.h"
+#include "metropolis_algorithm.h"
 #include "wavefunction.h"
 #include "hamiltonian.h"
-#include "math_macros"
+#include "math_macros.h"
 
 
 
 bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
 {
-    unsigned int particle_index, i;
+    unsigned int particle_index, i, num_dimensions;
     double step, weight, current_wavefunction, previous_wavefunction;
 
     /* Get evaluated wavefunction prior to moving */
@@ -28,7 +28,7 @@ bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
     /* Propose a new position */
     for (i = 0; i < num_dimensions; i++) {
         step = step_length*(2.0*m_random_step(m_engine) - 1.0);
-        wavefunction->add_move(step, particle_index, i);
+        wavefunction->add_step(step, particle_index, i);
     }
 
     /* Evaluate the new wavefunction */
