@@ -31,7 +31,7 @@ double inline HarmonicOscillator::compute_potential_energy(
     double potential_energy;
 
     potential_energy = 0.5*m_mass*SQUARE(m_omega);
-    potential_energy += wavefunction->position_sum_squared();
+    potential_energy += wavefunction->compute_position_squared_sum();
 
     return potential_energy;
 }
