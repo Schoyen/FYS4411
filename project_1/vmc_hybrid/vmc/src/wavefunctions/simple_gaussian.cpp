@@ -2,6 +2,7 @@
 
 #include "wavefunction.h"
 #include "simple_gaussian.h"
+#include "math_macros.h"
 
 SimpleGaussian::SimpleGaussian(
         unsigned int num_particles,
