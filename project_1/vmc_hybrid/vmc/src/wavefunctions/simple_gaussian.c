@@ -21,8 +21,9 @@ double SimpleGaussian::evaluate()
 {
     double alpha, evaluated_wavefunction, position_squared_sum;
 
-    /* Check if we have stored a valid evaluated result */
-    if (m_valid_last_value) {
+    /* Check if we have stored a valid evaluated result and that the particles
+     * haven't been moved */
+    if (m_valid_last_value && m_valid_position_squared_sum) {
         return m_last_value;
     }
 
