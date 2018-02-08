@@ -24,15 +24,15 @@ double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)
     return kinetic_energy + potential_energy;
 }
 
-    kinetic_energy = -SQUARE(hamiltonian->hbar)/(2.0*hamiltonian->mass) \
-        * (-2*alpha*wavefunction->dimensionality*wavefunction->num_particles \
-            + 4*SQUARE(alpha)*position_squared_sum);
+double inline HarmonicOscillator::compute_potential_energy(
+        Wavefunction *wavefunction)
+{
+    double potential_energy;
 
-    potential_energy = 0.5*hamiltonian->mass*SQUARE(hamiltonian->omega) \
-        * position_squared_sum;
+    potential_energy = 0.5*m_mass*SQUARE(m_omega);
+    potential_energy += wavefunction->position_sum_squared();
 
-    /* Return the local energy */
-    return kinetic_energy + potential_energy;
+    return potential_energy;
 }
 
 //double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)

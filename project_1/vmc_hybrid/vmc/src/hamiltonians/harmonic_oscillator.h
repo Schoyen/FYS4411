@@ -8,6 +8,7 @@ class HarmonicOscillator : public Hamiltonian
     public:
         HarmonicOscillator(double mass, double omega);
         double compute_local_energy(Wavefunction *wavefunction);
+        double inline compute_potential_energy(Wavefunction *wavefunction);
 
     private:
         double m_omega = 0;
