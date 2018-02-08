@@ -3,17 +3,31 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 
 import numpy as np
+import os
+
+os.environ["CFLAGS"] = "-g -std=c++11 -stdlib=libc++"
+
+base_path = ["vmc"]
+source_path = base_path + ["src"]
+
+config_path = source_path + ["config"]
+wavefunctions_path = source_path + ["wavefunctions"]
+hamiltonians_path = source_path + ["hamiltonians"]
+math_path = source_path + ["math"]
+solvers_path = source_path + ["solvers"]
+
 
 source_files = [
-    "vmc/metropolis_sampling.pyx",
-    "src/wavefunction.c",
-    "src/metropolis_sampling.c",
-    "src/harmonic_oscillator.c"
+        os.path.join(*base_path, "interface.pyx")
 ]
 
 
 include_dirs = [
-        "include",
+        os.path.join(*config_path),
+#        wavefunctions_path,
+#        hamiltonians_path,
+#        math_path,
+#        solvers_path,
         np.get_include()
 ]
 
@@ -22,9 +36,9 @@ libraries = []
 
 extensions = [
     Extension(
-        name="vmc.metropolis_sampling",
+        name="vmc.interface",
         sources=source_files,
-        language="c",
+        language="c++",
         include_dirs=include_dirs,
         libraries=libraries
     )
