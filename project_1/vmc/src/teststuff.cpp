@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/particles.h"
+//#include "../include/particles.h"
 #include "../include/system.h"
 
 int main() {
@@ -9,7 +9,7 @@ int main() {
 
     // Initiate a new system
     System* system = new System();
-    system.setWalkers(some_walkers);
+    system->setWalkers(some_walkers);
 
     std::cout << some_walkers->get_walkers() << std::endl;
 

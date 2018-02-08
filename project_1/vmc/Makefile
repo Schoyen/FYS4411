@@ -25,12 +25,12 @@ CXXFLAGS=-I$(IDIR) -I /usr/local/include/eigen3/ -g -Wall -std=c++11 -O3
 LIBS=-larmadillo
 
 # Add headers as seen in $(IDIR)
-_HEADERS=particles.h
+_HEADERS=particles.h system.h
 # Tell make to look in $(IDIR) for the header-files defined in $(_HEADERS)
 HEADERS=$(patsubst %, $(IDIR)/%, $(_HEADERS))
 
 # Add object files to be generated
-_OBJECTS=particles.o teststuff.o
+_OBJECTS=particles.o teststuff.o system.o
 # Tell make to look in $(ODIR) for the object files defined $(_OBJECTS)
 OBJECTS=$(patsubst %, $(ODIR)/%, $(_OBJECTS))
 
