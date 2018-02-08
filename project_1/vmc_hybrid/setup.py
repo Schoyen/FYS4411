@@ -18,16 +18,17 @@ solvers_path = source_path + ["solvers"]
 
 
 source_files = [
-        os.path.join(*base_path, "interface.pyx")
+        os.path.join(*base_path, "interface.pyx"),
+        os.path.join(*wavefunctions_path, "wavefunction.cpp")
 ]
 
 
 include_dirs = [
         os.path.join(*config_path),
-#        wavefunctions_path,
-#        hamiltonians_path,
-#        math_path,
-#        solvers_path,
+        os.path.join(*wavefunctions_path),
+        #os.path.join(*hamiltonians_path),
+        os.path.join(*math_path),
+        #os.path.join(*solvers_path),
         np.get_include()
 ]
 
