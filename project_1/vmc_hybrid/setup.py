@@ -22,6 +22,7 @@ source_files = [
         os.path.join(*wavefunctions_path, "wavefunction.cpp"),
         os.path.join(*wavefunctions_path, "simple_gaussian.cpp"),
         os.path.join(*hamiltonians_path, "harmonic_oscillator.cpp"),
+        os.path.join(*solvers_path, "monte_carlo_method.cpp")
 ]
 
 
@@ -30,7 +31,7 @@ include_dirs = [
         os.path.join(*wavefunctions_path),
         os.path.join(*hamiltonians_path),
         os.path.join(*math_path),
-        #os.path.join(*solvers_path),
+        os.path.join(*solvers_path),
         np.get_include()
 ]
 

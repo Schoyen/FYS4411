@@ -44,3 +44,7 @@ cdef extern from "harmonic_oscillator.h":
         HarmonicOscillator(double mass, double omega)
         double compute_local_energy(Wavefunction *wavefunction)
         double compute_potential_energy(Wavefunction *wavefunction)
+
+cdef extern from "monte_carlo_method.h":
+    cdef cppclass MonteCarloMethod:
+        MonteCarloMethod(unsigned int num_particles)
