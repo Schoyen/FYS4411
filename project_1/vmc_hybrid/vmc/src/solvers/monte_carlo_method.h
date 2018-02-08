@@ -5,7 +5,7 @@
 class MonteCarloMethod
 {
     protected:
-        std::mt19937 m_engine(std::random_device rd);
+        std::mt19937 m_engine;
         std::uniform_int_distribution<> m_random_particle;
         std::uniform_real_distribution<double> m_random_step;
 
