@@ -34,3 +34,13 @@ cdef extern from "simple_gaussian.h":
 
         double evaluate()
         double compute_laplacian()
+
+cdef extern from "hamiltonian.h":
+    cdef cppclass Hamiltonian:
+        pass
+
+cdef extern from "harmonic_oscillator.h":
+    cdef cppclass HarmonicOscillator(Hamiltonian):
+        HarmonicOscillator(double mass, double omega)
+        double compute_local_energy(Wavefunction *wavefunction)
+        double compute_potential_energy(Wavefunction *wavefunction)

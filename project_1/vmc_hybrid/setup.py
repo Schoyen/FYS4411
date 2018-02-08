@@ -20,14 +20,15 @@ solvers_path = source_path + ["solvers"]
 source_files = [
         os.path.join(*base_path, "interface.pyx"),
         os.path.join(*wavefunctions_path, "wavefunction.cpp"),
-        os.path.join(*wavefunctions_path, "simple_gaussian.cpp")
+        os.path.join(*wavefunctions_path, "simple_gaussian.cpp"),
+        os.path.join(*hamiltonians_path, "harmonic_oscillator.cpp"),
 ]
 
 
 include_dirs = [
         os.path.join(*config_path),
         os.path.join(*wavefunctions_path),
-        #os.path.join(*hamiltonians_path),
+        os.path.join(*hamiltonians_path),
         os.path.join(*math_path),
         #os.path.join(*solvers_path),
         np.get_include()
