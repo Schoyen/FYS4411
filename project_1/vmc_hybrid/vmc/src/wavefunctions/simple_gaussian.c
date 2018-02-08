@@ -1,27 +1,45 @@
 #include <math.h>
-#include <stdio.h>
 
 #include "wavefunction.h"
-#include "vmc_macros.h"
+#include "simple_gaussian.h"
 
-double evaluate_wavefunction(wavefunction_t *wavefunction)
+double SimpleGaussian::compute_laplacian()
 {
-    double position_squared_sum, alpha;
-    unsigned int i, j;
+    double alpha, position_squared_sum;
 
-    /* Initialize position squared sum */
-    position_squared_sum = 0.0;
+    /* Fetch the variational parameter alpha */
+    alpha = m_parameters[0];
 
-    /* Calculate position squared sum */
-    for (i = 0; i < wavefunction->num_particles; i++) {
-        for (j = 0; j < wavefunction->dimensionality; j++) {
-            position_squared_sum += SQUARE(wavefunction->particles[i][j]);
-        }
+    /* Compute the position squared sum */
+    position_squared_sum = compute_position_squared_sum();
+
+    return -2*m_dimensions*m_num_particles*alpha
+        + 4*SQUARE(alpha)*position_squared_sum;
+}
+
+double SimpleGaussian::evaluate()
+{
+    double alpha, evaluated_wavefunction, position_squared_sum;
+
+    /* Check if we have stored a valid evaluated result */
+    if (m_valid_last_value) {
+        return m_last_value;
     }
 
-    /* Fetch the variational parameter */
-    alpha = wavefunction->parameters[0];
+    /* Fetch the variational parameter alpha */
+    alpha = m_parameters[0];
 
-    /* Return the trial wavefunction */
-    return exp(-alpha*position_squared_sum);
+    /* Get the squared sum of the positions */
+    position_squared_sum = compute_position_squared_sum();
+
+    /* Compute the wavefunction */
+    evaluated_wavefunction = exp(-alpha*position_squared_sum);
+
+    /* Update the stored evaluated wavefunction */
+    m_last_value = evaluated_wavefunction;
+    /* Update the validity of the evaluated wavefunction */
+    m_valid_last_value = true;
+
+    /* Return the evaluated result */
+    return m_last_value;
 }
