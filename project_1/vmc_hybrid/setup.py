@@ -19,7 +19,8 @@ solvers_path = source_path + ["solvers"]
 
 source_files = [
         os.path.join(*base_path, "interface.pyx"),
-        os.path.join(*wavefunctions_path, "wavefunction.cpp")
+        os.path.join(*wavefunctions_path, "wavefunction.cpp"),
+        os.path.join(*wavefunctions_path, "simple_gaussian.cpp")
 ]
 
 

@@ -14,4 +14,4 @@ class SimpleGaussian : public Wavefunction
 
         double evaluate();
         double compute_laplacian();
-}
+};
