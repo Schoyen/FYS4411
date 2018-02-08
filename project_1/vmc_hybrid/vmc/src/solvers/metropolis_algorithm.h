@@ -2,6 +2,7 @@
 
 #include "wavefunction.h"
 #include "hamiltonian.h"
+#include "monte_carlo_method.h"
 
 class MetropolisAlgorithm : public MonteCarloMethod
 {
@@ -13,4 +14,4 @@ class MetropolisAlgorithm : public MonteCarloMethod
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples);
-}
+};
