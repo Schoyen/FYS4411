@@ -1,65 +1,54 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "wavefunction.h"
 
-
-void allocate_variational_parameters(wavefunction_t *wavefunction)
+Wavefunction::Wavefunction(
+        unsigned int num_particles,
+        unsigned int dimensions,
+        unsigned int num_parameters,
+        double *parameters,
+        double *particles)
 {
-    /* Allocate memory for parameters */
-    wavefunction->parameters =
-        (double *) calloc(wavefunction->num_parameters, sizeof(double));
+    m_num_particles = num_particles;
+    m_dimensions = dimensions;
+    m_num_parameters = num_parameters;
 
-    /* Check if the allocation succeeded */
-    if (!wavefunction->parameters) {
-        fprintf(stderr, "Allocation of parameters failed\n");
-        exit(EXIT_FAILURE);
-    }
+    m_parameters = parameters;
+    m_particles = particles;
+
+    m_valid_position_squared_sum = false;
+    compute_position_squared_sum();
+
+    // TODO: Check if this works, i.e., we call a virtual method from the
+    // constructor of the superclass.
+    m_valid_last_value = false;
+    evaluate();
 }
 
-void free_variational_parameters(wavefunction_t *wavefunction)
+double inline Wavefunction::compute_position_squared_sum()
 {
-    /* Free parameter array memory */
-    free(wavefunction->parameters);
-}
+    unsigned int i, j;
+    double position_squared_sum;
 
-void allocate_particles(wavefunction_t *wavefunction)
-{
-    unsigned int i;
-
-    /* Allocate memory for each particle */
-    wavefunction->particles =
-        (double **) calloc(wavefunction->num_particles, sizeof(double *));
-
-    /* Check if the allocation was successful */
-    if (!wavefunction->particles) {
-        fprintf(stderr, "Allocation of particle rows failed\n");
-        exit(EXIT_FAILURE);
+    /* Check if the last computed value is valid */
+    if (m_valid_position_squared_sum) {
+        return m_last_position_squared_sum;
     }
 
-    /* Allocate entire position matrix as one long contiguous array */
-    wavefunction->particles[0] =
-        (double *) calloc(
-                wavefunction->num_particles*wavefunction->dimensionality,
-                sizeof(double));
+    /* Initialize sum */
+    position_squared_sum = 0.0;
 
-    /* Check if the allocation passed */
-    if (!wavefunction->particles[0]) {
-        fprintf(stderr, "Allocation of all particle positions failed\n");
-        exit(EXIT_FAILURE);
+    /* Compute the squared sum */
+    for (i = 0; i < m_num_particles; i++) {
+        for (j = 0; j < m_dimensions; j++) {
+            position_squared_sum += SQUARE(m_particles[j + i*m_dimensions]);
+        }
     }
 
-    /* Set pointers for each particle */
-    for (i = 1; i < wavefunction->num_particles; i++) {
-        wavefunction->particles[i] =
-            wavefunction->particles[0] + i*wavefunction->dimensionality;
-    }
-}
 
-void free_particles(wavefunction_t *wavefunction)
-{
-    /* Free position array */
-    free(wavefunction->particles[0]);
-    /* Free particle array */
-    free(wavefunction->particles);
+    /* Update the stored position sum squared */
+    m_last_position_squared_sum = position_squared_sum;
+    /* Update the validity of the squared sum */
+    m_valid_position_squared_sum = true;
+
+    /* Return the valid squared sum */
+    return m_valid_position_squared_sum;
 }
