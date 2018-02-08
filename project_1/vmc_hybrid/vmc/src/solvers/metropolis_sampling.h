@@ -1,19 +1,16 @@
-#ifndef METROPOLIS_SAMPLING_H
-#define METROPOLIS_SAMPLING_H
-
-#include <stdlib.h>
-#include <limits.h>
+#pragma once
 
 #include "wavefunction.h"
 #include "hamiltonian.h"
-#include "vmc_macros.h"
 
-double perform_metropolis_step(
-        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
-        double step_length);
+class MetropolisAlgorithm : public MonteCarloMethod
+{
+    public:
+        using MonteCarloMethod::MonteCarloMethod;
 
-double metropolis_sampling(
-        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
-        double step_length, unsigned int num_samples);
+        bool step(Wavefunction *wavefunction, double step_length);
 
-#endif
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples);
+}

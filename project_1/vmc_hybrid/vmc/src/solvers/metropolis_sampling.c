@@ -1,68 +1,81 @@
 #include "metropolis_sampling.h"
 #include "wavefunction.h"
-#include "vmc_macros.h"
+#include "hamiltonian.h"
+#include "math_macros"
 
 
 
-
-double perform_metropolis_step(
-        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
-        double step_length)
+bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
 {
-    unsigned int particle_index, dimension_index, j;
-    double step, weight, current_wavefunction,
-           old_position[wavefunction->dimensionality];
+    unsigned int particle_index, i;
+    double step, weight, current_wavefunction, previous_wavefunction;
+
+    /* Get evaluated wavefunction prior to moving */
+    previous_wavefunction = wavefunction->evaluate();
+
+    /* Get the number of dimensions */
+    num_dimensions = wavefunction->get_num_dimensions();
+
+    /* Create a temporary storage for the old position */
+    double old_position[num_dimensions];
 
     /* Draw a random particle */
-    particle_index = arc4random_uniform(wavefunction->num_particles);
-    /* Choose random dimension */
-    dimension_index = arc4random_uniform(wavefunction->dimensionality);
+    particle_index = m_random_particle(m_engine);
 
     /* Store the previous position */
-    for (j = 0; j < wavefunction->dimensionality; j++) {
-        old_position[j] = wavefunction->particles[particle_index][j];
-    }
+    wavefunction->copy_particle_position(old_position, particle_index);
 
-    /* Do a step from [-step_length, step_length) */
-    step = step_length*(2.0*RANDOM_UNIFORM_DOUBLE - 1.0);
     /* Propose a new position */
-    wavefunction->particles[particle_index][dimension_index] += step;
+    for (i = 0; i < num_dimensions; i++) {
+        step = step_length*(2.0*m_random_step(m_engine) - 1.0);
+        wavefunction->add_move(step, particle_index, i);
+    }
 
     /* Evaluate the new wavefunction */
-    current_wavefunction = evaluate_wavefunction(wavefunction);
+    current_wavefunction = wavefunction->evaluate();
 
     /* Compute the ratio between the new and the old position */
-    weight = SQUARE(current_wavefunction)/SQUARE(wavefunction->last_value);
+    weight = SQUARE(current_wavefunction)/SQUARE(previous_wavefunction);
 
     /* Check if we should accept the new state */
-    if (weight >= RANDOM_UNIFORM_DOUBLE) {
-        /* Store accepted state as the last evaluated value */
-        wavefunction->last_value = current_wavefunction;
+    if (weight >= m_random_step(m_engine)) {
+        return true;
     } else {
-        /* Reset position of particle as we rejected the new state */
-        wavefunction->particles[particle_index][dimension_index] =
-            old_position[dimension_index];
+        /* Reset the particle position as we did not accept the state */
+        wavefunction->reset_particle_position(old_position, particle_index);
     }
 
-    /* Return the local energy */
-    return local_energy(wavefunction, hamiltonian);
+    return false;
 }
 
-
-double metropolis_sampling(
-        wavefunction_t *wavefunction, hamiltonian_t *hamiltonian,
+double MetropolisAlgorithm::run(
+        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
         double step_length, unsigned int num_samples)
 {
-    double energy;
-    unsigned int i;
+    double energy, local_energy;
+    unsigned int i, num_accepted_states;
+
+    /* Set initial number of accepted states */
+    num_accepted_states = 0;
 
     /* Set initial energy */
     energy = 0;
 
+    /* Compute initial local energy */
+    local_energy = hamiltonian->compute_local_energy(wavefunction);
+
     /* Perform num_samples metropolis steps */
     for (i = 0; i < num_samples; i++) {
-        energy += perform_metropolis_step(wavefunction, hamiltonian,
-                step_length);
+
+        /* Do a step and check if it got accepted */
+        if (step(wavefunction, step_length)) {
+            /* Compute new local energy */
+            local_energy = hamiltonian->compute_local_energy(wavefunction);
+            num_accepted_states++;
+        }
+
+        /* Add local energy */
+        energy += local_energy;
     }
 
     /* Return the total energy (without normalization) */
