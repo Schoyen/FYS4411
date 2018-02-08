@@ -4,6 +4,7 @@
 #include "harmonic_oscillator.h"
 #include "wavefunction.h"
 #include "math_macros.h"
+#include "constants.h"
 
 HarmonicOscillator::HarmonicOscillator(double mass, double omega)
 {
