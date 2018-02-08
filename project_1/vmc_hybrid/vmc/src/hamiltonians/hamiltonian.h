@@ -1,5 +1,7 @@
 #pragma once
 
+#include "wavefunction.h"
+
 class Hamiltonian
 {
     public:

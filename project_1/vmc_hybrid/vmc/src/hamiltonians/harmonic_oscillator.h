@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hamiltonian.h"
+#include "wavefunction.h"
 
 class HarmonicOscillator : public Hamiltonian
 {
