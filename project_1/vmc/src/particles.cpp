@@ -13,6 +13,7 @@ Particles::Particles()
 Particles::Particles(int dimensions, int numberOfWalkers) {
     m_walkers = MatrixDN::Random(dimensions, numberOfWalkers);
     m_numberOfWalkers = numberOfWalkers;
+    m_numberOfDimensions = dimensions;
 }
 
 // Constructor that creates n walkers in d dimensions with a given distribution spread.
@@ -20,6 +21,8 @@ Particles::Particles(int dimensions, int numberOfWalkers, double distributionSpr
     m_walkers = MatrixDN::Random(dimensions, numberOfWalkers);
     m_distributionSpread = distributionSpread;
     m_walkers = m_walkers * m_distributionSpread;
+    m_numberOfWalkers = numberOfWalkers;
+    m_numberOfDimensions = dimensions;
 }
 
 // Method to change the distribution spread of walkers
