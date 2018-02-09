@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <vector>
 
 class WaveFunction {
     public:
@@ -14,5 +15,8 @@ class WaveFunction {
         virtual double computeDoubleDerivative(class Particles* particles) = 0;
 
     protected:
+        int m_numberOfParameters = 0;
         class System* m_system = nullptr;
+        std::vector<double> m_parameters = std::vector<double>();
+        
 };

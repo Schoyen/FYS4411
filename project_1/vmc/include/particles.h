@@ -22,6 +22,6 @@ class Particles {
         // Getters
         MatrixDN getPositions() {return m_particles;};
         double getDistributionSpread() {return m_distributionSpread;};
-        int getNumberOfWalkers() {return m_numberOfParticles;};
+        int getNumberOfParticles() {return m_numberOfParticles;};
         int getNumberOfDimensions() {return m_numberOfDimensions;}
 };
