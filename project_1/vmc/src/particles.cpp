@@ -34,16 +34,10 @@ double Particles::rSquaredOfParticleN(int particleN) {
             2. dot with self. this is r**2
             3 return
     */
-
-    // What is here is unimportant, I think.
-    double r_squared = 0; 
-
-    // Naiive way
-    for (int i = 0; i < m_numberOfDimensions; i++) {
-        r_squared = 0; // Some number 
-    };
-
-    return r_squared;
+    
+    Eigen::VectorXd particlePosition =  m_particles.col(particleN);
+    
+    return particlePosition.dot(particlePosition);
 }
 
 // Method to change the distribution spread of walkers
