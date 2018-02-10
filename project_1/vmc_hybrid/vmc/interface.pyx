@@ -6,15 +6,21 @@ np.import_array()
 cdef class PyWavefunction:
 
     cdef Wavefunction *wavefunction
+    cdef double[:, ::1] particles
+    cdef double[:] parameters
 
 
     def __cinit__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters):
-        cdef np.ndarray[double, ndim=2, mode="c"] self.particles
-        cdef np.ndarray[double, ndim=1, mode="c"] self.parameters
-
         self.particles = np.random.random((num_particles, num_dimensions))
         self.parameters = np.zeros(num_parameters)
+
+    def get_particles(self):
+        return np.asarray(self.particles)
+
+    def get_parameters(self):
+        return np.asarray(self.parameters)
+
 
 cdef class PySimpleGaussian(PyWavefunction):
 
@@ -25,7 +31,4 @@ cdef class PySimpleGaussian(PyWavefunction):
 
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters,
-                &self.parameters[0], &self.parameters[0, 0])
-
-    def __dealloc__(self):
-        del self.wavefunction
+                &self.parameters[0], &self.particles[0, 0])
