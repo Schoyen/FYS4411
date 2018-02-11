@@ -40,8 +40,9 @@ cdef extern from "monte_carlo_method.h":
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
-        bool step(Wavefunction *wavefunction, double step_length)
+        MetropolisAlgorithm(unsigned int num_particles) except +
 
+        bool step(Wavefunction *wavefunction, double step_length)
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples)
