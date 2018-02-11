@@ -89,3 +89,19 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
     def __dealloc__(self):
         pass
         #del self.hamiltonian
+
+cdef class PyMetropolisAlgorithm:
+    cdef MetropolisAlgorithm *method
+
+    def __cinit__(self, unsigned int num_particles):
+        self.method = new MetropolisAlgorithm(num_particles)
+
+    def step(self, PyWavefunction wavefunction, double step_length):
+        return self.method.step(wavefunction.wavefunction, step_length)
+
+    def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
+            double step_length, unsigned int num_samples):
+
+        return self.method.run(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples)
