@@ -64,3 +64,28 @@ cdef class PySimpleGaussian(PyWavefunction):
     def __dealloc__(self):
         pass
         #del self.wavefunction
+
+cdef class PyHamiltonian:
+    cdef Hamiltonian *hamiltonian
+
+    def compute_local_energy(self, PyWavefunction wavefunction):
+        return self.hamiltonian.compute_local_energy(
+                wavefunction.wavefunction)
+
+    def compute_potential_energy(self, PyWavefunction wavefunction):
+        return self.hamiltonian.compute_potential_energy(
+                wavefunction.wavefunction)
+
+cdef class PyHarmonicOscillator(PyHamiltonian):
+    cdef double mass
+    cdef double omega
+
+    def __cinit__(self, double mass, double omega):
+        self.mass = mass
+        self.omega = omega
+
+        self.hamiltonian = new HarmonicOscillator(mass, omega)
+
+    def __dealloc__(self):
+        pass
+        #del self.hamiltonian
