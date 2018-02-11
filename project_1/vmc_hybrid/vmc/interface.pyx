@@ -40,6 +40,8 @@ cdef class PyWavefunction:
     def get_parameters(self):
         return np.asarray(self.parameters)
 
+    def evaluate(self):
+        return self.wavefunction.evaluate()
 
 cdef class PySimpleGaussian(PyWavefunction):
 
