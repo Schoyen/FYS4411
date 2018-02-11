@@ -26,6 +26,17 @@ cdef class PyWavefunction:
     def get_particles(self):
         return np.asarray(self.particles)
 
+    def set_parameters(self, np.ndarray[double, ndim=1, mode="c"] parameters):
+        cdef unsigned int i
+
+        if parameters.size != self.num_parameters:
+            raise Exception(
+                    "Parameters array must be equal to the number of "
+                    + "parameters")
+
+        for i in range(self.num_parameters):
+            self.parameters[i] = parameters[i]
+
     def get_parameters(self):
         return np.asarray(self.parameters)
 
