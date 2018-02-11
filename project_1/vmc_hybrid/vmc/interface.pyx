@@ -51,3 +51,6 @@ cdef class PySimpleGaussian(PyWavefunction):
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters,
                 &self.parameters[0], &self.particles[0, 0])
+
+    def __dealloc__(self):
+        del self.wavefunction
