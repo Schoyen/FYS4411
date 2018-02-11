@@ -6,4 +6,4 @@ CYTHONDIR=vmc
 .PHONY: clean
 
 clean:
-	$(RM) $(BDIR) $(CYTHONDIR)/*.cpp
+	$(RM) $(BDIR) $(CYTHONDIR)/*.cpp .cache
