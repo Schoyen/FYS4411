@@ -5,12 +5,7 @@
 class SimpleGaussian : public Wavefunction
 {
     public:
-        SimpleGaussian(
-                unsigned int num_particles,
-                unsigned int num_dimensions,
-                unsigned int num_parameters,
-                double *parameters,
-                double *particles);
+        using Wavefunction::Wavefunction;
 
         double evaluate();
         double compute_laplacian();
