@@ -15,6 +15,9 @@ cdef extern from "wavefunction.h":
         double compute_position_squared_sum()
         unsigned int get_num_dimensions()
 
+        double evaluate()
+        double compute_laplacian()
+
         void reset_particle_position(
                 double position[], unsigned int particle_index)
 
@@ -33,9 +36,6 @@ cdef extern from "simple_gaussian.h":
                 unsigned int num_parameters,
                 double *parameters,
                 double *particles) except +
-
-        double evaluate()
-        double compute_laplacian()
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
