@@ -7,7 +7,7 @@ cdef class PyWavefunction:
 
     cdef Wavefunction *wavefunction
     cdef double[:, ::1] particles
-    cdef double[:] parameters
+    cdef double[::1] parameters
     cdef unsigned int num_particles
     cdef unsigned int num_dimensions
     cdef unsigned int num_parameters
