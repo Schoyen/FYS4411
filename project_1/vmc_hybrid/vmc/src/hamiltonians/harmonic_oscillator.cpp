@@ -19,7 +19,7 @@ double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)
 {
     double kinetic_energy, potential_energy;
 
-    kinetic_energy = SQUARE(HBAR)*wavefunction->compute_laplacian()/(2*m_mass);
+    kinetic_energy = -SQUARE(HBAR)*wavefunction->compute_laplacian()/(2*m_mass);
     potential_energy = compute_potential_energy(wavefunction);
 
     return kinetic_energy + potential_energy;
