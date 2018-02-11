@@ -18,16 +18,6 @@ cdef extern from "wavefunction.h":
         double evaluate()
         double compute_laplacian()
 
-        void reset_particle_position(
-                double position[], unsigned int particle_index)
-
-        void copy_particle_position(
-                double position[], unsigned int particle_index)
-
-        void add_step(
-                double step, unsigned int particle_index,
-                unsigned int coordinate)
-
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):
         SimpleGaussian(
