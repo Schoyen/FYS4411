@@ -25,8 +25,7 @@ double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)
     return kinetic_energy + potential_energy;
 }
 
-double inline HarmonicOscillator::compute_potential_energy(
-        Wavefunction *wavefunction)
+double HarmonicOscillator::compute_potential_energy(Wavefunction *wavefunction)
 {
     double potential_energy;
 
