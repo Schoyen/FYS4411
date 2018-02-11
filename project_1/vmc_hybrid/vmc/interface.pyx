@@ -14,13 +14,15 @@ cdef class PyWavefunction:
 
 
     def __cinit__(self, unsigned int num_particles,
-            unsigned int num_dimensions, unsigned int num_parameters):
+            unsigned int num_dimensions, unsigned int num_parameters,
+            double spread=1.0):
 
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
         self.num_parameters = num_parameters
 
-        self.particles = np.random.random((num_particles, num_dimensions))
+        self.particles = spread \
+                * (2*np.random.random((num_particles, num_dimensions)) - 1.0)
         self.parameters = np.zeros(num_parameters)
 
     def get_particles(self):
@@ -52,7 +54,8 @@ cdef class PyWavefunction:
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __cinit__(self, unsigned int num_particles,
-            unsigned int num_dimensions, unsigned int num_parameters):
+            unsigned int num_dimensions, unsigned int num_parameters,
+            double spread=1.0):
 
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters,
