@@ -17,8 +17,12 @@ ax = plt.figure().add_subplot(111, projection="3d")
 ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
 plt.show()
 
-print (wavefunction.evaluate())
-
-wavefunction.set_parameters(np.array([3.0]))
+wavefunction.set_parameters(np.array([1.0]))
 
 print (wavefunction.evaluate())
+print (wavefunction.compute_laplacian())
+
+wavefunction.set_parameters(np.array([0.5]))
+
+print (wavefunction.evaluate())
+print (wavefunction.compute_laplacian())

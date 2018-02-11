@@ -43,6 +43,9 @@ cdef class PyWavefunction:
     def evaluate(self):
         return self.wavefunction.evaluate()
 
+    def compute_laplacian(self):
+        return self.wavefunction.compute_laplacian()
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __cinit__(self, unsigned int num_particles,
