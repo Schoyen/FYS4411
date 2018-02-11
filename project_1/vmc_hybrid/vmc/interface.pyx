@@ -62,4 +62,5 @@ cdef class PySimpleGaussian(PyWavefunction):
                 &self.parameters[0], &self.particles[0, 0])
 
     def __dealloc__(self):
-        del self.wavefunction
+        pass
+        #del self.wavefunction
