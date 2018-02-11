@@ -27,8 +27,6 @@ cdef class PySimpleGaussian(PyWavefunction):
     def __cinit__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters):
 
-        super.__cinit__(num_particles, num_dimensions, num_parameters)
-
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters,
                 &self.parameters[0], &self.particles[0, 0])
