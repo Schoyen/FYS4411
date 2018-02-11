@@ -46,6 +46,9 @@ cdef class PyWavefunction:
     def compute_laplacian(self):
         return self.wavefunction.compute_laplacian()
 
+    def compute_position_squared_sum(self):
+        return self.wavefunction.compute_position_squared_sum()
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __cinit__(self, unsigned int num_particles,
