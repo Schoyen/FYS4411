@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 num_particles = 1
-dimensionality = 3
+num_dimensions = 3
 num_parameters = 1
 spread = 1.0
 step_length = 0.5
