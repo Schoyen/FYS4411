@@ -4,8 +4,13 @@ from Cython.Build import cythonize
 
 import numpy as np
 import os
+import platform
 
-os.environ["CFLAGS"] = "-g -std=c++11 -stdlib=libc++"
+
+os.environ["CFLAGS"] = "-g -std=c++11"
+
+if platform.system() == "Darwin":
+    os.environ["CFLAGS"] += "-stdlib=libc++"
 
 base_path = ["vmc"]
 source_path = base_path + ["src"]
