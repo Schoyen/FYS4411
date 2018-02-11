@@ -16,6 +16,3 @@ particle_array = wavefunction.get_particles()
 ax = plt.figure().add_subplot(111, projection="3d")
 ax.scatter(particle_array[:, 0], particle_array[:, 1], particle_array[:, 2])
 plt.show()
-
-plt.plot(parameters[:, 0], energies)
-plt.show()
