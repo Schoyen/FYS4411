@@ -27,13 +27,12 @@ cdef extern from "simple_gaussian.h":
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
-        pass
+        double compute_local_energy(Wavefunction *wavefunction)
+        double compute_potential_energy(Wavefunction *wavefunction)
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
         HarmonicOscillator(double mass, double omega) except +
-        double compute_local_energy(Wavefunction *wavefunction)
-        double compute_potential_energy(Wavefunction *wavefunction)
 
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
