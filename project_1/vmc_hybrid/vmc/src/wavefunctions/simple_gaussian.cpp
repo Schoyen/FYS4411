@@ -6,7 +6,7 @@
 
 double SimpleGaussian::compute_laplacian()
 {
-    double alpha, position_squared_sum;
+    double alpha, position_squared_sum, laplacian;
 
     /* Fetch the variational parameter alpha */
     alpha = m_parameters[0];
@@ -14,8 +14,11 @@ double SimpleGaussian::compute_laplacian()
     /* Compute the position squared sum */
     position_squared_sum = compute_position_squared_sum();
 
-    return -2*m_num_dimensions*m_num_particles*alpha
-        + 4*SQUARE(alpha)*position_squared_sum;
+    /* Compute the Laplacian */
+    laplacian = (double) -2 * m_num_dimensions * m_num_particles * alpha
+        + 4 * SQUARE(alpha) * position_squared_sum;
+
+    return laplacian;
 }
 
 double SimpleGaussian::evaluate()
