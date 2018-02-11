@@ -13,8 +13,6 @@ cdef extern from "wavefunction.h":
                 double *particles) except +
 
         double compute_position_squared_sum()
-        unsigned int get_num_dimensions()
-
         double evaluate()
         double compute_laplacian()
 
