@@ -8,10 +8,18 @@ cdef class PyWavefunction:
     cdef Wavefunction *wavefunction
     cdef double[:, ::1] particles
     cdef double[:] parameters
+    cdef unsigned int num_particles
+    cdef unsigned int num_dimensions
+    cdef unsigned int num_parameters
 
 
     def __cinit__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters):
+
+        self.num_particles = num_particles
+        self.num_dimensions = num_dimensions
+        self.num_parameters = num_parameters
+
         self.particles = np.random.random((num_particles, num_dimensions))
         self.parameters = np.zeros(num_parameters)
 
