@@ -60,8 +60,8 @@ double MetropolisAlgorithm::run(
     num_accepted_states = 0;
 
     /* Set initial energy */
-    energy = 0;
 
+    energy = 0;
     /* Compute initial local energy */
     local_energy = hamiltonian->compute_local_energy(wavefunction);
 
