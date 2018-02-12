@@ -1,26 +1,48 @@
+from libcpp cimport bool
+
+cdef extern from "constants.h":
+    cdef unsigned int HBAR
+
 cdef extern from "wavefunction.h":
-    cdef struct wavefunction:
-        unsigned int num_particles
-        unsigned int dimensionality
-        unsigned int num_parameters
+    cdef cppclass Wavefunction:
+        Wavefunction(
+                unsigned int num_particles,
+                unsigned int num_dimensions,
+                unsigned int num_parameters,
+                double *parameters,
+                double *particles) except +
 
-        double last_value
+        double compute_position_squared_sum()
+        double evaluate()
+        double compute_laplacian()
 
-        double *parameters
-        double **particles
+cdef extern from "simple_gaussian.h":
+    cdef cppclass SimpleGaussian(Wavefunction):
+        SimpleGaussian(
+                unsigned int num_particles,
+                unsigned int num_dimensions,
+                unsigned int num_parameters,
+                double *parameters,
+                double *particles) except +
 
-    void allocate_variational_parameters(wavefunction *wavefunction)
-    void free_variational_parameters(wavefunction *wavefunction)
+cdef extern from "hamiltonian.h":
+    cdef cppclass Hamiltonian:
+        double compute_local_energy(Wavefunction *wavefunction)
+        double compute_potential_energy(Wavefunction *wavefunction)
 
-    void allocate_particles(wavefunction *wavefunction)
-    void free_particles(wavefunction *wavefunction)
+cdef extern from "harmonic_oscillator.h":
+    cdef cppclass HarmonicOscillator(Hamiltonian):
+        HarmonicOscillator(double mass, double omega) except +
 
-    double evaluate_wavefunction(wavefunction *wavefunction)
+cdef extern from "monte_carlo_method.h":
+    cdef cppclass MonteCarloMethod:
+        MonteCarloMethod(unsigned int num_particles) except +
 
-cdef extern from "metropolis_sampling.h":
-    double perform_metropolis_step(
-            wavefunction *wavefunction, double step_length)
+cdef extern from "metropolis_algorithm.h":
+    cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
+        MetropolisAlgorithm(unsigned int num_particles) except +
 
-    double metropolis_sampling(
-            wavefunction *wavefunction, double step_length,
-            unsigned int num_samples)
+        bool step(Wavefunction *wavefunction, double step_length)
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples)

@@ -1,10 +1,10 @@
-#ifndef HAMILTONIAN_H
-#define HAMILTONIAN_H
+#pragma once
 
 #include "wavefunction.h"
 
-typedef struct hamiltonian hamiltonian_t;
-
-double local_energy(wavefunction_t *wavefunction, hamiltonian_t *hamiltonian);
-
-#endif
+class Hamiltonian
+{
+    public:
+        virtual double compute_local_energy(Wavefunction *wavefunction) = 0;
+        virtual double compute_potential_energy(Wavefunction *wavefunction) = 0;
+};

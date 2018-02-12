@@ -3,30 +3,48 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 
 import numpy as np
+import os
+import glob
+import platform
+
+
+os.environ["CFLAGS"] = "-std=c++11"
+
+if platform.system() == "Darwin":
+    os.environ["CFLAGS"] += "-stdlib=libc++"
+
+base_path = ["vmc"]
+source_path = base_path + ["src"]
 
 source_files = [
-    "vmc/metropolis_sampling.pyx",
-    "src/wavefunction.c",
-    "src/metropolis_sampling.c",
-    "src/harmonic_oscillator.c"
+        os.path.join(*base_path, "interface.pyx"),
+        *glob.glob(os.path.join(*source_path, "*", "*.cpp"))
 ]
 
 
 include_dirs = [
-        "include",
+        *glob.glob(os.path.join(*source_path, "*")),
         np.get_include()
 ]
 
 
 libraries = []
 
+define_macros=[]
+
+undef_macros=[
+        "NDEBUG"
+]
+
 extensions = [
     Extension(
-        name="vmc.metropolis_sampling",
+        name="vmc.interface",
         sources=source_files,
-        language="c",
+        language="c++",
         include_dirs=include_dirs,
-        libraries=libraries
+        libraries=libraries,
+        define_macros=define_macros,
+        undef_macros=undef_macros
     )
 ]
 
