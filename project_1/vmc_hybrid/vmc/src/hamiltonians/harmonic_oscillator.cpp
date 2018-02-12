@@ -30,7 +30,7 @@ double HarmonicOscillator::compute_potential_energy(Wavefunction *wavefunction)
     double potential_energy;
 
     potential_energy = 0.5*m_mass*SQUARE(m_omega);
-    potential_energy += wavefunction->compute_position_squared_sum();
+    potential_energy *= wavefunction->compute_position_squared_sum();
 
     return potential_energy;
 }
