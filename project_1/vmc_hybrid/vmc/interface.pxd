@@ -46,3 +46,7 @@ cdef extern from "metropolis_algorithm.h":
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples)
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples,
+                double *local_energies)
