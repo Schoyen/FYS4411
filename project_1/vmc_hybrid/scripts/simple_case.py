@@ -6,21 +6,23 @@ from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, \
 import numpy as np
 import matplotlib.pyplot as plt
 
+import tqdm
 
-num_particles = 1 #[1, 10, 100, 500]
-num_dimensions = 1
+
+num_particles = 500#[1, 10, 100, 500]
+num_dimensions = 3
 num_parameters = 1
 spread = 1.0
 
 step_length = 0.05
-num_samples = 1000
+num_samples = 1000000
 
 mass = 1.0
 omega = 1.0
 
 alpha_min = 0.1
-alpha_max = 1.0
-num_alphas = 11
+alpha_max = 2.0
+num_alphas = 50
 
 alphas = np.linspace(alpha_min, alpha_max, num_alphas).reshape(num_alphas, 1)
 
@@ -32,7 +34,7 @@ method = PyMetropolisAlgorithm(num_particles)
 
 energies = np.zeros(num_alphas)
 
-for i in range(num_alphas):
+for i in tqdm.tqdm(range(num_alphas)):
     wavefunction.set_parameters(alphas[i])
     energies[i] = method.run(
             wavefunction, hamiltonian, step_length, num_samples)
