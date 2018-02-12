@@ -8,7 +8,7 @@ import glob
 import platform
 
 
-os.environ["CFLAGS"] = "-g -std=c++11"
+os.environ["CFLAGS"] = "-std=c++11"
 
 if platform.system() == "Darwin":
     os.environ["CFLAGS"] += "-stdlib=libc++"
