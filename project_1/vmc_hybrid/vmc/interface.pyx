@@ -27,12 +27,19 @@ cdef class PyWavefunction:
         self.parameters = np.zeros(num_parameters)
 
     def redistribute(self, double spread=-1):
-        
+
+        cdef np.ndarray[double, ndim=2, mode="c"] distro
+        cdef unsigned int i, j
+
         if spread < 0:
             spread = self.spread
 
-        self.particles = spread \
+        distro = spread \
              * (2*np.random.random((self.num_particles, self.num_dimensions)) - 1.0)
+
+        for i in range(self.num_particles):
+            for j in range(self.num_dimensions):
+                self.particles[i, j] = distro[i, j]
             
     def get_particles(self):
         return np.asarray(self.particles)
