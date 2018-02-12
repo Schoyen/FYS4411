@@ -11,7 +11,7 @@ import platform
 os.environ["CFLAGS"] = "-std=c++11"
 
 if platform.system() == "Darwin":
-    os.environ["CFLAGS"] += "-stdlib=libc++"
+    os.environ["CFLAGS"] += " -stdlib=libc++"
 
 base_path = ["vmc"]
 source_path = base_path + ["src"]
