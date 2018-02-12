@@ -55,7 +55,6 @@ def test_harmiltonian(hamiltonian_params, one_simple_gauss):
     wavefunction.set_parameters(parameters)
 
     local_energy = ho.compute_local_energy(wavefunction)
+    expected_value = 0.5
 
-    print (local_energy)
-
-    assert False
+    assert np.allclose(local_energy, expected_value)
