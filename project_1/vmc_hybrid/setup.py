@@ -30,13 +30,21 @@ include_dirs = [
 
 libraries = []
 
+define_macros=[]
+
+undef_macros=[
+        "NDEBUG"
+]
+
 extensions = [
     Extension(
         name="vmc.interface",
         sources=source_files,
         language="c++",
         include_dirs=include_dirs,
-        libraries=libraries
+        libraries=libraries,
+        define_macros=define_macros,
+        undef_macros=undef_macros
     )
 ]
 
