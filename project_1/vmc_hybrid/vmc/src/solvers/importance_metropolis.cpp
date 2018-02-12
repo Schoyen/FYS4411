@@ -11,7 +11,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     return false;
 }
 
-double ImportanceMetropolis::rund(
+double ImportanceMetropolis::run(
         Wavefunction *wavefunction, Hamiltonian *hamiltonian,
         double step_length, unsigned int num_samples)
 {
