@@ -62,7 +62,7 @@ class Wavefunction
             }
         }
 
-        void add_step(
+        void move_particle(
                 double step, unsigned int particle_index,
                 unsigned int coordinate);
 

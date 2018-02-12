@@ -29,7 +29,7 @@ bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
     /* Propose a new position */
     for (i = 0; i < num_dimensions; i++) {
         step = step_length*(2.0*m_random_step(m_engine) - 1.0);
-        wavefunction->add_step(step, particle_index, i);
+        wavefunction->move_particle(step, particle_index, i);
     }
 
     /* Evaluate the new wavefunction */

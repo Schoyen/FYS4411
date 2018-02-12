@@ -48,7 +48,7 @@ double Wavefunction::compute_position_squared_sum()
     return m_last_position_squared_sum;
 }
 
-void Wavefunction::add_step(
+void Wavefunction::move_particle(
         double step, unsigned int particle_index,
         unsigned int coordinate)
 {
