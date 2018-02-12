@@ -53,7 +53,7 @@ double MetropolisAlgorithm::run(
         Wavefunction *wavefunction, Hamiltonian *hamiltonian,
         double step_length, unsigned int num_samples)
 {
-    double energy, energy_squared, local_energy;
+    double energy, local_energy;
     unsigned int i, num_accepted_states;
 
     /* Set initial number of accepted states */
@@ -61,7 +61,6 @@ double MetropolisAlgorithm::run(
 
     /* Set initial energy */
     energy = 0;
-    energy_squared = 0;
 
     /* Compute initial local energy */
     local_energy = hamiltonian->compute_local_energy(wavefunction);
@@ -78,10 +77,8 @@ double MetropolisAlgorithm::run(
 
         /* Add local energy */
         energy += local_energy;
-        energy_squared += local_energy * local_energy;
     }
 
-    std::cout << "Var: " << ((energy_squared/num_samples) - (energy * energy / SQUARE(num_samples)))/num_samples << std::endl;
 
 
     /* Return the total energy (without normalization) */
