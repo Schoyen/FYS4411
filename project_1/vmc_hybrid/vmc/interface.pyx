@@ -11,7 +11,7 @@ cdef class PyWavefunction:
     cdef unsigned int num_particles
     cdef unsigned int num_dimensions
     cdef unsigned int num_parameters
-
+    cdef double spread
 
     def __cinit__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters,
@@ -20,11 +20,20 @@ cdef class PyWavefunction:
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
         self.num_parameters = num_parameters
+        self.spread = spread
 
         self.particles = spread \
                 * (2*np.random.random((num_particles, num_dimensions)) - 1.0)
         self.parameters = np.zeros(num_parameters)
 
+    def redistribute(self, double spread=-1):
+        
+        if spread < 0:
+            spread = self.spread
+
+        self.particles = spread \
+             * (2*np.random.random((self.num_particles, self.num_dimensions)) - 1.0)
+            
     def get_particles(self):
         return np.asarray(self.particles)
 
@@ -33,7 +42,7 @@ cdef class PyWavefunction:
 
         if parameters.size != self.num_parameters:
             raise Exception(
-                    "Parameters array must be equal to the number of "
+                    "Parameters array must be equal to the number "
                     + "parameters")
 
         for i in range(self.num_parameters):
