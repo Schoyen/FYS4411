@@ -7,10 +7,6 @@ class Wavefunction
         unsigned int m_num_dimensions;
         unsigned int m_num_parameters;
 
-        /* This refers to the last value from the evaluation function */
-        bool m_valid_last_value;
-        double m_last_value;
-
         /* This allows us to compute the position squared once per change of
          * particle movement */
         bool m_valid_position_squared_sum;
