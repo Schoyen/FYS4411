@@ -35,12 +35,13 @@ cdef class PyWavefunction:
             spread = self.spread
 
         distro = spread \
-             * (2*np.random.random((self.num_particles, self.num_dimensions)) - 1.0)
+                * (2*np.random.random(
+                    (self.num_particles, self.num_dimensions)) - 1.0)
 
         for i in range(self.num_particles):
             for j in range(self.num_dimensions):
                 self.particles[i, j] = distro[i, j]
-            
+
     def get_particles(self):
         return np.asarray(self.particles)
 
@@ -117,7 +118,21 @@ cdef class PyMetropolisAlgorithm:
 
     def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             double step_length, unsigned int num_samples):
-
         return self.method.run(
                 wavefunction.wavefunction, hamiltonian.hamiltonian,
                 step_length, num_samples)
+
+    def sample_local_energy(self, PyWavefunction wavefunction,
+            PyHamiltonian hamiltonian, double step_length,
+            unsigned int num_samples):
+
+        cdef double[::1] local_energies
+        cdef double energy
+
+        local_energies = np.zeros(num_samples)
+
+        energy = self.method.run(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples, &local_energies[0])
+
+        return energy, np.asarray(local_energies)
