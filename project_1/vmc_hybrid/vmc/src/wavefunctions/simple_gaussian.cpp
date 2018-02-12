@@ -3,6 +3,26 @@
 #include "wavefunction.h"
 #include "simple_gaussian.h"
 #include "math_macros.h"
+#include "constants.h"
+
+SimpleGaussian::SimpleGaussian(
+        unsigned int num_particles,
+        unsigned int num_dimensions,
+        unsigned int num_parameters,
+        double mass,
+        double omega,
+        double *parameters,
+        double *particles) :
+    Wavefunction(
+            num_particles,
+            num_dimensions,
+            num_parameters,
+            parameters,
+            particles)
+{
+    m_mass = mass;
+    m_omega = omega;
+}
 
 double SimpleGaussian::compute_laplacian()
 {
@@ -32,7 +52,8 @@ double SimpleGaussian::evaluate()
     position_squared_sum = compute_position_squared_sum();
 
     /* Compute the wavefunction */
-    evaluated_wavefunction = exp(-alpha*position_squared_sum);
+    evaluated_wavefunction =
+        exp(-alpha*m_mass*m_omega*position_squared_sum/HBAR);
 
     /* Return the evaluated result */
     return evaluated_wavefunction;

@@ -72,10 +72,10 @@ cdef class PySimpleGaussian(PyWavefunction):
 
     def __cinit__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters,
-            double spread=1.0):
+            double mass, double omega, double spread=1.0):
 
         self.wavefunction = new SimpleGaussian(
-                num_particles, num_dimensions, num_parameters,
+                num_particles, num_dimensions, num_parameters, mass, omega,
                 &self.parameters[0], &self.particles[0, 0])
 
     def __dealloc__(self):

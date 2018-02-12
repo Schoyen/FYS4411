@@ -22,6 +22,8 @@ cdef extern from "simple_gaussian.h":
                 unsigned int num_particles,
                 unsigned int num_dimensions,
                 unsigned int num_parameters,
+                double mass,
+                double omega,
                 double *parameters,
                 double *particles) except +
 
