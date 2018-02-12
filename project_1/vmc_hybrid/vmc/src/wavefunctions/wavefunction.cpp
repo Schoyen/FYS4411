@@ -39,14 +39,13 @@ double Wavefunction::compute_position_squared_sum()
         }
     }
 
-
     /* Update the stored position sum squared */
     m_last_position_squared_sum = position_squared_sum;
     /* Update the validity of the squared sum */
     m_valid_position_squared_sum = true;
 
     /* Return the valid squared sum */
-    return m_valid_position_squared_sum;
+    return m_last_position_squared_sum;
 }
 
 void Wavefunction::add_step(
