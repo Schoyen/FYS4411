@@ -115,7 +115,7 @@ double MetropolisAlgorithm::run_variance(
         energy_squared += SQUARE(local_energy);
     }
 
-    *variance = energy_squared/num_samples - SQUARE(energy)/SQUARE(num_samples);
+    *variance = energy_squared/num_samples - SQUARE((energy/num_samples));
 
     /* Return the total energy (without normalization) */
     return energy;
