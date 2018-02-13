@@ -1,6 +1,5 @@
 #include "wavefunction.h"
 #include "math_macros.h"
-#include "constants.h"
 
 Wavefunction::Wavefunction(
         unsigned int num_particles,
@@ -47,31 +46,6 @@ double Wavefunction::compute_position_squared_sum()
 
     /* Return the valid squared sum */
     return m_last_position_squared_sum;
-}
-
-double Wavefunction::compute_numerical_laplacian()
-{
-    double laplacian, central, forward, backward, h_squared;
-    unsigned int i, j;
-
-    h_squared = SQUARE(DELTA_H);
-    central = evaluate();
-    laplacian = 0;
-
-    for (i = 0; i < m_num_particles; i++) {
-        for (j = 0; j < m_num_dimensions; j++) {
-            move_particle(DELTA_H, i, j);
-            forward = evaluate();
-
-            move_particle(-2*DELTA_H, i, j);
-            backward = evaluate();
-
-            move_particle(DELTA_H, i, j);
-            laplacian += (forward - 2*central + backward)/h_squared;
-        }
-    }
-
-    return laplacian;
 }
 
 void Wavefunction::move_particle(

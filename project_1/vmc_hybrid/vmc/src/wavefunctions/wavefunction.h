@@ -32,7 +32,6 @@ class Wavefunction
 
 
         double compute_position_squared_sum();
-        double compute_numerical_laplacian();
 
         unsigned int get_num_dimensions()
         {
