@@ -25,21 +25,6 @@ SimpleGaussian::SimpleGaussian(
     m_omega = omega;
 }
 
-// This includes the division of wavefunction.
-// THIS FUNCTION IS USELESS!?!?!?!?!
-double SimpleGaussian::compute_alpha_derivative() 
-{
-    unsigned int p, d;
-    double r_sq = 0;
-    for (p = 0; p < m_num_particles; p++) {
-        for (d = 0; d < m_num_dimensions; d++) {
-            double particle_coordinate = m_particles[d + p*m_num_dimensions];
-            r_sq += SQUARE(particle_coordinate);
-        }
-    }
-    return -r_sq;
-}
-
 double SimpleGaussian::compute_laplacian()
 {
     double alpha, position_squared_sum, laplacian;

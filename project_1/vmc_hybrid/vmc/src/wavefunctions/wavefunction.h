@@ -71,5 +71,4 @@ class Wavefunction
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
-        virtual double compute_alpha_derivative() = 0;
 };

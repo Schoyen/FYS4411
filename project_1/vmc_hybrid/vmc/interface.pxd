@@ -14,7 +14,6 @@ cdef extern from "wavefunction.h":
 
         double compute_position_squared_sum()
         double evaluate()
-        double compute_alpha_derivative()
         double compute_laplacian()
 
 cdef extern from "simple_gaussian.h":
@@ -28,8 +27,6 @@ cdef extern from "simple_gaussian.h":
                 double *parameters,
                 double *particles) except +
         
-        #double compute_alpha_derivative()
-
 cdef extern from "simple_gaussian_numerical.h":
     cdef cppclass SimpleGaussianNumerical(SimpleGaussian):
         SimpleGaussianNumerical(

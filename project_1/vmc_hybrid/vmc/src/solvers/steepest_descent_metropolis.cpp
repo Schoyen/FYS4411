@@ -10,8 +10,6 @@ bool SteepestDescent::step(Wavefunction *wavefunction, double gamma)
 
     double alpha = parameters[0];
 
-    //wavefunction->compute_alpha_derivative();
-
     return false;
 }
 

@@ -62,9 +62,6 @@ cdef class PyWavefunction:
     def evaluate(self):
         return self.wavefunction.evaluate()
 
-    def compute_alpha_derivative(self):
-        return self.wavefunction.compute_alpha_derivative()
-
     def compute_laplacian(self):
         return self.wavefunction.compute_laplacian()
 
@@ -72,7 +69,6 @@ cdef class PyWavefunction:
         return self.wavefunction.compute_position_squared_sum()
 
 cdef class PySimpleGaussian(PyWavefunction):
-    #cdef SimpleGaussian *simplegaussian
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
             unsigned int num_parameters, double mass, double omega,
@@ -83,9 +79,6 @@ cdef class PySimpleGaussian(PyWavefunction):
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters, mass, omega,
                 &self.parameters[0], &self.particles[0, 0])
-        
-    #def compute_alpha_derivative(self):
-    #    return self.simplegaussian.compute_alpha_derivative()
 
 cdef class PySimpleGaussianNumerical(PyWavefunction):
 

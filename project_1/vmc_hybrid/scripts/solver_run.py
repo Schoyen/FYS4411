@@ -21,7 +21,6 @@ hamiltonian = PyHarmonicOscillator(mass, omega)
 #solver = PyMetropolisAlgorithm(num_particles)
 
 print(wavefunction.compute_position_squared_sum())
-print(wavefunction.compute_alpha_derivative())
 #solver = PySteepestDescent()
 
 #solver.step()
