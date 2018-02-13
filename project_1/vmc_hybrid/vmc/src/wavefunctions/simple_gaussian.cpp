@@ -26,18 +26,14 @@ SimpleGaussian::SimpleGaussian(
 }
 
 // This includes the division of wavefunction.
+// THIS FUNCTION IS USELESS!?!?!?!?!
 double SimpleGaussian::compute_alpha_derivative() 
 {
-    std::cout << "Started computing.." << std::endl;
+    unsigned int p, d;
     double r_sq = 0;
-    std::cout << "Created r_sq" << std::endl;
-    std::cout << m_mass << std::endl;
-    std::cout << "Number of particles = " << m_num_particles << std::endl;
-    std::cout << "Number of dimensions = " << m_num_dimensions << std::endl;
-    for (int p = 0; p < m_num_particles; p++) {
-        for (int d = 0; d < m_num_dimensions; d++) {
-            std::cout << "d = " << d << " p = " << p << std::endl;
-            double particle_coordinate = m_particles[p + d*m_num_dimensions];
+    for (p = 0; p < m_num_particles; p++) {
+        for (d = 0; d < m_num_dimensions; d++) {
+            double particle_coordinate = m_particles[d + p*m_num_dimensions];
             r_sq += SQUARE(particle_coordinate);
         }
     }

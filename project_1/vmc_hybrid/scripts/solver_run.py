@@ -20,7 +20,6 @@ wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, m
 hamiltonian = PyHarmonicOscillator(mass, omega)
 #solver = PyMetropolisAlgorithm(num_particles)
 
-print(wavefunction.compute_laplacian())
 print(wavefunction.compute_position_squared_sum())
 print(wavefunction.compute_alpha_derivative())
 #solver = PySteepestDescent()
