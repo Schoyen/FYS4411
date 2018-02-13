@@ -4,7 +4,7 @@
 
 class SimpleGaussian : public Wavefunction
 {
-    private:
+    protected:
         double m_mass;
         double m_omega;
     public:
