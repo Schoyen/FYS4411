@@ -127,6 +127,19 @@ cdef class PyMetropolisAlgorithm:
                 wavefunction.wavefunction, hamiltonian.hamiltonian,
                 step_length, num_samples)
 
+    def run_with_variance(self, PyWavefunction wavefunction,
+            PyHamiltonian hamiltonian, double step_length,
+            unsigned int num_samples):
+        cdef double variance
+        cdef double energy
+
+        variance = 0
+        energy = self.method.run_variance(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples, &variance)
+
+        return energy, variance
+
     def sample_local_energy(self, PyWavefunction wavefunction,
             PyHamiltonian hamiltonian, double step_length,
             unsigned int num_samples):
