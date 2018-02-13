@@ -27,6 +27,18 @@ cdef extern from "simple_gaussian.h":
                 double *parameters,
                 double *particles) except +
 
+cdef extern from "simple_gaussian_numerical.h":
+    cdef cppclass SimpleGaussianNumerical(SimpleGaussian):
+        SimpleGaussianNumerical(
+                unsigned int num_particles,
+                unsigned int num_dimensions,
+                unsigned int num_parameters,
+                double mass,
+                double omega,
+                double h,
+                double *parameters,
+                double *particles) except +
+
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
         double compute_local_energy(Wavefunction *wavefunction)
@@ -48,6 +60,10 @@ cdef extern from "metropolis_algorithm.h":
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples)
+        double run_variance(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples,
+                double *variance)
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples,

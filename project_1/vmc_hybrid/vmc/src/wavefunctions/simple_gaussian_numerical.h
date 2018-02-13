@@ -1,22 +1,23 @@
 #pragma once
 
 #include "wavefunction.h"
+#include "simple_gaussian.h"
 
-class SimpleGaussian : public Wavefunction
+class SimpleGaussianNumerical : public SimpleGaussian
 {
-    protected:
-        double m_mass;
-        double m_omega;
+    private:
+        double m_h;
+
     public:
-        SimpleGaussian(
+        SimpleGaussianNumerical(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
                 unsigned int num_parameters,
                 double mass,
                 double omega,
+                double h,
                 double *parameters,
                 double *particles);
 
-        double evaluate();
         double compute_laplacian();
 };

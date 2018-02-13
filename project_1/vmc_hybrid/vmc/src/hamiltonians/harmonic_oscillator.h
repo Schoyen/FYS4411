@@ -11,6 +11,6 @@ class HarmonicOscillator : public Hamiltonian
         double compute_potential_energy(Wavefunction *wavefunction);
 
     private:
-        double m_omega = 0;
-        double m_mass = 1;
+        double m_omega;
+        double m_mass;
 };

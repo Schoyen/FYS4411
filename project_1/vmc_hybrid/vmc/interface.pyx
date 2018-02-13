@@ -70,14 +70,25 @@ cdef class PyWavefunction:
 
 cdef class PySimpleGaussian(PyWavefunction):
 
-    def __init__(self, unsigned int num_particles,
-            unsigned int num_dimensions, unsigned int num_parameters,
-            double mass, double omega, double spread=1.0):
+    def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
+            unsigned int num_parameters, double mass, double omega,
+            double spread=1.0):
 
         super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters, mass, omega,
+                &self.parameters[0], &self.particles[0, 0])
+
+cdef class PySimpleGaussianNumerical(PyWavefunction):
+
+    def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
+            unsigned int num_parameters, double mass, double omega,
+            double h=1e-7, double spread=1.0):
+        super().__init__(num_particles, num_dimensions, num_parameters, spread)
+
+        self.wavefunction = new SimpleGaussianNumerical(
+                num_particles, num_dimensions, num_parameters, mass, omega, h,
                 &self.parameters[0], &self.particles[0, 0])
 
 cdef class PyHamiltonian:
@@ -115,6 +126,19 @@ cdef class PyMetropolisAlgorithm:
         return self.method.run(
                 wavefunction.wavefunction, hamiltonian.hamiltonian,
                 step_length, num_samples)
+
+    def run_with_variance(self, PyWavefunction wavefunction,
+            PyHamiltonian hamiltonian, double step_length,
+            unsigned int num_samples):
+        cdef double variance
+        cdef double energy
+
+        variance = 0
+        energy = self.method.run_variance(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples, &variance)
+
+        return energy, variance
 
     def sample_local_energy(self, PyWavefunction wavefunction,
             PyHamiltonian hamiltonian, double step_length,
