@@ -80,10 +80,6 @@ cdef class PySimpleGaussian(PyWavefunction):
                 num_particles, num_dimensions, num_parameters, mass, omega,
                 &self.parameters[0], &self.particles[0, 0])
 
-    def __dealloc__(self):
-        pass
-        #del self.wavefunction
-
 cdef class PyHamiltonian:
     cdef Hamiltonian *hamiltonian
 
@@ -104,10 +100,6 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
         self.omega = omega
 
         self.hamiltonian = new HarmonicOscillator(mass, omega)
-
-    def __dealloc__(self):
-        pass
-        #del self.hamiltonian
 
 cdef class PyMetropolisAlgorithm:
     cdef MetropolisAlgorithm *method
