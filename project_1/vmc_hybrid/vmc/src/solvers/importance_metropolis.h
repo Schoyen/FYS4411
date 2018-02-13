@@ -4,9 +4,7 @@
 #include "hamiltonian.h"
 #include "monte_carlo_method.h"
 
-#include random
-
-class ImportanceMetropolis
+class ImportanceMetropolis : public MonteCarloMethod
 {
     public:
         using MonteCarloMethod::MonteCarloMethod;
