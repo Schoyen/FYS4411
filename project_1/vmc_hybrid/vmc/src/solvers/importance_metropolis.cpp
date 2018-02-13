@@ -1,7 +1,7 @@
 #include "importance_metropolis.h"
 #include "wavefunction.h"
-#include "hamiltonian"
-#include "math_macros"
+#include "hamiltonian.h"
+#include "math_macros.h"
 
 bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length) 
 {
