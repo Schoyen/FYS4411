@@ -13,7 +13,7 @@ cdef class PyWavefunction:
     cdef unsigned int num_parameters
     cdef double spread
 
-    def __cinit__(self, unsigned int num_particles,
+    def __init__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters,
             double spread=1.0):
 
@@ -70,9 +70,11 @@ cdef class PyWavefunction:
 
 cdef class PySimpleGaussian(PyWavefunction):
 
-    def __cinit__(self, unsigned int num_particles,
+    def __init__(self, unsigned int num_particles,
             unsigned int num_dimensions, unsigned int num_parameters,
             double mass, double omega, double spread=1.0):
+
+        super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
         self.wavefunction = new SimpleGaussian(
                 num_particles, num_dimensions, num_parameters, mass, omega,
