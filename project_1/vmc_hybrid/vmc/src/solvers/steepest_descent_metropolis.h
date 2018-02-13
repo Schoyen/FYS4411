@@ -4,10 +4,9 @@
 #include "hamiltonian.h"
 #include "monte_carlo_method.h"
 
-class ImportanceMetropolis : public MonteCarloMethod
+class SteepestDescent
 {
     public:
-        using MonteCarloMethod::MonteCarloMethod;
 
         bool step(Wavefunction *wavefunction, double step_length);
         double run(

@@ -63,6 +63,9 @@ class Wavefunction
                 double step, unsigned int particle_index,
                 unsigned int coordinate);
 
+        double *get_parameters() {return m_parameters;};
+        unsigned int get_num_parameters() {return m_num_parameters:};
+
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
 };

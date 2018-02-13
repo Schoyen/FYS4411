@@ -130,3 +130,18 @@ cdef class PyMetropolisAlgorithm:
                 step_length, num_samples, &local_energies[0])
 
         return energy, np.asarray(local_energies)
+
+cdef class PySteepestDescent:
+    cdef SteepestDescent *method
+
+    def __cinit__(self):
+        self.method = new SteepestDescent()
+    
+    def step(self, PyWavefunction wavefunction, double step_length):
+        return self.method.step(wavefunction.wavefunction, step_length)
+    
+    def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
+            double step_length, unsigned int num_samples):
+        return self.method.run(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples) 

@@ -1,23 +1,35 @@
-#include "importance_metropolis.h"
+#include "steepest_descent_metropolis.h"
 #include "wavefunction.h"
 #include "hamiltonian.h"
 #include "math_macros.h"
 
-bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length) 
+bool SteepestDescent::step(Wavefunction *wavefunction, double gamma) 
 {
 
-    // Shit goes down
+    double* parameters = wavefunction->get_parameters();
+
+    double alpha = parameters[0];
 
     return false;
 }
 
-double ImportanceMetropolis::run(
+double SteepestDescent::run(
         Wavefunction *wavefunction, Hamiltonian *hamiltonian,
         double step_length, unsigned int num_samples)
 {
 
+    /*
+        In general: find expectation value of energy and search for minimum
+        How to do this w/o obtaining (num) derivatives wrt. variational params? 
+        Seek to minimise find a s.t. Del ev(E_L(a)) = 0. Decreases fastest in
+        the direction of - Del F(a). Iterative scheme:
+            a_(k+1) = a_k - gamma * Del F(a_k)
+        for small gamma, F(a_k) > F(a_(k+1)), should converge.
 
-    // The real shit goes down
+        If |F(a_k)| >= |F(a_(k+1))| we divide gamma by two.. proceed. Crude.
+
+        Need Initial guess for a.
+    */
 
     return 0.0;
 }
