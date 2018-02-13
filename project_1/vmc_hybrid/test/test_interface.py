@@ -8,8 +8,10 @@ def wavefunction_params():
     num_particles = 100
     num_parameters = 1
     num_dimensions = 3
+    mass = 1
+    omega = 1
 
-    return spread, num_particles, num_parameters, num_dimensions
+    return spread, num_particles, num_parameters, num_dimensions, mass, omega
 
 @pytest.fixture()
 def one_simple_gauss():
@@ -17,8 +19,10 @@ def one_simple_gauss():
     num_particles = 1
     num_parameters = 1
     num_dimensions = 1
+    mass = 1
+    omega = 1
 
-    return spread, num_particles, num_parameters, num_dimensions
+    return spread, num_particles, num_parameters, num_dimensions, mass, omega
 
 @pytest.fixture()
 def two_simple_gauss():
@@ -26,8 +30,10 @@ def two_simple_gauss():
     num_particles = 1
     num_parameters = 1
     num_dimensions = 2
+    mass = 1
+    omega = 1
 
-    return spread, num_particles, num_parameters, num_dimensions
+    return spread, num_particles, num_parameters, num_dimensions, mass, omega
 
 @pytest.fixture()
 def three_simple_gauss():
@@ -35,8 +41,10 @@ def three_simple_gauss():
     num_particles = 1
     num_parameters = 1
     num_dimensions = 3
+    mass = 1
+    omega = 1
 
-    return spread, num_particles, num_parameters, num_dimensions
+    return spread, num_particles, num_parameters, num_dimensions, mass, omega
 
 @pytest.fixture
 def hamiltonian_params():
@@ -46,12 +54,14 @@ def hamiltonian_params():
     return mass, omega
 
 def test_wavefunction(wavefunction_params):
-    spread, num_particles, num_parameters, num_dimensions = wavefunction_params
+    spread, num_particles, num_parameters, num_dimensions, mass, omega = \
+            wavefunction_params
 
     parameters = np.array([0.5])
 
     wavefunction = PySimpleGaussian(
-            num_particles, num_dimensions, num_parameters, spread=spread)
+            num_particles, num_dimensions, num_parameters, mass, omega,
+            spread=spread)
 
     particles = wavefunction.get_particles()
     assert ((particles >= -spread) & (particles <= spread)).all()
@@ -63,11 +73,13 @@ def test_wavefunction(wavefunction_params):
 @pytest.mark.run(after="test_wavefunction")
 def test_one_dimensional_ho(hamiltonian_params, one_simple_gauss):
     mass, omega = hamiltonian_params
-    spread, num_particles, num_parameters, num_dimensions = one_simple_gauss
+    spread, num_particles, num_parameters, num_dimensions, mass, omega = \
+            one_simple_gauss
 
     ho = PyHarmonicOscillator(mass, omega)
     wavefunction = PySimpleGaussian(
-            num_particles, num_dimensions, num_parameters, spread=spread)
+            num_particles, num_dimensions, num_parameters, mass, omega,
+            spread=spread)
 
     parameters = np.array([0.5])
     wavefunction.set_parameters(parameters)
@@ -80,11 +92,13 @@ def test_one_dimensional_ho(hamiltonian_params, one_simple_gauss):
 @pytest.mark.run(after="test_one_dimensional_ho")
 def test_two_dimensional_ho(hamiltonian_params, two_simple_gauss):
     mass, omega = hamiltonian_params
-    spread, num_particles, num_parameters, num_dimensions = two_simple_gauss
+    spread, num_particles, num_parameters, num_dimensions, mass, omega = \
+            two_simple_gauss
 
     ho = PyHarmonicOscillator(mass, omega)
     wavefunction = PySimpleGaussian(
-            num_particles, num_dimensions, num_parameters, spread=spread)
+            num_particles, num_dimensions, num_parameters, mass, omega,
+            spread=spread)
 
     parameters = np.array([0.5])
     wavefunction.set_parameters(parameters)
@@ -97,11 +111,13 @@ def test_two_dimensional_ho(hamiltonian_params, two_simple_gauss):
 @pytest.mark.run(after="test_two_dimensional_ho")
 def test_three_dimensional_ho(hamiltonian_params, three_simple_gauss):
     mass, omega = hamiltonian_params
-    spread, num_particles, num_parameters, num_dimensions = three_simple_gauss
+    spread, num_particles, num_parameters, num_dimensions, mass, omega = \
+            three_simple_gauss
 
     ho = PyHarmonicOscillator(mass, omega)
     wavefunction = PySimpleGaussian(
-            num_particles, num_dimensions, num_parameters, spread=spread)
+            num_particles, num_dimensions, num_parameters, mass, omega,
+            spread=spread)
 
     parameters = np.array([0.5])
     wavefunction.set_parameters(parameters)
