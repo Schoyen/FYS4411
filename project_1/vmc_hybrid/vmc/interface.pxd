@@ -6,7 +6,7 @@ cdef extern from "constants.h":
 cdef extern from "wavefunction.h":
     cdef cppclass Wavefunction:
         Wavefunction(
-                unsigned int num_particles,
+                unsigned int num_dimensions,
                 unsigned int num_dimensions,
                 unsigned int num_parameters,
                 double *parameters,
@@ -14,6 +14,7 @@ cdef extern from "wavefunction.h":
 
         double compute_position_squared_sum()
         double evaluate()
+        double compute_alpha_derivative()
         double compute_laplacian()
 
 cdef extern from "simple_gaussian.h":
@@ -26,6 +27,8 @@ cdef extern from "simple_gaussian.h":
                 double omega,
                 double *parameters,
                 double *particles) except +
+        
+        #double compute_alpha_derivative()
 
 cdef extern from "simple_gaussian_numerical.h":
     cdef cppclass SimpleGaussianNumerical(SimpleGaussian):

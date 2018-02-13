@@ -19,7 +19,11 @@ class Wavefunction
          *
          *      m_particles[j + i*m_num_dimensions] = m_particles[i][j],
          *
-         * where i is the particle index and j is the position index. */
+         * where i is the particle index and j is the position index. 
+         * 
+         *      Nice to know.
+         *          -Seb. 
+         */
         double *m_particles;
 
     public:
@@ -63,8 +67,9 @@ class Wavefunction
                 unsigned int coordinate);
 
         double *get_parameters() {return m_parameters;};
-        unsigned int get_num_parameters() {return m_num_parameters:};
+        unsigned int get_num_parameters() {return m_num_parameters;};
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
+        virtual double compute_alpha_derivative() = 0;
 };

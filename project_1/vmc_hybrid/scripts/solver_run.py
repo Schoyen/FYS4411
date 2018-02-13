@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
-num_particles = 200
-num_dimensions = 3
+num_particles = 10
+num_dimensions = 2
 num_parameters = 1
 spread = 5.0
 step_length = 0.05
@@ -20,7 +20,12 @@ wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, m
 hamiltonian = PyHarmonicOscillator(mass, omega)
 #solver = PyMetropolisAlgorithm(num_particles)
 
-solver = PySteepestDescent()
+print(wavefunction.compute_laplacian())
+print(wavefunction.compute_position_squared_sum())
+print(wavefunction.compute_alpha_derivative())
+#solver = PySteepestDescent()
+
+#solver.step()
 
 energies = [] 
 '''

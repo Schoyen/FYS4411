@@ -4,6 +4,7 @@
 #include "simple_gaussian.h"
 #include "math_macros.h"
 #include "constants.h"
+#include <iostream>
 
 SimpleGaussian::SimpleGaussian(
         unsigned int num_particles,
@@ -22,6 +23,25 @@ SimpleGaussian::SimpleGaussian(
 {
     m_mass = mass;
     m_omega = omega;
+}
+
+// This includes the division of wavefunction.
+double SimpleGaussian::compute_alpha_derivative() 
+{
+    std::cout << "Started computing.." << std::endl;
+    double r_sq = 0;
+    std::cout << "Created r_sq" << std::endl;
+    std::cout << m_mass << std::endl;
+    std::cout << "Number of particles = " << m_num_particles << std::endl;
+    std::cout << "Number of dimensions = " << m_num_dimensions << std::endl;
+    for (int p = 0; p < m_num_particles; p++) {
+        for (int d = 0; d < m_num_dimensions; d++) {
+            std::cout << "d = " << d << " p = " << p << std::endl;
+            double particle_coordinate = m_particles[p + d*m_num_dimensions];
+            r_sq += SQUARE(particle_coordinate);
+        }
+    }
+    return -r_sq;
 }
 
 double SimpleGaussian::compute_laplacian()
