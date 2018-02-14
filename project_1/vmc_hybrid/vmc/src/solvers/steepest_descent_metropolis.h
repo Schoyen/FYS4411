@@ -2,14 +2,15 @@
 
 #include "wavefunction.h"
 #include "hamiltonian.h"
-#include "monte_carlo_method.h"
+#include "metropolis_algorithm.h"
 
-class SteepestDescent
+class SteepestDescentMetropolis : public MetropolisAlgorithm
 {
     public:
 
-        bool step(Wavefunction *wavefunction, double step_length);
-        double run(
+        using MetropolisAlgorithm::MetropolisAlgorithm;
+    
+        double steepest_descent(
             Wavefunction *wavefunction, Hamiltonian *hamiltonian,
             double step_length, unsigned int num_samples);
 };
