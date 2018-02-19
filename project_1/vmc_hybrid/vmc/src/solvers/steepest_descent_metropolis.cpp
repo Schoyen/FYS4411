@@ -60,3 +60,47 @@ double SteepestDescentMetropolis::steepest_descent(
 
     return 0.0;
 }
+
+double MetropolisAlgorithm::run(
+        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+        double step_length, unsigned int num_samples)
+{
+    double energy, local_energy;
+    unsigned int i, num_accepted_states;
+
+    /* Set initial number of accepted states */
+    num_accepted_states = 0;
+
+    /* Set initial energy */
+    energy = 0;
+
+    /* Compute initial local energy */
+    local_energy = hamiltonian->compute_local_energy(wavefunction);
+
+    /* Used by Steepest decent */
+    m_psiAlphaDerivative1 = 0;
+    m_psiAlphaDerivative2 = 0;
+
+    /* Perform num_samples metropolis steps */
+    for (i = 0; i < num_samples; i++) {
+
+        /* Do a step and check if it got accepted */
+        if (step(wavefunction, step_length)) {
+            /* Compute new local energy */
+            local_energy = hamiltonian->compute_local_energy(wavefunction);
+            num_accepted_states++;
+        }
+
+        /* Add local energy */
+        energy += local_energy;
+
+        /* Adding to parameter derivatives (Steepest descent) 
+           Consider making boolean so that these computations are
+           only done when necessary.. */
+        m_psiAlphaDerivative1 += -wavefunction->compute_position_squared_sum()*local_energy;
+        m_psiAlphaDerivative2 += -wavefunction->compute_position_squared_sum();
+    }
+
+    /* Return the total energy (without normalization) */
+    return energy;
+}
