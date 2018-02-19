@@ -6,11 +6,6 @@
 
 class MetropolisAlgorithm : public MonteCarloMethod
 {
-
-    protected:
-        double m_psiAlphaDerivative1 = 0;
-        double m_psiAlphaDerivative2 = 0;
-
     public:
         using MonteCarloMethod::MonteCarloMethod;
 

@@ -65,10 +65,6 @@ double MetropolisAlgorithm::run(
     /* Compute initial local energy */
     local_energy = hamiltonian->compute_local_energy(wavefunction);
 
-    /* Used by Steepest decent */
-    m_psiAlphaDerivative1 = 0;
-    m_psiAlphaDerivative2 = 0;
-
     /* Perform num_samples metropolis steps */
     for (i = 0; i < num_samples; i++) {
 
@@ -82,11 +78,6 @@ double MetropolisAlgorithm::run(
         /* Add local energy */
         energy += local_energy;
 
-        /* Adding to parameter derivatives (Steepest descent) 
-           Consider making boolean so that these computations are
-           only done when necessary.. */
-        m_psiAlphaDerivative1 += -wavefunction->compute_position_squared_sum()*local_energy;
-        m_psiAlphaDerivative2 += -wavefunction->compute_position_squared_sum();
     }
 
     /* Return the total energy (without normalization) */

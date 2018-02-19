@@ -5,7 +5,13 @@
 #include "metropolis_algorithm.h"
 
 class SteepestDescentMetropolis : public MetropolisAlgorithm
-{
+{   
+
+    private:
+
+        double m_psiAlphaDerivative1 = 0;
+        double m_psiAlphaDerivative2 = 0;
+
     public:
 
         using MetropolisAlgorithm::MetropolisAlgorithm;
