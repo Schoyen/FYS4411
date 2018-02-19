@@ -16,12 +16,12 @@ double SteepestDescentMetropolis::steepest_descent(
             a_(k+1) = a_k - gamma * Del F(a_k)
         for small gamma, F(a_k) > F(a_(k+1)), should converge.
 
-        If |F(a_k)| >= |F(a_(k+1))| we divide gamma by two.. proceed. Crude.
+        If |F(a_k+1)| >= |F(a_(k))| we divide gamma by two.. proceed. Crude.
 
         Need Initial guess for a.
     */
 
-    const int MAX_ITER = 100;
+    const int MAX_ITER = 10;
 
     double* parameters = wavefunction->get_parameters();
 
@@ -31,17 +31,13 @@ double SteepestDescentMetropolis::steepest_descent(
 
     // It might be necessary to have gamma AND step_length
     // Metropolis stesps
-    energy = run(wavefunction, hamiltonian, gamma, num_samples);
-
-    energy_prev = energy;
+    energy = run(wavefunction, hamiltonian, 0.05, num_samples);
 
     // Compute derivative of energy wrt alpha (computed analytically)
-    gradient_prev = 2*(m_psiAlphaDerivative1/num_samples - (m_psiAlphaDerivative2/num_samples)*energy);
-
-    std::cout << gradient_prev << std::endl;
+    gradient = 2*(m_psiAlphaDerivative1/num_samples - (m_psiAlphaDerivative2/SQUARE(num_samples))*energy);
 
     // Starting alpha (alpha-naught) 
-    alpha_prev = parameters[0];
+    alpha = parameters[0];
 
     unsigned int iteration = 0;
 
@@ -50,18 +46,38 @@ double SteepestDescentMetropolis::steepest_descent(
         iteration++;
 
         // The main attraction
-        alpha = alpha - gamma * gradient_prev;
+        alpha = alpha - gamma * gradient;
 
-        std::cout << alpha << std::endl;
+        // Storing old energy and running Metropolis-Hastings
+        energy_prev = energy;
+        energy = run(wavefunction, hamiltonian, 0.05, num_samples);
+
+        // Storing old (unnecessary??) and computing new gradient
+        gradient_prev = gradient;
+        gradient = 2*(m_psiAlphaDerivative1/num_samples - (m_psiAlphaDerivative2/SQUARE(num_samples))*energy);
+
+        // The crude gamma adaption
+        if (energy >= energy_prev) {
+            gamma = 0.5 * gamma;
+        }
+
+        std::cout << "---------------" << std::endl;
+        std::cout << "alpha: " << alpha << std::endl;
+        std::cout << "gradient: " << gradient << std::endl;
+        std::cout << "prev grad: " << gradient_prev << std::endl;
+        std::cout << "gamma: " << gamma << std::endl;
+        std::cout << "psiAlphadDer1: " << m_psiAlphaDerivative1/num_samples << std::endl;
+        std::cout << "psiAlphadDer2*energy: " << (m_psiAlphaDerivative2/SQUARE(num_samples))*energy << std::endl;
+        std::cout << "position_squared_sum: " << wavefunction->compute_position_squared_sum() << std::endl;
+
     }
 
     // For each step I need to multiply LOCAL ENERGY with dPsi/dalpha. Summarize.
-    // Must happen in metropolis loop??
-
+    
     return 0.0;
 }
 
-double MetropolisAlgorithm::run(
+double SteepestDescentMetropolis::run(
         Wavefunction *wavefunction, Hamiltonian *hamiltonian,
         double step_length, unsigned int num_samples)
 {

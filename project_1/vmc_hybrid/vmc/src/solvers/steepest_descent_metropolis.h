@@ -19,4 +19,8 @@ class SteepestDescentMetropolis : public MetropolisAlgorithm
         double steepest_descent(
             Wavefunction *wavefunction, Hamiltonian *hamiltonian,
             double step_length, unsigned int num_samples);
+
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples);
 };

@@ -5,12 +5,12 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
-num_particles = 10
+num_particles = 1
 num_dimensions = 2
 num_parameters = 1
 spread = 5.0
 step_length = 0.05
-num_samples = 1000000
+num_samples = 10000
 mass = 1
 omega = 1
 
