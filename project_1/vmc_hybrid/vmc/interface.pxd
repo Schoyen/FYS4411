@@ -75,3 +75,13 @@ cdef extern from "steepest_descent_metropolis.h":
 
         double steepest_descent(Wavefunction *wavefunction, Hamiltonian *hamiltonian,
             double step_length, unsigned int num_samples)
+
+cdef extern from "importance_metropolis.h":
+    cdef cppclass ImportanceMetropolis:
+        ImportanceMetropolis(unsigned int num_particles) except +
+
+        bool step(Wavefunction *wavefunction, double sveitep_length)
+
+        double run(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples)

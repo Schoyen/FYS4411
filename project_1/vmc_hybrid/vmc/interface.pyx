@@ -165,3 +165,18 @@ cdef class PySteepestDescentMetropolis:
             double gamma, unsigned int num_samples):
         return self.method.steepest_descent(wavefunction.wavefunction, hamiltonian.hamiltonian,
             gamma, num_samples)
+
+cdef class PyImportanceMetropolis:
+    cdef ImportanceMetropolis *method
+
+    def __cinit__(self, unsigned int num_particles):
+        self.method = new ImportanceMetropolis(num_particles)
+
+    def step(self, PyWavefunction wavefunction, double step_length):
+        return self.method.step(wavefunction.wavefunction, step_length)
+
+    def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian, 
+            double step_length, unsigned int num_samples):
+        return self.method.run(
+                wavefunction.wavefunction, hamiltonian.hamiltonian,
+                step_length, num_samples)

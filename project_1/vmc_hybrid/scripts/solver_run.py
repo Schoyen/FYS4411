@@ -1,6 +1,6 @@
 import config
 
-from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, PyMetropolisAlgorithm, PySteepestDescentMetropolis
+from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, PyMetropolisAlgorithm, PySteepestDescentMetropolis, PyImportanceMetropolis
 from matplotlib import pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
@@ -10,21 +10,19 @@ num_dimensions = 1
 num_parameters = 1
 spread = 5.0
 step_length = 0.05
-num_samples = 1000000
+num_samples = 10
 mass = 1
 omega = 1
 
 alphas = np.linspace(0.2, 1.1, 22)
 
 wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, mass, omega)
+wavefunction.set_parameters(np.array([0.5]))
 hamiltonian = PyHarmonicOscillator(mass, omega)
 #solver = PyMetropolisAlgorithm(num_particles)
-wavefunction.set_parameters(np.array([0.5]))
+solver = PyImportanceMetropolis(num_particles)
 
-print(wavefunction.compute_position_squared_sum())
-solver = PySteepestDescentMetropolis(num_particles)
-
-solver.steepest_descent(wavefunction, hamiltonian, step_length, num_samples)
+solver.run(wavefunction, hamiltonian, step_length, num_samples)
 
 energies = [] 
 '''
