@@ -25,3 +25,6 @@ Below follows a list of things that needs to be implemented/tested.
 3. Test the implementation for the simple one-dimensional system described in
    Thijssen.
 4. Use `valgrind` to locate memory leaks.
+
+## Implementation tests
+We currently reproduce the results, i.e., the plots, from [these slides](https://www.acsu.buffalo.edu/~phygons/cp2/topic5/topic5-lec1.pdf).
