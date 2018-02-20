@@ -41,12 +41,14 @@ double SteepestDescentMetropolis::steepest_descent(
 
     unsigned int iteration = 0;
 
+    bool direction = true;
+
     while (iteration <= MAX_ITER) 
     {
         iteration++;
 
         // The main attraction
-        alpha = alpha - gamma * gradient;
+        alpha = alpha + ((direction) ? (- gamma * gradient) : (gamma * gradient));
 
         // Storing old energy and running Metropolis-Hastings
         energy_prev = energy;
@@ -58,7 +60,10 @@ double SteepestDescentMetropolis::steepest_descent(
 
         // The crude gamma adaption
         if (energy >= energy_prev) {
-            gamma = 0.5 * gamma;
+            if (gamma > 0.001) {
+                gamma = 0.5 * gamma;
+            }
+            direction = !direction;
         }
 
         std::cout << "---------------" << std::endl;
