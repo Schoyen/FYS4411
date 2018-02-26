@@ -42,6 +42,17 @@ double SimpleGaussian::compute_laplacian()
     return laplacian;
 }
 
+double SimpleGaussian::compute_drift_force_component(unsigned int dimension, unsigned int particle)
+{
+    double alpha; 
+
+    /* Fetch variational parameter alpha */
+    alpha = m_parameters[0];
+
+    // Drift force is F = -4*alpha*r_vec
+    return -4*alpha*m_particles[dimension, particle*m_num_dimensions];
+}
+
 double SimpleGaussian::evaluate()
 {
     double alpha, evaluated_wavefunction, position_squared_sum;

@@ -3,6 +3,39 @@
 #include "hamiltonian.h"
 #include "math_macros.h"
 #include <iostream>
+#include <math.h>
+//#include <random>
+
+
+// Function to compute the Green's functions fraction
+double ImportanceMetropolis::greensFraction(Wavefunction *wavefunction, double new_pos, double old_pos, double time_step, double D) {
+
+    double result;
+    double drift_force_old, drift_force_new;
+    double G_1 = 0;
+    double G_2 = 0;
+    unsigned int i, num_dimensions;
+
+    num_dimensions = wavefunction->get_num_dimensions();
+
+    for (i = 0; i < num_dimensions; i++) {
+        
+        drift_force_old = wavefunction->compute_drift_force_component(i, old_pos);
+        drift_force_new = wavefunction->compute_drift_force_component(i, new_pos);
+
+        double x_old, x_new;
+        x_old = m_particles[i, old_pos*num_dimensions]
+        x_new = m_particles[i, new_pos*num_dimensions]
+
+        // Part of this computation must probably be down outside the loop
+        G_1 += exp(- SQUARE(x_old - x_new - D*time_step*driftforce_new) / (4*D*time_step));
+        G_2 += exp(- SQUARE(x_new - x_old - D*time_step*driftforce_old) / (4*D*time_step));
+    }
+
+    result = G1 / G2;
+
+   return result; 
+}
 
 bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
 {
@@ -12,9 +45,69 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
 
         ( G(old_pos, new_pos, delta_t) * | psi_T(new)|^2 ) /
         ( G(new_pos, old_pos, delta_t) * | psi_T(old)|^2 )
+
+        And then there was ths whole deal of what G is..
+        What is nice: Both G's have a coefficient that is cancelled. 
     */
 
-    std::cout << "is this thing on?" << std::endl;
+    unsigned int num_dimensions, i, particle_index;
+    double weight, current_wavefunction, previous_wavefunction, drift_force;
+    //bool step_accepted;
+
+    // Must insert particle spread instead of 1??
+    std::normal_distribution<double> N(0,1);
+
+    // The Diffusion coefficient. I don't know what it is supposed to be. Hardcoding
+    double D = 1.0;
+
+    // Is this so?
+    double time_step = step_length;
+
+    // Getting dimensionality
+    num_dimensions = wavefunction->get_num_dimensions();
+     
+    // Storing the current wavefunction in prev (current will be overwritten)
+    previous_wavefunction = wavefunction->evaluate();
+
+    // Temporary storage for old position
+    double old_pos[num_dimensions];
+
+    // draw some particle
+    particle_index = m_random_particle(m_engine);
+
+    // DO I NEED TO STORE PREVIOUS POSITION???
+
+    /*
+        Update position:
+        r_new = r_prev + D*F(r)*time_step + N(0,1)*sqrt(time_step)
+        -> step = r_new - r_prev = D*F*time_step + N *sqrt(time_step)
+        N is normal dist. stoc. var. 
+        D is some diffusion coefficient. WHAT IS IT!?!?!?1
+    */
+
+    // Popose new position
+    for (i = 0; i < num_dimensions; i++) {
+        step = D*F*time_step + N(m_engine)*sqrt(time_step);
+        wavefunction->move_particle(step, particle_index, i);
+    }
+
+    // Evaluate new wavefunction
+    current_wavefunction = wavefunction->evaluate();
+
+    // Compute new weight
+    double greens_fraction = greensFraction(wavefunction, particle_index, old_pos, time_step, D);
+
+    // Acceptance weight
+    weight = greens_fraction * (abs(current_wavefunction) / abs(previous_wavefunction));
+
+    // The same kind of test as before
+    if (weight >= m_random_step(m_engine)) {
+        return true;
+    } else {
+        wavefunction->reset_particle_position(old_pos, particle_index);
+    }
+
+    //std::cout << "is this thing on?" << std::endl;
     return false;
 }
 
