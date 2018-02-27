@@ -206,6 +206,7 @@
             =
             \sum_{k = 1}^N
             \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+            \label{eq:drift_force}
         \end{align}
         Using this expression we are able to move towards parts of
         configuration space where the gradient increases or decreases yielding a
@@ -561,47 +562,96 @@
         example, the simplest case is to accept the new state, i.e., the new
         position for the random walker, if the ratio
         \begin{align}
-            w &= \frac{\Psi_T(\vf{r}_{i + 1})}{\Psi_T(\vf{r}_{i})},
+            q(\vf{r}_{i + 1}, \vf{r}_i)
+            &=
+            \frac{\left|\Psi_T(\vf{r}_{i + 1})\right|^2}
+            {\left|\Psi_T(\vf{r}_{i})\right|^2},
         \end{align}
         where $\vf{r}_{i + 1}$ are all the positions at step $i + 1$, is greater
         than a uniform probability $p \in [0, 1)$.
 
-\subsubsection{Importance Sampling}
-A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with
-no regard for where we are likely to find a particle. This problem can be remedied through a \emph{importance sampling}.
-It is reasonable to assume that the particles we erratically scatter in space are prone to movement towards the peaks
-of the probability density as dictated by the wave function. Consider therefore the Fokker-Planck equation,
-\begin{equation}
-    \frac{\partial \psi}{\partial t} = D \frac{\partial }{\partial x}\left(\frac{\partial }{\partial x} - F \right) \psi,
-    \label{eq:fokker_planck}
-\end{equation}
-which described the evolution in time of a probability density function, here exchanged for the wavefunction $\psi$.
-Originaly an equation that models diffusion, we have a diffusion term $D$ and a drift force,
-\begin{equation}
-    F = \frac{2}{\psi} \frac{\partial \psi}{\partial x}.
-\end{equation}
+        \subsubsection{Importance Sampling}
+            A problem with the naïve Metropolis-Hastings sampling approach is
+            that the sampling of position space is done with no regard for where
+            we are likely to find a particle. This problem can be remedied
+            through \emph{importance sampling}.  It is reasonable to assume that
+            the particles we erratically scatter in space are prone to movement
+            towards the peaks of the probability density as dictated by the wave
+            function. Consider therefore the Fokker-Planck equation,
+            \begin{align}
+                \dpd[]{\Psi_T}{t}
+                &=
+                D \nabla\cdot
+                \left(
+                    \nabla
+                    - \vf{F}
+                \right) \Psi_T,
+                \label{eq:fokker_planck}
+            \end{align}
+            which describes the evolution in time of a probability density
+            function. In our case this is the trial wavefunction $\Psi_T$.
+            Originaly an equation that models diffusion, we have a diffusion
+            term $D$ and the drift force \autoref{eq:drift_force}. In our case
+            the diffusion term $D$ is simply $1/2$ from the kinetic energy (in
+            natural units).
 
-The one-particle model corresponding to the Fokker-Planck equation is the Langevin equation,
-\begin{equation}
-    \frac{\partial x}{\partial t} = D F(x) + \eta,
-    \label{eq:langevin}
-\end{equation}
-where $\eta$ is a uniformly distributed stochastic variable. Solving Langevin's equation by Eurler's method gives a recursive relation for
-the subsequent new positions of a particle,
-\begin{equation}
-    x_{t+\Delta t} = x_t + D F(x) \Delta t +\xi \sqrt{\Delta t},
-\end{equation}
-given a time step $\Delta t$\footnote{Bear in mind that \autoref{eq:langevin} is only valid as $\Delta t \to 0$, a property stemming from the use of Euler's method.} and a normally distributed stochastic variable $\xi$.
+            We use the Langevin equation to find the new position of the
+            particle.
+            \begin{align}
+                \dpd[]{\vf{r}}{t}
+                &=
+                D\vf{F}(\vf{r}) + \vfg{\eta},
+                \label{eq:langevin}
+            \end{align}
+            where $\vfg{\eta}$ is a uniformly distributed stochastic variable
+            for each dimenion.  Solving Langevin's equation by Euler's method
+            gives a recursive relation for the subsequent new positions of a
+            particle.
+            \begin{align}
+                \vf{r}_{i + 1}
+                &=
+                \vf{r}_i + D\vf{F}(\vf{r}_i)\Delta t
+                + \vfg{\xi}\sqrt{\Delta t},
+            \end{align}
+            for a given time step $\Delta t$
+            \footnote{
+                Bear in mind that \autoref{eq:langevin} is only valid as $\Delta
+                t \to 0$, a property stemming from the use of Euler's method.
+            }
+            and a normally distributed stochastic variable $\vfg{\xi}$.
 
-Now we need to change the acceptance probability of the metropolis algorithm to something that takes
-the new sampling method into account,
-\begin{equation}
-    q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}^2}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}^2}
-\end{equation}
-where $G$ is the Green's function to the Fokker-Planck equation,
-\begin{align}
-    G&(x_{\text{new}}, x, \Delta x) \nonumber \\
-    &= \frac{1}{(4\pi D \Delta t)^{3N/2}}\exp\left(-\frac{(x_{\text{new}} - x - D\Delta t F(x))^2}{4D\Delta t} \right).
-\end{align}
+            Now we need to change the acceptance probability of the metropolis
+            algorithm to something that takes the new sampling method into
+            account.
+            \begin{align}
+                q(\vf{r}_{i + 1}, \vf{r}_i)
+                &=
+                \frac{
+                    G(\vf{r}_{i + 1}, \vf{r}_{i}, \Delta t)
+                    \left|\Psi_T(\vf{r}_{i + 1})\right|^2
+                }
+                {
+                    G(\vf{r}_{i}, \vf{r}_{i + 1}, \Delta t)
+                    \left|\Psi_T(\vf{r}_{i})\right|^2
+                },
+            \end{align}
+            where $G$ is the Green's function of the Fokker-Planck equation
+            given by
+            \begin{align}
+                G(\vf{r}_{i + 1}, \vf{r}_i, \Delta t)
+                &=
+                \exp\Biggl(
+                    -\frac{\bigl[
+                        \vf{r}_{i + 1}
+                        - \vf{r}_{i}
+                        - D\vf{F}(\vf{r}_i)\Delta t
+                    \bigr]^2}{4D\Delta t}
+                \Biggr)
+                \nonumber \\
+                &\qquad
+                \times
+                \frac{1}{(4\pi D\Delta t)^{dN/2}},
+            \end{align}
+            where $d$ is the dimensionality.
 
 \end{document}
