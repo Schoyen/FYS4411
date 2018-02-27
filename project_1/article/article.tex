@@ -304,227 +304,217 @@
     \begin{align}
         u(r_{jk}) = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr].
     \end{align}
-            To further shorten the notation we will use $u_{jk} = u(r_{jk})$.
-            We wish to find an analytical expression for the local energy.
-            Beginning with the gradient we get
-            \begin{align}
-                \nabla_k\Psi_T(\vf{r})
-                &=
-                \Bigl[
-                    \nabla_k
-                    \Phi_T(\vf{r})
-                \Bigr]
-                J(\vf{r})
-                + \Phi_T(\vf{r})
-                \nabla_k J(\vf{r}).
-            \end{align}
-            The gradient of the Slater permament for particle $k$ is given by
-            \begin{align}
-                \nabla_k
-                \Phi_T(\vf{r})
-                &=
-                \nabla_k\phi_k
-                \prod_{i \neq k}^N\phi_i
-                = \frac{\nabla_k\phi_k}{\phi_k}
-                \Phi_T(\vf{r}).
-            \end{align}
-            The gradient of the Jastrow factor is given by
-            \begin{align}
-                \nabla_k J(\vf{r})
-                &=
-                J(\vf{r})
-                \nabla_k\sum_{m < n}^N u_{mn} \\
-                &= J(\vf{r})
-                \Biggl(
-                    \sum_{m = 1}^{k - 1}\nabla_k u_{mk}
-                    \sum_{n = k + 1}^N\nabla_k u_{kn}
-                \Biggr)
-                \\
-                &=
-                J(\vf{r})
-                \sum_{m \neq k}^N\nabla_k u_{km},
-            \end{align}
-            where the gradient of the interaction term splits the antisymmetric
-            sum into two parts. As $r_{ij} = r_{ji}$ we can combine these sums
-            into a single sum. This in total yields the gradient
-            \begin{align}
-                \nabla_k\Psi_T(\vf{r})
-                &=
-                \Biggl(
-                    \frac{\nabla_k\phi_k}{\phi_k}
-                    + \sum_{m \neq k}^N
-                    \nabla_k u_{km}
-                \Biggr)
-                \Psi_T(\vf{r}).
-                \label{eq:gradient_full_wavefunction}
-            \end{align}
-            We now find the Laplacian of the trial wavefunction by finding the
-            divergence of \autoref{eq:gradient_full_wavefunction}.
-            \begin{align}
-                \nabla_k^2\Psi_T(\vf{r})
-                &=
-                \Biggl(
-                    \nabla_k\Biggl[
-                        \frac{\nabla_k\phi_k}{\phi_k}
-                    \Biggr]
-                    +
-                    \sum_{m \neq k}^N \nabla_k^2 u_{km}
-                \Biggr)\Psi_T(\vf{r})
-                \\
-                &\qquad
-                +
-                \Biggl(
-                    \frac{\nabla_k\phi_k}{\phi_k}
-                    + \sum_{m \neq k}^N
-                    \nabla_k u_{km}
-                \Biggr)^2
-                \Psi_T(\vf{r}),
-            \end{align}
-            where the squared term came from taking the gradient of the trial
-            wavefunction.  To further simplify we divide by the trial
-            wavefunction. This yields
-            \begin{widetext}
-                \begin{align}
-                    \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-                    &=
-                    \Biggl(
-                        \nabla_k\Biggl[
-                            \frac{\nabla_k\phi_k}{\phi_k}
-                        \Biggr]
-                        +
-                        \sum_{m \neq k}^N \nabla_k^2 u_{km}
-                    \Biggr)
-                    +
-                    \Biggl(
-                        \frac{\nabla_k\phi_k}{\phi_k}
-                        + \sum_{m \neq k}^N
-                        \nabla_k u_{km}
-                    \Biggr)^2 \\
-                    &=
-                    \frac{\nabla_k^2\phi_k}{\phi_k}
-                    + 2\frac{\nabla_k\phi_k}{\phi_k}
-                    \sum_{m \neq k}\nabla_k u_{km}
-                    + \sum_{m\neq k}^N\nabla_k^2 u_{km}
-                    + \Biggl(
-                        \sum_{m \neq k}^N\nabla_k u_{km}
-                    \Biggr)^2.
-                \end{align}
-            \end{widetext}
-            To go from here we have to find the gradient and the Laplacian of
-            the single particle functions, $\phi_k$, and the interaction
-            functions $u_{km}$. For the single particle functions we use
-            Cartesian coordinates when finding the derivatives whereas we for
-            the interaction functions will use spherical coordinates and do a
-            variable substitution. Beginning with the gradient of the single
-            particle functions we get
-            \begin{align}
-                \nabla_k\phi_k
-                &=
-                \nabla_k\exp\bigl[
-                    -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
-                \bigr] \\
-                &=
-                -2\alpha
-                (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-                \phi_k.
-            \end{align}
-            Note that the subscripts on the unit vectors $\vf{e}_i$ are
-            \textit{not} the same as the subscripts used for its components. The
-            Laplacian yields
-            \begin{align}
-                \nabla_k^2\phi_k
-                &=
-                \Bigl[
-                    -2\alpha
-                    \big(
-                        2 + \beta
-                    \bigr)
-                    + 4\alpha^2
-                    \bigl(
-                        x_k^2 + y_k^2 + \beta^2z_k^2
-                    \bigr)
-                \Bigr]
-                \phi_k.
-            \end{align}
-            In order to derive the interaction functions we have to do a
-            variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
-            then rewrite the $\nabla_k$-operator as
-            \begin{align}
-                \nabla_k
-                &=
-                \nabla_k
-                \dpd[]{r_{km}}{r_{km}}
-                =
-                \nabla_k r_{km} \dpd[]{}{r_{km}}
-                \\
-                &=
-                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
-            \end{align}
-            Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
-            \begin{align}
-                \nabla_k u_{km}
-                &=
-                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                \dpd[]{u_{km}}{r_{km}}.
-            \end{align}
-            For the Laplacian we switch a little back and forth between the two
-            ways of representing the $\nabla_k$-operator. We thus get
-            \begin{widetext}
-                \begin{align}
-                    \nabla_k^2 u_{km}
-                    &=
-                    \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    + \Biggl[
-                        \nabla_k \frac{1}{r_{km}}
-                    \Biggr]
-                    (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
-                    + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \nabla_k \dpd[]{u_{km}}{r_{km}} \\
-                    &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
-                    \dpd[]{u_{km}}{r_{km}}
-                    + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
-                    \dpd[2]{u_{km}}{r_{km}} \\
-                    &=
-                    \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    + \dpd[2]{u_{km}}{r_{km}},
-                \end{align}
-                where $d$ is again the dimensionality of the problem. In total
-                we can state an intermediate version of the Laplacian occuring
-                in the local energy as
-                \begin{align}
-                    \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-                    &=
-                    \frac{\nabla_k^2\phi_k}{\phi_k}
-                    + 2\frac{\nabla_k\phi_k}{\phi_k}
-                    \sum_{m \neq k}^N
-                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \dpd[]{u_{km}}{r_{km}}
-                    + \sum_{m\neq k}^N
-                    \Biggl(
-                        \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                        + \dpd[2]{u_{km}}{r_{km}}
-                    \Biggr)
-                    \nonumber \\
-                    &\qquad
-                    +
-                    \sum_{m, n \neq k}^N
-                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
-                    \dpd[]{u_{km}}{r_{km}}
-                    \dpd[]{u_{kn}}{r_{kn}}.
-                \end{align}
-            \end{widetext}
-            Moving on to the derivatives of the interaction terms, $u_{km}$, to
-            get an explicit expression for the Laplacian.
-            \begin{align}
-                \dpd[]{u_{km}}{r_{km}}
-                &=
-                \frac{a}{r_{km}(r_{km} - a)},
-                \\
-                \dpd[2]{u_{km}}{r_{km}}
-                &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
-            \end{align}
+    To further shorten the notation we will use $u_{jk} = u(r_{jk})$. Computing
+    the gradient of the wavefunction we get
+    \begin{align}
+        \nabla_k\Psi_T(\vf{r})
+        &=
+        \Bigl[
+            \nabla_k
+            \Phi_T(\vf{r})
+        \Bigr]
+        J(\vf{r})
+        + \Phi_T(\vf{r})
+        \nabla_k J(\vf{r}).
+    \end{align}
+    The gradient of the Slater permament for particle $k$ is given by
+    \begin{align}
+        \nabla_k
+        \Phi_T(\vf{r})
+        &=
+        \nabla_k\phi_k
+        \prod_{i \neq k}^N\phi_i
+        = \frac{\nabla_k\phi_k}{\phi_k}
+        \Phi_T(\vf{r}).
+    \end{align}
+    The gradient of the Jastrow factor is given by
+    \begin{align}
+        \nabla_k J(\vf{r})
+        &=
+        J(\vf{r})
+        \nabla_k\sum_{m < n}^N u_{mn} \\
+        &= J(\vf{r})
+        \Biggl(
+            \sum_{m = 1}^{k - 1}\nabla_k u_{mk}
+            \sum_{n = k + 1}^N\nabla_k u_{kn}
+        \Biggr)
+        \\
+        &=
+        J(\vf{r})
+        \sum_{m \neq k}^N\nabla_k u_{km},
+    \end{align}
+    where the gradient of the interaction term splits the antisymmetric
+    sum into two parts. As $r_{ij} = r_{ji}$ we can combine these sums
+    into a single sum. This in total yields the gradient
+    \begin{align}
+        \nabla_k\Psi_T(\vf{r})
+        &=
+        \Biggl(
+            \frac{\nabla_k\phi_k}{\phi_k}
+            + \sum_{m \neq k}^N
+            \nabla_k u_{km}
+        \Biggr)
+        \Psi_T(\vf{r}).
+        \label{eq:gradient_full_wavefunction}
+    \end{align}
+
+    The Laplcian of the trial wavefunction is found by finding the divergence of
+    \autoref{eq:gradient_full_wavefunction}.
+    \begin{align}
+        \nabla_k^2\Psi_T(\vf{r})
+        &=
+        \Biggl(
+            \nabla_k\Biggl[
+                \frac{\nabla_k\phi_k}{\phi_k}
+            \Biggr]
+            +
+            \sum_{m \neq k}^N \nabla_k^2 u_{km}
+        \Biggr)\Psi_T(\vf{r})
+        \\
+        &\qquad
+        +
+        \Biggl(
+            \frac{\nabla_k\phi_k}{\phi_k}
+            + \sum_{m \neq k}^N
+            \nabla_k u_{km}
+        \Biggr)^2
+        \Psi_T(\vf{r}),
+    \end{align}
+    where the squared term came from taking the gradient of the trial
+    wavefunction.  To further simplify we divide by the trial
+    wavefunction. This yields
+    \begin{align}
+        \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+        &=
+        \frac{\nabla_k^2\phi_k}{\phi_k}
+        + 2\frac{\nabla_k\phi_k}{\phi_k}
+        \sum_{m \neq k}\nabla_k u_{km}
+        \nonumber \\
+        &\qquad
+        + \sum_{m\neq k}^N\nabla_k^2 u_{km}
+        + \Biggl(
+            \sum_{m \neq k}^N\nabla_k u_{km}
+        \Biggr)^2.
+    \end{align}
+    To go from here we have to find the gradient and the Laplacian of
+    the single particle functions, $\phi_k$, and the interaction
+    functions $u_{km}$. For the single particle functions we use
+    Cartesian coordinates when finding the derivatives whereas we for
+    the interaction functions will use spherical coordinates and do a
+    variable substitution. Beginning with the gradient of the single
+    particle functions we get
+    \begin{align}
+        \nabla_k\phi_k
+        &=
+        \nabla_k\exp\bigl[
+            -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
+        \bigr] \\
+        &=
+        -2\alpha
+        (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+        \phi_k.
+    \end{align}
+    Note that the subscripts on the unit vectors $\vf{e}_i$ are
+    \textit{not} the same as the subscripts used for its components. The
+    Laplacian yields
+    \begin{align}
+        \nabla_k^2\phi_k
+        &=
+        \Bigl[
+            -2\alpha
+            \big(
+                d - 1 + \beta
+            \bigr)
+            \nonumber \\
+            &\qquad
+            + 4\alpha^2
+            \bigl(
+                x_k^2 + y_k^2 + \beta^2z_k^2
+            \bigr)
+        \Bigr]
+        \phi_k,
+    \end{align}
+    with $d$ as the dimensionality of the problem.
+    In order to derive the interaction functions we have to do a
+    variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
+    then rewrite the $\nabla_k$-operator as
+    \begin{align}
+        \nabla_k
+        &=
+        \nabla_k
+        \dpd[]{r_{km}}{r_{km}}
+        =
+        \nabla_k r_{km} \dpd[]{}{r_{km}}
+        \\
+        &=
+        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
+    \end{align}
+    Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
+    \begin{align}
+        \nabla_k u_{km}
+        &=
+        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+        \dpd[]{u_{km}}{r_{km}}.
+    \end{align}
+
+    \begin{widetext}
+        For the Laplacian we switch a little back and forth between the
+        two ways of representing the $\nabla_k$-operator. We thus get
+        \begin{align}
+            \nabla_k^2 u_{km}
+            &=
+            \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            + \Biggl[
+                \nabla_k \frac{1}{r_{km}}
+            \Biggr]
+            (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
+            + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \nabla_k \dpd[]{u_{km}}{r_{km}} \\
+            &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
+            \dpd[]{u_{km}}{r_{km}}
+            + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
+            \dpd[2]{u_{km}}{r_{km}} \\
+            &=
+            \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            + \dpd[2]{u_{km}}{r_{km}},
+        \end{align}
+        where $d$ is again the dimensionality of the problem. In total
+        we can state an intermediate version of the Laplacian occuring
+        in the local energy as
+        \begin{align}
+            \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+            &=
+            \frac{\nabla_k^2\phi_k}{\phi_k}
+            + 2\frac{\nabla_k\phi_k}{\phi_k}
+            \sum_{m \neq k}^N
+            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \dpd[]{u_{km}}{r_{km}}
+            + \sum_{m\neq k}^N
+            \Biggl(
+                \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                + \dpd[2]{u_{km}}{r_{km}}
+            \Biggr)
+            \nonumber \\
+            &\qquad
+            +
+            \sum_{m, n \neq k}^N
+            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
+            \dpd[]{u_{km}}{r_{km}}
+            \dpd[]{u_{kn}}{r_{kn}}.
+        \end{align}
+    \end{widetext}
+    Moving on to the derivatives of the interaction terms, $u_{km}$, to
+    get an explicit expression for the Laplacian.
+    \begin{align}
+        \dpd[]{u_{km}}{r_{km}}
+        &=
+        \frac{a}{r_{km}(r_{km} - a)},
+        \\
+        \dpd[2]{u_{km}}{r_{km}}
+        &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
+    \end{align}
 
 \section{Algorithms}
 
