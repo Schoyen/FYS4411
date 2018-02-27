@@ -9,11 +9,11 @@ class ImportanceMetropolis : public MonteCarloMethod
     public:
         using MonteCarloMethod::MonteCarloMethod;
 
+        double greensFraction(Wavefunction *wavefunction, double *new_pos, double *old_pos, double time_step, double D);
+
         bool step(Wavefunction *wavefunction, double step_length);
 
         double run(
                 Wavefunction *wavefunction, Hamiltonian *hamiltonian,
                 double step_length, unsigned int num_samples);
-        
-        double green(double pos1, double pos2, double time_step, double D);
 };

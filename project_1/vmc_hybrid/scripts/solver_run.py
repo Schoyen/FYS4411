@@ -8,13 +8,13 @@ import numpy as np
 num_particles = 1
 num_dimensions = 1
 num_parameters = 1
-spread = 5.0
+spread = 2.0
 step_length = 0.05
-num_samples = 10
+num_samples = 1000000
 mass = 1
 omega = 1
 
-alphas = np.linspace(0.2, 1.1, 22)
+alphas = np.linspace(0.1, 1.1, 21)
 
 wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, mass, omega)
 wavefunction.set_parameters(np.array([0.5]))
@@ -25,7 +25,7 @@ solver = PyImportanceMetropolis(num_particles)
 solver.run(wavefunction, hamiltonian, step_length, num_samples)
 
 energies = [] 
-'''
+
 for alpha in alphas:
 
     wavefunction.redistribute()
@@ -39,6 +39,3 @@ for alpha in alphas:
 
 plt.plot(alphas, energies)
 plt.show()
-
-'''
-

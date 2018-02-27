@@ -71,5 +71,6 @@ class Wavefunction
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
-        virtual double compute_gradient() = 0;
+        //virtual double compute_drift_force_component(unsigned int dimension, unsigned int particle) = 0;
+        virtual double compute_drift_force_component(double coordinate) = 0;
 };
