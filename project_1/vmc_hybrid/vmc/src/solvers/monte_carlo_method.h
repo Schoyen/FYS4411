@@ -2,6 +2,8 @@
 
 #include <random>
 
+#include "wavefunction.h"
+
 class MonteCarloMethod
 {
     protected:
@@ -11,4 +13,6 @@ class MonteCarloMethod
 
     public:
         MonteCarloMethod(unsigned int num_particles);
+        virtual void initialize();
+        virtual bool step(Wavefunction *wavefunction, double step_length);
 };
