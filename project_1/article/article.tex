@@ -88,8 +88,8 @@
 \begin{abstract}
     Something very abstract and clever should go here.
     \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{loopholes.jpg}
+    \centering
+    \includegraphics[width=0.7\textwidth]{loopholes.jpg}
 \end{figure}
 \end{abstract}
 
@@ -191,6 +191,21 @@
         One of the most computationally intensive parts of the VMC algorithm
         will be to compute $E_L$. We therefore find an analytical expression for
         $E_L$ in terms of the trial wavefunction.
+
+    \subsection{The drift force}
+        A disadvantage in the use of the brute-force Metropolis algorithm is
+        that we might be spending much computational resources in an
+        uninteresting part of configuration space. To make smarter moves we will
+        use the Metropolis-Hastings algorithm (which will be discussed in due
+        time). This algorithm is dependent on the drift force of the system.
+        \begin{align}
+            \vf{F}(\vf{r})
+            &=
+            \frac{2\nabla\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+        \end{align}
+        Using this expression we are able to move towards parts of
+        configuration space where the gradient increases or decreases yielding a
+        better choice of movements.
 
         \subsubsection{Non-interacting harmonic oscillator}
             We start by finding an analytical expression for the local energy in
@@ -503,64 +518,64 @@
 
 \section{Algorithms}
 
-In the project we rely on a Monte Carlo approach of random sampling to obtain numerical results. 
-Ironic, is it not? To rely randomness to solve problems that must be naturally deterministic? 
-We simulate random walks over a volume in order to find optimal parameters in our trial wavefunctions. 
-The most common of such methods, which we make use of herein, is the Metropolis-Hastings algorithm. 
+In the project we rely on a Monte Carlo approach of random sampling to obtain numerical results.
+Ironic, is it not? To rely randomness to solve problems that must be naturally deterministic?
+We simulate random walks over a volume in order to find optimal parameters in our trial wavefunctions.
+The most common of such methods, which we make use of herein, is the Metropolis-Hastings algorithm.
 
 \subsection{Metropolis-Hastings Algorithm}
 The Metropolis-Hastings algorithm can in our particular situation be condensed down to the following steps,
 \begin{enumerate}
-	\item The system is initialised by a certain number $N$ of randomly generated positions, or particles. This allows us to evaluate the
-	 wavefunction at these points and compute the local energy $E_L$.
-	\item The initial configuration is changed by setting a new position for one of these particles. The particle is picked at random.
-	\item A ratio between new wavefunction density and the previous (initial) density is computed and compared to a random number. 
-	This acceptance probability decides if the particle move is rejected or accepted. 
-	The particle is only allowed to move a predetermined step length.
-	\item If the particle movement is accepted and the local energy $E_L$ is computed for the new system. 
-	\item Repeat steps until convergence and an optimum is reached.
+    \item The system is initialised by a certain number $N$ of randomly generated positions, or particles. This allows us to evaluate the
+     wavefunction at these points and compute the local energy $E_L$.
+    \item The initial configuration is changed by setting a new position for one of these particles. The particle is picked at random.
+    \item A ratio between new wavefunction density and the previous (initial) density is computed and compared to a random number.
+    This acceptance probability decides if the particle move is rejected or accepted.
+    The particle is only allowed to move a predetermined step length.
+    \item If the particle movement is accepted and the local energy $E_L$ is computed for the new system.
+    \item Repeat steps until convergence and an optimum is reached.
 \end{enumerate}
 
-The algorithm described above can be applied in an "exhaustive" search of the parameter space in order to find the optimal parameters. 
-Whether a proposed move is accepted or not is determined by a transition probability and the acceptance probability. 
-The strength of the algorithm is that the transition algorithm need not be known. 
+The algorithm described above can be applied in an "exhaustive" search of the parameter space in order to find the optimal parameters.
+Whether a proposed move is accepted or not is determined by a transition probability and the acceptance probability.
+The strength of the algorithm is that the transition algorithm need not be known.
 
 \subsubsection{Importance Sampling}
-A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with 
-no regard for where we are likely to find a particle. This problem can be remedied through a \emph{importance sampling}. 
-It is reasonable to assume that the particles we erratically scatter in space are prone to movement towards the peaks 
+A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with
+no regard for where we are likely to find a particle. This problem can be remedied through a \emph{importance sampling}.
+It is reasonable to assume that the particles we erratically scatter in space are prone to movement towards the peaks
 of the probability density as dictated by the wave function. Consider therefore the Fokker-Planck equation,
 \begin{equation}
-	\frac{\partial \psi}{\partial t} = D \frac{\partial }{\partial x}\left(\frac{\partial }{\partial x} - F \right) \psi,	
-	\label{eq:fokker_planck}
+    \frac{\partial \psi}{\partial t} = D \frac{\partial }{\partial x}\left(\frac{\partial }{\partial x} - F \right) \psi,
+    \label{eq:fokker_planck}
 \end{equation}
-which described the evolution in time of a probability density function, here exchanged for the wavefunction $\psi$. 
-Originaly an equation that models diffusion, we have a diffusion term $D$ and a drift force, 
+which described the evolution in time of a probability density function, here exchanged for the wavefunction $\psi$.
+Originaly an equation that models diffusion, we have a diffusion term $D$ and a drift force,
 \begin{equation}
-	F = \frac{2}{\psi} \frac{\partial \psi}{\partial x}.
+    F = \frac{2}{\psi} \frac{\partial \psi}{\partial x}.
 \end{equation}
 
 The one-particle model corresponding to the Fokker-Planck equation is the Langevin equation,
 \begin{equation}
-	\frac{\partial x}{\partial t} = D F(x) + \eta,
-	\label{eq:langevin}
+    \frac{\partial x}{\partial t} = D F(x) + \eta,
+    \label{eq:langevin}
 \end{equation}
 where $\eta$ is a uniformly distributed stochastic variable. Solving Langevin's equation by Eurler's method gives a recursive relation for
 the subsequent new positions of a particle,
 \begin{equation}
-	x_{t+\Delta t} = x_t + D F(x) \Delta t +\xi \sqrt{\Delta t},
+    x_{t+\Delta t} = x_t + D F(x) \Delta t +\xi \sqrt{\Delta t},
 \end{equation}
 given a time step $\Delta t$\footnote{Bear in mind that \autoref{eq:langevin} is only valid as $\Delta t \to 0$, a property stemming from the use of Euler's method.} and a normally distributed stochastic variable $\xi$.
 
-Now we need to change the acceptance probability of the metropolis algorithm to something that takes 
+Now we need to change the acceptance probability of the metropolis algorithm to something that takes
 the new sampling method into account,
 \begin{equation}
-	q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}}
+    q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}}
 \end{equation}
 where $G$ is the Green's function to the Fokker-Planck equation,
 \begin{align}
-	G&(x_{\text{new}}, x, \Delta x) \nonumber \\
-	&= \frac{1}{(4\pi D \Delta t)^{3N/2}}\exp\left(-\frac{(x_{\text{new}} - x - D\Delta t F(x))^2}{4D\Delta t} \right).
+    G&(x_{\text{new}}, x, \Delta x) \nonumber \\
+    &= \frac{1}{(4\pi D \Delta t)^{3N/2}}\exp\left(-\frac{(x_{\text{new}} - x - D\Delta t F(x))^2}{4D\Delta t} \right).
 \end{align}
 
 \end{document}
