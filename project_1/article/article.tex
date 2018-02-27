@@ -88,8 +88,8 @@
 \begin{abstract}
     Something very abstract and clever should go here.
     \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{loopholes.jpg}
+    \centering
+    \includegraphics[width=0.7\textwidth]{loopholes.jpg}
 \end{figure}
 \end{abstract}
 
@@ -119,7 +119,7 @@
     where we can choose between a spherical (S) or an elliptical (E) harmonic
     trap. The two-body Hamiltonian of the system is given by
     \begin{align}
-        H = \sum_{i}^{N}h(\vf{r}_i) + \sum_{i < j}^{N}w(\vf{r}_i, \vf{r}_j),
+        H = \sum_{i = 1}^{N}h(\vf{r}_i) + \sum_{i < j}^{N}w(\vf{r}_i, \vf{r}_j),
     \end{align}
     where the single particle one body operator, $h$, is given by
     \begin{align}
@@ -143,7 +143,7 @@
         &= \Phi_T(\vf{r})
         \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k) \\
         &= \Biggl(
-            \prod_i^N g(\alpha, \beta, \vf{r}_i)
+            \prod_{i = 1}^N g(\alpha, \beta, \vf{r}_i)
         \Biggr)
         \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k),
         \label{eq:initial_trial_wavefunction}
@@ -192,375 +192,407 @@
         will be to compute $E_L$. We therefore find an analytical expression for
         $E_L$ in terms of the trial wavefunction.
 
-        \subsubsection{Non-interacting harmonic oscillator}
-            We start by finding an analytical expression for the local energy in
-            a system where we set $a = 0$ and $\beta = 1$, i.e., a system of
-            non-interacting harmonic oscillators.
-            \begin{align}
-                \Psi_T(\vf{r})
-                = \Phi_T(\vf{r})
-                = \prod_i^N \exp\bigl[
-                    -\alpha |\vf{r}_i|^2
-                \bigr],
-            \end{align}
-            where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
-            $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
-            (in the spherical case)
-            \begin{align}
-                H &= \sum_i^N h(\vf{r}_i)
-                = \sum_i^N \Biggl(
-                    -\frac{\hbar^2}{2m}\nabla_i^2
-                    + \half m \omega^2 r_i^2
-                \Biggr).
-            \end{align}
-            The hardest part of finding the local energy is computing the
-            kinetic term. Starting with the gradient of the wavefunction in the
-            non-interacting case, we get
-            \begin{align}
-                \nabla_k\Psi_T(\vf{r})
-                &= -2\alpha \vf{r}_k\Psi_T(\vf{r}).
-            \end{align}
-            The Laplacian yields
-            \begin{align}
-                \nabla^2_k\Psi_T(\vf{r})
-                &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
-            \end{align}
-            where $d$ is the dimensionality of the problem determined by
-            $\vf{r}_k \in \mathbb{R}^d$. This yields the analytical expression
-            for the local energy in the non-interacting case to be
-            \begin{align}
-                E_L(\vf{r})
-                &=
-                \sum_i^N
-                \Biggl(
-                    -\frac{\hbar^2}{2m}
-                    \bigl[
-                        -2d\alpha + 4\alpha^2 r_i^2
-                    \bigr]
-                    + \half m\omega^2 r_i^2
-                \Biggr).
-            \end{align}
-            In natural units, with $\hbar = c = m = 1$, this reduces to
-            \begin{align}
-                E_L(\vf{r})
-                &=
-                \alpha dN
-                + \biggl(
-                    \half\omega^2
-                    - 2\alpha^2
-                \biggr)
-                \sum_i^N r_i^2.
-            \end{align}
-            It is worth noting that for $\alpha = \half\omega$ we will find a
-            stable value. This happens as the entire sum over all the random
-            walkers disappears.
+    \subsection{The drift force}
+        A disadvantage in the use of the brute-force Metropolis algorithm is
+        that we might be spending much computational resources in an
+        uninteresting part of configuration space. To make smarter moves we will
+        use the Metropolis-Hastings algorithm (which will be discussed in due
+        time). This algorithm is dependent on the drift force of the system.
+        \begin{align}
+            \vf{F}(\vf{r})
+            &=
+            \sum_{k = 1}^N
+            \vf{F}_k(\vf{r})
+            =
+            \sum_{k = 1}^N
+            \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+        \end{align}
+        Using this expression we are able to move towards parts of
+        configuration space where the gradient increases or decreases yielding a
+        better choice of movements. We will mainly be interested in the drift
+        force of a single particle $k$.
+
+\section{Non-interacting harmonic oscillators}
+    We start by looking at a simple system of non-interacting harmonic
+    oscillators. That is, where $a = 0$ and $\beta = 1$. We thus get the trial
+    wavefunction
+    \begin{align}
+        \Psi_T(\vf{r})
+        = \Phi_T(\vf{r})
+        = \prod_{i = 1}^N \exp\bigl[
+            -\alpha |\vf{r}_i|^2
+        \bigr],
+    \end{align}
+    where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
+    $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
+    (in the spherical case)
+    \begin{align}
+        H &= \sum_{i = 1}^N h(\vf{r}_i)
+        = \sum_{i = 1}^N \Biggl(
+            -\frac{\hbar^2}{2m}\nabla_i^2
+            + \half m \omega^2 r_i^2
+        \Biggr).
+    \end{align}
+    To find the drift force and the local energy we have to compute the gradient
+    and the Laplacian of the trial wavefunction. The gradient is given by
+    \begin{align}
+        \nabla_k\Psi_T(\vf{r})
+        &= -2\alpha \vf{r}_k\Psi_T(\vf{r}),
+    \end{align}
+    whereas the Laplacian yields
+    \begin{align}
+        \nabla^2_k\Psi_T(\vf{r})
+        &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
+    \end{align}
+    where $d$ is the dimensionality of the problem determined by
+    $\vf{r}_k \in \mathbb{R}^d$. We can thus use the gradient to find an
+    expression for the drift force for particle $k$.
+    \begin{align}
+        \vf{F}_k(\vf{r})
+        &= -2\alpha\vf{r}_k.
+    \end{align}
+    Using the Laplcian we can compute the kinteic term in the expression for the
+    local energy. We get
+    \begin{align}
+        E_L(\vf{r})
+        &=
+        \sum_{i = 1}^N
+        \Biggl(
+            -\frac{\hbar^2}{2m}
+            \bigl[
+                -2d\alpha + 4\alpha^2 r_i^2
+            \bigr]
+            + \half m\omega^2 r_i^2
+        \Biggr).
+    \end{align}
+    In natural units, with $\hbar = c = m = 1$, this reduces to
+    \begin{align}
+        E_L(\vf{r})
+        &=
+        \alpha dN
+        + \biggl(
+            \half\omega^2
+            - 2\alpha^2
+        \biggr)
+        \sum_{i = 1}^N r_i^2.
+    \end{align}
+    It is worth noting that for $\alpha = \pm\half\omega$ we will find a stable
+    value which turns out to be the exact energy minimum. This happens as the
+    entire sum over all the random walkers disappears.
 
 
-        \subsubsection{The full system}
-            Moving to the full system allowing $\beta$ to vary and setting $a
-            \neq 0$ we write the trial wavefunction as
-            \begin{align}
-                \Psi_T(\vf{r})
-                &=
-                \Phi_T(\vf{r})
-                J(\vf{r}),
-            \end{align}
-            where $\ket{\Phi_T}$ is the same Slater permanent as in
-            \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
-            \textit{Jastrow factor} given by
-            \begin{align}
-                J(\vf{r})
-                &=
-                \exp\Biggl(
-                    \sum_{j < l}^N u(r_{jl})
-                \Biggr),
-            \end{align}
-            where $r_{jk} = |\vf{r}_j - \vf{r}_k|$ and
-            \begin{align}
-                u(r_{jk}) = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr].
-            \end{align}
-            To further shorten the notation we will use $u_{jk} = u(r_{jk})$.
-            We wish to find an analytical expression for the local energy.
-            Beginning with the gradient we get
-            \begin{align}
-                \nabla_k\Psi_T(\vf{r})
-                &=
-                \Bigl[
-                    \nabla_k
-                    \Phi_T(\vf{r})
-                \Bigr]
-                J(\vf{r})
-                + \Phi_T(\vf{r})
-                \nabla_k J(\vf{r}).
-            \end{align}
-            The gradient of the Slater permament for particle $k$ is given by
-            \begin{align}
-                \nabla_k
-                \Phi_T(\vf{r})
-                &=
-                \nabla_k\phi_k
-                \prod_{i \neq k}^N\phi_i
-                = \frac{\nabla_k\phi_k}{\phi_k}
-                \Phi_T(\vf{r}).
-            \end{align}
-            The gradient of the Jastrow factor is given by
-            \begin{align}
-                \nabla_k J(\vf{r})
-                &=
-                J(\vf{r})
-                \nabla_k\sum_{m < n}^N u_{mn} \\
-                &= J(\vf{r})
-                \Biggl(
-                    \sum_{m = 1}^{k - 1}\nabla_k u_{mk}
-                    \sum_{n = k + 1}^N\nabla_k u_{kn}
-                \Biggr)
-                \\
-                &=
-                J(\vf{r})
-                \sum_{m \neq k}^N\nabla_k u_{km},
-            \end{align}
-            where the gradient of the interaction term splits the antisymmetric
-            sum into two parts. As $r_{ij} = r_{ji}$ we can combine these sums
-            into a single sum. This in total yields the gradient
-            \begin{align}
-                \nabla_k\Psi_T(\vf{r})
-                &=
-                \Biggl(
-                    \frac{\nabla_k\phi_k}{\phi_k}
-                    + \sum_{m \neq k}^N
-                    \nabla_k u_{km}
-                \Biggr)
-                \Psi_T(\vf{r}).
-                \label{eq:gradient_full_wavefunction}
-            \end{align}
-            We now find the Laplacian of the trial wavefunction by finding the
-            divergence of \autoref{eq:gradient_full_wavefunction}.
-            \begin{align}
-                \nabla_k^2\Psi_T(\vf{r})
-                &=
-                \Biggl(
-                    \nabla_k\Biggl[
-                        \frac{\nabla_k\phi_k}{\phi_k}
-                    \Biggr]
-                    +
-                    \sum_{m \neq k}^N \nabla_k^2 u_{km}
-                \Biggr)\Psi_T(\vf{r})
-                \\
-                &\qquad
-                +
-                \Biggl(
-                    \frac{\nabla_k\phi_k}{\phi_k}
-                    + \sum_{m \neq k}^N
-                    \nabla_k u_{km}
-                \Biggr)^2
-                \Psi_T(\vf{r}),
-            \end{align}
-            where the squared term came from taking the gradient of the trial
-            wavefunction.  To further simplify we divide by the trial
-            wavefunction. This yields
-            \begin{widetext}
-                \begin{align}
-                    \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-                    &=
-                    \Biggl(
-                        \nabla_k\Biggl[
-                            \frac{\nabla_k\phi_k}{\phi_k}
-                        \Biggr]
-                        +
-                        \sum_{m \neq k}^N \nabla_k^2 u_{km}
-                    \Biggr)
-                    +
-                    \Biggl(
-                        \frac{\nabla_k\phi_k}{\phi_k}
-                        + \sum_{m \neq k}^N
-                        \nabla_k u_{km}
-                    \Biggr)^2 \\
-                    &=
-                    \frac{\nabla_k^2\phi_k}{\phi_k}
-                    + 2\frac{\nabla_k\phi_k}{\phi_k}
-                    \sum_{m \neq k}\nabla_k u_{km}
-                    + \sum_{m\neq k}^N\nabla_k^2 u_{km}
-                    + \Biggl(
-                        \sum_{m \neq k}^N\nabla_k u_{km}
-                    \Biggr)^2.
-                \end{align}
-            \end{widetext}
-            To go from here we have to find the gradient and the Laplacian of
-            the single particle functions, $\phi_k$, and the interaction
-            functions $u_{km}$. For the single particle functions we use
-            Cartesian coordinates when finding the derivatives whereas we for
-            the interaction functions will use spherical coordinates and do a
-            variable substitution. Beginning with the gradient of the single
-            particle functions we get
-            \begin{align}
-                \nabla_k\phi_k
-                &=
-                \nabla_k\exp\bigl[
-                    -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
-                \bigr] \\
-                &=
-                -2\alpha
-                (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-                \phi_k.
-            \end{align}
-            Note that the subscripts on the unit vectors $\vf{e}_i$ are
-            \textit{not} the same as the subscripts used for its components. The
-            Laplacian yields
-            \begin{align}
-                \nabla_k^2\phi_k
-                &=
-                \Bigl[
-                    -2\alpha
-                    \big(
-                        2 + \beta
-                    \bigr)
-                    + 4\alpha^2
-                    \bigl(
-                        x_k^2 + y_k^2 + \beta^2z_k^2
-                    \bigr)
-                \Bigr]
-                \phi_k.
-            \end{align}
-            In order to derive the interaction functions we have to do a
-            variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
-            then rewrite the $\nabla_k$-operator as
-            \begin{align}
-                \nabla_k
-                &=
-                \nabla_k
-                \dpd[]{r_{km}}{r_{km}}
-                =
-                \nabla_k r_{km} \dpd[]{}{r_{km}}
-                \\
-                &=
-                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
-            \end{align}
-            Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
-            \begin{align}
-                \nabla_k u_{km}
-                &=
-                \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                \dpd[]{u_{km}}{r_{km}}.
-            \end{align}
-            For the Laplacian we switch a little back and forth between the two
-            ways of representing the $\nabla_k$-operator. We thus get
-            \begin{widetext}
-                \begin{align}
-                    \nabla_k^2 u_{km}
-                    &=
-                    \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    + \Biggl[
-                        \nabla_k \frac{1}{r_{km}}
-                    \Biggr]
-                    (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
-                    + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \nabla_k \dpd[]{u_{km}}{r_{km}} \\
-                    &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
-                    \dpd[]{u_{km}}{r_{km}}
-                    + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
-                    \dpd[2]{u_{km}}{r_{km}} \\
-                    &=
-                    \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                    + \dpd[2]{u_{km}}{r_{km}},
-                \end{align}
-                where $d$ is again the dimensionality of the problem. In total
-                we can state an intermediate version of the Laplacian occuring
-                in the local energy as
-                \begin{align}
-                    \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-                    &=
-                    \frac{\nabla_k^2\phi_k}{\phi_k}
-                    + 2\frac{\nabla_k\phi_k}{\phi_k}
-                    \sum_{m \neq k}^N
-                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \dpd[]{u_{km}}{r_{km}}
-                    + \sum_{m\neq k}^N
-                    \Biggl(
-                        \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                        + \dpd[2]{u_{km}}{r_{km}}
-                    \Biggr)
-                    \nonumber \\
-                    &\qquad
-                    +
-                    \sum_{m, n \neq k}^N
-                    \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-                    \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
-                    \dpd[]{u_{km}}{r_{km}}
-                    \dpd[]{u_{kn}}{r_{kn}}.
-                \end{align}
-            \end{widetext}
-            Moving on to the derivatives of the interaction terms, $u_{km}$, to
-            get an explicit expression for the Laplacian.
-            \begin{align}
-                \dpd[]{u_{km}}{r_{km}}
-                &=
-                \frac{a}{r_{km}(r_{km} - a)},
-                \\
-                \dpd[2]{u_{km}}{r_{km}}
-                &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
-            \end{align}
+\section{Interacting hard sphere bosons}
+    Moving to the full system allowing $\beta$ to vary and setting $a
+    \neq 0$ we can write the trial wavefunction as
+    \begin{align}
+        \Psi_T(\vf{r})
+        &=
+        \Phi_T(\vf{r})
+        J(\vf{r}),
+    \end{align}
+    where $\ket{\Phi_T}$ is the same Slater permanent as in
+    \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
+    \textit{Jastrow factor} given by
+    \begin{align}
+        J(\vf{r})
+        &=
+        \exp\Biggl(
+            \sum_{j < l}^N u(r_{jl})
+        \Biggr),
+    \end{align}
+    where $r_{jk} = |\vf{r}_j - \vf{r}_k|$ and
+    \begin{align}
+        u(r_{jk}) = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr].
+    \end{align}
+    To further shorten the notation we will use $u_{jk} = u(r_{jk})$. Computing
+    the gradient of the wavefunction we get
+    \begin{align}
+        \nabla_k\Psi_T(\vf{r})
+        &=
+        \Bigl[
+            \nabla_k
+            \Phi_T(\vf{r})
+        \Bigr]
+        J(\vf{r})
+        + \Phi_T(\vf{r})
+        \nabla_k J(\vf{r}).
+    \end{align}
+    The gradient of the Slater permament for particle $k$ is given by
+    \begin{align}
+        \nabla_k
+        \Phi_T(\vf{r})
+        &=
+        \nabla_k\phi_k
+        \prod_{i \neq k}^N\phi_i
+        = \frac{\nabla_k\phi_k}{\phi_k}
+        \Phi_T(\vf{r}).
+    \end{align}
+    The gradient of the Jastrow factor is given by
+    \begin{align}
+        \nabla_k J(\vf{r})
+        &=
+        J(\vf{r})
+        \nabla_k\sum_{m < n}^N u_{mn} \\
+        &= J(\vf{r})
+        \Biggl(
+            \sum_{m = 1}^{k - 1}\nabla_k u_{mk}
+            \sum_{n = k + 1}^N\nabla_k u_{kn}
+        \Biggr)
+        \\
+        &=
+        J(\vf{r})
+        \sum_{m \neq k}^N\nabla_k u_{km},
+    \end{align}
+    where the gradient of the interaction term splits the antisymmetric
+    sum into two parts. As $r_{ij} = r_{ji}$ we can combine these sums
+    into a single sum. This in total yields the gradient
+    \begin{align}
+        \nabla_k\Psi_T(\vf{r})
+        &=
+        \Biggl(
+            \frac{\nabla_k\phi_k}{\phi_k}
+            + \sum_{m \neq k}^N
+            \nabla_k u_{km}
+        \Biggr)
+        \Psi_T(\vf{r}).
+        \label{eq:gradient_full_wavefunction}
+    \end{align}
+
+    The Laplcian of the trial wavefunction is found by finding the divergence of
+    \autoref{eq:gradient_full_wavefunction}.
+    \begin{align}
+        \nabla_k^2\Psi_T(\vf{r})
+        &=
+        \Biggl(
+            \nabla_k\Biggl[
+                \frac{\nabla_k\phi_k}{\phi_k}
+            \Biggr]
+            +
+            \sum_{m \neq k}^N \nabla_k^2 u_{km}
+        \Biggr)\Psi_T(\vf{r})
+        \\
+        &\qquad
+        +
+        \Biggl(
+            \frac{\nabla_k\phi_k}{\phi_k}
+            + \sum_{m \neq k}^N
+            \nabla_k u_{km}
+        \Biggr)^2
+        \Psi_T(\vf{r}),
+    \end{align}
+    where the squared term came from taking the gradient of the trial
+    wavefunction.  To further simplify we divide by the trial
+    wavefunction. This yields
+    \begin{align}
+        \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+        &=
+        \frac{\nabla_k^2\phi_k}{\phi_k}
+        + 2\frac{\nabla_k\phi_k}{\phi_k}
+        \sum_{m \neq k}\nabla_k u_{km}
+        \nonumber \\
+        &\qquad
+        + \sum_{m\neq k}^N\nabla_k^2 u_{km}
+        + \Biggl(
+            \sum_{m \neq k}^N\nabla_k u_{km}
+        \Biggr)^2.
+    \end{align}
+    To go from here we have to find the gradient and the Laplacian of
+    the single particle functions, $\phi_k$, and the interaction
+    functions $u_{km}$. For the single particle functions we use
+    Cartesian coordinates when finding the derivatives whereas we for
+    the interaction functions will use spherical coordinates and do a
+    variable substitution. Beginning with the gradient of the single
+    particle functions we get
+    \begin{align}
+        \nabla_k\phi_k
+        &=
+        \nabla_k\exp\bigl[
+            -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
+        \bigr] \\
+        &=
+        -2\alpha
+        (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+        \phi_k.
+    \end{align}
+    Note that the subscripts on the unit vectors $\vf{e}_i$ are
+    \textit{not} the same as the subscripts used for its components. The
+    Laplacian yields
+    \begin{align}
+        \nabla_k^2\phi_k
+        &=
+        \Bigl[
+            -2\alpha
+            \big(
+                d - 1 + \beta
+            \bigr)
+            \nonumber \\
+            &\qquad
+            + 4\alpha^2
+            \bigl(
+                x_k^2 + y_k^2 + \beta^2z_k^2
+            \bigr)
+        \Bigr]
+        \phi_k,
+    \end{align}
+    with $d$ as the dimensionality of the problem.
+    In order to derive the interaction functions we have to do a
+    variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
+    then rewrite the $\nabla_k$-operator as
+    \begin{align}
+        \nabla_k
+        &=
+        \nabla_k
+        \dpd[]{r_{km}}{r_{km}}
+        =
+        \nabla_k r_{km} \dpd[]{}{r_{km}}
+        \\
+        &=
+        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
+    \end{align}
+    Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
+    \begin{align}
+        \nabla_k u_{km}
+        &=
+        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+        \dpd[]{u_{km}}{r_{km}}.
+    \end{align}
+
+    \begin{widetext}
+        For the Laplacian we switch a little back and forth between the
+        two ways of representing the $\nabla_k$-operator. We thus get
+        \begin{align}
+            \nabla_k^2 u_{km}
+            &=
+            \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            + \Biggl[
+                \nabla_k \frac{1}{r_{km}}
+            \Biggr]
+            (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
+            + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \nabla_k \dpd[]{u_{km}}{r_{km}} \\
+            &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
+            \dpd[]{u_{km}}{r_{km}}
+            + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
+            \dpd[2]{u_{km}}{r_{km}} \\
+            &=
+            \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+            + \dpd[2]{u_{km}}{r_{km}},
+        \end{align}
+        where $d$ is again the dimensionality of the problem. In total
+        we can state an intermediate version of the Laplacian occuring
+        in the local energy as
+        \begin{align}
+            \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+            &=
+            \frac{\nabla_k^2\phi_k}{\phi_k}
+            + 2\frac{\nabla_k\phi_k}{\phi_k}
+            \sum_{m \neq k}^N
+            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \dpd[]{u_{km}}{r_{km}}
+            + \sum_{m\neq k}^N
+            \Biggl(
+                \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                + \dpd[2]{u_{km}}{r_{km}}
+            \Biggr)
+            \nonumber \\
+            &\qquad
+            +
+            \sum_{m, n \neq k}^N
+            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
+            \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
+            \dpd[]{u_{km}}{r_{km}}
+            \dpd[]{u_{kn}}{r_{kn}}.
+        \end{align}
+    \end{widetext}
+    Moving on to the derivatives of the interaction terms, $u_{km}$, to
+    get an explicit expression for the Laplacian.
+    \begin{align}
+        \dpd[]{u_{km}}{r_{km}}
+        &=
+        \frac{a}{r_{km}(r_{km} - a)},
+        \\
+        \dpd[2]{u_{km}}{r_{km}}
+        &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
+    \end{align}
+
+    \subsection{Analytical expressions}
+        Using these results we can write out explicit expressions for the drift
+        force and the local energy. The drift force for particle $k$ is given by
+        \begin{align}
+            \vf{F}_k(\vf{r})
+            &=
+            2\frac{\nabla_k\phi_k}{\phi_k}
+            + 2\sum_{m \neq k}^N\nabla_k u_{km}
+            \\
+            &=
+            -4\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
+            \nonumber \\
+            &\qquad
+            + 2\sum_{m \neq k}^N
+            \frac{a(\vf{r}_k - \vf{r}_m)}{r_{km}^2(r_{km} - a)}.
+        \end{align}
 
 \section{Algorithms}
 
-In the project we rely on a Monte Carlo approach of random sampling to obtain numerical results. 
-Ironic, is it not? To rely randomness to solve problems that must be naturally deterministic? 
-We simulate random walks over a volume in order to find optimal parameters in our trial wavefunctions. 
-The most common of such methods, which we make use of herein, is the Metropolis-Hastings algorithm. 
+In the project we rely on a Monte Carlo approach of random sampling to obtain numerical results.
+Ironic, is it not? To rely randomness to solve problems that must be naturally deterministic?
+We simulate random walks over a volume in order to find optimal parameters in our trial wavefunctions.
+The most common of such methods, which we make use of herein, is the Metropolis-Hastings algorithm.
 
 \subsection{Metropolis-Hastings Algorithm}
 The Metropolis-Hastings algorithm can in our particular situation be condensed down to the following steps,
 \begin{enumerate}
-	\item The system is initialised by a certain number $N$ of randomly generated positions, or particles. This allows us to evaluate the
-	 wavefunction at these points and compute the local energy $E_L$.
-	\item The initial configuration is changed by setting a new position for one of these particles. The particle is picked at random.
-	\item A ratio between new wavefunction density and the previous (initial) density is computed and compared to a random number. 
-	This acceptance probability decides if the particle move is rejected or accepted. 
-	The particle is only allowed to move a predetermined step length.
-	\item If the particle movement is accepted and the local energy $E_L$ is computed for the new system. 
-	\item Repeat steps until convergence and an optimum is reached.
+    \item The system is initialised by a certain number $N$ of randomly generated positions, or particles. This allows us to evaluate the
+     wavefunction at these points and compute the local energy $E_L$.
+    \item The initial configuration is changed by setting a new position for one of these particles. The particle is picked at random.
+    \item A ratio between new wavefunction density and the previous (initial) density is computed and compared to a random number.
+    This acceptance probability decides if the particle move is rejected or accepted.
+    The particle is only allowed to move a predetermined step length.
+    \item If the particle movement is accepted and the local energy $E_L$ is computed for the new system.
+    \item Repeat steps until convergence and an optimum is reached.
 \end{enumerate}
 
-The algorithm described above can be applied in an "exhaustive" search of the parameter space in order to find the optimal parameters. 
-Whether a proposed move is accepted or not is determined by a transition probability and the acceptance probability. 
-The strength of the algorithm is that the transition algorithm need not be known. 
+The algorithm described above can be applied in an "exhaustive" search of the parameter space in order to find the optimal parameters.
+Whether a proposed move is accepted or not is determined by a transition probability and the acceptance probability.
+The strength of the algorithm is that the transition algorithm need not be known.
 
 \subsubsection{Importance Sampling}
-A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with 
-no regard for where we are likely to find a particle. This problem can be remedied through a \emph{importance sampling}. 
-It is reasonable to assume that the particles we erratically scatter in space are prone to movement towards the peaks 
+A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with
+no regard for where we are likely to find a particle. This problem can be remedied through a \emph{importance sampling}.
+It is reasonable to assume that the particles we erratically scatter in space are prone to movement towards the peaks
 of the probability density as dictated by the wave function. Consider therefore the Fokker-Planck equation,
 \begin{equation}
-	\frac{\partial \psi}{\partial t} = D \frac{\partial }{\partial x}\left(\frac{\partial }{\partial x} - F \right) \psi,	
-	\label{eq:fokker_planck}
+    \frac{\partial \psi}{\partial t} = D \frac{\partial }{\partial x}\left(\frac{\partial }{\partial x} - F \right) \psi,
+    \label{eq:fokker_planck}
 \end{equation}
-which described the evolution in time of a probability density function, here exchanged for the wavefunction $\psi$. 
-Originaly an equation that models diffusion, we have a diffusion term $D$ and a drift force, 
+which described the evolution in time of a probability density function, here exchanged for the wavefunction $\psi$.
+Originaly an equation that models diffusion, we have a diffusion term $D$ and a drift force,
 \begin{equation}
-	F = \frac{2}{\psi} \frac{\partial \psi}{\partial x}.
+    F = \frac{2}{\psi} \frac{\partial \psi}{\partial x}.
 \end{equation}
 
 The one-particle model corresponding to the Fokker-Planck equation is the Langevin equation,
 \begin{equation}
-	\frac{\partial x}{\partial t} = D F(x) + \eta,
-	\label{eq:langevin}
+    \frac{\partial x}{\partial t} = D F(x) + \eta,
+    \label{eq:langevin}
 \end{equation}
 where $\eta$ is a uniformly distributed stochastic variable. Solving Langevin's equation by Eurler's method gives a recursive relation for
 the subsequent new positions of a particle,
 \begin{equation}
-	x_{t+\Delta t} = x_t + D F(x) \Delta t +\xi \sqrt{\Delta t},
+    x_{t+\Delta t} = x_t + D F(x) \Delta t +\xi \sqrt{\Delta t},
 \end{equation}
 given a time step $\Delta t$\footnote{Bear in mind that \autoref{eq:langevin} is only valid as $\Delta t \to 0$, a property stemming from the use of Euler's method.} and a normally distributed stochastic variable $\xi$.
 
-Now we need to change the acceptance probability of the metropolis algorithm to something that takes 
+Now we need to change the acceptance probability of the metropolis algorithm to something that takes
 the new sampling method into account,
 \begin{equation}
 	q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}^2}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}^2}
 \end{equation}
 where $G$ is the Green's function to the Fokker-Planck equation,
 \begin{align}
-	G&(x_{\text{new}}, x, \Delta x) \nonumber \\
-	&= \frac{1}{(4\pi D \Delta t)^{3N/2}}\exp\left(-\frac{(x_{\text{new}} - x - D\Delta t F(x))^2}{4D\Delta t} \right).
+    G&(x_{\text{new}}, x, \Delta x) \nonumber \\
+    &= \frac{1}{(4\pi D \Delta t)^{3N/2}}\exp\left(-\frac{(x_{\text{new}} - x - D\Delta t F(x))^2}{4D\Delta t} \right).
 \end{align}
 
 \end{document}
