@@ -587,7 +587,7 @@ given a time step $\Delta t$\footnote{Bear in mind that \autoref{eq:langevin} is
 Now we need to change the acceptance probability of the metropolis algorithm to something that takes
 the new sampling method into account,
 \begin{equation}
-	q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}^2}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}^2}
+    q(x_{\text{new}}, x) = \frac{G(x, x_{\text{new}}, \Delta t)\abs{\psi_T(x_{\text{new}})}^2}{G(x_{\text{new}}, x, \Delta t)\abs{\psi_T(x)}^2}
 \end{equation}
 where $G$ is the Green's function to the Fokker-Planck equation,
 \begin{align}
