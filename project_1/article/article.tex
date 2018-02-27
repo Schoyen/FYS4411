@@ -521,28 +521,50 @@
 
 
 \section{Algorithms}
+    In the project we rely on a Monte Carlo approach of random sampling to
+    obtain numerical results.  We simulate random walks over a volume in order
+    to find optimal parameters in our trial wavefunctions.  The most common of
+    such methods, which we make use of herein, is the Metropolis-Hastings
+    algorithm.
 
-In the project we rely on a Monte Carlo approach of random sampling to obtain numerical results.
-Ironic, is it not? To rely randomness to solve problems that must be naturally deterministic?
-We simulate random walks over a volume in order to find optimal parameters in our trial wavefunctions.
-The most common of such methods, which we make use of herein, is the Metropolis-Hastings algorithm.
+    \subsection{The Metropolis-Hastings Algorithm}
+        The Metropolis-Hastings algorithm can in our particular situation be
+        condensed down to the following steps:
 
-\subsection{Metropolis-Hastings Algorithm}
-The Metropolis-Hastings algorithm can in our particular situation be condensed down to the following steps,
-\begin{enumerate}
-    \item The system is initialised by a certain number $N$ of randomly generated positions, or particles. This allows us to evaluate the
-     wavefunction at these points and compute the local energy $E_L$.
-    \item The initial configuration is changed by setting a new position for one of these particles. The particle is picked at random.
-    \item A ratio between new wavefunction density and the previous (initial) density is computed and compared to a random number.
-    This acceptance probability decides if the particle move is rejected or accepted.
-    The particle is only allowed to move a predetermined step length.
-    \item If the particle movement is accepted and the local energy $E_L$ is computed for the new system.
-    \item Repeat steps until convergence and an optimum is reached.
-\end{enumerate}
+        \begin{enumerate}
+            \item The system is initialised by a certain number $N$ of randomly
+                generated positions, or particles. This allows us to evaluate
+                the wavefunction at these points and compute the local energy
+                $E_L$.
 
-The algorithm described above can be applied in an "exhaustive" search of the parameter space in order to find the optimal parameters.
-Whether a proposed move is accepted or not is determined by a transition probability and the acceptance probability.
-The strength of the algorithm is that the transition algorithm need not be known.
+            \item The initial configuration is changed by setting a new position
+                for one of these particles. The particle is picked at random.
+
+            \item A ratio between new wavefunction density and the previous
+                (initial) density is computed and compared to a random number.
+                This acceptance probability decides if the particle move is
+                rejected or accepted.  The particle is only allowed to move a
+                predetermined step length.
+
+            \item If the particle movement is accepted and the local energy
+                $E_L$ is computed for the new system.
+
+            \item Repeat steps until convergence and an optimum is reached.
+
+        \end{enumerate}
+
+        The algorithm described above can be applied in an "exhaustive" search
+        of the parameter space in order to find the optimal parameters.  Whether
+        a proposed move is accepted or not is determined by a transition
+        probability and the acceptance probability.  The strength of the
+        algorithm is that the transition algorithm need not be known. For
+        example, the simplest case is to accept the new state, i.e., the new
+        position for the random walker, if the ratio
+        \begin{align}
+            w &= \frac{\Psi_T(\vf{r}_{i + 1})}{\Psi_T(\vf{r}_{i})},
+        \end{align}
+        where $\vf{r}_{i + 1}$ are all the positions at step $i + 1$, is greater
+        than a uniform probability $p \in [0, 1)$.
 
 \subsubsection{Importance Sampling}
 A problem with the naïve Metropolis-Hastings sampling approach is that the sampling of the position space is done with
