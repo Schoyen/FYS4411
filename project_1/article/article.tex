@@ -515,23 +515,10 @@
         \dpd[2]{u_{km}}{r_{km}}
         &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
     \end{align}
+    The local energy and the drift force can now be found by combining these
+    expressions. For brevity, we will not write out the explicit expressions as
+    these will be called by separated functions in our programs.
 
-    \subsection{Analytical expressions}
-        Using these results we can write out explicit expressions for the drift
-        force and the local energy. The drift force for particle $k$ is given by
-        \begin{align}
-            \vf{F}_k(\vf{r})
-            &=
-            2\frac{\nabla_k\phi_k}{\phi_k}
-            + 2\sum_{m \neq k}^N\nabla_k u_{km}
-            \\
-            &=
-            -4\alpha(x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-            \nonumber \\
-            &\qquad
-            + 2\sum_{m \neq k}^N
-            \frac{a(\vf{r}_k - \vf{r}_m)}{r_{km}^2(r_{km} - a)}.
-        \end{align}
 
 \section{Algorithms}
 
