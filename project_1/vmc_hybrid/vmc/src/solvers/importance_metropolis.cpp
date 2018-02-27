@@ -30,7 +30,7 @@ double ImportanceMetropolis::greensFraction(Wavefunction *wavefunction, double* 
         //x_old = m_particles[i + old_pos*num_dimensions];
         //x_new = m_particles[i + new_pos*num_dimensions];
 
-        first_vector  += SQUARE(new_pos[i] - old_pos[i] - D*time_step*drift_force_new);
+        first_vector  += SQUARE(old_pos[i] - new_pos[i] - D*time_step*drift_force_new);
         second_vector += SQUARE(new_pos[i] - old_pos[i] - D*time_step*drift_force_old);
     }
 
@@ -113,7 +113,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     double greens_fraction = greensFraction(wavefunction, new_pos, old_pos, time_step, D);
 
     // Acceptance weight
-    weight = greens_fraction * (abs(current_wavefunction) / abs(previous_wavefunction));
+    weight = greens_fraction * (SQUARE(current_wavefunction) / SQUARE(previous_wavefunction));
 
     // The same kind of test as before
     if (weight >= m_random_step(m_engine)) {
