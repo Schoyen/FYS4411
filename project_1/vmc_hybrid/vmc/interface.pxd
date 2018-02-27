@@ -26,7 +26,7 @@ cdef extern from "simple_gaussian.h":
                 double omega,
                 double *parameters,
                 double *particles) except +
-        
+
 cdef extern from "simple_gaussian_numerical.h":
     cdef cppclass SimpleGaussianNumerical(SimpleGaussian):
         SimpleGaussianNumerical(
@@ -71,10 +71,11 @@ cdef extern from "metropolis_algorithm.h":
 
 cdef extern from "steepest_descent_metropolis.h":
     cdef cppclass SteepestDescentMetropolis:
-        SteepestDescentMetropolis(unsigned int num_particles) except + 
+        SteepestDescentMetropolis(unsigned int num_particles) except +
 
-        double steepest_descent(Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-            double step_length, unsigned int num_samples)
+        double steepest_descent(
+                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+                double step_length, unsigned int num_samples)
 
 cdef extern from "importance_metropolis.h":
     cdef cppclass ImportanceMetropolis:

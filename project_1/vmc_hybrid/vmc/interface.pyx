@@ -50,8 +50,8 @@ cdef class PyWavefunction:
 
         if parameters.size != self.num_parameters:
             raise Exception(
-                    "Parameters array must be equal to the number "
-                    + "parameters")
+                    "The length of the parameters array must be equal to "
+                    + "the number of parameters")
 
         for i in range(self.num_parameters):
             self.parameters[i] = parameters[i]
@@ -160,11 +160,12 @@ cdef class PySteepestDescentMetropolis:
 
     def __cinit__(self, unsigned int num_particles):
         self.method = new SteepestDescentMetropolis(num_particles)
-    
-    def steepest_descent(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
-            double gamma, unsigned int num_samples):
-        return self.method.steepest_descent(wavefunction.wavefunction, hamiltonian.hamiltonian,
-            gamma, num_samples)
+
+    def steepest_descent(self, PyWavefunction wavefunction,
+            PyHamiltonian hamiltonian, double gamma, unsigned int num_samples):
+        return self.method.steepest_descent(
+                wavefunction.wavefunction, hamiltonian.hamiltonian, gamma,
+                num_samples)
 
 cdef class PyImportanceMetropolis:
     cdef ImportanceMetropolis *method
@@ -175,7 +176,7 @@ cdef class PyImportanceMetropolis:
     def step(self, PyWavefunction wavefunction, double step_length):
         return self.method.step(wavefunction.wavefunction, step_length)
 
-    def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian, 
+    def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             double step_length, unsigned int num_samples):
         return self.method.run(
                 wavefunction.wavefunction, hamiltonian.hamiltonian,
