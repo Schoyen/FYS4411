@@ -42,7 +42,7 @@ double SimpleGaussian::compute_laplacian()
     return laplacian;
 }
 
-double SimpleGaussian::compute_drift_force_component(unsigned int dimension, unsigned int particle)
+double SimpleGaussian::compute_drift_force_component(double coordinate)
 {
     double alpha; 
 
@@ -50,7 +50,8 @@ double SimpleGaussian::compute_drift_force_component(unsigned int dimension, uns
     alpha = m_parameters[0];
 
     // Drift force is F = -4*alpha*r_vec
-    return -4*alpha*m_particles[dimension, particle*m_num_dimensions];
+    // return -4*alpha*m_particles[dimension, particle*m_num_dimensions];
+    return - 4*alpha*coordinate;
 }
 
 double SimpleGaussian::evaluate()
