@@ -54,6 +54,23 @@ cdef extern from "monte_carlo_method.h":
 
         void initialize()
         bool step(Wavefunction *wavefunction, double step_length)
+
+cdef extern from "sampler.h":
+    cdef cppclass Sampler:
+        Sampler(
+                Wavefunction *wavefunction,
+                Hamiltonian *hamiltonian,
+                MonteCarloMethod *solver,
+                unsigned int num_local_energies,
+                unsigned int stride_local_energies,
+                double *local_energies) except +
+
+        void sample(unsigned int num_samples, double step_length)
+        double get_variance()
+        double get_energy()
+        double get_energy_squared()
+        double get_ratio_of_accepted_steps()
+
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
         MetropolisAlgorithm(unsigned int num_particles) except +
