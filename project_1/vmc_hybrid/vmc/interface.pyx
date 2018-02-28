@@ -128,11 +128,6 @@ cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
     def __cinit__(self, unsigned int num_particles):
         self.method = new MetropolisAlgorithm(num_particles)
 
-cdef class PySteepestDescentMetropolis(PyMonteCarloMethod):
-
-    def __cinit__(self, unsigned int num_particles):
-        self.method = new SteepestDescentMetropolis(num_particles)
-
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 
     def __cinit__(self, unsigned int num_particles):

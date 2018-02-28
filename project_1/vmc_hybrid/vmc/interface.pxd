@@ -70,10 +70,6 @@ cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
         MetropolisAlgorithm(unsigned int num_particles) except +
 
-cdef extern from "steepest_descent_metropolis.h":
-    cdef cppclass SteepestDescentMetropolis(MetropolisAlgorithm):
-        SteepestDescentMetropolis(unsigned int num_particles) except +
-
 cdef extern from "importance_metropolis.h":
     cdef cppclass ImportanceMetropolis(MonteCarloMethod):
         ImportanceMetropolis(unsigned int num_particles) except +
