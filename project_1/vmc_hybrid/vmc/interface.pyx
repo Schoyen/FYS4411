@@ -131,6 +131,21 @@ cdef class PySampler:
                 stride_local_energies,
                 &self.local_energies[0])
 
+    def get_local_energies(self):
+        return np.asarray(self.local_energies)
+
+    def get_variance(self):
+        return self.sampler.get_variance()
+
+    def get_energy(self):
+        return self.sampler.get_energy()
+
+    def get_energy_squared(self):
+        return self.sampler.get_energy_squared()
+
+    def get_ratio_of_accepted_steps(self):
+        return self.sampler.get_ratio_of_accepted_steps()
+
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
     def __cinit__(self, unsigned int num_particles):
