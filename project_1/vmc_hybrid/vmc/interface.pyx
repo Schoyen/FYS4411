@@ -42,9 +42,6 @@ cdef class PyWavefunction:
             for j in range(self.num_dimensions):
                 self.particles[i, j] = distro[i, j]
 
-    def get_particles(self):
-        return np.asarray(self.particles)
-
     def set_parameters(self, np.ndarray[double, ndim=1, mode="c"] parameters):
         cdef unsigned int i
 
@@ -55,18 +52,6 @@ cdef class PyWavefunction:
 
         for i in range(self.num_parameters):
             self.parameters[i] = parameters[i]
-
-    def get_parameters(self):
-        return np.asarray(self.parameters)
-
-    def evaluate(self):
-        return self.wavefunction.evaluate()
-
-    def compute_laplacian(self):
-        return self.wavefunction.compute_laplacian()
-
-    def compute_position_squared_sum(self):
-        return self.wavefunction.compute_position_squared_sum()
 
 cdef class PySimpleGaussian(PyWavefunction):
 
@@ -93,14 +78,6 @@ cdef class PySimpleGaussianNumerical(PyWavefunction):
 
 cdef class PyHamiltonian:
     cdef Hamiltonian *hamiltonian
-
-    def compute_local_energy(self, PyWavefunction wavefunction):
-        return self.hamiltonian.compute_local_energy(
-                wavefunction.wavefunction)
-
-    def compute_potential_energy(self, PyWavefunction wavefunction):
-        return self.hamiltonian.compute_potential_energy(
-                wavefunction.wavefunction)
 
 cdef class PyHarmonicOscillator(PyHamiltonian):
 

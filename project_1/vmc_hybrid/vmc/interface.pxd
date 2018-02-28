@@ -12,10 +12,6 @@ cdef extern from "wavefunction.h":
                 double *parameters,
                 double *particles) except +
 
-        double compute_position_squared_sum()
-        double evaluate()
-        double compute_laplacian()
-
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):
         SimpleGaussian(
@@ -41,8 +37,7 @@ cdef extern from "simple_gaussian_numerical.h":
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
-        double compute_local_energy(Wavefunction *wavefunction)
-        double compute_potential_energy(Wavefunction *wavefunction)
+        pass
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
