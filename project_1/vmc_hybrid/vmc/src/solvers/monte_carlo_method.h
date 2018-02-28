@@ -13,6 +13,6 @@ class MonteCarloMethod
 
     public:
         MonteCarloMethod(unsigned int num_particles);
-        virtual void initialize();
-        virtual bool step(Wavefunction *wavefunction, double step_length);
+        virtual void initialize() = 0;
+        virtual bool step(Wavefunction *wavefunction, double step_length) = 0;
 };
