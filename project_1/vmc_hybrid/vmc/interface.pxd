@@ -89,7 +89,7 @@ cdef extern from "metropolis_algorithm.h":
                 double *local_energies)
 
 cdef extern from "steepest_descent_metropolis.h":
-    cdef cppclass SteepestDescentMetropolis:
+    cdef cppclass SteepestDescentMetropolis(MetropolisAlgorithm):
         SteepestDescentMetropolis(unsigned int num_particles) except +
 
         double steepest_descent(
@@ -97,7 +97,7 @@ cdef extern from "steepest_descent_metropolis.h":
                 double step_length, unsigned int num_samples)
 
 cdef extern from "importance_metropolis.h":
-    cdef cppclass ImportanceMetropolis:
+    cdef cppclass ImportanceMetropolis(MonteCarloMethod):
         ImportanceMetropolis(unsigned int num_particles) except +
 
         bool step(Wavefunction *wavefunction, double sveitep_length)
