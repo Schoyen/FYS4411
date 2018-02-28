@@ -128,64 +128,12 @@ cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
     def __cinit__(self, unsigned int num_particles):
         self.method = new MetropolisAlgorithm(num_particles)
 
-    #def step(self, PyWavefunction wavefunction, double step_length):
-    #    return self.method.step(wavefunction.wavefunction, step_length)
-
-    #def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
-    #        double step_length, unsigned int num_samples):
-    #    return self.method.run(
-    #            wavefunction.wavefunction, hamiltonian.hamiltonian,
-    #            step_length, num_samples)
-
-    #def run_with_variance(self, PyWavefunction wavefunction,
-    #        PyHamiltonian hamiltonian, double step_length,
-    #        unsigned int num_samples):
-    #    cdef double variance
-    #    cdef double energy
-
-    #    variance = 0
-    #    energy = self.method.run_variance(
-    #            wavefunction.wavefunction, hamiltonian.hamiltonian,
-    #            step_length, num_samples, &variance)
-
-    #    return energy, variance
-
-    #def sample_local_energy(self, PyWavefunction wavefunction,
-    #        PyHamiltonian hamiltonian, double step_length,
-    #        unsigned int num_samples):
-
-    #    cdef double[::1] local_energies
-    #    cdef double energy
-
-    #    local_energies = np.zeros(num_samples)
-
-    #    energy = self.method.run(
-    #            wavefunction.wavefunction, hamiltonian.hamiltonian,
-    #            step_length, num_samples, &local_energies[0])
-
-    #    return energy, np.asarray(local_energies)
-
 cdef class PySteepestDescentMetropolis(PyMonteCarloMethod):
 
     def __cinit__(self, unsigned int num_particles):
         self.method = new SteepestDescentMetropolis(num_particles)
 
-    #def steepest_descent(self, PyWavefunction wavefunction,
-    #        PyHamiltonian hamiltonian, double gamma, unsigned int num_samples):
-    #    return self.method.steepest_descent(
-    #            wavefunction.wavefunction, hamiltonian.hamiltonian, gamma,
-    #            num_samples)
-
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 
     def __cinit__(self, unsigned int num_particles):
         self.method = new ImportanceMetropolis(num_particles)
-
-#    def step(self, PyWavefunction wavefunction, double step_length):
-#        return self.method.step(wavefunction.wavefunction, step_length)
-#
-    #def run(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
-    #        double step_length, unsigned int num_samples):
-    #    return self.method.run(
-    #            wavefunction.wavefunction, hamiltonian.hamiltonian,
-    #            step_length, num_samples)
