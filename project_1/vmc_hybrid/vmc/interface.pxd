@@ -75,18 +75,18 @@ cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
         MetropolisAlgorithm(unsigned int num_particles) except +
 
-        bool step(Wavefunction *wavefunction, double step_length)
-        double run(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples)
-        double run_variance(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples,
-                double *variance)
-        double run(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples,
-                double *local_energies)
+        #bool step(Wavefunction *wavefunction, double step_length)
+        #double run(
+        #        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+        #        double step_length, unsigned int num_samples)
+        #double run_variance(
+        #        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+        #        double step_length, unsigned int num_samples,
+        #        double *variance)
+        #double run(
+        #        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+        #        double step_length, unsigned int num_samples,
+        #        double *local_energies)
 
 cdef extern from "steepest_descent_metropolis.h":
     cdef cppclass SteepestDescentMetropolis(MetropolisAlgorithm):
