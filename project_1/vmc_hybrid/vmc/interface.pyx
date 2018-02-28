@@ -103,13 +103,8 @@ cdef class PyHamiltonian:
                 wavefunction.wavefunction)
 
 cdef class PyHarmonicOscillator(PyHamiltonian):
-    cdef double mass
-    cdef double omega
 
     def __cinit__(self, double mass, double omega):
-        self.mass = mass
-        self.omega = omega
-
         self.hamiltonian = new HarmonicOscillator(mass, omega)
 
 cdef class PyMonteCarloMethod:
