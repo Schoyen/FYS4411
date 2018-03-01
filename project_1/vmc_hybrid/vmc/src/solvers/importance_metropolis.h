@@ -15,8 +15,4 @@ class ImportanceMetropolis : public MonteCarloMethod
 
         void initialize();
         bool step(Wavefunction *wavefunction, double step_length);
-
-        //double run(
-        //        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-        //        double step_length, unsigned int num_samples);
 };
