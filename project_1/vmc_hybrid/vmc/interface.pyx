@@ -123,6 +123,9 @@ cdef class PySampler:
     def get_ratio_of_accepted_steps(self):
         return self.sampler.get_ratio_of_accepted_steps()
 
+    def sample(self, unsigned int num_samples, double step_length):
+        self.sampler.sample(num_samples, step_length)
+
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
     def __cinit__(self, unsigned int num_particles):
