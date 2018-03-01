@@ -654,4 +654,35 @@
             \end{align}
             where $d$ is the dimensionality.
 
+	\subsection{Statistical Analysis}
+		If the results of the metropolis sampling were completely uncorrelated,
+		it would be enough to compute the standard deviation in a familiar way,
+		\begin{equation}
+			\sigma = \sqrt{\frac{1}{N}(\ev{E^2_L} - \ev{E_L}^2},
+			\label{eq:standard_deviation}
+		\end{equation}
+		where $N$ is the number of samples, or Monte-Carlo cycles, in the experiment.
+		However, it is reasonable to assume that the data we are dealing with in this
+		study is liable to suffer from \emph{autocorrelation} and \autoref{eq:standard_deviation}
+		does not hold. The prevailing
+		definition of autocorrelation in a data stream or signal is correlation 
+		between a delay of the signal and the original signal. One would be interested to find the
+		delay, or lag, in the signal at which the "self-correlation" is highest. We refer to this
+		spacing as $d$, and define the following correlation function,
+		\begin{equation}
+			f_d = \frac{1}{n -d} \sum_{k=1}^{n-d} (x_k - \bar{x}_n)(x_{k+d} - \bar{x}_n).
+			\label{eq:correlation_f_d}
+		\end{equation}
+		The keen reader would have noticed that the function $f_d$ in \autoref{eq:correlation_f_d}
+		would be equal to the sample variance for $d=0$. We can now define the \emph{autocorrelation function}
+		\begin{equation}
+			\kappa_d = \frac{f_d}{\text{Var}(x)},
+			\label{eq:autocorrelation_function}
+		\end{equation}
+		which is equal to $1$ if the data exhibits no autocorrealtions, equating to $d=0$. From the autocorrelation
+		function (\ref{eq:autocorrelation_function}) we in turn define the \emph{autocorrelation time},
+		\begin{equation}
+			\tau = 1 + 2 \sum_{d=1}^{n-1},
+		\end{equation}
+		notice that the autocorrelation time is $1$ for a correlation free experiment.
 \end{document}
