@@ -91,13 +91,10 @@ cdef class PySampler:
     cdef Sampler *sampler
     cdef double[::1] local_energies
 
-    def __cinit__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
+    def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             PyMonteCarloMethod solver, unsigned int num_local_energies,
             unsigned int stride_local_energies):
 
-        self.wavefunction = wavefunction
-        self.hamiltonian = hamiltonian
-        self.solver = solver
         self.local_energies = np.zeros(num_local_energies)
 
         self.sampler = new Sampler(
