@@ -4,11 +4,19 @@
 #include "math_macros.h"
 #include <iostream>
 #include <math.h>
-//#include <random>
+#include <random>
 
+
+
+void ImportanceMetropolis::initialize()
+{
+    /* This method does not need an initializer */
+}
 
 // Function to compute the Green's functions fraction
-double ImportanceMetropolis::greensFraction(Wavefunction *wavefunction, double* new_pos, double* old_pos, double time_step, double D) 
+double ImportanceMetropolis::greensFraction(
+        Wavefunction *wavefunction, double* new_pos, double* old_pos,
+        double time_step, double D)
 {
     double result;
     double drift_force_old, drift_force_new;
@@ -22,7 +30,7 @@ double ImportanceMetropolis::greensFraction(Wavefunction *wavefunction, double* 
     num_dimensions = wavefunction->get_num_dimensions();
 
     for (i = 0; i < num_dimensions; i++) {
-        
+
         drift_force_old = wavefunction->compute_drift_force_component(old_pos[i]);
         drift_force_new = wavefunction->compute_drift_force_component(new_pos[i]);
 
@@ -36,10 +44,10 @@ double ImportanceMetropolis::greensFraction(Wavefunction *wavefunction, double* 
 
     G_numerator = exp(-  first_vector / (4*D*time_step));
     G_denominator = exp(- second_vector / (4*D*time_step));
-    
+
     result = G_numerator / G_denominator;
 
-    return result; 
+    return result;
 }
 
 bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
@@ -52,7 +60,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
         ( G(new_pos, old_pos, delta_t) * | psi_T(old)|^2 )
 
         And then there was ths whole deal of what G is..
-        What is nice: Both G's have a coefficient that is cancelled. 
+        What is nice: Both G's have a coefficient that is cancelled.
     */
 
     unsigned int num_dimensions, i, particle_index;
@@ -62,7 +70,8 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     // Must insert particle spread instead of 1??
     std::normal_distribution<double> N(0,1);
 
-    // The Diffusion coefficient. I don't know what it is supposed to be. Hardcoding
+    // The Diffusion coefficient. I don't know what it is supposed to be.
+    // Hardcoding
     double D = 0.5;
 
     // Is this so?
@@ -70,7 +79,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
 
     // Getting dimensionality
     num_dimensions = wavefunction->get_num_dimensions();
-     
+
     // Storing the current wavefunction in prev (current will be overwritten)
     previous_wavefunction = wavefunction->evaluate();
 
@@ -90,7 +99,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
         Update position:
         r_new = r_prev + D*F(r)*time_step + N(0,1)*sqrt(time_step)
         -> step = r_new - r_prev = D*F*time_step + N *sqrt(time_step)
-        N is normal dist. stoc. var. 
+        N is normal dist. stoc. var.
         D is some diffusion coefficient. WHAT IS IT!?!?!?1
     */
 
@@ -110,10 +119,12 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     current_wavefunction = wavefunction->evaluate();
 
     // Compute new weight
-    double greens_fraction = greensFraction(wavefunction, new_pos, old_pos, time_step, D);
+    double greens_fraction = greensFraction(
+            wavefunction, new_pos, old_pos, time_step, D);
 
     // Acceptance weight
-    weight = greens_fraction * (SQUARE(current_wavefunction) / SQUARE(previous_wavefunction));
+    weight = greens_fraction \
+             * (SQUARE(current_wavefunction) / SQUARE(previous_wavefunction));
 
     // The same kind of test as before
     if (weight >= m_random_step(m_engine)) {
@@ -125,37 +136,37 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     return false;
 }
 
-double ImportanceMetropolis::run(
-        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-        double step_length, unsigned int num_samples)
-{
-    double energy, local_energy;
-    unsigned int i, num_accepted_states;
-
-    /* Set initial number of accepted states */
-    num_accepted_states = 0;
-
-    /* Set initial energy */
-    energy = 0;
-
-    /* Compute initial local energy */
-    local_energy = hamiltonian->compute_local_energy(wavefunction);
-
-    /* Perform num_samples metropolis steps */
-    for (i = 0; i < num_samples; i++) {
-
-        /* Do a step and check if it got accepted */
-        if (step(wavefunction, step_length)) {
-            /* Compute new local energy */
-            local_energy = hamiltonian->compute_local_energy(wavefunction);
-            num_accepted_states++;
-        }
-
-        /* Add local energy */
-        energy += local_energy;
-
-    }
-
-    /* Return the total energy (without normalization) */
-    return energy;
-}
+//double ImportanceMetropolis::run(
+//        Wavefunction *wavefunction, Hamiltonian *hamiltonian,
+//        double step_length, unsigned int num_samples)
+//{
+//    double energy, local_energy;
+//    unsigned int i, num_accepted_states;
+//
+//    /* Set initial number of accepted states */
+//    num_accepted_states = 0;
+//
+//    /* Set initial energy */
+//    energy = 0;
+//
+//    /* Compute initial local energy */
+//    local_energy = hamiltonian->compute_local_energy(wavefunction);
+//
+//    /* Perform num_samples metropolis steps */
+//    for (i = 0; i < num_samples; i++) {
+//
+//        /* Do a step and check if it got accepted */
+//        if (step(wavefunction, step_length)) {
+//            /* Compute new local energy */
+//            local_energy = hamiltonian->compute_local_energy(wavefunction);
+//            num_accepted_states++;
+//        }
+//
+//        /* Add local energy */
+//        energy += local_energy;
+//
+//    }
+//
+//    /* Return the total energy (without normalization) */
+//    return energy;
+//}

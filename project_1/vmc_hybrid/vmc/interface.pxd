@@ -12,10 +12,6 @@ cdef extern from "wavefunction.h":
                 double *parameters,
                 double *particles) except +
 
-        double compute_position_squared_sum()
-        double evaluate()
-        double compute_laplacian()
-
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):
         SimpleGaussian(
@@ -41,8 +37,7 @@ cdef extern from "simple_gaussian_numerical.h":
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
-        double compute_local_energy(Wavefunction *wavefunction)
-        double compute_potential_energy(Wavefunction *wavefunction)
+        pass
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
@@ -52,37 +47,29 @@ cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
         MonteCarloMethod(unsigned int num_particles) except +
 
+        void initialize()
+        bool step(Wavefunction *wavefunction, double step_length)
+
+cdef extern from "sampler.h":
+    cdef cppclass Sampler:
+        Sampler(
+                Wavefunction *wavefunction,
+                Hamiltonian *hamiltonian,
+                MonteCarloMethod *solver,
+                unsigned int num_local_energies,
+                unsigned int stride_local_energies,
+                double *local_energies) except +
+
+        void sample(unsigned int num_samples, double step_length)
+        double get_variance()
+        double get_energy()
+        double get_energy_squared()
+        double get_ratio_of_accepted_steps()
+
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
         MetropolisAlgorithm(unsigned int num_particles) except +
 
-        bool step(Wavefunction *wavefunction, double step_length)
-        double run(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples)
-        double run_variance(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples,
-                double *variance)
-        double run(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples,
-                double *local_energies)
-
-cdef extern from "steepest_descent_metropolis.h":
-    cdef cppclass SteepestDescentMetropolis:
-        SteepestDescentMetropolis(unsigned int num_particles) except +
-
-        double steepest_descent(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples)
-
 cdef extern from "importance_metropolis.h":
-    cdef cppclass ImportanceMetropolis:
+    cdef cppclass ImportanceMetropolis(MonteCarloMethod):
         ImportanceMetropolis(unsigned int num_particles) except +
-
-        bool step(Wavefunction *wavefunction, double sveitep_length)
-
-        double run(
-                Wavefunction *wavefunction, Hamiltonian *hamiltonian,
-                double step_length, unsigned int num_samples)
