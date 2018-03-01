@@ -29,22 +29,22 @@ void Sampler::sample(unsigned int num_samples, double step_length)
     initialize();
 
     /* Initialize the solver */
-    solver->initialize();
+    m_solver->initialize();
 
     /* Store the number of samples which will be performed */
     m_num_steps = num_samples;
     /* Compute initial local energy */
-    current_local_energy = hamiltonian->compute_local_energy(wavefunction);
+    current_local_energy = m_hamiltonian->compute_local_energy(m_wavefunction);
 
     /* Perform m_num_steps metropolis steps */
     for (i = 0; i < m_num_steps; i++) {
 
         /* Do a step and check if it got accepted */
-        if (solver->step(wavefunction, step_length)) {
+        if (m_solver->step(m_wavefunction, step_length)) {
             /* Compute new local energy */
             current_local_energy =
-                hamiltonian->compute_local_energy(wavefunction);
-            m_num_accepted_states++;
+                m_hamiltonian->compute_local_energy(m_wavefunction);
+            m_num_accepted_steps++;
         }
 
         /* Add local energy */
