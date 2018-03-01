@@ -685,4 +685,23 @@
 			\tau = 1 + 2 \sum_{d=1}^{n-1},
 		\end{equation}
 		notice that the autocorrelation time is $1$ for a correlation free experiment.
+		
+		We are now able to make a correction to the expression for the standard deviation 
+		improving on \autoref{eq:standard_deviation} by taking correlation into account,
+		\begin{equation}
+			\sigma =\sqrt{\frac{1 + 2\tau / \Delta t}{N}(\ev{E^2_L} - \ev{E_L}^2)},
+		\end{equation}
+		where $\Delta t$ is the time between each sample. The main problem at this point is to 
+		find $\tau$, which we do not know for any given system and it is generally very expensive to
+		compute. In order to find a good estimate of $\tau$ we use a procedure called \emph{blocking}.
+		
+		\subsubsection{Blocking}
+		In the method of blocking we group the samples into blocks of increasing size. If one where to compute
+		the standard deviation for each block, one should see the variance increase with the block size.
+		The standard deviation would only increase up to a certain point, from whence it would stay
+		almost constant. What is happening is that we have reached a point where a particular
+		sample from one block is no longer correlated with a corresponding sample from an adjacent block.
+		The block size for this point of convergence now functions as an estimate for the autocorrelation 
+		time $\tau$.
+
 \end{document}
