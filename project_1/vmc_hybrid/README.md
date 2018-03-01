@@ -1,6 +1,6 @@
 # Variational Monte Carlo
 
-This code uses a hybrid solution with Python, Cython and C to run Quantum
+This code uses a hybrid solution with Python, Cython and C++ to run Quantum
 Variational Monte Carlo simulations.
 
 ## Compilation
@@ -11,9 +11,41 @@ To compile the code use:
 python3 setup.py build_ext
 ```
 
-This builds a shared library which, by default, gets placed in the `scripts`
-directory. Scripts located in this directoy can import directly from this
-library.
+This builds a shared library which, by default, gets placed in the `vmc`
+directory.
+
+## Installation
+To do a global installation run
+
+```bash
+pip install . --upgrade
+```
+
+This builds the project in the `/path/to/python/lib/python3.6/site-packages/`
+directory, where `/path/to/python/` depends on the default Python installation
+and `/python3.6/` depends on the version of Python (Python 3.6 in this case).
+
+### Local installation
+An alternative to this can be to define your own local build directory which can
+later be purged. For example:
+
+```bash
+mkdir -p $HOME/build/bin
+mkdir -p $HOME/build/lib/python3.6/site-packages
+```
+
+We then need to set the `PATH` and `PYTHONPATH` environment variables.
+
+```bash
+export PATH=$PATH:$HOME/build/bin
+export PYTHONPATH=$PYTHONPATH:$HOME/build/lib/python3.6/site-packages
+```
+
+Installation can then be performed by executing
+
+```bash
+pip install . --upgrade --install-options="--prefix=$HOME/build"
+```
 
 ## To be implemented
 
