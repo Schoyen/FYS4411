@@ -120,7 +120,12 @@ cdef class PySampler:
     def get_ratio_of_accepted_steps(self):
         return self.sampler.get_ratio_of_accepted_steps()
 
-    def sample(self, unsigned int num_samples, double step_length):
+    def sample(self, unsigned int num_samples, double step_length,
+            unsigned int num_thermalization_steps=0):
+
+        if num_thermalization_steps > 0:
+            self.sampler.sample(num_thermalization_steps, step_length)
+
         self.sampler.sample(num_samples, step_length)
     
     def get_energy_gradient(self):

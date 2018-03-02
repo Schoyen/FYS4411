@@ -277,9 +277,46 @@
         \biggr)
         \sum_{i = 1}^N r_i^2.
     \end{align}
-    It is worth noting that for $\alpha = \pm\half\omega$ we will find a stable
-    value which turns out to be the exact energy minimum. This happens as the
-    entire sum over all the random walkers disappears.
+    It is worth noting that for $\alpha = \half\omega$ ($\alpha$ is required to
+    be positive) we will find a stable value which turns out to be the exact
+    energy minimum. This happens as the entire sum over all the random walkers
+    disappears.
+
+    \subsection{Exact variational energy}
+        As the system is non-interacting and consisting of Gaussians we can
+        find an expression for the exact energy as a function of the
+        variational parameter $\alpha$, i.e.,
+        \begin{align}
+            E(\alpha)
+            &=
+            \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}.
+        \end{align}
+
+        % TODO: Add the computation of this expression
+        The final result for the energy is
+        \begin{align}
+            E(\alpha)
+            &=
+            \left(
+                \frac{\hbar^2 \alpha}{2m}
+                + \frac{m\omega^2}{8\alpha}
+            \right)dN.
+        \end{align}
+        By minimizing this expression, i.e., finding the derivative of the
+        energy with respect to $\alpha$ and equating this to zero, yields the
+        expected minimum of variational energy to be
+        \begin{align}
+            \dod[]{E(\alpha)}{\alpha} = 0
+            \implies
+            \alpha_0 = \frac{m\omega}{2\hbar},
+        \end{align}
+        which in natural units reduces to $\alpha_0 = \half\omega$. The energy at
+        this value of $\alpha$ (in natural units) is then
+        \begin{align}
+            E(\alpha_0)
+            &=
+            \frac{\omega dN}{2}.
+        \end{align}
 
 
 \section{Interacting hard sphere bosons}
@@ -654,54 +691,54 @@
             \end{align}
             where $d$ is the dimensionality.
 
-	\subsection{Statistical Analysis}
-		If the results of the metropolis sampling were completely uncorrelated,
-		it would be enough to compute the standard deviation in a familiar way,
-		\begin{equation}
-			\sigma = \sqrt{\frac{1}{N}(\ev{E^2_L} - \ev{E_L}^2},
-			\label{eq:standard_deviation}
-		\end{equation}
-		where $N$ is the number of samples, or Monte-Carlo cycles, in the experiment.
-		However, it is reasonable to assume that the data we are dealing with in this
-		study is liable to suffer from \emph{autocorrelation} and \autoref{eq:standard_deviation}
-		does not hold. The prevailing
-		definition of autocorrelation in a data stream or signal is correlation 
-		between a delay of the signal and the original signal. One would be interested to find the
-		delay, or lag, in the signal at which the "self-correlation" is highest. We refer to this
-		spacing as $d$, and define the following correlation function,
-		\begin{equation}
-			f_d = \frac{1}{n -d} \sum_{k=1}^{n-d} (x_k - \bar{x}_n)(x_{k+d} - \bar{x}_n).
-			\label{eq:correlation_f_d}
-		\end{equation}
-		The keen reader would have noticed that the function $f_d$ in \autoref{eq:correlation_f_d}
-		would be equal to the sample variance for $d=0$. We can now define the \emph{autocorrelation function}
-		\begin{equation}
-			\kappa_d = \frac{f_d}{\text{Var}(x)},
-			\label{eq:autocorrelation_function}
-		\end{equation}
-		which is equal to $1$ if the data exhibits no autocorrealtions, equating to $d=0$. From the autocorrelation
-		function (\ref{eq:autocorrelation_function}) we in turn define the \emph{autocorrelation time},
-		\begin{equation}
-			\tau = 1 + 2 \sum_{d=1}^{n-1},
-		\end{equation}
-		notice that the autocorrelation time is $1$ for a correlation free experiment.
-		
-		We are now able to make a correction to the expression for the standard deviation 
-		improving on \autoref{eq:standard_deviation} by taking correlation into account,
-		\begin{equation}
-			\sigma =\sqrt{\frac{1 + 2\tau / \Delta t}{N}(\ev{E^2_L} - \ev{E_L}^2)},
-		\end{equation}
-		where $\Delta t$ is the time between each sample. The main problem at this point is to 
-		find $\tau$, which we do not know for any given system and it is generally very expensive to
-		compute. In order to find a good estimate of $\tau$ we use a procedure called \emph{blocking}.
-		
-		\subsubsection{Blocking}
-		In the method of blocking we group the samples into blocks of increasing size. If one where to compute
-		the standard deviation for each block, one should see the variance increase with the block size.
-		The standard deviation would only increase up to a certain point, from whence it would stay
-		almost constant. What is happening is that we have reached a point where a particular
-		sample from one block is no longer correlated with a corresponding sample from an adjacent block.
-		The block size for this point of convergence now functions as an estimate for the autocorrelation 
-		time $\tau$.
+    \subsection{Statistical Analysis}
+        If the results of the metropolis sampling were completely uncorrelated,
+        it would be enough to compute the standard deviation in a familiar way,
+        \begin{equation}
+            \sigma = \sqrt{\frac{1}{N}(\ev{E^2_L} - \ev{E_L}^2},
+            \label{eq:standard_deviation}
+        \end{equation}
+        where $N$ is the number of samples, or Monte-Carlo cycles, in the experiment.
+        However, it is reasonable to assume that the data we are dealing with in this
+        study is liable to suffer from \emph{autocorrelation} and \autoref{eq:standard_deviation}
+        does not hold. The prevailing
+        definition of autocorrelation in a data stream or signal is correlation
+        between a delay of the signal and the original signal. One would be interested to find the
+        delay, or lag, in the signal at which the "self-correlation" is highest. We refer to this
+        spacing as $d$, and define the following correlation function,
+        \begin{equation}
+            f_d = \frac{1}{n -d} \sum_{k=1}^{n-d} (x_k - \bar{x}_n)(x_{k+d} - \bar{x}_n).
+            \label{eq:correlation_f_d}
+        \end{equation}
+        The keen reader would have noticed that the function $f_d$ in \autoref{eq:correlation_f_d}
+        would be equal to the sample variance for $d=0$. We can now define the \emph{autocorrelation function}
+        \begin{equation}
+            \kappa_d = \frac{f_d}{\text{Var}(x)},
+            \label{eq:autocorrelation_function}
+        \end{equation}
+        which is equal to $1$ if the data exhibits no autocorrealtions, equating to $d=0$. From the autocorrelation
+        function (\ref{eq:autocorrelation_function}) we in turn define the \emph{autocorrelation time},
+        \begin{equation}
+            \tau = 1 + 2 \sum_{d=1}^{n-1},
+        \end{equation}
+        notice that the autocorrelation time is $1$ for a correlation free experiment.
+
+        We are now able to make a correction to the expression for the standard deviation
+        improving on \autoref{eq:standard_deviation} by taking correlation into account,
+        \begin{equation}
+            \sigma =\sqrt{\frac{1 + 2\tau / \Delta t}{N}(\ev{E^2_L} - \ev{E_L}^2)},
+        \end{equation}
+        where $\Delta t$ is the time between each sample. The main problem at this point is to
+        find $\tau$, which we do not know for any given system and it is generally very expensive to
+        compute. In order to find a good estimate of $\tau$ we use a procedure called \emph{blocking}.
+
+        \subsubsection{Blocking}
+        In the method of blocking we group the samples into blocks of increasing size. If one where to compute
+        the standard deviation for each block, one should see the variance increase with the block size.
+        The standard deviation would only increase up to a certain point, from whence it would stay
+        almost constant. What is happening is that we have reached a point where a particular
+        sample from one block is no longer correlated with a corresponding sample from an adjacent block.
+        The block size for this point of convergence now functions as an estimate for the autocorrelation
+        time $\tau$.
 
 \end{document}
