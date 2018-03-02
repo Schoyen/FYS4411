@@ -72,4 +72,6 @@ class Sampler
         {
             return ((double) m_num_accepted_steps)/((double) m_num_steps);
         }
+
+        double get_energy_gradient();
 };

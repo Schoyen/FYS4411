@@ -37,7 +37,7 @@ cdef extern from "simple_gaussian_numerical.h":
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
-        pass
+        pass    
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
@@ -65,6 +65,7 @@ cdef extern from "sampler.h":
         double get_energy()
         double get_energy_squared()
         double get_ratio_of_accepted_steps()
+        double get_energy_gradient()
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):

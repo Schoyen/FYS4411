@@ -65,3 +65,11 @@ void Sampler::sample(unsigned int num_samples, double step_length)
     /* Compute the variance */
     m_variance = m_energy_squared - SQUARE(m_energy);
 }
+
+double Sampler::get_energy_gradient()
+{
+    // Not done. Must sum up all particles.
+    // Never mind. Already done in Wavefunction:.compute_position_squared_sum()
+    // Consider moving to header file only
+    return m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
+}

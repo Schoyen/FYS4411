@@ -122,6 +122,9 @@ cdef class PySampler:
 
     def sample(self, unsigned int num_samples, double step_length):
         self.sampler.sample(num_samples, step_length)
+    
+    def get_energy_gradient(self):
+        return self.sampler.get_energy_gradient()
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 

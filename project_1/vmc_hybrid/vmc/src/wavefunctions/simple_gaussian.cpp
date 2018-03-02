@@ -53,9 +53,9 @@ double SimpleGaussian::compute_laplacian_alpha_derivative()
     position_squared_sum = compute_position_squared_sum();
 
     /* Compute the alpha derivative of the laplacian */
-    laplacian_alpha_derivative = (double) -2 * m_num_dimensions
+    laplacian_alpha_derivative = (double) -2 * m_num_dimensions * m_num_particles
         + 8 * alpha * position_squared_sum;
-    
+
     return laplacian_alpha_derivative;
 }
 
