@@ -42,6 +42,23 @@ double SimpleGaussian::compute_laplacian()
     return laplacian;
 }
 
+double SimpleGaussian::compute_laplacian_alpha_derivative() 
+{
+    double alpha, position_squared_sum, laplacian_alpha_derivative;
+
+    /* Fetch variational parameter alpha */
+    alpha = m_parameters[0];
+
+    /* Compute position squared sum */
+    position_squared_sum = compute_position_squared_sum();
+
+    /* Compute the alpha derivative of the laplacian */
+    laplacian_alpha_derivative = (double) -2 * m_num_dimensions
+        + 8 * alpha * position_squared_sum;
+    
+    return laplacian_alpha_derivative;
+}
+
 double SimpleGaussian::compute_drift_force_component(double coordinate)
 {
     double alpha; 

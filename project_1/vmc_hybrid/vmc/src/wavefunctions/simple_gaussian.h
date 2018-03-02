@@ -19,6 +19,6 @@ class SimpleGaussian : public Wavefunction
 
         double evaluate();
         double compute_laplacian();
-        //double compute_drift_force_component(unsigned int dimension, unsigned int particle);
         double compute_drift_force_component(double coordinate);
+        double compute_laplacian_alpha_derivative();
 };
