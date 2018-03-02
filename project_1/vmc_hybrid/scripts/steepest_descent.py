@@ -20,9 +20,9 @@ import numpy as np
 num_particles = 10
 num_dimensions = 1
 num_parameters = 1
-spread = 2.0
+spread = 5.0
 step_length = 0.05
-num_samples = 1000000
+num_samples = 500000
 
 mass = 1
 omega = 1
@@ -47,14 +47,15 @@ for alpha in alphas:
     print("End: ", sampler.get_energy_gradient())
 '''
 
-alpha = 0.7 # start
+alpha = 0.9 # start
 
 MAX_ITER = 100
 iterations = 0
-gamma = 0.01
+iters_since_last_improvement = 0
+gamma = 0.3
 wavefunction.set_parameters(np.array([alpha]))
 sampler.sample(num_samples, step_length)
-gradient = sampler.get_energy_gradient()
+gradient = sampler.get_energy_gradient() / num_particles
 energy = sampler.get_energy()
 
 alphas = np.zeros(MAX_ITER)
@@ -65,16 +66,28 @@ while (iterations < MAX_ITER):
     print("Gradient = ", gradient)
     alpha = alpha - gamma * gradient
     wavefunction.set_parameters(np.array([alpha]))
+    wavefunction.redistribute()
     energy_prev = energy
     energy = sampler.get_energy()
-    
-    if (energy > energy_prev):
-        gamma = gamma*0.95
-
+    gradient_prev = gradient
     sampler.sample(num_samples, step_length)
-    gradient = sampler.get_energy_gradient()
+    gradient = sampler.get_energy_gradient() /num_particles
+
+    if (gradient*gradient > gradient_prev*gradient_prev):
+        if (iters_since_last_improvement >= 10):
+            gamma = 0.01
+            print("Stuck!")
+        else:
+            gamma = gamma * 0.9
+        
+        iters_since_last_improvement += 1
+    else:
+        iters_since_last_improvement = 0
 
     alphas[iterations] = alpha
+
+    if alpha < 0:
+        alpha = -alpha
 
     iterations += 1
 
