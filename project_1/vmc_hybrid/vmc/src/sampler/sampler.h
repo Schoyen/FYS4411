@@ -1,5 +1,7 @@
 #pragma once
 
+#include <valarray>
+
 #include "monte_carlo_method.h"
 #include "wavefunction.h"
 #include "hamiltonian.h"
@@ -14,8 +16,7 @@ class Sampler
         double m_energy;
         double m_energy_squared;
         double m_variance;
-        /* TODO: This should be a vector for each variational parameter */
-        double m_energy_gradient;
+        std::valarray<double> m_energy_gradient;
 
         unsigned int m_num_local_energies;
         unsigned int m_stride_local_energies;
@@ -40,7 +41,6 @@ class Sampler
             m_energy = 0;
             m_energy_squared = 0;
             m_variance = 0;
-            /* TODO: Should be a vector */
             m_energy_gradient = 0;
 
             if (m_num_local_energies > 0) {
@@ -54,7 +54,6 @@ class Sampler
         {
             m_energy /= m_num_steps;
             m_energy_squared /= m_num_steps;
-            /* TODO: Vector */
             m_energy_gradient /= m_num_steps;
         }
 
@@ -80,9 +79,8 @@ class Sampler
             return ((double) m_num_accepted_steps)/((double) m_num_steps);
         }
 
-        double get_energy_gradient()
+        std::valarray<double> get_energy_gradient()
         {
-            /* TODO: Vector */
             return m_energy_gradient;
         }
 };

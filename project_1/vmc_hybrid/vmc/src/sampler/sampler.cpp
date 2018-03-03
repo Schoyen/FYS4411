@@ -1,3 +1,5 @@
+#include <valarray>
+
 #include "sampler.h"
 #include "monte_carlo_method.h"
 #include "wavefunction.h"
@@ -15,6 +17,8 @@ Sampler::Sampler(
     m_wavefunction = wavefunction;
     m_hamiltonian = hamiltonian;
     m_solver = solver;
+    m_energy_gradient =
+        std::valarray<double>(wavefunction->get_num_parameters());
     m_num_local_energies = num_local_energies;
     m_stride_local_energies = stride_local_energies;
     m_local_energies = local_energies;
@@ -52,7 +56,6 @@ void Sampler::sample(unsigned int num_samples, double step_length)
         /* Add local energy squared */
         m_energy_squared += SQUARE(current_local_energy);
         /* Add local energy gradient */
-        /* TODO: Should be a vector */
         m_energy_gradient +=
             m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
 

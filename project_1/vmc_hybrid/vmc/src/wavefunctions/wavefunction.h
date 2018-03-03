@@ -1,5 +1,7 @@
 #pragma once
 
+#include <valarray>
+
 class Wavefunction
 {
     protected:
@@ -19,10 +21,10 @@ class Wavefunction
          *
          *      m_particles[j + i*m_num_dimensions] = m_particles[i][j],
          *
-         * where i is the particle index and j is the position index. 
-         * 
+         * where i is the particle index and j is the position index.
+         *
          *      Nice to know.
-         *          -Seb. 
+         *          -Seb.
          */
         double *m_particles;
 
@@ -40,6 +42,16 @@ class Wavefunction
         unsigned int get_num_dimensions()
         {
             return m_num_dimensions;
+        }
+
+        double *get_parameters()
+        {
+            return m_parameters;
+        }
+
+        unsigned int get_num_parameters()
+        {
+            return m_num_parameters;
         }
 
         void reset_particle_position(
@@ -66,11 +78,9 @@ class Wavefunction
                 double step, unsigned int particle_index,
                 unsigned int coordinate);
 
-        double *get_parameters() {return m_parameters;};
-        unsigned int get_num_parameters() {return m_num_parameters;};
-
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
         virtual double compute_drift_force_component(double coordinate) = 0;
-        virtual double compute_laplacian_alpha_derivative() = 0;
+        virtual std::valarray<double> compute_laplacian_variational_gradient()
+            = 0;
 };

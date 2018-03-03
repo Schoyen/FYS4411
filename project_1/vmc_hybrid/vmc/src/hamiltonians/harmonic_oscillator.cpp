@@ -1,4 +1,5 @@
 #include <cassert>
+#include <valarray>
 
 #include "hamiltonian.h"
 #include "harmonic_oscillator.h"
@@ -35,13 +36,14 @@ double HarmonicOscillator::compute_potential_energy(Wavefunction *wavefunction)
     return potential_energy;
 }
 
-double HarmonicOscillator::compute_local_energy_gradient(Wavefunction *wavefunction)
+std::valarray<double> HarmonicOscillator::compute_local_energy_gradient(
+        Wavefunction *wavefunction)
 {
-    double local_energy_gradient;
+    std::valarray<double> local_energy_gradient;
 
     local_energy_gradient =
-        -SQUARE(HBAR)*wavefunction->compute_laplacian_alpha_derivative();
-    local_energy_gradient /= 2*m_mass;
+        wavefunction->compute_laplacian_variational_gradient();
+    local_energy_gradient *= -SQUARE(HBAR)/(2*m_mass);
 
     return local_energy_gradient;
 }

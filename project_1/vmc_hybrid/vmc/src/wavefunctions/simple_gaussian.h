@@ -1,5 +1,7 @@
 #pragma once
 
+#include <valarray>
+
 #include "wavefunction.h"
 
 class SimpleGaussian : public Wavefunction
@@ -20,5 +22,5 @@ class SimpleGaussian : public Wavefunction
         double evaluate();
         double compute_laplacian();
         double compute_drift_force_component(double coordinate);
-        double compute_laplacian_alpha_derivative();
+        std::valarray<double> compute_laplacian_variational_gradient();
 };

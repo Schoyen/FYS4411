@@ -1,5 +1,10 @@
 from libcpp cimport bool
 
+cdef extern from "<valarray>" namespace "std":
+    cdef cppclass valarray[T]:
+        T& operator[](int)
+        unsigned int size()
+
 cdef extern from "constants.h":
     cdef unsigned int HBAR
 
@@ -65,7 +70,7 @@ cdef extern from "sampler.h":
         double get_energy()
         double get_energy_squared()
         double get_ratio_of_accepted_steps()
-        double get_energy_gradient()
+        valarray[double] get_energy_gradient()
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
