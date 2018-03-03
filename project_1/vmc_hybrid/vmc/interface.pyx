@@ -127,8 +127,9 @@ cdef class PySampler:
             self.sampler.sample(num_thermalization_steps, step_length)
 
         self.sampler.sample(num_samples, step_length)
-    
+
     def get_energy_gradient(self):
+        # TODO: This should return a numpy array
         return self.sampler.get_energy_gradient()
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):

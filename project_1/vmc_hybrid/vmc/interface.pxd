@@ -37,7 +37,7 @@ cdef extern from "simple_gaussian_numerical.h":
 
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
-        pass    
+        pass
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
