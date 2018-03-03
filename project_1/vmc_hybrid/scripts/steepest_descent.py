@@ -45,9 +45,9 @@ for i in range(1, experiments + 1):
     sampler.sample(num_samples, step_length, num_thermalization_steps)
     gradient += sampler.get_energy_gradient()
     wavefunction.redistribute()
-    print ("Intermediate gradient: {0:f}".format(gradient/i))
+    print ("Intermediate gradient: {0}".format(gradient/i))
 
-print ("Final gradient: {0:f}".format(gradient/experiments))
+print ("Final gradient: {0}".format(gradient/experiments))
 __import__('sys').exit()
 
 alphas = np.linspace(0.1, 1.1, 11)
