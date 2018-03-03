@@ -1,6 +1,9 @@
 #pragma once
 
 #include <valarray>
+#include <cmath>
+
+#include "math_macros.h"
 
 class Wavefunction
 {
@@ -13,6 +16,8 @@ class Wavefunction
          * particle movement */
         bool m_valid_position_squared_sum;
         double m_last_position_squared_sum;
+
+        double m_hard_sphere_radius = 0.0;
 
         double *m_parameters;
 
@@ -39,6 +44,11 @@ class Wavefunction
 
         double compute_position_squared_sum();
 
+        unsigned int get_num_particles()
+        {
+            return m_num_particles;
+        }
+
         unsigned int get_num_dimensions()
         {
             return m_num_dimensions;
@@ -52,6 +62,11 @@ class Wavefunction
         unsigned int get_num_parameters()
         {
             return m_num_parameters;
+        }
+
+        double get_hard_sphere_radius()
+        {
+            return m_hard_sphere_radius;
         }
 
         void reset_particle_position(
