@@ -39,7 +39,8 @@ double HarmonicOscillator::compute_local_energy_gradient(Wavefunction *wavefunct
 {
     double local_energy_gradient;
 
-    local_energy_gradient = -SQUARE(HBAR)*wavefunction->compute_laplacian_alpha_derivative();
+    local_energy_gradient =
+        -SQUARE(HBAR)*wavefunction->compute_laplacian_alpha_derivative();
     local_energy_gradient /= 2*m_mass;
 
     return local_energy_gradient;

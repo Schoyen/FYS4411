@@ -51,6 +51,10 @@ void Sampler::sample(unsigned int num_samples, double step_length)
         m_energy += current_local_energy;
         /* Add local energy squared */
         m_energy_squared += SQUARE(current_local_energy);
+        /* Add local energy gradient */
+        /* TODO: Should be a vector */
+        m_energy_gradient +=
+            m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
 
         /* Check if we should sample the local energies and if we are at the
          * correct iteration */
@@ -60,16 +64,8 @@ void Sampler::sample(unsigned int num_samples, double step_length)
         }
     }
 
-    /* Normalize accumulated energy and energy squared */
+    /* Normalize accumulated energy, energy squared and energy gradient */
     normalize_energies();
     /* Compute the variance */
     m_variance = m_energy_squared - SQUARE(m_energy);
-}
-
-double Sampler::get_energy_gradient()
-{
-    // Not done. Must sum up all particles.
-    // Never mind. Already done in Wavefunction:.compute_position_squared_sum()
-    // Consider moving to header file only
-    return m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
 }
