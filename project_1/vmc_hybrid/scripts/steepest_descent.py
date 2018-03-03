@@ -17,11 +17,11 @@ from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, PyImportanceMe
 from matplotlib import pyplot as plt
 import numpy as np
 
-num_particles = 10
+num_particles = 20
 num_dimensions = 1
 num_parameters = 1
 spread = 1.0
-step_length = 0.05
+step_length = 0.01
 num_samples = int(1e6)
 num_thermalization_steps = int(1e6)
 
