@@ -89,6 +89,22 @@ class Wavefunction
             }
         }
 
+        double get_distance_between_particles(unsigned int i, unsigned int j)
+        {
+            double distance;
+            unsigned int k;
+
+            distance = 0.0;
+
+            for (k = 0; k < m_num_dimensions; k++) {
+                distance += SQUARE(
+                        (m_particles[k + i*m_num_dimensions]
+                         - m_particles[k + j*m_num_dimensions]));
+            }
+
+            return sqrt(distance);
+        }
+
         void move_particle(
                 double step, unsigned int particle_index,
                 unsigned int coordinate);
