@@ -7,6 +7,9 @@
 *.out
 *.bib
 
+# Avoid ignoring reference bibliography
+!references.bib
+
 # Jupyter notebook intermediate files
 .ipynb_checkpoints
 
