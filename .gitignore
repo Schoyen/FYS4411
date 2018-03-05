@@ -6,6 +6,8 @@
 *.log
 *.out
 *.bib
+*.bbl
+*.blg
 
 # Avoid ignoring reference bibliography
 !references.bib
