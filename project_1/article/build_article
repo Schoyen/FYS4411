@@ -1,4 +1,6 @@
 #!/bin/bash
 
 lualatex article.tex
+bibtex article
+lualatex article.tex
 lualatex article.tex
