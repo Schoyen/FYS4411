@@ -18,6 +18,8 @@ class Wavefunction
         double m_last_position_squared_sum;
 
         double m_hard_sphere_radius = 0.0;
+        double m_mass;
+        double m_omega;
 
         double *m_parameters;
 
@@ -38,6 +40,8 @@ class Wavefunction
                 unsigned int num_particles,
                 unsigned int num_dimensions,
                 unsigned int num_parameters,
+                double mass,
+                double omega,
                 double *parameters,
                 double *particles);
 
@@ -67,6 +71,16 @@ class Wavefunction
         double get_hard_sphere_radius()
         {
             return m_hard_sphere_radius;
+        }
+
+        double get_mass()
+        {
+            return m_mass;
+        }
+
+        double get_frequency()
+        {
+            return m_omega;
         }
 
         void reset_particle_position(

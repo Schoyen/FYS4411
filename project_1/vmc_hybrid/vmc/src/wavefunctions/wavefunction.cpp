@@ -5,6 +5,8 @@ Wavefunction::Wavefunction(
         unsigned int num_particles,
         unsigned int num_dimensions,
         unsigned int num_parameters,
+        double mass,
+        double omega,
         double *parameters,
         double *particles)
 {
@@ -14,6 +16,9 @@ Wavefunction::Wavefunction(
 
     m_parameters = parameters;
     m_particles = particles;
+
+    m_mass = mass;
+    m_omega = omega;
 
     m_valid_position_squared_sum = false;
     compute_position_squared_sum();

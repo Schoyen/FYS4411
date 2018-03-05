@@ -7,20 +7,13 @@
 #include "math_macros.h"
 #include "constants.h"
 
-HarmonicOscillator::HarmonicOscillator(double mass, double omega)
-{
-    assert(mass > 0);
-    assert(omega > 0);
-
-    m_mass = mass;
-    m_omega = omega;
-}
-
 double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)
 {
     double kinetic_energy, potential_energy;
 
-    kinetic_energy = -SQUARE(HBAR)*wavefunction->compute_laplacian()/(2*m_mass);
+    kinetic_energy = wavefunction->compute_laplacian();
+    kinetic_energy *= -SQUARE(HBAR)/(2*wavefunction->get_mass());
+
     potential_energy = compute_potential_energy(wavefunction);
 
     return kinetic_energy + potential_energy;
@@ -30,8 +23,9 @@ double HarmonicOscillator::compute_potential_energy(Wavefunction *wavefunction)
 {
     double potential_energy;
 
-    potential_energy = 0.5*m_mass*SQUARE(m_omega);
-    potential_energy *= wavefunction->compute_position_squared_sum();
+    potential_energy = wavefunction->compute_position_squared_sum();
+    potential_energy *= 0.5*wavefunction->get_mass();
+    potential_energy *= SQUARE((wavefunction->get_frequency()));
 
     return potential_energy;
 }
@@ -43,7 +37,7 @@ std::valarray<double> HarmonicOscillator::compute_local_energy_gradient(
 
     local_energy_gradient =
         wavefunction->compute_laplacian_variational_gradient();
-    local_energy_gradient *= -SQUARE(HBAR)/(2*m_mass);
+    local_energy_gradient *= -SQUARE(HBAR)/(2*wavefunction->get_mass());
 
     return local_energy_gradient;
 }

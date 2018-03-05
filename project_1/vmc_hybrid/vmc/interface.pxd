@@ -10,12 +10,7 @@ cdef extern from "constants.h":
 
 cdef extern from "wavefunction.h":
     cdef cppclass Wavefunction:
-        Wavefunction(
-                unsigned int num_dimensions,
-                unsigned int num_dimensions,
-                unsigned int num_parameters,
-                double *parameters,
-                double *particles) except +
+        pass
 
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):
@@ -46,7 +41,7 @@ cdef extern from "hamiltonian.h":
 
 cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
-        HarmonicOscillator(double mass, double omega) except +
+        pass
 
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:

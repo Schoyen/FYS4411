@@ -32,7 +32,7 @@ num_local_energies = 100
 stride_local_energies = num_samples // num_local_energies
 
 
-hamiltonian = PyHarmonicOscillator(mass, omega)
+hamiltonian = PyHarmonicOscillator()
 wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, mass, omega)
 solver = PyImportanceMetropolis(num_particles)
 sampler = PySampler(wavefunction, hamiltonian, solver, num_local_energies, stride_local_energies)

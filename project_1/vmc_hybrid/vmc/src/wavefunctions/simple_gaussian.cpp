@@ -6,24 +6,7 @@
 #include "math_macros.h"
 #include "constants.h"
 
-SimpleGaussian::SimpleGaussian(
-        unsigned int num_particles,
-        unsigned int num_dimensions,
-        unsigned int num_parameters,
-        double mass,
-        double omega,
-        double *parameters,
-        double *particles) :
-    Wavefunction(
-            num_particles,
-            num_dimensions,
-            num_parameters,
-            parameters,
-            particles)
-{
-    m_mass = mass;
-    m_omega = omega;
-}
+
 
 double SimpleGaussian::compute_laplacian()
 {
