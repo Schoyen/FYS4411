@@ -95,7 +95,10 @@ cdef class PySampler:
             PyMonteCarloMethod solver, unsigned int num_local_energies,
             unsigned int stride_local_energies):
 
-        self.local_energies = np.zeros(num_local_energies)
+        if num_local_energies > 0:
+            self.local_energies = np.zeros(num_local_energies)
+        else:
+            self.local_energies = np.zeros(1)
 
         self.sampler = new Sampler(
                 wavefunction.wavefunction,
