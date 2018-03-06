@@ -10,8 +10,13 @@ class InteractingEllipticalGaussian : public Wavefunction
         double m_beta;
 
         double evaluate_single_particle_function(unsigned int p_i);
+        std::valarray<double> compute_gradient_single_particle_function(
+                unsigned int p_k);
+        double compute_laplacian_single_particle_function(unsigned int p_k);
+
         double evaluate_correlation_wavefunction(
                 unsigned int p_i, unsigned int p_j);
+        double compute_laplacian(unsigned int p_k);
 
     public:
         InteractingEllipticalGaussian(

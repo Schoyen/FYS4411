@@ -64,6 +64,49 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
     return exp(-(alpha*HBAR/(m_mass*m_omega))*position_sum);
 }
 
+std::valarray<double>
+InteractingEllipticalGaussian::compute_gradient_single_particle_function(
+        unsigned int p_k)
+{
+    std::valarray<double> gradient(m_num_dimensions);
+    double alpha, *position;
+    unsigned int i;
+
+    alpha = m_parameters[0];
+
+    position = &m_particles[p_k*m_num_dimensions];
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        gradient[i] = (i != 2) ? position[i] : (m_beta*position[i]);
+    }
+
+    return -2*alpha*gradient
+}
+
+double
+InteractingEllipticalGaussian::compute_laplacian_single_particle_function(
+        unsigned int p_k)
+{
+    double alpha, *position, position_sum, laplacian;
+    unsigned int i;
+
+    alpha = m_parameters[0];
+
+    position = &m_particles[p_k*m_num_dimensions];
+
+    position_sum = 0;
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        position_sum +=
+            (i != 2) ? SQUARE(position[i]) : SQUARE(m_beta*position[i]);
+    }
+
+    laplacian = -2*alpha*(m_num_dimensions - 1 + m_beta);
+    laplacian += 4*SQUARE(alpha)*position_sum;
+
+    return laplacian;
+}
+
 double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
         unsigned int p_i, unsigned int p_j)
 {
@@ -81,6 +124,11 @@ double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
 }
 
 double InteractingEllipticalGaussian::compute_laplacian()
+{
+    return 0.0;
+}
+
+double InteractingEllipticalGaussian::compute_laplacian(unsigned int p_k)
 {
     return 0.0;
 }
