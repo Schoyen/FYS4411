@@ -6,7 +6,6 @@
 SimpleGaussianNumerical::SimpleGaussianNumerical(
         unsigned int num_particles,
         unsigned int num_dimensions,
-        unsigned int num_parameters,
         double mass,
         double omega,
         double h,
@@ -15,7 +14,6 @@ SimpleGaussianNumerical::SimpleGaussianNumerical(
     SimpleGaussian(
             num_particles,
             num_dimensions,
-            num_parameters,
             mass,
             omega,
             parameters,

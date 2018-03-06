@@ -7,6 +7,23 @@
 #include "constants.h"
 
 
+SimpleGaussian::SimpleGaussian(
+        unsigned int num_particles,
+        unsigned int num_dimensions,
+        double mass,
+        double omega,
+        double *parameters,
+        double *particles) :
+    Wavefunction(
+            num_particles,
+            num_dimensions,
+            1, // num_parameters
+            mass,
+            omega,
+            parameters,
+            particles)
+{
+}
 
 double SimpleGaussian::compute_laplacian()
 {

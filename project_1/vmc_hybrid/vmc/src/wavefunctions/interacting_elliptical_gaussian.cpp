@@ -9,7 +9,6 @@
 InteractingEllipticalGaussian::InteractingEllipticalGaussian(
         unsigned int num_particles,
         unsigned int num_dimensions,
-        unsigned int num_parameters,
         double mass,
         double omega,
         double beta,
@@ -18,7 +17,7 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
     Wavefunction(
             num_particles,
             num_dimensions,
-            num_parameters,
+            1, //num_parameters
             mass,
             omega,
             parameters,
