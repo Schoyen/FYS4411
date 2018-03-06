@@ -9,8 +9,9 @@ class InteractingEllipticalGaussian : public Wavefunction
     private:
         double m_beta;
 
-        double evaluate_single_particle_function(unsigned int i);
-        double correlation_wavefunction(unsigned int i, unsigned int j);
+        double evaluate_single_particle_function(unsigned int p_i);
+        double evaluate_correlation_wavefunction(
+                unsigned int p_i, unsigned int p_j);
 
     public:
         InteractingEllipticalGaussian(

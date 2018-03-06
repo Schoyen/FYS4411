@@ -3,6 +3,8 @@
 
 #include "wavefunction.h"
 #include "interacting_elliptical_gaussian.h"
+#include "math_macros.h"
+#include "constants.h"
 
 InteractingEllipticalGaussian::InteractingEllipticalGaussian(
         unsigned int num_particles,
@@ -27,18 +29,30 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
 
 double InteractingEllipticalGaussian::evaluate()
 {
-    return 0.0;
+    double product;
+    unsigned int i, j;
+
+    product = 1.0;
+
+    for (i = 0; i < m_num_particles; i++) {
+        product *= evaluate_single_particle_function(i);
+        for (j = i + 1; j < m_num_particles; j++) {
+            product *= evaluate_correlation_wavefunction(i, j);
+        }
+    }
+
+    return product;
 }
 
 double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
-        unsigned int i)
+        unsigned int p_i)
 {
-    double alpha, phi, position_sum, *position;
+    double alpha, position_sum, *position;
     unsigned int i;
 
     alpha = m_parameters[0];
 
-    position = &m_particles[i*m_num_dimensions];
+    position = &m_particles[p_i*m_num_dimensions];
 
     position_sum = 0;
 
@@ -50,14 +64,14 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
     return exp(-(alpha*HBAR/(m_mass*m_omega))*position_sum);
 }
 
-double InteractingEllipticalGaussian::correlation_wavefunction(
-        unsigned int i, unsigned int j)
+double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
+        unsigned int p_i, unsigned int p_j)
 {
     double a, distance;
 
     a = m_hard_sphere_radius;
 
-    distance = get_distance_between_particles(i, j);
+    distance = get_distance_between_particles(p_i, p_j);
 
     if (distance <= a) {
         return 0.0;
