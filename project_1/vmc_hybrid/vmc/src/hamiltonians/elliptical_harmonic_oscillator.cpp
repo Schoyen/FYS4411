@@ -46,3 +46,15 @@ double EllipticalHarmonicOscillator::compute_potential_energy(
 
     return potential_energy;
 }
+
+std::valarray<double>
+EllipticalHarmonicOscillator::compute_local_energy_gradient(
+        Wavefunction *wavefunction)
+{
+    std::valarray<double> local_energy_gradient;
+
+    local_energy_gradient =
+        wavefunction->compute_laplacian_variational_gradient();
+
+    return local_energy_gradient;
+}
