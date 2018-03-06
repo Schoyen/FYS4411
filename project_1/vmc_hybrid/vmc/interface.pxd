@@ -35,6 +35,18 @@ cdef extern from "simple_gaussian_numerical.h":
                 double *parameters,
                 double *particles) except +
 
+cdef extern from "interacting_elliptical_gaussian.h":
+    cdef cppclass InteractingEllipticalGaussian(Wavefunction):
+        InteractingEllipticalGaussian(
+                unsigned int num_particles,
+                unsigned int num_dimensions,
+                unsigned int num_parameters,
+                double mass,
+                double omega,
+                double beta,
+                double *parameters,
+                double *particles) except +
+
 cdef extern from "hamiltonian.h":
     cdef cppclass Hamiltonian:
         pass
