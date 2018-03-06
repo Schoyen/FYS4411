@@ -27,20 +27,17 @@ double EllipticalHarmonicOscillator::compute_potential_energy(
         Wavefunction *wavefunction)
 {
     double potential_energy, position[wavefunction->get_num_dimensions()],
-        position_sum, beta;
+        position_sum;
     unsigned int i, p_k;
 
     position_sum = 0;
-
-    beta =
-        dynamic_cast<InteractingEllipticalGaussian *>(wavefunction)->get_beta();
 
     for (p_k = 0; p_k < wavefunction->get_num_particles(); p_k++) {
         wavefunction->copy_particle_position(position, p_k);
 
         for (i = 0; i < wavefunction->get_num_dimensions(); i++) {
             position_sum +=
-                (i != 2) ? SQUARE(position[i]) : SQUARE(position[i]*beta);
+                (i != 2) ? SQUARE(position[i]) : SQUARE(position[i]*m_lambda);
         }
     }
 
