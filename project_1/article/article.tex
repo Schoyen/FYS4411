@@ -557,6 +557,64 @@
     expressions. For brevity, we will not write out the explicit expressions as
     these will be called by separated functions in our programs.
 
+    \subsection{Scaling the system}
+        We now introduce a scaled distance $\vf{r}' = \vf{r}/a_{\text{ho}}$
+        \cite{dubois2001bose}, where
+        \begin{align}
+            a_{\text{ho}}
+            &=
+            \sqrt{\frac{\hbar}{m\omega}}.
+        \end{align}
+        We can then rewrite the Hamiltonian for the elliptic potential in terms
+        of this new distance. By doing a variable substitution for each
+        direction in the Laplace operator we get
+        \begin{align}
+            \nabla_k^2
+            &=
+            \frac{1}{a_{\text{ho}}^2}{\nabla_k'}^2.
+        \end{align}
+
+        Looking at the one-body part of the Hamiltonian we get
+        \begin{align}
+            H
+            &=
+            \sum_{k = 1}^N
+            \brac{
+                -\frac{\hbar^2}{2m}\nabla_k^2
+                + \half m\brak{
+                    \omega^2(x_k^2 + y_k^2)
+                    + \omega_z^2 z_k^2
+                }
+            }
+            \\
+            &=
+            \frac{\hbar\omega}{2}
+            \sum_{k = 1}^N
+            \brac{
+                -{\nabla_k'}^2
+                +
+                \brak{
+                    {x_k'}^2 + {y_k'}^2 + \lambda^2{z_k'}^2
+                }
+            },
+        \end{align}
+        where we have introduced the dimensionless frequency $\lambda =
+        \omega_z/\omega$. The single particle functions also gets a scaling
+        factor
+        \begin{align}
+            \phi_k
+            &=
+            \exp\brak{
+                -\frac{\alpha\hbar}{m\omega}
+                ({x_k'}^2 + {y_k'}^2 + \beta^2{z_k'}^2)
+            }
+            \equiv
+            \phi(\vf{r}_k').
+        \end{align}
+        The correlation wavefunction and the interaction potential remain the
+        same, but using the scaled hard core sphere radius $a/a_{\text{ho}} =
+        0.0043$. For brevity we will remove the ticks on the variables.
+
 
 \section{Algorithms}
     In the project we rely on a Monte Carlo approach of random sampling to
