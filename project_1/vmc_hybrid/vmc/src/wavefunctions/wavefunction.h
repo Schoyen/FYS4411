@@ -94,26 +94,27 @@ class Wavefunction
         }
 
         void copy_particle_position(
-                double position[], unsigned int particle_index)
+                double position[], unsigned int p_k)
         {
             unsigned int i;
 
             for (i = 0; i < m_num_dimensions; i++) {
-                position[i] = m_particles[i + particle_index*m_num_dimensions];
+                position[i] = m_particles[i + p_k*m_num_dimensions];
             }
         }
 
-        double get_distance_between_particles(unsigned int i, unsigned int j)
+        double get_distance_between_particles(
+                unsigned int p_i, unsigned int p_j)
         {
             double distance;
-            unsigned int k;
+            unsigned int i;
 
             distance = 0.0;
 
-            for (k = 0; k < m_num_dimensions; k++) {
+            for (i = 0; i < m_num_dimensions; i++) {
                 distance += SQUARE(
-                        (m_particles[k + i*m_num_dimensions]
-                         - m_particles[k + j*m_num_dimensions]));
+                        (m_particles[i + p_i*m_num_dimensions]
+                         - m_particles[i + p_j*m_num_dimensions]));
             }
 
             return sqrt(distance);

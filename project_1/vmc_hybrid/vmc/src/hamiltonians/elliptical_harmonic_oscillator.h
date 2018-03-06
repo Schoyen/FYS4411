@@ -4,14 +4,16 @@
 
 #include "hamiltonian.h"
 #include "wavefunction.h"
+#include "interacting_elliptical_gaussian.h"
 
-class HarmonicOscillator : public Hamiltonian
+class EllipticalHarmonicOscillator : public Hamiltonian
 {
+    private:
+        double m_lambda;
+
     public:
-        using Hamiltonian::Hamiltonian;
+        EllipticalHarmonicOscillator(double lambda);
 
         double compute_kinetic_energy(Wavefunction *wavefunction);
         double compute_potential_energy(Wavefunction *wavefunction);
-        std::valarray<double> compute_local_energy_gradient(
-                Wavefunction *wavefunction);
 };

@@ -7,16 +7,16 @@
 #include "math_macros.h"
 #include "constants.h"
 
-double HarmonicOscillator::compute_local_energy(Wavefunction *wavefunction)
+
+
+double HarmonicOscillator::compute_kinetic_energy(Wavefunction *wavefunction)
 {
-    double kinetic_energy, potential_energy;
+    double kinetic_energy;
 
     kinetic_energy = wavefunction->compute_laplacian();
     kinetic_energy *= -SQUARE(HBAR)/(2*wavefunction->get_mass());
 
-    potential_energy = compute_potential_energy(wavefunction);
-
-    return kinetic_energy + potential_energy;
+    return kinetic_energy;
 }
 
 double HarmonicOscillator::compute_potential_energy(Wavefunction *wavefunction)
