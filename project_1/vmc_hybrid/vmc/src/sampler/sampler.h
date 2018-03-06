@@ -19,7 +19,6 @@ class Sampler
         std::valarray<double> m_energy_gradient;
 
         unsigned int m_num_local_energies;
-        unsigned int m_stride_local_energies;
         double *m_local_energies;
 
         Wavefunction *m_wavefunction;
@@ -31,7 +30,6 @@ class Sampler
                 Hamiltonian *hamiltonian,
                 MonteCarloMethod *solver,
                 unsigned int num_local_energies,
-                unsigned int stride_local_energies,
                 double *local_energies);
 
         void initialize()

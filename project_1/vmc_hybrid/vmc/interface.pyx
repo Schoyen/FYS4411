@@ -92,8 +92,7 @@ cdef class PySampler:
     cdef double[::1] local_energies
 
     def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
-            PyMonteCarloMethod solver, unsigned int num_local_energies,
-            unsigned int stride_local_energies):
+            PyMonteCarloMethod solver, unsigned int num_local_energies):
 
         if num_local_energies > 0:
             self.local_energies = np.zeros(num_local_energies)
@@ -105,7 +104,6 @@ cdef class PySampler:
                 hamiltonian.hamiltonian,
                 solver.method,
                 num_local_energies,
-                stride_local_energies,
                 &self.local_energies[0])
 
     def get_local_energies(self):

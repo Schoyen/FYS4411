@@ -57,7 +57,6 @@ cdef extern from "sampler.h":
                 Hamiltonian *hamiltonian,
                 MonteCarloMethod *solver,
                 unsigned int num_local_energies,
-                unsigned int stride_local_energies,
                 double *local_energies) except +
 
         void sample(unsigned int num_samples, double step_length)
