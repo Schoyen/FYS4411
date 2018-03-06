@@ -2,9 +2,10 @@
 
 #include <valarray>
 
+#include "hamiltonian.h"
 #include "wavefunction.h"
 
-class EllipticalHarmonicOscillator
+class EllipticalHarmonicOscillator : public Hamiltonian
 {
     private:
         double m_lambda;
@@ -16,4 +17,4 @@ class EllipticalHarmonicOscillator
         double compute_potential_energy(Wavefunction *wavefunction);
         std::valarray<double> compute_local_energy_gradient(
                 Wavefunction *wavefunction);
-}
+};
