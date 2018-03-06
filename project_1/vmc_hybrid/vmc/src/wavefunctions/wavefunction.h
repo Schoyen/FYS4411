@@ -94,12 +94,12 @@ class Wavefunction
         }
 
         void copy_particle_position(
-                double position[], unsigned int particle_index)
+                double position[], unsigned int p_k)
         {
             unsigned int i;
 
             for (i = 0; i < m_num_dimensions; i++) {
-                position[i] = m_particles[i + particle_index*m_num_dimensions];
+                position[i] = m_particles[i + p_k*m_num_dimensions];
             }
         }
 
