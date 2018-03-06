@@ -16,6 +16,10 @@ class InteractingEllipticalGaussian : public Wavefunction
 
         double evaluate_correlation_wavefunction(
                 unsigned int p_i, unsigned int p_j);
+        std::valarray<double> compute_gradient_correlation_wavefunction(
+                unsigned int p_k);
+        double compute_laplacian_correlation_wavefunction(unsigned int p_k);
+
         double compute_laplacian(unsigned int p_k);
 
     public:

@@ -80,7 +80,7 @@ InteractingEllipticalGaussian::compute_gradient_single_particle_function(
         gradient[i] = (i != 2) ? position[i] : (m_beta*position[i]);
     }
 
-    return -2*alpha*gradient
+    return -2*alpha*gradient;
 }
 
 double
@@ -123,19 +123,97 @@ double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
     return 1.0 - a/distance;
 }
 
-double InteractingEllipticalGaussian::compute_laplacian()
+std::valarray<double>
+InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
+        unsigned int p_k)
 {
-    return 0.0;
+    std::valarray<double> gradient(m_num_dimensions);
+    double a, *r_k, *r_m, r_km;
+    unsigned int p_m, i;
+
+    a = m_hard_sphere_radius;
+
+    r_k = &m_particles[p_k*m_num_dimensions];
+
+    gradient = 0;
+
+    for (p_m = 0; p_m < m_num_particles; p_m++) {
+        if (p_m == p_k) {
+            continue;
+        }
+
+        r_m = &m_particles[p_m*m_num_dimensions];
+        r_km = get_distance_between_particles(p_k, p_m);
+
+        for (i = 0; i < m_num_dimensions; i++) {
+            gradient[i] += (r_k[i] - r_m[i])*a/(SQUARE(r_km)*(r_km - a));
+        }
+    }
+
+    return gradient;
+}
+
+double
+InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
+        unsigned int p_k)
+{
+    double a, *r_k, *r_m, r_km, laplacian;
+    unsigned int p_m;
+
+    a = m_hard_sphere_radius;
+
+    r_k = &m_particles[p_k*m_num_dimensions];
+
+    laplacian = 0;
+
+    for (p_m = 0; p_m < m_num_particles; p_m++) {
+        if (p_m == p_k) {
+            continue;
+        }
+
+        r_m = &m_particles[p_m*m_num_dimensions];
+        r_km = get_distance_between_particles(p_k, p_m);
+
+        laplacian += (m_num_dimensions - 1)*a/(SQUARE(r_km)*(r_km - a));
+        laplacian += (SQUARE(a) - 2*a*r_km)/(SQUARE(r_km)*SQUARE((r_km - a)));
+    }
+
+    return laplacian;
 }
 
 double InteractingEllipticalGaussian::compute_laplacian(unsigned int p_k)
 {
-    return 0.0;
+    double laplacian;
+    std::valarray<double> gradient_1, gradient_2;
+    unsigned int i;
+
+    laplacian = compute_laplacian_single_particle_function(p_k);
+
+    gradient_1 = compute_gradient_single_particle_function(p_k);
+    gradient_2 = compute_gradient_correlation_wavefunction(p_k);
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        laplacian += 2*gradient_1[i]*gradient_2[i];
+        laplacian += SQUARE(gradient_2[i]);
+    }
+
+    laplacian += compute_laplacian_correlation_wavefunction(p_k);
+
+    return laplacian;
 }
 
-double InteractingEllipticalGaussian::compute_interaction()
+double InteractingEllipticalGaussian::compute_laplacian()
 {
-    return 0.0;
+    unsigned int p_k;
+    double laplacian;
+
+    laplacian = 0;
+
+    for (p_k = 0; p_k < m_num_particles; p_k++) {
+        laplacian += compute_laplacian(p_k);
+    }
+
+    return laplacian;
 }
 
 double InteractingEllipticalGaussian::compute_drift_force_component(
