@@ -157,12 +157,10 @@ double
 InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
         unsigned int p_k)
 {
-    double a, *r_k, *r_m, r_km, laplacian;
+    double a, r_km, laplacian;
     unsigned int p_m;
 
     a = m_hard_sphere_radius;
-
-    r_k = &m_particles[p_k*m_num_dimensions];
 
     laplacian = 0;
 
@@ -171,7 +169,6 @@ InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
             continue;
         }
 
-        r_m = &m_particles[p_m*m_num_dimensions];
         r_km = get_distance_between_particles(p_k, p_m);
 
         laplacian += (m_num_dimensions - 1)*a/(SQUARE(r_km)*(r_km - a));
