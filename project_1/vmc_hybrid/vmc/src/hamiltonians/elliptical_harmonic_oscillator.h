@@ -1,5 +1,7 @@
 #pragma once
 
+#include <valarray>
+
 #include "wavefunction.h"
 
 class EllipticalHarmonicOscillator
