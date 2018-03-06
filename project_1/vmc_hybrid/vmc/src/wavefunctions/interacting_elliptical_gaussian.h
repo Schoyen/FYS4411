@@ -36,7 +36,6 @@ class InteractingEllipticalGaussian : public Wavefunction
 
         double evaluate();
         double compute_laplacian();
-        double compute_interaction();
         double compute_drift_force_component(double coordinate);
         std::valarray<double> compute_laplacian_variational_gradient();
 };
