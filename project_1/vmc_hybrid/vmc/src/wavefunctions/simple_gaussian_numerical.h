@@ -12,7 +12,6 @@ class SimpleGaussianNumerical : public SimpleGaussian
         SimpleGaussianNumerical(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
-                unsigned int num_parameters,
                 double mass,
                 double omega,
                 double h,

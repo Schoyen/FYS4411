@@ -17,7 +17,6 @@ cdef extern from "simple_gaussian.h":
         SimpleGaussian(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
-                unsigned int num_parameters,
                 double mass,
                 double omega,
                 double *parameters,
@@ -28,7 +27,6 @@ cdef extern from "simple_gaussian_numerical.h":
         SimpleGaussianNumerical(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
-                unsigned int num_parameters,
                 double mass,
                 double omega,
                 double h,
@@ -40,7 +38,6 @@ cdef extern from "interacting_elliptical_gaussian.h":
         InteractingEllipticalGaussian(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
-                unsigned int num_parameters,
                 double mass,
                 double omega,
                 double beta,

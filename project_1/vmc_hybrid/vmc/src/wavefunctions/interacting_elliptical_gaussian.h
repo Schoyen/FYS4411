@@ -26,7 +26,6 @@ class InteractingEllipticalGaussian : public Wavefunction
         InteractingEllipticalGaussian(
                 unsigned int num_particles,
                 unsigned int num_dimensions,
-                unsigned int num_parameters,
                 double mass,
                 double omega,
                 double beta,
