@@ -95,6 +95,11 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
     def __cinit__(self):
         self.hamiltonian = new HarmonicOscillator()
 
+cdef class PyEllipticalHarmonicOscillator(PyHamiltonian):
+
+    def __cinit__(self, double _lambda):
+        self.hamiltonian = new EllipticalHarmonicOscillator(_lambda)
+
 cdef class PyMonteCarloMethod:
     cdef MonteCarloMethod *method
 
