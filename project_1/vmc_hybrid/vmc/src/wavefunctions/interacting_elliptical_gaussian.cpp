@@ -30,14 +30,14 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
 double InteractingEllipticalGaussian::evaluate()
 {
     double product;
-    unsigned int i, j;
+    unsigned int p_i, p_j;
 
     product = 1.0;
 
-    for (i = 0; i < m_num_particles; i++) {
-        product *= evaluate_single_particle_function(i);
-        for (j = i + 1; j < m_num_particles; j++) {
-            product *= evaluate_correlation_wavefunction(i, j);
+    for (p_i = 0; p_i < m_num_particles; p_i++) {
+        product *= evaluate_single_particle_function(p_i);
+        for (p_j = p_i + 1; p_j < m_num_particles; p_j++) {
+            product *= evaluate_correlation_wavefunction(p_i, p_j);
         }
     }
 
