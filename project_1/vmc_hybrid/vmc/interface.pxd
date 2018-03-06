@@ -55,6 +55,10 @@ cdef extern from "harmonic_oscillator.h":
     cdef cppclass HarmonicOscillator(Hamiltonian):
         pass
 
+cdef extern from "elliptical_harmonic_oscillator.h":
+    cdef cppclass EllipticalHarmonicOscillator(Hamiltonian):
+        EllipticalHarmonicOscillator(double lambda) except +
+
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
         MonteCarloMethod(unsigned int num_particles) except +
