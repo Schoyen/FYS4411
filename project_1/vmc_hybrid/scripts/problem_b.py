@@ -38,7 +38,7 @@ num_alphas = 11
 alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
 
 # Particle-, dimension- and parameter configuration
-num_particles  = [1, 10, 100, 500]
+num_particles  = [1, 10, 100]
 num_dimensions = [1, 2, 3]
 num_parameters = 1
 
@@ -62,7 +62,8 @@ for i in range(len(num_particles)):
         hamiltonian  = PyHarmonicOscillator()
         analytic_sampler  = PySampler(analytic_wfn, hamiltonian, solver, 0)
         numerical_sampler = PySampler(numerical_wfn,  hamiltonian, solver, 0)
-        num_samples = int(1200 * num_particles[i])
+        #num_samples = int(1200 * num_particles[i])
+        num_samples = 1000000
 
         # Iterating over alphas
         for k in range(num_alphas):
