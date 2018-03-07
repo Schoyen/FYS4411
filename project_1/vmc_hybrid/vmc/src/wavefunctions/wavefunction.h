@@ -12,11 +12,6 @@ class Wavefunction
         unsigned int m_num_dimensions;
         unsigned int m_num_parameters;
 
-        /* This allows us to compute the position squared once per change of
-         * particle movement */
-        bool m_valid_position_squared_sum;
-        double m_last_position_squared_sum;
-
         double m_hard_sphere_radius = 0.0;
         double m_mass;
         double m_omega;
