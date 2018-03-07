@@ -19,20 +19,12 @@ Wavefunction::Wavefunction(
 
     m_mass = mass;
     m_omega = omega;
-
-    m_valid_position_squared_sum = false;
-    compute_position_squared_sum();
 }
 
 double Wavefunction::compute_position_squared_sum()
 {
     unsigned int i, j;
     double position_squared_sum;
-
-    /* Check if the last computed value is valid */
-    if (m_valid_position_squared_sum) {
-        return m_last_position_squared_sum;
-    }
 
     /* Initialize sum */
     position_squared_sum = 0.0;
@@ -44,13 +36,7 @@ double Wavefunction::compute_position_squared_sum()
         }
     }
 
-    /* Update the stored position sum squared */
-    m_last_position_squared_sum = position_squared_sum;
-    /* Update the validity of the squared sum */
-    m_valid_position_squared_sum = true;
-
-    /* Return the valid squared sum */
-    return m_last_position_squared_sum;
+    return position_squared_sum;
 }
 
 void Wavefunction::move_particle(
@@ -58,5 +44,4 @@ void Wavefunction::move_particle(
         unsigned int coordinate)
 {
     m_particles[coordinate + particle_index*m_num_dimensions] += step;
-    m_valid_position_squared_sum = false;
 }
