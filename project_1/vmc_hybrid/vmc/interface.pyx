@@ -136,8 +136,8 @@ cdef class PySampler:
     def get_energy_squared(self):
         return self.sampler.get_energy_squared()
 
-    def get_ratio_of_accepted_steps(self):
-        return self.sampler.get_ratio_of_accepted_steps()
+    def get_acceptance_ratio(self):
+        return self.sampler.get_acceptance_ratio()
 
     def sample(self, unsigned int num_samples, double step_length,
             unsigned int num_thermalization_steps=0):

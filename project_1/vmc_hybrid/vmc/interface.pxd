@@ -76,7 +76,7 @@ cdef extern from "sampler.h":
         double get_variance()
         double get_energy()
         double get_energy_squared()
-        double get_ratio_of_accepted_steps()
+        double get_acceptance_ratio()
         valarray[double] get_energy_gradient()
 
 cdef extern from "metropolis_algorithm.h":

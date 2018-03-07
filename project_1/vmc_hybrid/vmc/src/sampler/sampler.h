@@ -72,7 +72,7 @@ class Sampler
             return m_energy_squared;
         }
 
-        double get_ratio_of_accepted_steps()
+        double get_acceptance_ratio()
         {
             return ((double) m_num_accepted_steps)/((double) m_num_steps);
         }
