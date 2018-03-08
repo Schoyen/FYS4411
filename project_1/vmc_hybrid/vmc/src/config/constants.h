@@ -1,3 +1,3 @@
 #pragma once
 
-#define HBAR 1
+#define HBAR ((double) 1)

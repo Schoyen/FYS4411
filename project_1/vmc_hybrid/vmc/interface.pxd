@@ -6,7 +6,7 @@ cdef extern from "<valarray>" namespace "std":
         unsigned int size()
 
 cdef extern from "constants.h":
-    cdef unsigned int HBAR
+    cdef double HBAR
 
 cdef extern from "wavefunction.h":
     cdef cppclass Wavefunction:
