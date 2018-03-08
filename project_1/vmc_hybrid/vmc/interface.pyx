@@ -112,12 +112,13 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
     def __cinit__(self):
         self.hamiltonian = new HarmonicOscillator()
 
-    def compute_exact_energy(self, PyWavefunction wavefunction, alphas=None):
-        cdef double alpha, mass, omega
+    def compute_exact_energy(self, PyWavefunction wavefunction, alphas=[]):
+        cdef double mass, omega
         cdef unsigned int num_dimensions, num_particles
+        cdef np.ndarray[double, ndim=1, mode="c"] alpha
 
-        if alphas == None:
-            alpha = wavefunction.get_parameters()[0]
+        if len(alphas) == 0:
+            alpha = wavefunction.get_parameters()
         else:
             alpha = alphas
 
