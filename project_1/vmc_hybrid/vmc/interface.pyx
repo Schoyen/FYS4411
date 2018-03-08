@@ -112,6 +112,25 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
     def __cinit__(self):
         self.hamiltonian = new HarmonicOscillator()
 
+    def compute_exact_energy(self, PyWavefunction wavefunction, alphas=None):
+        cdef double alpha, mass, omega
+        cdef unsigned int num_dimensions, num_particles
+
+        if alphas == None:
+            alpha = wavefunction.get_parameters()[0]
+        else:
+            alpha = alphas
+
+        mass = wavefunction.get_mass()
+        omega = wavefunction.get_frequency()
+        num_dimensions = wavefunction.get_num_dimensions()
+        num_particles = wavefunction.get_num_particles()
+
+        energy = HBAR**2*alpha/(2.0*mass) + mass*omega**2/(8.0*alpha)
+        energy *= num_dimensions*num_particles
+
+        return energy
+
 cdef class PyEllipticalHarmonicOscillator(PyHamiltonian):
 
     def __cinit__(self, double _lambda):
