@@ -47,16 +47,5 @@ Installation can then be performed by executing
 pip install . --upgrade --install-options="--prefix=$HOME/build"
 ```
 
-## To be implemented
-
-Below follows a list of things that needs to be implemented/tested.
-
-1. Implement the Metropolis sampling function in `src/metropolis_sampling.c`.
-2. Add bosonic hard sphere wavefunction, variational parameters, local energy
-   and ratio functions in `src/bosonic_hard_sphere.c`.
-3. Test the implementation for the simple one-dimensional system described in
-   Thijssen.
-4. Use `valgrind` to locate memory leaks.
-
 ## Implementation tests
 We currently reproduce the results, i.e., the plots, from [these slides](https://www.acsu.buffalo.edu/~phygons/cp2/topic5/topic5-lec1.pdf).
