@@ -27,7 +27,7 @@ omega = 1.0
 hbar  = 1.0
 
 # Initial distribution spread
-spread      = 0.1
+spread      = 0.1 # Unused !?!?!
 
 # Pretermined step particles (walkers) can move for each iteration
 step_length = 0.1 
@@ -60,8 +60,8 @@ for i in range(len(num_particles)):
 
         # Monte Carlo specific parameters
         solver = PyMetropolisAlgorithm(num_particles[i])
-        analytic_wfn  = PySimpleGaussian(num_particles[i], num_dimensions[j], num_parameters, mass, omega, spread=spread)
-        numerical_wfn = PySimpleGaussianNumerical(num_particles[i], num_dimensions[j], num_parameters, mass, omega, spread=spread)
+        analytic_wfn  = PySimpleGaussian(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
+        numerical_wfn = PySimpleGaussianNumerical(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
         hamiltonian  = PyHarmonicOscillator()
         analytic_sampler  = PySampler(analytic_wfn, hamiltonian, solver, 0)
         numerical_sampler = PySampler(numerical_wfn,  hamiltonian, solver, 0)
@@ -77,7 +77,7 @@ for i in range(len(num_particles)):
 
             # Sampling, analytic wavefunction
             analytic_start_time = time.time()
-            analytic_sampler.sample(num_samples, step_length, num_thermalization_steps=int(0.15*num_samples))
+            analytic_sampler.sample(num_samples=num_samples, step_length=step_length, num_thermalization_steps=int(0.15*num_samples))
             analytic_stop_time = time.time()
 
             # Storing analytic time, energy, variance, acceptance ratio
@@ -86,9 +86,9 @@ for i in range(len(num_particles)):
             variance_analytic[i, j, k] += analytic_sampler.get_variance()
             accept_analytic[i, j, k]   += analytic_sampler.get_acceptance_ratio()
              
-            # Sampling, numeric wavefunction
+            # Sampling, numerical wavefunction
             numerical_start_time = time.time()
-            numerical_sampler.sample(num_samples, step_length, num_thermalization_steps=int(0.15*num_samples))
+            numerical_sampler.sample(num_samples=num_samples, step_length=step_length, num_thermalization_steps=int(0.15*num_samples))
             numerical_stop_time = time.time()
 
             # Storing numerical time, energy, variance and acceptance ratio
