@@ -276,6 +276,7 @@
             - 2\alpha^2
         \biggr)
         \sum_{i = 1}^N r_i^2.
+        \label{eq:closed_form_natural_units_local_energy}
     \end{align}
     It is worth noting that for $\alpha = \half\omega$ ($\alpha$ is required to
     be positive) we will find a stable value which turns out to be the exact
@@ -807,7 +808,12 @@
 	Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
 	the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
 	harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every 
-	undergraduate physics student should be well aware of.}.
+	undergraduate physics student should be well aware of.}, which is further simplified by the "god-given" analytic
+	units (\autoref{eq:closed_form_natural_units_local_energy}). By insertion of the analytically optimal
+	
+	
+	We will start without importance sampling, that is by employing the simpler and more naïve "brute force" Monte Carlo
+	sampling. Moreover, we will 
 
 \bibliography{references}
 \end{document}
