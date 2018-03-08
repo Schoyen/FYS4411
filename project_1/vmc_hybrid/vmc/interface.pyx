@@ -53,6 +53,21 @@ cdef class PyWavefunction:
         for i in range(self.num_parameters):
             self.parameters[i] = parameters[i]
 
+    def get_mass(self):
+        return self.wavefunction.get_mass()
+
+    def get_frequency(self):
+        return self.wavefunction.get_frequency()
+
+    def get_num_particles(self):
+        return self.wavefunction.get_num_particles()
+
+    def get_num_dimensions(self):
+        return self.wavefunction.get_num_dimensions()
+
+    def get_parameters(self):
+        return np.asarray(self.parameters)
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,

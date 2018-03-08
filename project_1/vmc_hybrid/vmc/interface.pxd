@@ -10,7 +10,11 @@ cdef extern from "constants.h":
 
 cdef extern from "wavefunction.h":
     cdef cppclass Wavefunction:
-        pass
+        double get_mass()
+        double get_frequency()
+        unsigned int get_num_particles()
+        unsigned int get_num_dimensions()
+        double *get_parameters()
 
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):
