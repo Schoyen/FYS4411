@@ -51,5 +51,6 @@ extensions = [
 setup(
     name="Bosonic vmc",
     version="0.0.1",
+    packages=["vmc"],
     ext_modules=cythonize(extensions)
 )
