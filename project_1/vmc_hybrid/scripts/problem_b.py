@@ -33,12 +33,13 @@ spread      = 0.1 # Unused !?!?!
 step_length = 0.1 
 
 # Parameter space, variational parameter alpha (include alpha = 0.5)
-num_alphas = 11
-alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
+num_alphas = 1
+#alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
+alpha = np.array([0.5]).reshape(1,1)
 
 # Particle-, dimension- and parameter configuration
-num_particles  = [1, 10, 100]
-num_dimensions = [1, 2, 3]
+num_particles  = [1, 10, 100, 500]
+num_dimensions = [3]
 num_parameters = 1
 
 # Storage
@@ -101,6 +102,6 @@ for i in range(len(num_particles)):
             analytic_wfn.redistribute()
             numerical_wfn.redistribute()
 
-            print("Alpha = {:5.3f}, Analytic E = {:9.5f}, CPU Time: {:8.5f}, Numerical E = {:9.5f}, CPU Time: {:8.5f}"
-                    .format(alpha.ravel()[k], energies_analytic[i, j, k], cpu_time_analytic[i, j, k], energies_numerical[i, j, k], cpu_time_numerical[i, j, k]))
+            print("Alpha = {:5.3f}, Ana E = {:9.5f}, var = {:9.5f}, CPU Time: {:8.5f}, Num E = {:9.5f}, var = {:9.5f}, CPU Time: {:8.5f}"
+                    .format(alpha.ravel()[k], energies_analytic[i, j, k], variance_analytic[i, j, k], cpu_time_analytic[i, j, k], energies_numerical[i, j, k], variance_numerical[i, j, k], cpu_time_numerical[i, j, k]))
 
