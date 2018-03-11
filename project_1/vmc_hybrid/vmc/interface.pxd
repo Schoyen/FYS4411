@@ -6,11 +6,15 @@ cdef extern from "<valarray>" namespace "std":
         unsigned int size()
 
 cdef extern from "constants.h":
-    cdef unsigned int HBAR
+    cdef double HBAR
 
 cdef extern from "wavefunction.h":
     cdef cppclass Wavefunction:
-        pass
+        double get_mass()
+        double get_frequency()
+        unsigned int get_num_particles()
+        unsigned int get_num_dimensions()
+        double *get_parameters()
 
 cdef extern from "simple_gaussian.h":
     cdef cppclass SimpleGaussian(Wavefunction):

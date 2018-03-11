@@ -53,6 +53,21 @@ cdef class PyWavefunction:
         for i in range(self.num_parameters):
             self.parameters[i] = parameters[i]
 
+    def get_mass(self):
+        return self.wavefunction.get_mass()
+
+    def get_frequency(self):
+        return self.wavefunction.get_frequency()
+
+    def get_num_particles(self):
+        return self.wavefunction.get_num_particles()
+
+    def get_num_dimensions(self):
+        return self.wavefunction.get_num_dimensions()
+
+    def get_parameters(self):
+        return np.asarray(self.parameters)
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
@@ -96,6 +111,26 @@ cdef class PyHarmonicOscillator(PyHamiltonian):
 
     def __cinit__(self):
         self.hamiltonian = new HarmonicOscillator()
+
+    def compute_exact_energy(self, PyWavefunction wavefunction, alphas=[]):
+        cdef double mass, omega
+        cdef unsigned int num_dimensions, num_particles
+        cdef np.ndarray[double, ndim=1, mode="c"] alpha
+
+        if len(alphas) == 0:
+            alpha = wavefunction.get_parameters()
+        else:
+            alpha = alphas
+
+        mass = wavefunction.get_mass()
+        omega = wavefunction.get_frequency()
+        num_dimensions = wavefunction.get_num_dimensions()
+        num_particles = wavefunction.get_num_particles()
+
+        energy = HBAR**2*alpha/(2.0*mass) + mass*omega**2/(8.0*alpha)
+        energy *= num_dimensions*num_particles
+
+        return energy
 
 cdef class PyEllipticalHarmonicOscillator(PyHamiltonian):
 
