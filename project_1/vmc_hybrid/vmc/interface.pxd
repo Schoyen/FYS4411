@@ -45,6 +45,7 @@ cdef extern from "interacting_elliptical_gaussian.h":
                 double mass,
                 double omega,
                 double beta,
+                double radius,
                 double *parameters,
                 double *particles) except +
 

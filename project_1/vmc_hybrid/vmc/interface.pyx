@@ -93,15 +93,21 @@ cdef class PySimpleGaussianNumerical(PyWavefunction):
                 &self.parameters[0], &self.particles[0, 0])
 
 cdef class PyInteractingEllipticalGaussian(PyWavefunction):
+    cdef double radius
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
-            double mass, double omega, double beta, double spread=1.0):
+            double mass, double omega, double beta, double radius,
+            double spread=1.0):
+
+        assert radius < spread, "Radius must be smaller than spread"
 
         cdef unsigned int num_parameters = 1
+
+        self.radius = radius
         super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
         self.wavefunction = new InteractingEllipticalGaussian(
-                num_particles, num_dimensions, mass, omega, beta,
+                num_particles, num_dimensions, mass, omega, beta, radius,
                 &self.parameters[0], &self.particles[0, 0])
 
 cdef class PyHamiltonian:

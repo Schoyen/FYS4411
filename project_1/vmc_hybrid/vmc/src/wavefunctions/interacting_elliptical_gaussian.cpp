@@ -12,6 +12,7 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
         double mass,
         double omega,
         double beta,
+        double radius,
         double *parameters,
         double *particles) :
     Wavefunction(
@@ -24,6 +25,7 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
             particles)
 {
     m_beta = beta;
+    m_hard_sphere_radius = radius;
 }
 
 double InteractingEllipticalGaussian::evaluate()
