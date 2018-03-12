@@ -106,9 +106,44 @@ cdef class PyInteractingEllipticalGaussian(PyWavefunction):
         self.radius = radius
         super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
+        self._remove_overlap()
+
         self.wavefunction = new InteractingEllipticalGaussian(
                 num_particles, num_dimensions, mass, omega, beta, radius,
                 &self.parameters[0], &self.particles[0, 0])
+
+    def _remove_overlap(self):
+        cdef unsigned int p_i, i, p_j, j
+
+        for p_i in range(self.num_particles):
+            for p_j in range(self.num_particles):
+                if p_i == p_j:
+                    continue
+
+                for i in range(self.num_dimensions):
+
+                    while abs(self.particles[p_i][i] - self.particles[p_j][i]) \
+                            >= self.radius:
+                        self.particles[p_i, i] = \
+                                self.spread*(2.0*np.random.random() - 1.0)
+
+    def redistribute(self, double spread=-1):
+
+        cdef np.ndarray[double, ndim=2, mode="c"] distro
+        cdef unsigned int i, j
+
+        if spread < 0:
+            spread = self.spread
+
+        distro = spread \
+                * (2*np.random.random(
+                    (self.num_particles, self.num_dimensions)) - 1.0)
+
+        for i in range(self.num_particles):
+            for j in range(self.num_dimensions):
+                self.particles[i, j] = distro[i, j]
+
+        self._remove_overlap()
 
 cdef class PyHamiltonian:
     cdef Hamiltonian *hamiltonian
