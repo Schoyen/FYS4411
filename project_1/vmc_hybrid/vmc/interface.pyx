@@ -68,6 +68,9 @@ cdef class PyWavefunction:
     def get_parameters(self):
         return np.asarray(self.parameters)
 
+    def __dealloc__(self):
+        del self.wavefunction
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
