@@ -227,10 +227,20 @@ cdef class PySampler:
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
-    def __cinit__(self, unsigned int num_particles):
-        self.method = new MetropolisAlgorithm(num_particles)
+    def __cinit__(self, seed=None):
+        if seed:
+            self.method = new MetropolisAlgorithm(seed)
+        else:
+            self.method = new MetropolisAlgorithm()
+
 
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 
-    def __cinit__(self, unsigned int num_particles):
-        self.method = new ImportanceMetropolis(num_particles)
+    def __cinit__(self, double time_step, double diffusion_coefficient,
+            seed=None):
+        if seed:
+            self.method = new ImportanceMetropolis(
+                    time_step, diffusion_coefficient, seed)
+        else:
+            self.method = new ImportanceMetropolis(
+                    time_step, diffusion_coefficient)

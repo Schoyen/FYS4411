@@ -86,8 +86,13 @@ cdef extern from "sampler.h":
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
-        MetropolisAlgorithm(unsigned int num_particles) except +
+        MetropolisAlgorithm() except +
+        MetropolisAlgorithm(int seed) except +
 
 cdef extern from "importance_metropolis.h":
     cdef cppclass ImportanceMetropolis(MonteCarloMethod):
-        ImportanceMetropolis(unsigned int num_particles) except +
+        ImportanceMetropolis(
+                double time_step, double diffusion_coefficient) except +
+        ImportanceMetropolis(
+                double time_step, double diffusion_coefficient,
+                int seed) except +
