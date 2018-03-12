@@ -40,6 +40,8 @@ class Wavefunction
                 double *parameters,
                 double *particles);
 
+        virtual ~Wavefunction();
+
 
         double compute_position_squared_sum();
 
