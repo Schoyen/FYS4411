@@ -128,21 +128,7 @@ cdef class PyInteractingEllipticalGaussian(PyWavefunction):
                                 self.spread*(2.0*np.random.random() - 1.0)
 
     def redistribute(self, double spread=-1):
-
-        cdef np.ndarray[double, ndim=2, mode="c"] distro
-        cdef unsigned int i, j
-
-        if spread < 0:
-            spread = self.spread
-
-        distro = spread \
-                * (2*np.random.random(
-                    (self.num_particles, self.num_dimensions)) - 1.0)
-
-        for i in range(self.num_particles):
-            for j in range(self.num_dimensions):
-                self.particles[i, j] = distro[i, j]
-
+        super().redistribute(spread=spread)
         self._remove_overlap()
 
 cdef class PyHamiltonian:
