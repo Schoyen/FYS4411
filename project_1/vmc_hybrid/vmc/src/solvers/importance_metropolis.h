@@ -6,13 +6,17 @@
 
 class ImportanceMetropolis : public MonteCarloMethod
 {
+    private:
+        double m_diffusion_coefficient = 0.5;
+        double m_time_step;
+
     public:
-        using MonteCarloMethod::MonteCarloMethod;
+        ImportanceMetropolis(double time_step, double diffusion_coefficient);
+        ImportanceMetropolis(
+                double time_step, double diffusion_coefficient, int seed);
 
         double greensFraction(
-                Wavefunction *wavefunction, double *new_pos, double *old_pos,
-                double time_step, double D);
+                Wavefunction *wavefunction, double *new_pos, double *old_pos);
 
-        void initialize();
         bool step(Wavefunction *wavefunction, double step_length);
 };
