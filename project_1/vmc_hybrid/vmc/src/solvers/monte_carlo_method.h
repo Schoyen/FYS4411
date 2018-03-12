@@ -6,13 +6,12 @@
 
 class MonteCarloMethod
 {
-    protected:
+    private:
         std::mt19937_64 m_engine;
-        std::uniform_int_distribution<> m_random_particle;
-        std::uniform_real_distribution<double> m_random_step;
 
     public:
-        MonteCarloMethod(unsigned int num_particles);
-        virtual void initialize() = 0;
+        MonteCarloMethod();
+        MonteCarloMethod(int seed);
+
         virtual bool step(Wavefunction *wavefunction, double step_length) = 0;
 };

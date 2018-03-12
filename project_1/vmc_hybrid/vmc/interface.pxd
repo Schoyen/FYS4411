@@ -63,9 +63,9 @@ cdef extern from "elliptical_harmonic_oscillator.h":
 
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
-        MonteCarloMethod(unsigned int num_particles) except +
+        MonteCarloMethod() except +
+        MonteCarloMethod(int seed) except +
 
-        void initialize()
         bool step(Wavefunction *wavefunction, double step_length)
 
 cdef extern from "sampler.h":
