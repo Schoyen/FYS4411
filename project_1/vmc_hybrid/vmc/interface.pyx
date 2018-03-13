@@ -204,6 +204,12 @@ cdef class PySampler:
     def get_acceptance_ratio(self):
         return self.sampler.get_acceptance_ratio()
 
+    def get_position_squared_sum(self):
+        return self.sampler.get_position_squared_sum()
+
+    def get_position_energy_sum(self):
+        return self.sampler.get_position_energy_sum()
+
     def sample(self, unsigned int num_samples, double step_length,
             unsigned int num_thermalization_steps=0):
 

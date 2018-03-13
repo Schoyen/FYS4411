@@ -82,6 +82,8 @@ cdef extern from "sampler.h":
         double get_energy()
         double get_energy_squared()
         double get_acceptance_ratio()
+        double get_position_squared_sum()
+        double get_position_energy_sum()
         valarray[double] get_energy_gradient()
 
 cdef extern from "metropolis_algorithm.h":

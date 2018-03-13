@@ -54,6 +54,12 @@ void Sampler::sample(unsigned int num_samples, double step_length)
         m_energy_gradient +=
             m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
 
+        /* TODO: Should be variational gradient of wavefunction */
+        m_position_squared_sum +=
+            m_wavefunction->compute_position_squared_sum();
+        m_position_energy_sum +=
+            m_wavefunction->compute_position_squared_sum()*current_local_energy;
+
         /* Check if we should sample the local energies */
         if (m_num_local_energies != 0) {
             m_local_energies[i] = current_local_energy;
@@ -61,7 +67,7 @@ void Sampler::sample(unsigned int num_samples, double step_length)
     }
 
     /* Normalize accumulated energy, energy squared and energy gradient */
-    normalize_energies();
+    normalize();
     /* Compute the variance */
     m_variance = m_energy_squared - SQUARE(m_energy);
 }

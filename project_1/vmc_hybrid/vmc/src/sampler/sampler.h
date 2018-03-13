@@ -16,6 +16,11 @@ class Sampler
         double m_energy;
         double m_energy_squared;
         double m_variance;
+
+        /* TODO: This should be a vector */
+        double m_position_squared_sum;
+        double m_position_energy_sum;
+
         std::valarray<double> m_energy_gradient;
 
         unsigned int m_num_local_energies;
@@ -40,6 +45,8 @@ class Sampler
             m_energy_squared = 0;
             m_variance = 0;
             m_energy_gradient = 0;
+            m_position_squared_sum = 0;
+            m_position_energy_sum = 0;
 
             if (m_num_local_energies > 0) {
                 std::fill(
@@ -48,11 +55,13 @@ class Sampler
             }
         }
 
-        void normalize_energies()
+        void normalize()
         {
             m_energy /= m_num_steps;
             m_energy_squared /= m_num_steps;
             m_energy_gradient /= m_num_steps;
+            m_position_squared_sum /= m_num_steps;
+            m_position_energy_sum /= m_num_steps;
         }
 
         void sample(unsigned int num_samples, double step_length);
@@ -70,6 +79,17 @@ class Sampler
         double get_energy_squared()
         {
             return m_energy_squared;
+        }
+
+        /* TODO: Lol */
+        double get_position_squared_sum()
+        {
+            return m_position_squared_sum;
+        }
+
+        double get_position_energy_sum()
+        {
+            return m_position_energy_sum;
         }
 
         double get_acceptance_ratio()
