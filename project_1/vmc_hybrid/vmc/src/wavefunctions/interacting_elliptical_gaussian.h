@@ -38,8 +38,12 @@ class InteractingEllipticalGaussian : public Wavefunction
             return m_beta;
         }
 
+        double compute_gradient_component(unsigned int p_i, unsigned int i)
+        {
+            return 0.0;
+        }
+
         double evaluate();
         double compute_laplacian();
-        double compute_drift_force_component(double coordinate);
         std::valarray<double> compute_laplacian_variational_gradient();
 };

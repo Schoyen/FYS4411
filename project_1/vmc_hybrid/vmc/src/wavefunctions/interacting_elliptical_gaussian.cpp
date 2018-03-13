@@ -214,12 +214,6 @@ double InteractingEllipticalGaussian::compute_laplacian()
     return laplacian;
 }
 
-double InteractingEllipticalGaussian::compute_drift_force_component(
-        double coordinate)
-{
-    return 0.0;
-}
-
 std::valarray<double>
 InteractingEllipticalGaussian::compute_laplacian_variational_gradient()
 {

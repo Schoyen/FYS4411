@@ -61,18 +61,6 @@ std::valarray<double> SimpleGaussian::compute_laplacian_variational_gradient()
     return laplacian_alpha_derivative;
 }
 
-double SimpleGaussian::compute_drift_force_component(double coordinate)
-{
-    double alpha;
-
-    /* Fetch variational parameter alpha */
-    alpha = m_parameters[0];
-
-    // Drift force is F = -4*alpha*r_vec
-    // return -4*alpha*m_particles[dimension, particle*m_num_dimensions];
-    return - 4*alpha*coordinate;
-}
-
 double SimpleGaussian::evaluate()
 {
     double alpha, evaluated_wavefunction, position_squared_sum;
