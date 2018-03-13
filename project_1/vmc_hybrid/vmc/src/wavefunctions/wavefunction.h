@@ -107,6 +107,20 @@ class Wavefunction
             m_particles[p_i][i] += step;
         }
 
+        double compute_drift_force_component(unsigned int p_i, unsigned int i)
+        {
+            return 2*compute_gradient_component(p_i, i);
+        }
+
+        void compute_drift_force(double *drift_force, unsigned int p_i)
+        {
+            unsigned int i;
+
+            for (i = 0; i < m_num_dimensions; i++) {
+                drift_force[i] = compute_drift_force_component(p_i, i);
+            }
+        }
+
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
         virtual double compute_gradient_component(
