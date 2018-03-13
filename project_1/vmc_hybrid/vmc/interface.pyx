@@ -204,11 +204,41 @@ cdef class PySampler:
     def get_acceptance_ratio(self):
         return self.sampler.get_acceptance_ratio()
 
-    def get_position_squared_sum(self):
-        return self.sampler.get_position_squared_sum()
+    def get_parameter_gradient(self):
+        cdef np.ndarray[double, ndim=1, mode="c"] wave_grad, energy_grad
+        cdef double energy
 
-    def get_position_energy_sum(self):
-        return self.sampler.get_position_energy_sum()
+        energy = self.get_energy()
+        wave_grad = self._get_wavefunction_variational_gradient()
+        energy_grad = self._get_variational_energy_gradient()
+
+        return 2*(energy_grad - wave_grad*energy)
+
+    def _get_wavefunction_variational_gradient(self):
+        cdef valarray[double] _arr
+        cdef np.ndarray[double, ndim=1, mode="c"] arr
+        cdef unsigned int i
+
+        _arr = self.sampler.get_wavefunction_variational_gradient()
+        arr = np.zeros(_arr.size())
+
+        for i in range(arr.size):
+            arr[i] = _arr[i]
+
+        return arr
+
+    def _get_variational_energy_gradient(self):
+        cdef valarray[double] _arr
+        cdef np.ndarray[double, ndim=1, mode="c"] arr
+        cdef unsigned int i
+
+        _arr = self.sampler.get_variational_energy_gradient()
+        arr = np.zeros(_arr.size())
+
+        for i in range(arr.size):
+            arr[i] = _arr[i]
+
+        return arr
 
     def sample(self, unsigned int num_samples, double step_length,
             unsigned int num_thermalization_steps=0):
@@ -218,19 +248,6 @@ cdef class PySampler:
 
         self.sampler.sample(num_samples, step_length)
 
-    def get_energy_gradient(self):
-        cdef valarray[double] _energy_gradient
-        cdef np.ndarray[double, ndim=1, mode="c"] energy_gradient
-        cdef unsigned int i
-
-        _energy_gradient = self.sampler.get_energy_gradient()
-        energy_gradient = np.zeros(_energy_gradient.size())
-
-        for i in range(energy_gradient.size):
-            energy_gradient[i] = _energy_gradient[i]
-
-        return energy_gradient
-
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
     def __cinit__(self, seed=None):
@@ -238,7 +255,6 @@ cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
             self.method = new MetropolisAlgorithm(seed)
         else:
             self.method = new MetropolisAlgorithm()
-
 
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 

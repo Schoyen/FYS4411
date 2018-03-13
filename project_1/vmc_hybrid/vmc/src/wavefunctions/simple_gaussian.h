@@ -28,5 +28,5 @@ class SimpleGaussian : public Wavefunction
 
         double evaluate();
         double compute_laplacian();
-        std::valarray<double> compute_laplacian_variational_gradient();
+        std::valarray<double> compute_variational_gradient();
 };

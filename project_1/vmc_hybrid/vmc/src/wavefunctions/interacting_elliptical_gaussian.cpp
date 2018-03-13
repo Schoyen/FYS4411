@@ -215,11 +215,11 @@ double InteractingEllipticalGaussian::compute_laplacian()
 }
 
 std::valarray<double>
-InteractingEllipticalGaussian::compute_laplacian_variational_gradient()
+InteractingEllipticalGaussian::compute_variational_gradient()
 {
-    std::valarray<double> derivative(m_num_parameters);
+    std::valarray<double> gradient(m_num_parameters);
 
-    derivative = 0;
+    gradient = 0;
 
-    return derivative;
+    return gradient;
 }
