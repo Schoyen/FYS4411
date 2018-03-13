@@ -30,9 +30,6 @@ void Sampler::sample(unsigned int num_samples, double step_length)
     /* Initialize all accumulators and parameters */
     initialize();
 
-    /* Initialize the solver */
-    m_solver->initialize();
-
     /* Store the number of samples which will be performed */
     m_num_steps = num_samples;
     /* Compute initial local energy */

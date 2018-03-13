@@ -45,6 +45,7 @@ cdef extern from "interacting_elliptical_gaussian.h":
                 double mass,
                 double omega,
                 double beta,
+                double radius,
                 double *parameters,
                 double *particles) except +
 
@@ -62,9 +63,9 @@ cdef extern from "elliptical_harmonic_oscillator.h":
 
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
-        MonteCarloMethod(unsigned int num_particles) except +
+        MonteCarloMethod() except +
+        MonteCarloMethod(int seed) except +
 
-        void initialize()
         bool step(Wavefunction *wavefunction, double step_length)
 
 cdef extern from "sampler.h":
@@ -85,8 +86,13 @@ cdef extern from "sampler.h":
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):
-        MetropolisAlgorithm(unsigned int num_particles) except +
+        MetropolisAlgorithm() except +
+        MetropolisAlgorithm(int seed) except +
 
 cdef extern from "importance_metropolis.h":
     cdef cppclass ImportanceMetropolis(MonteCarloMethod):
-        ImportanceMetropolis(unsigned int num_particles) except +
+        ImportanceMetropolis(
+                double time_step, double diffusion_coefficient) except +
+        ImportanceMetropolis(
+                double time_step, double diffusion_coefficient,
+                int seed) except +

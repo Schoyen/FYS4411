@@ -68,6 +68,9 @@ cdef class PyWavefunction:
     def get_parameters(self):
         return np.asarray(self.parameters)
 
+    def __dealloc__(self):
+        del self.wavefunction
+
 cdef class PySimpleGaussian(PyWavefunction):
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
@@ -93,16 +96,43 @@ cdef class PySimpleGaussianNumerical(PyWavefunction):
                 &self.parameters[0], &self.particles[0, 0])
 
 cdef class PyInteractingEllipticalGaussian(PyWavefunction):
+    cdef double radius
 
     def __init__(self, unsigned int num_particles, unsigned int num_dimensions,
-            double mass, double omega, double beta, double spread=1.0):
+            double mass, double omega, double beta, double radius,
+            double spread=1.0):
+
+        assert radius < spread, "Radius must be smaller than spread"
 
         cdef unsigned int num_parameters = 1
+
+        self.radius = radius
         super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
+        self._remove_overlap()
+
         self.wavefunction = new InteractingEllipticalGaussian(
-                num_particles, num_dimensions, mass, omega, beta,
+                num_particles, num_dimensions, mass, omega, beta, radius,
                 &self.parameters[0], &self.particles[0, 0])
+
+    def _remove_overlap(self):
+        cdef unsigned int p_i, i, p_j, j
+
+        for p_i in range(self.num_particles):
+            for p_j in range(self.num_particles):
+                if p_i == p_j:
+                    continue
+
+                for i in range(self.num_dimensions):
+
+                    while abs(self.particles[p_i][i] - self.particles[p_j][i]) \
+                            >= self.radius:
+                        self.particles[p_i, i] = \
+                                self.spread*(2.0*np.random.random() - 1.0)
+
+    def redistribute(self, double spread=-1):
+        super().redistribute(spread=spread)
+        self._remove_overlap()
 
 cdef class PyHamiltonian:
     cdef Hamiltonian *hamiltonian
@@ -197,10 +227,20 @@ cdef class PySampler:
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
-    def __cinit__(self, unsigned int num_particles):
-        self.method = new MetropolisAlgorithm(num_particles)
+    def __cinit__(self, seed=None):
+        if seed:
+            self.method = new MetropolisAlgorithm(seed)
+        else:
+            self.method = new MetropolisAlgorithm()
+
 
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 
-    def __cinit__(self, unsigned int num_particles):
-        self.method = new ImportanceMetropolis(num_particles)
+    def __cinit__(self, double time_step, double diffusion_coefficient,
+            seed=None):
+        if seed:
+            self.method = new ImportanceMetropolis(
+                    time_step, diffusion_coefficient, seed)
+        else:
+            self.method = new ImportanceMetropolis(
+                    time_step, diffusion_coefficient)

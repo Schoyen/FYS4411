@@ -17,18 +17,7 @@ class Wavefunction
         double m_omega;
 
         double *m_parameters;
-
-        /* We use single pointer in order to allow for allocation from NumPy.
-         * This array will thus be indexed as:
-         *
-         *      m_particles[j + i*m_num_dimensions] = m_particles[i][j],
-         *
-         * where i is the particle index and j is the position index.
-         *
-         *      Nice to know.
-         *          -Seb.
-         */
-        double *m_particles;
+        double **m_particles;
 
     public:
         Wavefunction(
@@ -39,6 +28,8 @@ class Wavefunction
                 double omega,
                 double *parameters,
                 double *particles);
+
+        virtual ~Wavefunction();
 
 
         double compute_position_squared_sum();
@@ -78,13 +69,12 @@ class Wavefunction
             return m_omega;
         }
 
-        void reset_particle_position(
-                double position[], unsigned int particle_index)
+        void reset_particle_position(double position[], unsigned int p_i)
         {
             unsigned int i;
 
             for (i = 0; i < m_num_dimensions; i++) {
-                m_particles[i + particle_index*m_num_dimensions] = position[i];
+                m_particles[p_i][i] = position[i];
             }
         }
 
@@ -94,7 +84,7 @@ class Wavefunction
             unsigned int i;
 
             for (i = 0; i < m_num_dimensions; i++) {
-                position[i] = m_particles[i + p_k*m_num_dimensions];
+                position[i] = m_particles[p_k][i];
             }
         }
 
@@ -107,9 +97,7 @@ class Wavefunction
             distance = 0.0;
 
             for (i = 0; i < m_num_dimensions; i++) {
-                distance += SQUARE(
-                        (m_particles[i + p_i*m_num_dimensions]
-                         - m_particles[i + p_j*m_num_dimensions]));
+                distance += SQUARE(m_particles[p_i][i] - m_particles[p_j][i]);
             }
 
             return sqrt(distance);

@@ -29,6 +29,7 @@ class InteractingEllipticalGaussian : public Wavefunction
                 double mass,
                 double omega,
                 double beta,
+                double radius,
                 double *parameters,
                 double *particles);
 

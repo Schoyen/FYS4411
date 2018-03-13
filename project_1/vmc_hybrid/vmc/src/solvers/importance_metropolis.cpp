@@ -7,16 +7,24 @@
 #include <random>
 
 
-
-void ImportanceMetropolis::initialize()
+ImportanceMetropolis::ImportanceMetropolis(
+        double time_step, double diffusion_coefficient)
 {
-    /* This method does not need an initializer */
+    m_time_step = time_step;
+    m_diffusion_coefficient = diffusion_coefficient;
+}
+
+ImportanceMetropolis::ImportanceMetropolis(
+        double time_step, double diffusion_coefficient, int seed) :
+    MonteCarloMethod(seed)
+{
+    m_time_step = time_step;
+    m_diffusion_coefficient = diffusion_coefficient;
 }
 
 // Function to compute the Green's functions fraction
 double ImportanceMetropolis::greensFraction(
-        Wavefunction *wavefunction, double* new_pos, double* old_pos,
-        double time_step, double D)
+        Wavefunction *wavefunction, double* new_pos, double* old_pos)
 {
     double result;
     double drift_force_old, drift_force_new;
@@ -34,16 +42,14 @@ double ImportanceMetropolis::greensFraction(
         drift_force_old = wavefunction->compute_drift_force_component(old_pos[i]);
         drift_force_new = wavefunction->compute_drift_force_component(new_pos[i]);
 
-        //double x_old, x_new;
-        //x_old = m_particles[i + old_pos*num_dimensions];
-        //x_new = m_particles[i + new_pos*num_dimensions];
-
-        first_vector  += SQUARE(old_pos[i] - new_pos[i] - D*time_step*drift_force_new);
-        second_vector += SQUARE(new_pos[i] - old_pos[i] - D*time_step*drift_force_old);
+        first_vector  += SQUARE(old_pos[i] - new_pos[i]
+                - m_diffusion_coefficient*m_time_step*drift_force_new);
+        second_vector += SQUARE(new_pos[i] - old_pos[i]
+                - m_diffusion_coefficient*m_time_step*drift_force_old);
     }
 
-    G_numerator = exp(-  first_vector / (4*D*time_step));
-    G_denominator = exp(- second_vector / (4*D*time_step));
+    G_numerator = exp(-first_vector / (4*m_diffusion_coefficient*m_time_step));
+    G_denominator = exp(-second_vector / (4*m_diffusion_coefficient*m_time_step));
 
     result = G_numerator / G_denominator;
 
@@ -63,22 +69,21 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
         What is nice: Both G's have a coefficient that is cancelled.
     */
 
-    unsigned int num_dimensions, i, particle_index;
+    unsigned int num_dimensions, num_particles, i, particle_index;
     double step, weight, current_wavefunction, previous_wavefunction;
-    //bool step_accepted;
 
-    // Must insert particle spread instead of 1??
-    std::normal_distribution<double> N(0,1);
+    //// The Diffusion coefficient. I don't know what it is supposed to be.
+    //// Hardcoding
+    //double D = 0.5;
 
-    // The Diffusion coefficient. I don't know what it is supposed to be.
-    // Hardcoding
-    double D = 0.5;
-
-    // Is this so?
-    double time_step = step_length;
+    //// Is this so?
+    //double time_step = step_length;
 
     // Getting dimensionality
     num_dimensions = wavefunction->get_num_dimensions();
+
+    // Get the number of particles
+    num_particles = wavefunction->get_num_particles();
 
     // Storing the current wavefunction in prev (current will be overwritten)
     previous_wavefunction = wavefunction->evaluate();
@@ -90,7 +95,7 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     double new_pos[num_dimensions];
 
     // draw some particle
-    particle_index = m_random_particle(m_engine);
+    particle_index = next_int(0, num_particles - 1);
 
     // Store old (this) position
     wavefunction->copy_particle_position(old_pos, particle_index);
@@ -108,7 +113,11 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     // Popose new position
     for (i = 0; i < num_dimensions; i++) {
         drift_force = wavefunction->compute_drift_force_component(old_pos[i]);
-        step = D*drift_force*time_step + N(m_engine)*sqrt(time_step);
+
+        step =
+            m_diffusion_coefficient*drift_force*m_time_step
+            + next_gaussian(0, 1)*sqrt(m_time_step);
+
         wavefunction->move_particle(step, particle_index, i);
     }
 
@@ -119,15 +128,14 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     current_wavefunction = wavefunction->evaluate();
 
     // Compute new weight
-    double greens_fraction = greensFraction(
-            wavefunction, new_pos, old_pos, time_step, D);
+    double greens_fraction = greensFraction(wavefunction, new_pos, old_pos);
 
     // Acceptance weight
-    weight = greens_fraction \
+    weight = greens_fraction
              * (SQUARE(current_wavefunction) / SQUARE(previous_wavefunction));
 
     // The same kind of test as before
-    if (weight >= m_random_step(m_engine)) {
+    if (weight >= next_uniform()) {
         return true;
     } else {
         wavefunction->reset_particle_position(old_pos, particle_index);

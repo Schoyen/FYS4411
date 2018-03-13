@@ -12,6 +12,7 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
         double mass,
         double omega,
         double beta,
+        double radius,
         double *parameters,
         double *particles) :
     Wavefunction(
@@ -24,6 +25,7 @@ InteractingEllipticalGaussian::InteractingEllipticalGaussian(
             particles)
 {
     m_beta = beta;
+    m_hard_sphere_radius = radius;
 }
 
 double InteractingEllipticalGaussian::evaluate()
@@ -51,7 +53,7 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
 
     alpha = m_parameters[0];
 
-    position = &m_particles[p_i*m_num_dimensions];
+    position = m_particles[p_i];
 
     position_sum = 0;
 
@@ -73,7 +75,7 @@ InteractingEllipticalGaussian::compute_gradient_single_particle_function(
 
     alpha = m_parameters[0];
 
-    position = &m_particles[p_k*m_num_dimensions];
+    position = m_particles[p_k];
 
     for (i = 0; i < m_num_dimensions; i++) {
         gradient[i] = (i != 2) ? position[i] : (m_beta*position[i]);
@@ -91,7 +93,7 @@ InteractingEllipticalGaussian::compute_laplacian_single_particle_function(
 
     alpha = m_parameters[0];
 
-    position = &m_particles[p_k*m_num_dimensions];
+    position = m_particles[p_k];
 
     position_sum = 0;
 
@@ -132,7 +134,7 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
 
     a = m_hard_sphere_radius;
 
-    r_k = &m_particles[p_k*m_num_dimensions];
+    r_k = m_particles[p_k];
 
     gradient = 0;
 
@@ -141,7 +143,7 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
             continue;
         }
 
-        r_m = &m_particles[p_m*m_num_dimensions];
+        r_m = m_particles[p_m];
         r_km = get_distance_between_particles(p_k, p_m);
 
         for (i = 0; i < m_num_dimensions; i++) {

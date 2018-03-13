@@ -5,14 +5,10 @@
 #include <iostream>
 
 
-void MetropolisAlgorithm::initialize()
-{
-    /* This method does not need an initialization */
-}
 
 bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
 {
-    unsigned int particle_index, i, num_dimensions;
+    unsigned int particle_index, i, num_dimensions, num_particles;
     double step, weight, current_wavefunction, previous_wavefunction;
 
     /* Get evaluated wavefunction prior to moving */
@@ -20,19 +16,21 @@ bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
 
     /* Get the number of dimensions */
     num_dimensions = wavefunction->get_num_dimensions();
+    /* Get the number of particles */
+    num_particles = wavefunction->get_num_particles();
 
     /* Create a temporary storage for the old position */
     double old_position[num_dimensions];
 
     /* Draw a random particle */
-    particle_index = m_random_particle(m_engine);
+    particle_index = next_int(0, num_particles - 1);
 
     /* Store the previous position */
     wavefunction->copy_particle_position(old_position, particle_index);
 
     /* Propose a new position */
     for (i = 0; i < num_dimensions; i++) {
-        step = step_length*(2.0*m_random_step(m_engine) - 1.0);
+        step = step_length*next_uniform(-1.0, 1.0);
         wavefunction->move_particle(step, particle_index, i);
     }
 
@@ -43,7 +41,7 @@ bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
     weight = SQUARE(current_wavefunction)/SQUARE(previous_wavefunction);
 
     /* Check if we should accept the new state */
-    if (weight >= m_random_step(m_engine)) {
+    if (weight >= next_uniform()) {
         return true;
     } else {
         /* Reset the particle position as we did not accept the state */
