@@ -69,7 +69,7 @@ class Wavefunction
             return m_omega;
         }
 
-        void reset_particle_position(double position[], unsigned int p_i)
+        void reset_particle_position(double *position, unsigned int p_i)
         {
             unsigned int i;
 
@@ -78,8 +78,7 @@ class Wavefunction
             }
         }
 
-        void copy_particle_position(
-                double position[], unsigned int p_k)
+        void copy_particle_position(double *position, unsigned int p_k)
         {
             unsigned int i;
 
