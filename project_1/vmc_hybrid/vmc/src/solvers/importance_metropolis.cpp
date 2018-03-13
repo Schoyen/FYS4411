@@ -22,124 +22,80 @@ ImportanceMetropolis::ImportanceMetropolis(
     m_diffusion_coefficient = diffusion_coefficient;
 }
 
-// Function to compute the Green's functions fraction
-double ImportanceMetropolis::greensFraction(
-        Wavefunction *wavefunction, double* new_pos, double* old_pos)
-{
-    double result;
-    double drift_force_old, drift_force_new;
-    double G_numerator = 0;
-    double G_denominator = 0;
-    unsigned int i, num_dimensions;
-
-    double first_vector = 0;
-    double second_vector = 0;
-
-    num_dimensions = wavefunction->get_num_dimensions();
-
-    for (i = 0; i < num_dimensions; i++) {
-
-        drift_force_old = wavefunction->compute_drift_force_component(old_pos[i]);
-        drift_force_new = wavefunction->compute_drift_force_component(new_pos[i]);
-
-        first_vector  += SQUARE(old_pos[i] - new_pos[i]
-                - m_diffusion_coefficient*m_time_step*drift_force_new);
-        second_vector += SQUARE(new_pos[i] - old_pos[i]
-                - m_diffusion_coefficient*m_time_step*drift_force_old);
-    }
-
-    G_numerator = exp(-first_vector / (4*m_diffusion_coefficient*m_time_step));
-    G_denominator = exp(-second_vector / (4*m_diffusion_coefficient*m_time_step));
-
-    result = G_numerator / G_denominator;
-
-    return result;
-}
-
 bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
 {
-    /*
-        This method is potentially very similar to the other step methods.
-        Uses a different ratio to determine if step is accepted:
+    unsigned int num_dimensions, num_particles, p_i, i;
+    double previous_wavefunction, current_wavefunction, step, first_vector,
+           second_vector, greens_numerator, greens_denominator, weight;
 
-        ( G(old_pos, new_pos, delta_t) * | psi_T(new)|^2 ) /
-        ( G(new_pos, old_pos, delta_t) * | psi_T(old)|^2 )
-
-        And then there was ths whole deal of what G is..
-        What is nice: Both G's have a coefficient that is cancelled.
-    */
-
-    unsigned int num_dimensions, num_particles, i, particle_index;
-    double step, weight, current_wavefunction, previous_wavefunction;
-
-    //// The Diffusion coefficient. I don't know what it is supposed to be.
-    //// Hardcoding
-    //double D = 0.5;
-
-    //// Is this so?
-    //double time_step = step_length;
-
-    // Getting dimensionality
+    /* Get the number of dimensions and particles */
     num_dimensions = wavefunction->get_num_dimensions();
-
-    // Get the number of particles
     num_particles = wavefunction->get_num_particles();
 
-    // Storing the current wavefunction in prev (current will be overwritten)
+    /* Store the previous wavefunction for the ratio test */
     previous_wavefunction = wavefunction->evaluate();
 
-    // Temporary storage for old position
-    double old_pos[num_dimensions];
+    /* Create containers for drift force and positions */
+    double old_position[num_dimensions];
+    double new_position[num_dimensions];
+    double drift_force_old[num_dimensions];
+    double drift_force_new[num_dimensions];
 
-    // Temporary storage for new position
-    double new_pos[num_dimensions];
+    /* Draw a random particle */
+    p_i = next_int(0, num_particles - 1);
 
-    // draw some particle
-    particle_index = next_int(0, num_particles - 1);
+    /* Store the old position of the random particle */
+    wavefunction->copy_particle_position(old_position, p_i);
 
-    // Store old (this) position
-    wavefunction->copy_particle_position(old_pos, particle_index);
+    /* Compute the drift force for particle p_i */
+    wavefunction->compute_drift_force(drift_force_old, p_i);
 
-    /*
-        Update position:
-        r_new = r_prev + D*F(r)*time_step + N(0,1)*sqrt(time_step)
-        -> step = r_new - r_prev = D*F*time_step + N *sqrt(time_step)
-        N is normal dist. stoc. var.
-        D is some diffusion coefficient. WHAT IS IT!?!?!?1
-    */
-
-    double drift_force = 0;
-
-    // Popose new position
+    /* Propose a new step and move the particle */
     for (i = 0; i < num_dimensions; i++) {
-        drift_force = wavefunction->compute_drift_force_component(old_pos[i]);
-
-        step =
-            m_diffusion_coefficient*drift_force*m_time_step
+        step = m_diffusion_coefficient*drift_force_old[i]*m_time_step
             + next_gaussian(0, 1)*sqrt(m_time_step);
 
-        wavefunction->move_particle(step, particle_index, i);
+        wavefunction->move_particle(step, p_i, i);
     }
 
-    // Store new position
-    wavefunction->copy_particle_position(new_pos, particle_index);
+    /* Store the updated particle position */
+    wavefunction->copy_particle_position(new_position, p_i);
 
-    // Evaluate new wavefunction
+    /* Evaluate new wavefunction */
     current_wavefunction = wavefunction->evaluate();
 
-    // Compute new weight
-    double greens_fraction = greensFraction(wavefunction, new_pos, old_pos);
+    /* Compute the new drift force for particle p_i */
+    wavefunction->compute_drift_force(drift_force_new, p_i);
 
-    // Acceptance weight
-    weight = greens_fraction
-             * (SQUARE(current_wavefunction) / SQUARE(previous_wavefunction));
+    /* Initialize vector accumulators */
+    first_vector = 0;
+    second_vector = 0;
 
-    // The same kind of test as before
+    /* Compute the exponential terms in the Green's functions */
+    for (i = 0; i < num_dimensions; i++) {
+        first_vector += SQUARE(old_position[i] - new_position[i]
+                - m_diffusion_coefficient*m_time_step*drift_force_new[i]);
+        second_vector += SQUARE(new_position[i] - old_position[i]
+                - m_diffusion_coefficient*m_time_step*drift_force_old[i]);
+    }
+
+    /* Compute the Green's functions */
+    greens_numerator =
+        exp(-first_vector/(4.0*m_diffusion_coefficient*m_time_step));
+    greens_denominator =
+        exp(-second_vector/(4.0*m_diffusion_coefficient*m_time_step));
+
+    /* Compute the ratio test for the Metropolis-Hastings algorithm */
+    weight = (greens_numerator/greens_denominator)
+        *SQUARE(current_wavefunction)/SQUARE(previous_wavefunction);
+
+    /* Perform the Metropolis test */
     if (weight >= next_uniform()) {
         return true;
-    } else {
-        wavefunction->reset_particle_position(old_pos, particle_index);
     }
+
+    /* Reset position as we did not accept the state */
+    wavefunction->reset_particle_position(old_position, p_i);
 
     return false;
 }
