@@ -50,8 +50,3 @@ double Wavefunction::compute_position_squared_sum()
 
     return position_squared_sum;
 }
-
-void Wavefunction::move_particle(double step, unsigned int p_i, unsigned int i)
-{
-    m_particles[p_i][i] += step;
-}

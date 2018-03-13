@@ -102,9 +102,10 @@ class Wavefunction
             return sqrt(distance);
         }
 
-        void move_particle(
-                double step, unsigned int particle_index,
-                unsigned int coordinate);
+        void move_particle(double step, unsigned int p_i, unsigned int i)
+        {
+            m_particles[p_i][i] += step;
+        }
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
