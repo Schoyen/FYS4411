@@ -109,7 +109,8 @@ class Wavefunction
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
-        virtual double compute_drift_force_component(double coordinate) = 0;
-        virtual std::valarray<double> compute_laplacian_variational_gradient()
-            = 0;
+        virtual double compute_gradient_component(
+                unsigned int p_i, unsigned int i) = 0;
+        virtual std::valarray<double>
+            compute_laplacian_variational_gradient() = 0;
 };
