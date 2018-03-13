@@ -33,7 +33,7 @@ class MonteCarloMethod
             return dist(m_engine);
         }
 
-        int next_gaussian(const double &mean, const double &std)
+        double next_gaussian(const double &mean, const double &std)
         {
             std::normal_distribution<double> dist(mean, std);
             return dist(m_engine);
