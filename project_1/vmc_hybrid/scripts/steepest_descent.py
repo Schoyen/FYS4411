@@ -34,43 +34,39 @@ wavefunction = PySimpleGaussian(num_particles, num_dimensions, mass, omega)
 solver = PyImportanceMetropolis(step_length, 0.5)
 sampler = PySampler(wavefunction, hamiltonian, solver, num_local_energies)
 
-alpha = 1.0 # start
+alpha = np.array([1.0]) # start
 
 MAX_ITER = 100
 iterations = 0
 gamma = 0.001
-wavefunction.set_parameters(np.array([alpha]))
-sampler.sample(
-        num_samples, step_length,
-        num_thermalization_steps=num_thermalization_steps)
-energy = sampler.get_energy()
 
 alphas = np.zeros(MAX_ITER)
 
+gradient_prev = 1e10
+
 while (iterations < MAX_ITER):
 
-    wavefunction.set_parameters(np.array([alpha]))
-    gradient = 2*(sampler.get_position_energy_sum() \
-            - sampler.get_position_squared_sum()*sampler.get_energy())
-    alpha = alpha + gamma * gradient
-    print("Alpha = ", alpha)
-    print("Gradient = ", gradient)
-    wavefunction.redistribute()
-    energy_prev = energy
-    energy = sampler.get_energy()
-    gradient_prev = gradient
+    wavefunction.set_parameters(alpha)
     sampler.sample(
             num_samples, step_length,
             num_thermalization_steps=num_thermalization_steps)
+
+    print("Alpha = ", alpha)
+    gradient = sampler.get_parameter_gradient()
+    print("Gradient = ", gradient)
+    alpha = alpha + gamma * gradient
+    wavefunction.redistribute()
 
     if (gradient*gradient > gradient_prev*gradient_prev):
         print ("Boink")
         gamma = gamma * 0.9
 
-    if alpha < 0:
-        alpha = -alpha
+    gradient_prev = gradient
 
-    alphas[iterations] = alpha
+    mask = alpha < 0
+    alpha[mask] = -alpha[mask]
+
+    alphas[iterations] = alpha[0]
     iterations += 1
 
 plt.plot(alphas)
