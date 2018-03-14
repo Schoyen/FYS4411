@@ -125,9 +125,9 @@ cdef class PyInteractingEllipticalGaussian(PyWavefunction):
 
                 for i in range(self.num_dimensions):
 
-                    while abs(self.particles[p_i][i] - self.particles[p_j][i]) \
+                    while abs(self.particles[p_i, i] - self.particles[p_j, i]) \
                             >= self.radius:
-                        self.particles[p_i, i] = \
+                        self.particles[p_j, i] = \
                                 self.spread*(2.0*np.random.random() - 1.0)
 
     def redistribute(self, double spread=-1):
