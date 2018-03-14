@@ -54,7 +54,7 @@ while (iterations < MAX_ITER):
     print("Alpha = ", alpha)
     gradient = sampler.get_parameter_gradient()
     print("Gradient = ", gradient)
-    alpha = alpha + gamma * gradient
+    alpha = alpha - gamma * gradient
     wavefunction.redistribute()
 
     if (gradient*gradient > gradient_prev*gradient_prev):
