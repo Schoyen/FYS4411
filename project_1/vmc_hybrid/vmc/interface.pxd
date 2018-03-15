@@ -73,11 +73,9 @@ cdef extern from "sampler.h":
         Sampler(
                 Wavefunction *wavefunction,
                 Hamiltonian *hamiltonian,
-                MonteCarloMethod *solver,
-                unsigned int num_local_energies,
-                double *local_energies) except +
+                MonteCarloMethod *solver) except +
 
-        void sample(unsigned int num_samples, double step_length)
+        void sample(unsigned int num_samples, double step_length, double *local_energies)
         double get_variance()
         double get_energy()
         double get_energy_squared()

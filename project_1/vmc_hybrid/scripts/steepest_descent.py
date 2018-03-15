@@ -32,7 +32,7 @@ num_local_energies = 0
 hamiltonian = PyHarmonicOscillator()
 wavefunction = PySimpleGaussian(num_particles, num_dimensions, mass, omega)
 solver = PyImportanceMetropolis(step_length, 0.5)
-sampler = PySampler(wavefunction, hamiltonian, solver, num_local_energies)
+sampler = PySampler(wavefunction, hamiltonian, solver)
 
 alpha = np.array([1.0]) # start
 

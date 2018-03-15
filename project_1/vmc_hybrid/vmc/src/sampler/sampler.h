@@ -20,9 +20,6 @@ class Sampler
         std::valarray<double> m_wavefunction_variational_gradient;
         std::valarray<double> m_variational_energy_gradient;
 
-        unsigned int m_num_local_energies;
-        double *m_local_energies;
-
         Wavefunction *m_wavefunction;
         Hamiltonian *m_hamiltonian;
         MonteCarloMethod *m_solver;
@@ -30,9 +27,7 @@ class Sampler
         Sampler(
                 Wavefunction *wavefunction,
                 Hamiltonian *hamiltonian,
-                MonteCarloMethod *solver,
-                unsigned int num_local_energies,
-                double *local_energies);
+                MonteCarloMethod *solver);
 
         void initialize()
         {
@@ -43,12 +38,6 @@ class Sampler
             m_variance = 0;
             m_wavefunction_variational_gradient = 0;
             m_variational_energy_gradient = 0;
-
-            if (m_num_local_energies > 0) {
-                std::fill(
-                        m_local_energies,
-                        m_local_energies + m_num_local_energies, 0);
-            }
         }
 
         void normalize()
@@ -59,7 +48,7 @@ class Sampler
             m_variational_energy_gradient /= m_num_steps;
         }
 
-        void sample(unsigned int num_samples, double step_length);
+        void sample(unsigned int num_samples, double step_length, double *local_energies);
 
         double get_variance()
         {

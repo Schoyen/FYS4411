@@ -9,15 +9,12 @@
 Sampler::Sampler(
         Wavefunction *wavefunction,
         Hamiltonian *hamiltonian,
-        MonteCarloMethod *solver,
-        unsigned int num_local_energies,
-        double *local_energies)
+        MonteCarloMethod *solver)
+ 
 {
     m_wavefunction = wavefunction;
     m_hamiltonian = hamiltonian;
     m_solver = solver;
-    m_num_local_energies = num_local_energies;
-    m_local_energies = local_energies;
 
     m_wavefunction_variational_gradient =
         std::valarray<double>(m_wavefunction->get_num_parameters());
@@ -25,7 +22,7 @@ Sampler::Sampler(
         std::valarray<double>(m_wavefunction->get_num_parameters());
 }
 
-void Sampler::sample(unsigned int num_samples, double step_length)
+void Sampler::sample(unsigned int num_samples, double step_length, double *local_energies)
 {
     double current_local_energy;
     unsigned int i;
@@ -65,8 +62,8 @@ void Sampler::sample(unsigned int num_samples, double step_length)
             current_variational_gradient*current_local_energy;
 
         /* Check if we should sample the local energies */
-        if (m_num_local_energies != 0) {
-            m_local_energies[i] = current_local_energy;
+        if (local_energies != 0) {
+            local_energies[i] = current_local_energy;
         }
     }
 

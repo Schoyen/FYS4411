@@ -64,8 +64,8 @@ for i in range(len(num_particles)):
         analytic_wfn  = PySimpleGaussian(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
         numerical_wfn = PySimpleGaussianNumerical(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
         hamiltonian  = PyHarmonicOscillator()
-        analytic_sampler  = PySampler(analytic_wfn, hamiltonian, solver, 0)
-        numerical_sampler = PySampler(numerical_wfn,  hamiltonian, solver, 0)
+        analytic_sampler  = PySampler(analytic_wfn, hamiltonian, solver)
+        numerical_sampler = PySampler(numerical_wfn,  hamiltonian, solver)
         #num_samples = int(1200 * num_particles[i])
         num_samples = 2000000
 

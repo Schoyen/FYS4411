@@ -175,19 +175,14 @@ cdef class PySampler:
     cdef double[::1] local_energies
 
     def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
-            PyMonteCarloMethod solver, unsigned int num_local_energies):
+            PyMonteCarloMethod solver):
 
-        if num_local_energies > 0:
-            self.local_energies = np.zeros(num_local_energies)
-        else:
-            self.local_energies = np.zeros(1)
+        self.local_energies = np.zeros(1)
 
         self.sampler = new Sampler(
                 wavefunction.wavefunction,
                 hamiltonian.hamiltonian,
-                solver.method,
-                num_local_energies,
-                &self.local_energies[0])
+                solver.method)
 
     def get_local_energies(self):
         return np.asarray(self.local_energies)
@@ -241,12 +236,16 @@ cdef class PySampler:
         return arr
 
     def sample(self, unsigned int num_samples, double step_length,
-            unsigned int num_thermalization_steps=0):
+            unsigned int num_thermalization_steps=0, sample_local_energies=False):
 
         if num_thermalization_steps > 0:
-            self.sampler.sample(num_thermalization_steps, step_length)
+            self.sampler.sample(num_thermalization_steps, step_length, <double *> 0)
 
-        self.sampler.sample(num_samples, step_length)
+        if sample_local_energies:
+            self.local_energies = np.zeros(num_samples)
+            self.sampler.sample(num_samples, step_length, &self.local_energies[0])
+        else:
+            self.sampler.sample(num_samples, step_length, <double *> 0)
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
