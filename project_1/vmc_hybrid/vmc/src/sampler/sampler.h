@@ -17,6 +17,12 @@ class Sampler
         double m_energy_squared;
         double m_variance;
 
+        double m_r_min = 0;
+        double m_r_max = 0;
+        double m_bin_step = 0;
+        unsigned int m_num_bins = 0;
+        double *m_bins = 0;
+
         std::valarray<double> m_wavefunction_variational_gradient;
         std::valarray<double> m_variational_energy_gradient;
 
@@ -31,6 +37,8 @@ class Sampler
 
         void initialize()
         {
+            unsigned int i;
+
             m_num_steps = 0;
             m_num_accepted_steps = 0;
             m_energy = 0;
@@ -38,17 +46,43 @@ class Sampler
             m_variance = 0;
             m_wavefunction_variational_gradient = 0;
             m_variational_energy_gradient = 0;
+
+            if (m_bins != 0) {
+                for (i = 0; i < m_num_bins; i++) {
+                    m_bins[i] = 0;
+                }
+            }
         }
 
         void normalize()
         {
+            unsigned int i;
+
             m_energy /= m_num_steps;
             m_energy_squared /= m_num_steps;
             m_wavefunction_variational_gradient /= m_num_steps;
             m_variational_energy_gradient /= m_num_steps;
+
+            if (m_bins != 0) {
+                for (i = 0; i < m_num_bins; i++) {
+                    m_bins[i] /=
+                        (m_num_steps*m_wavefunction->get_num_particles());
+                }
+            }
         }
 
-        void sample(unsigned int num_samples, double step_length, double *local_energies);
+        void sample(unsigned int num_samples, double step_length,
+                double *local_energies);
+
+        void set_one_body_parameters(
+                double r_min, double r_max, unsigned int num_bins, double *bins)
+        {
+            m_r_min = r_min;
+            m_r_max = r_max;
+            m_num_bins = num_bins;
+            m_bin_step = (m_r_max - m_r_min)/(m_num_bins - 1);
+            m_bins = bins;
+        }
 
         double get_variance()
         {
