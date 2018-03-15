@@ -27,19 +27,18 @@ omega = 1.0
 hbar  = 1.0
 
 # Initial distribution spread
-spread      = 0.1 # Unused !?!?!
 
 # Pretermined step particles (walkers) can move for each iteration
-step_length = 0.1 
+step_length = 1.0 
 
 # Parameter space, variational parameter alpha (include alpha = 0.5)
-num_alphas = 1
+num_alphas = 11
 #alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
-alpha = np.array([0.5]).reshape(1,1)
+alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
 
 # Particle-, dimension- and parameter configuration
-num_particles  = [1, 10, 100, 500]
-num_dimensions = [3]
+num_particles  = [1, 10, 100]
+num_dimensions = [1, 2, 3]
 num_parameters = 1
 
 # Storage

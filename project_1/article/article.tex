@@ -32,7 +32,8 @@
 \usepackage{tikz}
 % Several figures in the same figure
 \usepackage{subfig}
-
+% Appendix
+\usepackage[toc, page]{appendix}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -876,4 +877,20 @@
 
 
 \bibliography{references}
+
+\pagebreak
+
+\begin{widetext}
+\begin{appendices}
+
+\section{Brute Force Metropolis-Hastings}
+\begin{figure}[h]
+	\makebox[\textwidth][c]{
+	\includegraphics[width=1.2\textwidth]{../figures/problem_b.png}
+	}
+\end{figure}
+
+\end{appendices}
+\end{widetext}
+
 \end{document}
