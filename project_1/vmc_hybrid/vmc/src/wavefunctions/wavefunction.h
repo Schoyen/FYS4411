@@ -69,6 +69,18 @@ class Wavefunction
             return m_omega;
         }
 
+        double get_radial_position(unsigned int p_i)
+        {
+            unsigned int i;
+            double radius = 0;
+
+            for (i = 0; i < m_num_dimensions; i++) {
+                radius += SQUARE(m_particles[p_i][i]);
+            }
+
+            return sqrt(radius);
+        }
+
         void reset_particle_position(double *position, unsigned int p_i)
         {
             unsigned int i;

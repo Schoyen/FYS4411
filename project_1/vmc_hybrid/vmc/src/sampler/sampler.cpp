@@ -10,7 +10,6 @@ Sampler::Sampler(
         Wavefunction *wavefunction,
         Hamiltonian *hamiltonian,
         MonteCarloMethod *solver)
- 
 {
     m_wavefunction = wavefunction;
     m_hamiltonian = hamiltonian;
@@ -22,7 +21,8 @@ Sampler::Sampler(
         std::valarray<double>(m_wavefunction->get_num_parameters());
 }
 
-void Sampler::sample(unsigned int num_samples, double step_length, double *local_energies)
+void Sampler::sample(unsigned int num_samples, double step_length,
+        double *local_energies)
 {
     double current_local_energy;
     unsigned int i;
@@ -64,6 +64,25 @@ void Sampler::sample(unsigned int num_samples, double step_length, double *local
         /* Check if we should sample the local energies */
         if (local_energies != 0) {
             local_energies[i] = current_local_energy;
+        }
+
+        /* Check if we should sample one body densities */
+        if (m_bins != 0) {
+            double radius;
+            unsigned int p_i, bin_index, num_particles;
+
+            num_particles = m_wavefunction->get_num_particles();
+
+            for (p_i = 0; p_i < num_particles; p_i++) {
+                radius = m_wavefunction->get_radial_position(p_i);
+
+                if (radius < m_r_min || radius > m_r_max) {
+                    continue;
+                }
+
+                bin_index = (int) floor((radius - m_r_min)/m_bin_step);
+                m_bins[bin_index] += 1;
+            }
         }
     }
 

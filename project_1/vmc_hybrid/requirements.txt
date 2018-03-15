@@ -1,0 +1,11 @@
+# Install the Cython compiler
+cython
+
+# Install numpy
+numpy
+
+# Install Pandas
+pandas
+
+# Install tqdm for the progress bar
+tqdm

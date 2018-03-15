@@ -173,6 +173,7 @@ cdef class PyMonteCarloMethod:
 cdef class PySampler:
     cdef Sampler *sampler
     cdef double[::1] local_energies
+    cdef double[::1] bins
 
     def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             PyMonteCarloMethod solver):
@@ -235,15 +236,30 @@ cdef class PySampler:
 
         return arr
 
+    def get_one_body_densities(self):
+        return np.asarray(self.bins)
+
+    def initialize_one_body_densities(self, double r_min, double r_max,
+            unsigned int num_bins):
+        self.bins = np.zeros(num_bins)
+
+        self.sampler.set_one_body_parameters(
+                r_min, r_max, num_bins, &self.bins[0])
+
     def sample(self, unsigned int num_samples, double step_length,
-            unsigned int num_thermalization_steps=0, sample_local_energies=False):
+            unsigned int num_thermalization_steps=0,
+            sample_local_energies=False):
 
         if num_thermalization_steps > 0:
-            self.sampler.sample(num_thermalization_steps, step_length, <double *> 0)
+            self.sampler.sample(
+                    num_thermalization_steps, step_length, <double *> 0)
 
         if sample_local_energies:
-            self.local_energies = np.zeros(num_samples)
-            self.sampler.sample(num_samples, step_length, &self.local_energies[0])
+            if len(self.local_energies) != num_samples:
+                self.local_energies = np.zeros(num_samples)
+
+            self.sampler.sample(
+                    num_samples, step_length, &self.local_energies[0])
         else:
             self.sampler.sample(num_samples, step_length, <double *> 0)
 
