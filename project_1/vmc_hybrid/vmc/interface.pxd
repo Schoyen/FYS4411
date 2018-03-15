@@ -82,7 +82,8 @@ cdef extern from "sampler.h":
         double get_energy()
         double get_energy_squared()
         double get_acceptance_ratio()
-        valarray[double] get_energy_gradient()
+        valarray[double] get_wavefunction_variational_gradient()
+        valarray[double] get_variational_energy_gradient()
 
 cdef extern from "metropolis_algorithm.h":
     cdef cppclass MetropolisAlgorithm(MonteCarloMethod):

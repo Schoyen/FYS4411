@@ -15,8 +15,18 @@ class SimpleGaussian : public Wavefunction
                 double *parameters,
                 double *particles);
 
+        double compute_gradient_component(
+                unsigned int p_i, unsigned int i)
+        {
+            double alpha;
+
+            /* Fetch variational parameter alpha */
+            alpha = m_parameters[0];
+
+            return -2*alpha*m_particles[p_i][i];
+        }
+
         double evaluate();
         double compute_laplacian();
-        double compute_drift_force_component(double coordinate);
-        std::valarray<double> compute_laplacian_variational_gradient();
+        std::valarray<double> compute_variational_gradient();
 };

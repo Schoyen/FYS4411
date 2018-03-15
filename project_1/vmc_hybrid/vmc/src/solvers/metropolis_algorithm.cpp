@@ -43,10 +43,10 @@ bool MetropolisAlgorithm::step(Wavefunction *wavefunction, double step_length)
     /* Check if we should accept the new state */
     if (weight >= next_uniform()) {
         return true;
-    } else {
-        /* Reset the particle position as we did not accept the state */
-        wavefunction->reset_particle_position(old_position, particle_index);
     }
+
+    /* Reset the particle position as we did not accept the state */
+    wavefunction->reset_particle_position(old_position, particle_index);
 
     return false;
 }

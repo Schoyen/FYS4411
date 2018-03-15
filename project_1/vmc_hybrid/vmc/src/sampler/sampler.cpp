@@ -16,16 +16,20 @@ Sampler::Sampler(
     m_wavefunction = wavefunction;
     m_hamiltonian = hamiltonian;
     m_solver = solver;
-    m_energy_gradient =
-        std::valarray<double>(wavefunction->get_num_parameters());
     m_num_local_energies = num_local_energies;
     m_local_energies = local_energies;
+
+    m_wavefunction_variational_gradient =
+        std::valarray<double>(m_wavefunction->get_num_parameters());
+    m_variational_energy_gradient =
+        std::valarray<double>(m_wavefunction->get_num_parameters());
 }
 
 void Sampler::sample(unsigned int num_samples, double step_length)
 {
     double current_local_energy;
     unsigned int i;
+    std::valarray<double> current_variational_gradient;
 
     /* Initialize all accumulators and parameters */
     initialize();
@@ -50,9 +54,15 @@ void Sampler::sample(unsigned int num_samples, double step_length)
         m_energy += current_local_energy;
         /* Add local energy squared */
         m_energy_squared += SQUARE(current_local_energy);
-        /* Add local energy gradient */
-        m_energy_gradient +=
-            m_hamiltonian->compute_local_energy_gradient(m_wavefunction);
+
+        /* Get the variational gradient of the wavefunction */
+        current_variational_gradient =
+            m_wavefunction->compute_variational_gradient();
+
+        /* Accumulate expectation values */
+        m_wavefunction_variational_gradient += current_variational_gradient;
+        m_variational_energy_gradient +=
+            current_variational_gradient*current_local_energy;
 
         /* Check if we should sample the local energies */
         if (m_num_local_energies != 0) {
@@ -61,7 +71,7 @@ void Sampler::sample(unsigned int num_samples, double step_length)
     }
 
     /* Normalize accumulated energy, energy squared and energy gradient */
-    normalize_energies();
+    normalize();
     /* Compute the variance */
     m_variance = m_energy_squared - SQUARE(m_energy);
 }

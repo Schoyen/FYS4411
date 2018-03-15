@@ -17,94 +17,56 @@ from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, PyImportanceMe
 from matplotlib import pyplot as plt
 import numpy as np
 
-num_particles = 20
-num_dimensions = 1
-num_parameters = 1
-spread = 1.0
-step_length = 0.01
-num_samples = int(1e6)
-num_thermalization_steps = int(1e6)
+num_particles = 100
+num_dimensions = 3
+step_length = 1.0
+num_samples = int(1e5)
+num_thermalization_steps = 0
 
 mass = 1
 omega = 1
 
-num_local_energies = 100
-stride_local_energies = num_samples // num_local_energies
+num_local_energies = 0
 
 
 hamiltonian = PyHarmonicOscillator()
-wavefunction = PySimpleGaussian(num_particles, num_dimensions, num_parameters, mass, omega)
-solver = PyImportanceMetropolis(num_particles)
-sampler = PySampler(wavefunction, hamiltonian, solver, num_local_energies, stride_local_energies)
+wavefunction = PySimpleGaussian(num_particles, num_dimensions, mass, omega)
+solver = PyImportanceMetropolis(step_length, 0.5)
+sampler = PySampler(wavefunction, hamiltonian, solver, num_local_energies)
 
-alpha = 1.0
-wavefunction.set_parameters(np.array([alpha]))
-gradient = 0
-experiments = 100
-for i in range(1, experiments + 1):
-    sampler.sample(num_samples, step_length, num_thermalization_steps)
-    gradient += sampler.get_energy_gradient()
-    wavefunction.redistribute()
-    print ("Intermediate gradient: {0}".format(gradient/i))
-
-print ("Final gradient: {0}".format(gradient/experiments))
-__import__('sys').exit()
-
-alphas = np.linspace(0.1, 1.1, 11)
-
-for alpha in alphas:
-    print("Alpha = ", alpha)
-    wavefunction.set_parameters(np.array([alpha]))
-    print("Start: ", sampler.get_energy_gradient())
-    sampler.sample(num_samples, step_length)
-    print("End: ", sampler.get_energy_gradient())
-    wavefunction.redistribute()
-
-alpha = 0.5 # start
+alpha = np.array([1.0]) # start
 
 MAX_ITER = 100
 iterations = 0
-iters_since_last_improvement = 0
-gamma = 1.0
-wavefunction.set_parameters(np.array([alpha]))
-sampler.sample(
-        num_samples, step_length,
-        num_thermalization_steps=num_thermalization_steps)
-gradient = sampler.get_energy_gradient()# / num_particles
-energy = sampler.get_energy()
+gamma = 0.001
 
 alphas = np.zeros(MAX_ITER)
 
+gradient_prev = 1e10
+
 while (iterations < MAX_ITER):
 
-    print("Alpha = ", alpha)
-    print("Gradient = ", gradient)
-    alpha = alpha - gamma * gradient
-    wavefunction.set_parameters(np.array([alpha]))
-    wavefunction.redistribute()
-    energy_prev = energy
-    energy = sampler.get_energy()
-    gradient_prev = gradient
+    wavefunction.set_parameters(alpha)
     sampler.sample(
             num_samples, step_length,
             num_thermalization_steps=num_thermalization_steps)
-    gradient = sampler.get_energy_gradient()# /num_particles
+
+    print("Alpha = ", alpha)
+    gradient = sampler.get_parameter_gradient()
+    print("Gradient = ", gradient)
+    alpha = alpha - gamma * gradient
+    wavefunction.redistribute()
 
     if (gradient*gradient > gradient_prev*gradient_prev):
-        if (iters_since_last_improvement >= 10):
-            gamma = 0.01
-            print("Stuck!")
-        else:
-            gamma = gamma * 0.9
+        print ("Boink")
+        gamma = gamma * 0.9
 
-        iters_since_last_improvement += 1
-    else:
-        iters_since_last_improvement = 0
+    gradient_prev = gradient
 
-    if alpha < 0:
-        alpha = -alpha
+    mask = alpha < 0
+    alpha[mask] = -alpha[mask]
 
-    alphas[iterations] = alpha
+    alphas[iterations] = alpha[0]
     iterations += 1
 
 plt.plot(alphas)

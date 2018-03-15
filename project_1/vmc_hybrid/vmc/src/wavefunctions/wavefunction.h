@@ -69,7 +69,7 @@ class Wavefunction
             return m_omega;
         }
 
-        void reset_particle_position(double position[], unsigned int p_i)
+        void reset_particle_position(double *position, unsigned int p_i)
         {
             unsigned int i;
 
@@ -78,8 +78,7 @@ class Wavefunction
             }
         }
 
-        void copy_particle_position(
-                double position[], unsigned int p_k)
+        void copy_particle_position(double *position, unsigned int p_k)
         {
             unsigned int i;
 
@@ -103,13 +102,28 @@ class Wavefunction
             return sqrt(distance);
         }
 
-        void move_particle(
-                double step, unsigned int particle_index,
-                unsigned int coordinate);
+        void move_particle(double step, unsigned int p_i, unsigned int i)
+        {
+            m_particles[p_i][i] += step;
+        }
+
+        double compute_drift_force_component(unsigned int p_i, unsigned int i)
+        {
+            return 2*compute_gradient_component(p_i, i);
+        }
+
+        void compute_drift_force(double *drift_force, unsigned int p_i)
+        {
+            unsigned int i;
+
+            for (i = 0; i < m_num_dimensions; i++) {
+                drift_force[i] = compute_drift_force_component(p_i, i);
+            }
+        }
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
-        virtual double compute_drift_force_component(double coordinate) = 0;
-        virtual std::valarray<double> compute_laplacian_variational_gradient()
-            = 0;
+        virtual double compute_gradient_component(
+                unsigned int p_i, unsigned int i) = 0;
+        virtual std::valarray<double> compute_variational_gradient() = 0;
 };

@@ -15,8 +15,5 @@ class ImportanceMetropolis : public MonteCarloMethod
         ImportanceMetropolis(
                 double time_step, double diffusion_coefficient, int seed);
 
-        double greensFraction(
-                Wavefunction *wavefunction, double *new_pos, double *old_pos);
-
         bool step(Wavefunction *wavefunction, double step_length);
 };

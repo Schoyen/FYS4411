@@ -42,37 +42,6 @@ double SimpleGaussian::compute_laplacian()
     return laplacian;
 }
 
-std::valarray<double> SimpleGaussian::compute_laplacian_variational_gradient()
-{
-    double alpha, position_squared_sum;
-    std::valarray<double> laplacian_alpha_derivative(m_num_parameters);
-
-    /* Fetch variational parameter alpha */
-    alpha = m_parameters[0];
-
-    /* Compute position squared sum */
-    position_squared_sum = compute_position_squared_sum();
-
-    /* Compute the alpha derivative of the laplacian */
-    laplacian_alpha_derivative[0] =
-        (double) -2 * m_num_dimensions * m_num_particles
-        + 8 * alpha * position_squared_sum;
-
-    return laplacian_alpha_derivative;
-}
-
-double SimpleGaussian::compute_drift_force_component(double coordinate)
-{
-    double alpha;
-
-    /* Fetch variational parameter alpha */
-    alpha = m_parameters[0];
-
-    // Drift force is F = -4*alpha*r_vec
-    // return -4*alpha*m_particles[dimension, particle*m_num_dimensions];
-    return - 4*alpha*coordinate;
-}
-
 double SimpleGaussian::evaluate()
 {
     double alpha, evaluated_wavefunction, position_squared_sum;
@@ -89,4 +58,13 @@ double SimpleGaussian::evaluate()
 
     /* Return the evaluated result */
     return evaluated_wavefunction;
+}
+
+std::valarray<double> SimpleGaussian::compute_variational_gradient()
+{
+    std::valarray<double> gradient(m_num_parameters);
+
+    gradient = compute_position_squared_sum();
+
+    return gradient;
 }
