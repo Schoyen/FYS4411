@@ -9,6 +9,9 @@ build:
 install:
 	@pip install . --upgrade
 
+installr:
+	@pip install . --upgrade -r requirements.txt
+
 .PHONY: clean
 
 clean:
