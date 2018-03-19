@@ -13,11 +13,13 @@
 
 import config
 
-from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, PyImportanceMetropolis, PySampler
+from vmc.interface import PySimpleGaussian, PyHarmonicOscillator, \
+    PyImportanceMetropolis, PySampler, PyEllipticalHarmonicOscillator, \
+    PyInteractingEllipticalGaussian
 from matplotlib import pyplot as plt
 import numpy as np
 
-num_particles = 100
+num_particles = 10
 num_dimensions = 3
 step_length = 1.0
 num_samples = int(1e5)
@@ -28,10 +30,17 @@ omega = 1
 
 num_local_energies = 0
 
+beta = _lambda = 2.82843
+radius = 0.043
 
-hamiltonian = PyHarmonicOscillator()
-wavefunction = PySimpleGaussian(num_particles, num_dimensions, mass, omega)
-solver = PyImportanceMetropolis(step_length, 0.5)
+
+#hamiltonian = PyHarmonicOscillator()
+hamiltonian = PyEllipticalHarmonicOscillator(_lambda)
+wavefunction = PyInteractingEllipticalGaussian(
+        num_particles, num_dimensions, mass, omega, beta, radius,
+        spread=step_length)
+#wavefunction = PySimpleGaussian(num_particles, num_dimensions, mass, omega)
+solver = PyImportanceMetropolis()
 sampler = PySampler(wavefunction, hamiltonian, solver)
 
 alpha = np.array([1.0]) # start
@@ -57,9 +66,9 @@ while (iterations < MAX_ITER):
     alpha = alpha - gamma * gradient
     wavefunction.redistribute()
 
-    if (gradient*gradient > gradient_prev*gradient_prev):
-        print ("Boink")
-        gamma = gamma * 0.9
+    #if (gradient*gradient > gradient_prev*gradient_prev):
+    #    print ("Boink")
+    #    gamma = gamma * 0.9
 
     gradient_prev = gradient
 
