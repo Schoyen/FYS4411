@@ -214,6 +214,20 @@ InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
     return laplacian;
 }
 
+void InteractingEllipticalGaussian::compute_gradient(
+        double *gradient, unsigned int p_i)
+{
+    unsigned int i;
+    std::valarray<double> spf_gradient, corr_gradient;
+
+    spf_gradient = compute_gradient_single_particle_function(p_i);
+    corr_gradient = compute_gradient_correlation_wavefunction(p_i);
+
+    for (i = 0; i < m_num_dimensions; i++) {
+        gradient[i] = spf_gradient[i] + corr_gradient[i];
+    }
+}
+
 std::valarray<double>
 InteractingEllipticalGaussian::compute_variational_gradient()
 {
