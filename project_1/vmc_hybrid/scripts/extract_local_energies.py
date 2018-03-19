@@ -21,7 +21,7 @@ num_dimensions = 1
 num_parameters = 1
 
 # Monte Carlo classes
-solver = PyImportanceMetropolis(num_particles)
+solver = PyImportanceMetropolis()
 wavefunction = PySimpleGaussian(num_particles, num_dimensions,\
         mass, omega, spread=step_length)
 hamiltonian = PyHarmonicOscillator()
