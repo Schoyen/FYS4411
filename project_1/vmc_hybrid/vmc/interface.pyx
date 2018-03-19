@@ -208,7 +208,7 @@ cdef class PySampler:
         wave_grad = self._get_wavefunction_variational_gradient()
         energy_grad = self._get_variational_energy_gradient()
 
-        return -2*(energy_grad - wave_grad*energy)
+        return 2*(energy_grad - wave_grad*energy)
 
     def _get_wavefunction_variational_gradient(self):
         cdef valarray[double] _arr

@@ -64,7 +64,7 @@ std::valarray<double> SimpleGaussian::compute_variational_gradient()
 {
     std::valarray<double> gradient(m_num_parameters);
 
-    gradient = compute_position_squared_sum();
+    gradient = -compute_position_squared_sum();
 
     return gradient;
 }
