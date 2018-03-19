@@ -1,1 +1,1 @@
-from vmc.runner import run_experiment
+from vmc.runner import *
