@@ -7,18 +7,15 @@
 #include <random>
 
 
-ImportanceMetropolis::ImportanceMetropolis(
-        double time_step, double diffusion_coefficient)
+ImportanceMetropolis::ImportanceMetropolis(double diffusion_coefficient)
 {
-    m_time_step = time_step;
     m_diffusion_coefficient = diffusion_coefficient;
 }
 
 ImportanceMetropolis::ImportanceMetropolis(
-        double time_step, double diffusion_coefficient, int seed) :
+        double diffusion_coefficient, int seed) :
     MonteCarloMethod(seed)
 {
-    m_time_step = time_step;
     m_diffusion_coefficient = diffusion_coefficient;
 }
 
@@ -52,8 +49,8 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
 
     /* Propose a new step and move the particle */
     for (i = 0; i < num_dimensions; i++) {
-        step = m_diffusion_coefficient*drift_force_old[i]*m_time_step
-            + next_gaussian(0, 1)*sqrt(m_time_step);
+        step = m_diffusion_coefficient*drift_force_old[i]*step_length
+            + next_gaussian(0, 1)*sqrt(step_length);
 
         wavefunction->move_particle(step, p_i, i);
     }
@@ -74,16 +71,16 @@ bool ImportanceMetropolis::step(Wavefunction *wavefunction, double step_length)
     /* Compute the exponential terms in the Green's functions */
     for (i = 0; i < num_dimensions; i++) {
         first_vector += SQUARE(old_position[i] - new_position[i]
-                - m_diffusion_coefficient*m_time_step*drift_force_new[i]);
+                - m_diffusion_coefficient*step_length*drift_force_new[i]);
         second_vector += SQUARE(new_position[i] - old_position[i]
-                - m_diffusion_coefficient*m_time_step*drift_force_old[i]);
+                - m_diffusion_coefficient*step_length*drift_force_old[i]);
     }
 
     /* Compute the Green's functions */
     greens_numerator =
-        exp(-first_vector/(4.0*m_diffusion_coefficient*m_time_step));
+        exp(-first_vector/(4.0*m_diffusion_coefficient*step_length));
     greens_denominator =
-        exp(-second_vector/(4.0*m_diffusion_coefficient*m_time_step));
+        exp(-second_vector/(4.0*m_diffusion_coefficient*step_length));
 
     /* Compute the ratio test for the Metropolis-Hastings algorithm */
     weight = (greens_numerator/greens_denominator)

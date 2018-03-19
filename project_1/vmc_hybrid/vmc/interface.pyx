@@ -273,11 +273,8 @@ cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 
 cdef class PyImportanceMetropolis(PyMonteCarloMethod):
 
-    def __cinit__(self, double time_step, double diffusion_coefficient,
-            seed=None):
+    def __cinit__(self, double diffusion_coefficient=0.5, seed=None):
         if seed:
-            self.method = new ImportanceMetropolis(
-                    time_step, diffusion_coefficient, seed)
+            self.method = new ImportanceMetropolis(diffusion_coefficient, seed)
         else:
-            self.method = new ImportanceMetropolis(
-                    time_step, diffusion_coefficient)
+            self.method = new ImportanceMetropolis(diffusion_coefficient)
