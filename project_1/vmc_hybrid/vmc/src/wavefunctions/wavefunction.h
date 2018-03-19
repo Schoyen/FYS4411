@@ -119,23 +119,19 @@ class Wavefunction
             m_particles[p_i][i] += step;
         }
 
-        double compute_drift_force_component(unsigned int p_i, unsigned int i)
-        {
-            return 2*compute_gradient_component(p_i, i);
-        }
-
         void compute_drift_force(double *drift_force, unsigned int p_i)
         {
             unsigned int i;
 
+            compute_gradient(drift_force, p_i);
+
             for (i = 0; i < m_num_dimensions; i++) {
-                drift_force[i] = compute_drift_force_component(p_i, i);
+                drift_force[i] *= 2;
             }
         }
 
         virtual double evaluate() = 0;
         virtual double compute_laplacian() = 0;
-        virtual double compute_gradient_component(
-                unsigned int p_i, unsigned int i) = 0;
+        virtual void compute_gradient(double *gradient, unsigned int p_i) = 0;
         virtual std::valarray<double> compute_variational_gradient() = 0;
 };

@@ -15,15 +15,16 @@ class SimpleGaussian : public Wavefunction
                 double *parameters,
                 double *particles);
 
-        double compute_gradient_component(
-                unsigned int p_i, unsigned int i)
+        void compute_gradient(double *gradient, unsigned int p_i)
         {
             double alpha;
+            unsigned int i;
 
-            /* Fetch variational parameter alpha */
             alpha = m_parameters[0];
 
-            return -2*alpha*m_particles[p_i][i];
+            for (i = 0; i < m_num_dimensions; i++) {
+                gradient[i] = -2*alpha*m_particles[p_i][i];
+            }
         }
 
         double evaluate();
