@@ -1,5 +1,28 @@
 import tqdm
 import pandas as pd
+import numpy as np
+from .resampling_methods import bootstrap, blocking
+
+def sample_local_energies(sampler, wavefunction, parameters, time=True,
+        **sampler_kwargs):
+
+    if not "sample_local_energies" in sampler_kwargs:
+        sampler_kwargs["sample_local_energies"] = True
+
+    # Use index into parameters array as column names
+    df = pd.DataFrame(columns=[str(i) for i in range(parameters.size)])
+
+    for i in tqdm.tqdm(range(parameters.size)) \
+            if time else range(parameters.size):
+
+        wavefunction.redistribute()
+        wavefunction.set_parameters(parameters[i])
+
+        sampler.sample(**sampler_kwargs)
+
+        df[str(i)] = sampler.get_local_energies()
+
+    return df
 
 def run_experiment(sampler, wavefunction, parameters, parameter_names,
         time=True, **sampler_kwargs):
