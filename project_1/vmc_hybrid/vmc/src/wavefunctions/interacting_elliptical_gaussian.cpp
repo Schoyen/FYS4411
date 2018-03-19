@@ -231,9 +231,21 @@ void InteractingEllipticalGaussian::compute_gradient(
 std::valarray<double>
 InteractingEllipticalGaussian::compute_variational_gradient()
 {
+    unsigned int p_i, i;
     std::valarray<double> gradient(m_num_parameters);
+    double particle_gradient;
 
-    gradient = 0;
+    particle_gradient = 0;
+
+    for (p_i = 0; p_i < m_num_particles; p_i++) {
+        for (i = 0; i < m_num_dimensions; i++) {
+            particle_gradient +=
+                (i != 2) ? SQUARE(m_particles[p_i][i])
+                : (m_beta*SQUARE(m_particles[p_i][i]));
+        }
+    }
+
+    gradient = -particle_gradient;
 
     return gradient;
 }
