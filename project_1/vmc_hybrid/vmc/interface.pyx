@@ -174,16 +174,22 @@ cdef class PySampler:
     cdef Sampler *sampler
     cdef double[::1] local_energies
     cdef double[::1] bins
+    cdef PyWavefunction wavefunction
 
     def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             PyMonteCarloMethod solver):
 
         self.local_energies = np.zeros(1)
+        self.wavefunction = wavefunction
 
         self.sampler = new Sampler(
                 wavefunction.wavefunction,
                 hamiltonian.hamiltonian,
                 solver.method)
+
+    def initialize(self, np.ndarray[double, ndim=1, mode="c"] parameters):
+        self.wavefunction.redistribute()
+        self.wavefunction.set_parameters(parameters)
 
     def get_local_energies(self):
         return np.asarray(self.local_energies)
