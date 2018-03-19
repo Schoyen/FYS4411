@@ -197,6 +197,9 @@ cdef class PySampler:
     def get_variance(self):
         return self.sampler.get_variance()
 
+    def get_stddev(self):
+        return np.sqrt(self.get_variance())
+
     def get_energy(self):
         return self.sampler.get_energy()
 
