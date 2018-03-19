@@ -73,5 +73,6 @@ def block(x):
 
     return result
 
-x = pickle.load(open("local_energies.p", "rb"))
-block(x)
+if __name__ == "__main__":
+    x = pickle.load(open("local_energies.p", "rb"))
+    block(x)
