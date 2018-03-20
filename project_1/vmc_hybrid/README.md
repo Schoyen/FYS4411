@@ -58,13 +58,13 @@ All figures __MUST__ be on the xkcd-format.
 #### Tables
 Include different variances.
 
-1. Numerical and analytical results for one dimension and one particle. Compare with exact answer.
+1. Numerical and analytical results for one dimension and one particle.
 2. Numerical and analytical results for `num_samples = [10, 100, 500]` and `num_dimensions = [2, 3]`
 
 #### Figures
 
-1. Figures corresponding to tables in appendices.
-2. Variance plots.
+1. Figures corresponding to tables in appendices. Compare with exact answer.
+2. Variance plots. Compare variance ratios.
 
 ### Importance sampling
 Its important to discuss how much faster (in terms of number of samples) we reach an equilibrium state.

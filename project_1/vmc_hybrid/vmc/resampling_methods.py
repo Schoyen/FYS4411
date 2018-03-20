@@ -17,7 +17,7 @@ def bootstrap(data, bootstrap_samples):
 
     return np.var(boot_vector), np.std(boot_vector)
 
-def blocking(data):
+def blocking(data, tol=1e-12):
     n = len(data)
     divisor = int(np.log2(n))
     mu = np.mean(data)
@@ -36,6 +36,9 @@ def blocking(data):
         shortest = len(data_2) if len(data_1) > len(data_2) else len(data_1)
 
         data = 0.5*(data_1[:shortest] + data_2[:shortest])
+
+    if np.sum(variances**2) <= tol:
+        return 0
 
     factor_1 = (gamma/variances)**2
     factor_2 = (2**np.arange(1, divisor+1))[::-1]
