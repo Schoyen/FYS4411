@@ -1,3 +1,8 @@
+/*
+ * Hamiltonian with Elliptic Harmonic Oscillator trap potential
+ * 
+ */
+
 #include <valarray>
 
 #include "wavefunction.h"
@@ -7,6 +12,7 @@
 #include "math_macros.h"
 #include "constants.h"
 
+// Constructor: add the elliptical variational parameter lambda
 EllipticalHarmonicOscillator::EllipticalHarmonicOscillator(double lambda)
 {
     m_lambda = lambda;
@@ -32,10 +38,14 @@ double EllipticalHarmonicOscillator::compute_potential_energy(
 
     position_sum = 0;
 
+    // Iterating over all particles. 
     for (p_k = 0; p_k < wavefunction->get_num_particles(); p_k++) {
         wavefunction->copy_particle_position(position, p_k);
 
+        // Iterating over every particle coordinate (dimensions)
         for (i = 0; i < wavefunction->get_num_dimensions(); i++) {
+            
+            // For the third dimension - add the elliptical perturbation
             position_sum +=
                 (i != 2) ? SQUARE(position[i]) : SQUARE(position[i]*m_lambda);
         }
