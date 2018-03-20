@@ -22,12 +22,6 @@
 \usepackage{commath}
 % Include font for the identity operator
 \usepackage{dsfont}
-% Include package for drawing Feynman diagrams
-\usepackage{tikz-feynman}
-% Include package for typesetting contractions
-\usepackage{simpler-wick}
-% Include the Feynman-slash
-\usepackage{slashed}
 % Include Tikz
 \usepackage{tikz}
 % Several figures in the same figure
@@ -802,70 +796,105 @@
         sample from one block is no longer correlated with a corresponding sample from an adjacent block.
         The block size for this point of convergence now functions as an estimate for the autocorrelation
         time $\tau$.
-        
-        INSERT PSEUDO-CODE DESCRIPTION OF ALGORITHM? 
+
+        INSERT PSEUDO-CODE DESCRIPTION OF ALGORITHM?
 
 \section{Results}
 
 	\subsection{Non-Interacting Systems}
 	Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
 	the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
-	harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every 
+	harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
 	undergraduate physics student should be well aware of.}, which is further simplified by the "god-given" analytic
-	units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for 
-	$\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the 
+	units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
+	$\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
 	expected minimum local energy,
 	\begin{equation}
 		E_L(\vb{r}) = \frac{dN}{2},
 	\end{equation}
-	which will be used as the benchmark we are ultimately aiming for. 
+	which will be used as the benchmark we are ultimately aiming for.
 	
 	We will start without importance sampling, that is by employing the simpler and more naïve "brute force" Monte Carlo
-	sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach. 
+	sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
 	In the numerical approach.
-	
-	\begin{table}
-		\caption{Analytic result. $N=1$, 1D, $2\times10^6$ cycles.}
-		\centering
-		\begin{tabular}{ccc} \hline
-			\alpha & E($\alpha$) & $\sigma^2$(E) \\ \hline \hline
-				0.30 & 0.5717 & 0.1504 \\
-				0.34 & 0.5397 & 0.0815 \\
-				0.38 & 0.5197 & 0.0390 \\
-				0.42 & 0.5084 & 0.0154 \\
-				0.46 & 0.5016 & 0.0034 \\
-				0.50 & 0.5000 & 0.0000 \\
-				0.54 & 0.5016 & 0.0030 \\
-				0.58 & 0.5047 & 0.0117 \\
-				0.62 & 0.5114 & 0.0239 \\
-				0.66 & 0.5203 & 0.0381 \\
-				0.70 & 0.5275 & 0.0590 \\ \hline \hline			
-		\end{tabular}	
-	\end{table}
-	
-	\begin{table}
-		\caption{Numerical result. $N=1$, 1D, $2\times10^6$ cycles.}
-		\centering
-		\begin{tabular}{ccc} \hline
-			\alpha & E($\alpha$) & $\sigma^2$(E) \\ \hline \hline
-				0.30 & 0.5807 & 0.2535 \\
-				0.34 & 0.5379 & 0.1280 \\
-				0.38 & 0.5365 & 0.1120 \\
-				0.42 & 0.5220 & 0.0671 \\
-				0.46 & 0.5210 & 0.05250 \\
-				0.50 & 0.5265 & 0.0411\\
-				0.54 & 0.5264 & 0.0263 \\
-				0.58 & 0.5353 & 0.0259 \\
-				0.62 & 0.5481 & 0.0221 \\
-				0.66 & 0.5481 & 0.0194 \\
-				0.70 & 0.5596 & 0.0204 \\ \hline \hline
-		\end{tabular}
-	\end{table}
-	
+
+    \begin{table}
+        \centering
+        \caption{One particle in one dimension for the analytic expression with
+        $2^{21}$ Monte Carlo cycles and step length of $0.5$.}
+        \begin{ruledtabular}
+            \begin{tabular}{cccccc}
+                $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$ & $A$
+                & $t_{\text{CPU}} [\si{\second}]$ \\
+                \hline
+                0.30&0.56661&0.00026&0.00133&0.89121&0.39765\\
+                0.34&0.53858&0.00019&0.00096&0.88419&0.34550\\
+                0.38&0.51822&0.00013&0.00062&0.87823&0.34849\\
+                0.42&0.50770&0.00009&0.00037&0.87136&0.36115\\
+                0.46&0.50197&0.00004&0.00018&0.86589&0.34705\\
+                0.50&0.50000&0.00000&0.00000&0.86092&0.35124\\
+                0.54&0.50146&0.00004&0.00016&0.85497&0.34875\\
+                0.58&0.50592&0.00007&0.00029&0.84999&0.34705\\
+                0.62&0.51180&0.00011&0.00041&0.84455&0.34861\\
+                0.66&0.51983&0.00014&0.00051&0.84014&0.36164\\
+                0.70&0.52742&0.00017&0.00063&0.83516&0.35525\\
+            \end{tabular}
+        \end{ruledtabular}
+        \label{tab:1D1N_analytic}
+    \end{table}
+
+    \begin{table}
+        \centering
+        \caption{One particle in one dimension for the numeric expression with
+        $2^{21}$ Monte Carlo cycles and a step length of $0.5$.}
+        \begin{ruledtabular}
+            \begin{tabular}{cccccc}
+                $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$
+                & $A$&$t_{\text{CPU}} [\si{\second}]$ \\
+                \hline
+                0.30&0.56494&0.00026&0.00131&0.89160&0.35031\\
+                0.34&0.53933&0.00020&0.00097&0.88427&0.37179\\
+                0.38&0.51841&0.00014&0.00063&0.87840&0.34806\\
+                0.42&0.50737&0.00008&0.00037&0.87182&0.34957\\
+                0.46&0.50211&0.00004&0.00018&0.86549&0.34976\\
+                0.50&0.50000&0.00000&0.00000&0.86041&0.34791\\
+                0.54&0.50136&0.00004&0.00015&0.85532&0.34858\\
+                0.58&0.50525&0.00007&0.00028&0.84945&0.34703\\
+                0.62&0.51181&0.00011&0.00040&0.84535&0.34517\\
+                0.66&0.52002&0.00014&0.00051&0.84053&0.34858\\
+                0.70&0.52778&0.00017&0.00061&0.83560&0.34818\\
+            \end{tabular}
+        \end{ruledtabular}
+        \label{tab:1D1N_numeric}
+    \end{table}
+
+    \begin{table}
+        \centering
+        \caption{BLEH}
+        \begin{ruledtabular}
+            \begin{tabular}{c|ccc|ccc}
+                & \multicolumn{3}{c|}{Analytic}
+                & \multicolumn{3}{c}{Numeric} \\
+                \hline
+                $N$
+                & $\langle E_L\rangle$ & $\sigma_b$
+                & $t_{\text{CPU}} [\si{\second}]$
+                & $\langle E_L\rangle$ & $\sigma_b$
+                & $t_{\text{CPU}} [\si{\second}]$ \\
+                \hline
+                1  \\
+                10 \\
+                100 \\
+                500
+            \end{tabular}
+        \end{ruledtabular}
+        \label{tab:initial_optimum_comparison}
+    \end{table}
+
 	\begin{table*}[ht]
 		\centering
 		\caption{Brute force Metropolis-Hasting at optimum value $\alpha = \frac{1}{2}$ in three dimensions. Step length = 0.1.}
-		\begin{tabular}{c|ccc|ccc} 
+		\begin{tabular}{c|ccc|ccc}
 			  & \multicolumn{3}{c|}{Analytic} & \multicolumn{3}{c}{Numeric} \\ \hline
 			No. of particles & E($\alpha$) & $\sigma^2$(E) & CPU time [s] & E($\alpha$) & $\sigma^2$(E) & CPU time [s] \\ \hline
 			1					 	&   1.5000		  & 0.0000			&  0.42562		& 1.29538		 & 0.10489		   & 0.69979  \\
@@ -875,22 +904,23 @@
 		\end{tabular}
 	\end{table*}
 
+\appendix
+\section{Brute Force Metropolis-Hastings}
+
+    \begin{figure*}
+        \makebox[\textwidth][c]{
+            \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}
+        }
+        \caption{Comparison of analytic and numeric results with the exact
+        expression for the energy as a function of $\alpha$. The plots show the
+        standard deviation from the blocking method as error ticks. In the
+        figure $N$ is the number of particles and $d$ the number of dimensions.}
+        \label{fig:initial_problem_b}
+    \end{figure*}
+
 
 \bibliography{references}
 
-\pagebreak
 
-\begin{widetext}
-\begin{appendices}
-
-\section{Brute Force Metropolis-Hastings}
-\begin{figure}[h]
-	\makebox[\textwidth][c]{
-	\includegraphics[width=1.2\textwidth]{../figures/problem_b.png}
-	}
-\end{figure}
-
-\end{appendices}
-\end{widetext}
 
 \end{document}
