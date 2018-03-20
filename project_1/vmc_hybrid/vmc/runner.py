@@ -28,6 +28,9 @@ def sample_local_energies(sampler, wavefunction, parameters, time=True,
 def run_all(sampler, parameters, parameter_names, bootstrap_samples,
         timeit=True, **sampler_kwargs):
 
+    if not "sample_local_energies" in sampler_kwargs:
+        sampler_kwargs["sample_local_energies"] = True
+
     _quantities = ["energy", "variance", "std", "acceptance", "sampling_time"]
     _boot_quantities = ["boot_var", "boot_std"]
     _block_quantities = ["block_var", "block_std"]
