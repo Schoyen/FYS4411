@@ -44,5 +44,5 @@ double SimpleGaussianNumerical::compute_laplacian()
         }
     }
 
-    return laplacian;
+    return laplacian/central;
 }
