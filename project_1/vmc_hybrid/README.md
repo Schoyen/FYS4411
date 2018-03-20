@@ -58,7 +58,7 @@ All figures __MUST__ be on the xkcd-format.
 #### Tables
 Include different variances.
 
-1. Numerical and analytical results for one dimension and one particle.
+1. Numerical and analytical results for one dimension and one particle. CZHECH
 2. Numerical and analytical results for `num_samples = [10, 100, 500]` and `num_dimensions = [2, 3]` for `alpha = 0.5`.
 
 #### Figures
