@@ -85,9 +85,10 @@ void Sampler::sample(unsigned int num_samples, double step_length,
             }
         }
     }
-
     /* Normalize accumulated energy, energy squared and energy gradient */
     normalize();
+
     /* Compute the variance */
     m_variance = m_energy_squared - SQUARE(m_energy);
+    m_variance /= m_num_steps;
 }
