@@ -63,7 +63,7 @@ Include different variances.
 
 #### Figures
 
-1. Figures corresponding to tables in appendices. Compare with exact answer.
+1. Figures corresponding to tables in appendices. Compare with exact answer. CJIOASDJ
 2. Variance plots. Compare variance ratios.
 
 ### Importance sampling
