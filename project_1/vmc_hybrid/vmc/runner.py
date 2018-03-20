@@ -32,7 +32,9 @@ def run_all(sampler, parameters, parameter_names, bootstrap_samples,
         sampler_kwargs["sample_local_energies"] = True
 
     _quantities = ["energy", "variance", "std", "acceptance", "sampling_time"]
-    _boot_quantities = ["boot_var", "boot_std"]
+
+    _boot_quantities = ["boot_var", "boot_std"] if bootstrap_samples > 0 else []
+
     _block_quantities = ["block_var", "block_std"]
 
     columns = \
@@ -61,8 +63,9 @@ def run_all(sampler, parameters, parameter_names, bootstrap_samples,
 
         local_energies = sampler.get_local_energies()
 
-        df.loc[i, _boot_quantities] = bootstrap(
-                local_energies, bootstrap_samples)
+        if bootstrap_samples > 0:
+            df.loc[i, _boot_quantities] = bootstrap(
+                    local_energies, bootstrap_samples)
 
         df.loc[i, _block_quantities] = blocking(local_energies)
 
