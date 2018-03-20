@@ -37,13 +37,14 @@ num_alphas = 11
 alpha = np.linspace(0.3, 0.7, num_alphas).reshape(num_alphas, 1)
 
 # Particle-, dimension- and parameter configuration
-num_particles  = [1, 10, 100]
+num_particles  = [1, 10, 100, 500]
 num_dimensions = [1, 2, 3]
 num_parameters = 1
 
 # Storage
 energies_analytic  = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
 energies_numerical = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
+energies_exact     = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
 cpu_time_analytic  = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
 cpu_time_numerical = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
 variance_analytic  = np.zeros((len(num_particles), len(num_dimensions), num_alphas))
@@ -59,13 +60,12 @@ for i in range(len(num_particles)):
         print("Number of particles: {}, {}D".format(num_particles[i], num_dimensions[j]))
 
         # Monte Carlo specific parameters
-        solver = PyMetropolisAlgorithm(num_particles[i])
+        solver = PyMetropolisAlgorithm()
         analytic_wfn  = PySimpleGaussian(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
         numerical_wfn = PySimpleGaussianNumerical(num_particles[i], num_dimensions[j], mass, omega, spread=step_length)
         hamiltonian  = PyHarmonicOscillator()
         analytic_sampler  = PySampler(analytic_wfn, hamiltonian, solver)
         numerical_sampler = PySampler(numerical_wfn,  hamiltonian, solver)
-        #num_samples = int(1200 * num_particles[i])
         num_samples = 2000000
 
         # Iterating over alphas
