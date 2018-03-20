@@ -1,4 +1,5 @@
 import tqdm
+import time
 import pandas as pd
 import numpy as np
 from .resampling_methods import bootstrap, blocking
@@ -24,10 +25,10 @@ def sample_local_energies(sampler, wavefunction, parameters, time=True,
 
     return df
 
-def run_all(sampler, parameters, parameter_names, bootstrap_samples, time=True,
-        **sampler_kwargs):
+def run_all(sampler, parameters, parameter_names, bootstrap_samples,
+        timeit=True, **sampler_kwargs):
 
-    _quantities = ["energy", "variance", "std", "acceptance"]
+    _quantities = ["energy", "variance", "std", "acceptance", "sampling_time"]
     _boot_quantities = ["boot_var", "boot_std"]
     _block_quantities = ["block_var", "block_std"]
 
@@ -42,16 +43,18 @@ def run_all(sampler, parameters, parameter_names, bootstrap_samples, time=True,
     df = df.astype("double")
 
     for i in tqdm.tqdm(range(len(parameters))) \
-            if time else range(len(parameters)):
+            if timeit else range(len(parameters)):
 
         # Redistribute and set variational parameters in wavefunction
         sampler.initialize(df.iloc[i][parameter_names].values)
 
+        t0 = time.time()
         sampler.sample(**sampler_kwargs)
+        t1 = time.time()
 
         df.loc[i, _quantities] = [
             sampler.get_energy(), sampler.get_variance(), sampler.get_stddev(),
-            sampler.get_acceptance_ratio()]
+            sampler.get_acceptance_ratio(), t1 - t0]
 
         local_energies = sampler.get_local_energies()
 
