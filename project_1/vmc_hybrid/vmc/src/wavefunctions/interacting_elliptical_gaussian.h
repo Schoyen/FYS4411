@@ -6,6 +6,8 @@
 
 class InteractingEllipticalGaussian : public Wavefunction
 {
+
+   // Private helper functions
     private:
         double m_beta;
 

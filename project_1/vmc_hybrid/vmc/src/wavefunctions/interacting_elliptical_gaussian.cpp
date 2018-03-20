@@ -1,3 +1,8 @@
+/*
+ * Gaussian wavefunction for use with elliptic traph
+ * 
+ */ 
+
 #include <valarray>
 #include <cmath>
 
@@ -35,6 +40,7 @@ double InteractingEllipticalGaussian::evaluate()
 
     product = 1.0;
 
+    // Wavefunction evaluation, single-particle and interaction contributions
     for (p_i = 0; p_i < m_num_particles; p_i++) {
         product *= evaluate_single_particle_function(p_i);
         for (p_j = p_i + 1; p_j < m_num_particles; p_j++) {
@@ -45,6 +51,7 @@ double InteractingEllipticalGaussian::evaluate()
     return product;
 }
 
+// Private method. Single-particle contributions.
 double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
         unsigned int p_i)
 {
@@ -58,6 +65,8 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
     position_sum = 0;
 
     for (i = 0; i < m_num_dimensions; i++) {
+
+        // The z-coordinates will be perturbed. 
         position_sum +=
             (i != 2) ? SQUARE(position[i]) : (m_beta*SQUARE(position[i]));
     }
@@ -65,6 +74,7 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
     return exp(-(alpha*HBAR/(m_mass*m_omega))*position_sum);
 }
 
+// Private method. Interaction (correlation) contributions.
 double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
         unsigned int p_i, unsigned int p_j)
 {
@@ -74,6 +84,7 @@ double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
 
     distance = get_distance_between_particles(p_i, p_j);
 
+    // Removing "illegal" position contributions
     if (distance <= a) {
         return 0.0;
     }
@@ -81,6 +92,7 @@ double InteractingEllipticalGaussian::evaluate_correlation_wavefunction(
     return 1.0 - a/distance;
 }
 
+// Method to compute laplacian for all particles.
 double InteractingEllipticalGaussian::compute_laplacian()
 {
     unsigned int p_k;
@@ -95,17 +107,19 @@ double InteractingEllipticalGaussian::compute_laplacian()
     return laplacian;
 }
 
+// PRIVAET method to compute laplacian for a single particle.
 double InteractingEllipticalGaussian::compute_laplacian(unsigned int p_k)
 {
     double laplacian;
     std::valarray<double> gradient_spf, gradient_cw;
     unsigned int i;
 
+    // Call to helper functions
     laplacian = compute_laplacian_single_particle_function(p_k);
-
     gradient_spf = compute_gradient_single_particle_function(p_k);
     gradient_cw = compute_gradient_correlation_wavefunction(p_k);
 
+    // Adding up contributions for the particular in question.
     for (i = 0; i < m_num_dimensions; i++) {
         laplacian += 2*gradient_spf[i]*gradient_cw[i];
         laplacian += SQUARE(gradient_cw[i]);
@@ -116,6 +130,7 @@ double InteractingEllipticalGaussian::compute_laplacian(unsigned int p_k)
     return laplacian;
 }
 
+// Private method. Helper. Compute SPF gradient.
 std::valarray<double>
 InteractingEllipticalGaussian::compute_gradient_single_particle_function(
         unsigned int p_k)
@@ -128,6 +143,7 @@ InteractingEllipticalGaussian::compute_gradient_single_particle_function(
 
     position = m_particles[p_k];
 
+    // Conditional z-coordinate perturbation.
     for (i = 0; i < m_num_dimensions; i++) {
         gradient[i] = (i != 2) ? position[i] : (m_beta*position[i]);
     }
@@ -135,6 +151,7 @@ InteractingEllipticalGaussian::compute_gradient_single_particle_function(
     return -2*alpha*gradient;
 }
 
+// Private method. Helper. Compute SPF laplacian.
 double
 InteractingEllipticalGaussian::compute_laplacian_single_particle_function(
         unsigned int p_k)
@@ -148,6 +165,7 @@ InteractingEllipticalGaussian::compute_laplacian_single_particle_function(
 
     position_sum = 0;
 
+    // Conditional z-coordinate perturbation.
     for (i = 0; i < m_num_dimensions; i++) {
         position_sum +=
             (i != 2) ? SQUARE(position[i]) : SQUARE(m_beta*position[i]);
@@ -159,6 +177,7 @@ InteractingEllipticalGaussian::compute_laplacian_single_particle_function(
     return laplacian;
 }
 
+// Private method. Computes CW gradient for scpecific particle.
 std::valarray<double>
 InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
         unsigned int p_k)
@@ -173,14 +192,17 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
 
     gradient = 0;
 
+    // Compute all particle contributions. Ignore if self (p_m == p_k).
     for (p_m = 0; p_m < m_num_particles; p_m++) {
         if (p_m == p_k) {
             continue;
         }
 
+        // Getting distance b/w particles.j
         r_m = m_particles[p_m];
         r_km = get_distance_between_particles(p_k, p_m);
 
+        // Adding contribution. 
         for (i = 0; i < m_num_dimensions; i++) {
             gradient[i] += (r_k[i] - r_m[i])*a/(SQUARE(r_km)*(r_km - a));
         }
@@ -189,6 +211,7 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
     return gradient;
 }
 
+// Private method. Computes CW laplacian for specific particle. 
 double
 InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
         unsigned int p_k)
@@ -200,13 +223,16 @@ InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
 
     laplacian = 0;
 
+    // Compute all particle contributions. Ignore if self (p_m == p_k).
     for (p_m = 0; p_m < m_num_particles; p_m++) {
         if (p_m == p_k) {
             continue;
         }
 
+        // Get distance b/w particles.
         r_km = get_distance_between_particles(p_k, p_m);
 
+        // Adding contribution.
         laplacian += (m_num_dimensions - 1)*a/(SQUARE(r_km)*(r_km - a));
         laplacian += (SQUARE(a) - 2*a*r_km)/(SQUARE(r_km)*SQUARE((r_km - a)));
     }
@@ -214,20 +240,24 @@ InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
     return laplacian;
 }
 
+// Public method. Full gradient for particular particle. 
 void InteractingEllipticalGaussian::compute_gradient(
         double *gradient, unsigned int p_i)
 {
     unsigned int i;
     std::valarray<double> spf_gradient, corr_gradient;
 
+    // Calling private helper methods. 
     spf_gradient = compute_gradient_single_particle_function(p_i);
     corr_gradient = compute_gradient_correlation_wavefunction(p_i);
 
+    // Contribution from all particles to particle at p_i
     for (i = 0; i < m_num_dimensions; i++) {
         gradient[i] = spf_gradient[i] + corr_gradient[i];
     }
 }
 
+// Public method. Full variational gradient for particular particle.
 std::valarray<double>
 InteractingEllipticalGaussian::compute_variational_gradient()
 {
@@ -237,6 +267,7 @@ InteractingEllipticalGaussian::compute_variational_gradient()
 
     particle_gradient = 0;
 
+    // Iterating over all particles and coordinates. Adding up contributions. 
     for (p_i = 0; p_i < m_num_particles; p_i++) {
         for (i = 0; i < m_num_dimensions; i++) {
             particle_gradient +=
