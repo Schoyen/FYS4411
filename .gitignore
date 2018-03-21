@@ -8,6 +8,7 @@
 *.bib
 *.bbl
 *.blg
+*.toc
 
 # Avoid ignoring reference bibliography
 !references.bib
