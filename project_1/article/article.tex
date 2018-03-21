@@ -869,10 +869,13 @@
     \end{table}
 
     \begin{table}
+        \caption{Comparison of energy, standard deviation and the CPU time for
+        $\alpha = 0.5$ (the correct minimum) for the analytic and numeric
+        schemes in three dimensions and $N$ particles. The step length is
+        $0.5$.}
         \centering
-        \caption{BLEH}
         \begin{ruledtabular}
-            \begin{tabular}{c|ccc|ccc}
+            \begin{tabular}{r|rrr|rrr}
                 & \multicolumn{3}{c|}{Analytic}
                 & \multicolumn{3}{c}{Numeric} \\
                 \hline
@@ -882,27 +885,18 @@
                 & $\langle E_L\rangle$ & $\sigma_b$
                 & $t_{\text{CPU}} [\si{\second}]$ \\
                 \hline
-                1  \\
-                10 \\
-                100 \\
-                500
+                1 & 1.5 & 0.0 & 0.50
+                & 1.49997 & 0.00008 & 0.73 \\
+                10 & 15.0 & 0.0 & 0.73
+                & 14.98278 & 0.00867 & 6.40 \\
+                100 & 150.0 & 0.0 & 4.13
+                & 149.81453 & 0.81501 & 387.60 \\
+                500 & 750.0 & 0.0 & 19.16
+                & 773.85435 & 20.69789 & 9595.02
             \end{tabular}
         \end{ruledtabular}
         \label{tab:initial_optimum_comparison}
     \end{table}
-
-    \begin{table*}[ht]
-        \centering
-        \caption{Brute force Metropolis-Hasting at optimum value $\alpha = \frac{1}{2}$ in three dimensions. Step length = 0.1.}
-        \begin{tabular}{c|ccc|ccc}
-              & \multicolumn{3}{c|}{Analytic} & \multicolumn{3}{c}{Numeric} \\ \hline
-            No. of particles & E($\alpha$) & $\sigma^2$(E) & CPU time [s] & E($\alpha$) & $\sigma^2$(E) & CPU time [s] \\ \hline
-            1                         &   1.5000          & 0.0000            &  0.42562        & 1.29538         & 0.10489           & 0.69979  \\
-            10                        &  15.0000      & 0.0000            &  0.78426         & 7.70527         & 3.91873           & 7.06599     \\
-            100                    &  150.0000      & 0.0000            &  4.34369        & 74.22956      & 29.77369           & 481.69100 \\
-            500                    &    750.0000      & 0.0000            &  21.32269        & 362.01744     & 51.52385         & 28409.41744\\ \hline
-        \end{tabular}
-    \end{table*}
 
 \appendix
 \section{Brute Force Metropolis-Hastings}
