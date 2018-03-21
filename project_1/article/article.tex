@@ -94,6 +94,7 @@
 \end{abstract}
 
 \maketitle
+\tableofcontents
 
 %\begin{widetext}
 
@@ -799,64 +800,67 @@
         sample from one block is no longer correlated with a corresponding sample from an adjacent block.
         The block size for this point of convergence now functions as an estimate for the autocorrelation
         time $\tau$.
-        
-        
+
+
         % Flow chart for description of automatic blocking algorithm
-		\begin{figure}
-			\centering
-        
-        		% Defining blocks of flowchart
-        		\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-   			 	text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
-			\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-    				text width=10em, text centered, rounded corners, minimum height=4em]
-			\tikzstyle{line} = [draw, -latex']
-    			
-    			% Actual figure
-    			\begin{tikzpicture}[node distance = 2.2cm, auto]
-    			
-    				% Nodes
-    				\node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
-    				\node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
-    				\node [block, below of=variance] (transform) 
-    					{Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
-    				\node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
-    				\node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? }; 
-    				\node [block, below of=x_size] (m_test) {Compute test statistic $M_j$};
-    				\node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
-    				\node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
-    			
-    				% Edges
-    				\path [line] (init) -- (variance);
-    				\path [line] (variance) -- (transform);
-    				\path [line] (transform) -- (x_size);
-    					\path [line] (x_size) -| node [near start] {yes} (i+1);
-    					\path [line] (i+1) |- (variance);
-    				\path [line] (x_size) -- node [near start] {no} (m_test);
-    				\path [line] (m_test) -- (magic_numbers);
-    				\path [line] (magic_numbers) -- (return);
-    			\end{tikzpicture}
-    			\caption{Flow chart, blocking algorithm.}
-		\end{figure}
+        \begin{figure}
+            \centering
+
+                % Defining blocks of flowchart
+                \tikzstyle{decision} = [diamond, draw, fill=blue!20,
+                    text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
+            \tikzstyle{block} = [rectangle, draw, fill=blue!20,
+                    text width=10em, text centered, rounded corners, minimum height=4em]
+            \tikzstyle{line} = [draw, -latex']
+
+                % Actual figure
+                \begin{tikzpicture}[node distance = 2.2cm, auto]
+
+                    % Nodes
+                    \node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
+                    \node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
+                    \node [block, below of=variance] (transform)
+                        {Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
+                    \node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
+                    \node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? };
+                    \node [block, below of=x_size] (m_test) {Compute test statistic $M_j$};
+                    \node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
+                    \node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
+
+                    % Edges
+                    \path [line] (init) -- (variance);
+                    \path [line] (variance) -- (transform);
+                    \path [line] (transform) -- (x_size);
+                        \path [line] (x_size) -| node [near start] {yes} (i+1);
+                        \path [line] (i+1) |- (variance);
+                    \path [line] (x_size) -- node [near start] {no} (m_test);
+                    \path [line] (m_test) -- (magic_numbers);
+                    \path [line] (magic_numbers) -- (return);
+                \end{tikzpicture}
+                \caption{Flow chart, blocking algorithm.}
+        \end{figure}
 
 \section{Results}
 
     \subsection{Non-Interacting Systems}
-    Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
-    the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
-    harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
-    undergraduate physics student should be well aware of.}, which is further simplified by the "god-given" analytic
-    units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
-    $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
-    expected minimum local energy,
+    Initially we are interested in seeing how our implementation performs and to
+    what extent it functions properly.  the logical thing to do would be to look
+    at a non-interacting system with a simple Gaussian wavefunction and harmonic
+    oscillator potential. Such a system has a simple closed-form analytic
+    solution\footnote{A fact that every undergraduate physics student should be
+    well aware of.}, which is further simplified by the "god-given" analytic
+    units (\autoref{eq:closed_form_natural_units_local_energy}). This expression
+    is minimised for $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and
+    get an expression for the expected minimum local energy,
     \begin{equation}
         E_L(\vb{r}) = \frac{dN}{2},
     \end{equation}
     which will be used as the benchmark we are ultimately aiming for.
 
-    We will start without importance sampling, that is by employing the simpler and more naïve "brute force" Monte Carlo
-    sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
-    In the numerical approach.
+    We will start without importance sampling, that is by employing the simpler
+    and more naïve "brute force" Monte Carlo sampling. Moreover, we will compute
+    the value for the local energy analytically as well as with a numerical
+    approach.  In the numerical approach.
 
     \begin{table}
         \centering
@@ -937,6 +941,8 @@
         \end{ruledtabular}
         \label{tab:initial_optimum_comparison}
     \end{table}
+
+    \subsection{Interacting elliptical harmonic oscillator}
 
 \appendix
 \section{Brute Force Metropolis-Hastings}
