@@ -24,9 +24,6 @@
 # Executable
 *.x
 
-# Data file
-*.dat
-
 # Build directory
 build
 
