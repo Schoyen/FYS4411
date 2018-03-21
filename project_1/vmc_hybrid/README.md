@@ -55,16 +55,18 @@ We currently reproduce the results, i.e., the plots, from [these slides](https:/
 All figures __MUST__ be on the xkcd-format.
 
 ### Initial testing
+We compare the naive and the blocking standard deviation in this section.
+Discuss the quality of each and explain that we will in the remainder use the blocking standard deviation.
+
 #### Tables
 Include different variances.
 
-1. Numerical and analytical results for one dimension and one particle. CZHECH
-2. Numerical and analytical results for `num_samples = [10, 100, 500]` and `num_dimensions = [2, 3]` for `alpha = 0.5`.
+1. ~~Numerical and analytical results for one dimension and one particle.~~
+2. ~~Numerical and analytical results for `num_samples = [10, 100, 500]` and `num_dimensions = [2, 3]` for `alpha = 0.5`.~~
 
 #### Figures
 
-1. Figures corresponding to tables in appendices. Compare with exact answer. CJIOASDJ
-2. Variance plots. Compare variance ratios.
+1. ~~Figures corresponding to tables in appendices. Compare with exact answer.~~
 
 ### Importance sampling
 Its important to discuss how much faster (in terms of number of samples) we reach an equilibrium state.
