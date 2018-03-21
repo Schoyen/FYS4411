@@ -54,7 +54,7 @@ double SimpleGaussian::evaluate()
 
     /* Compute the wavefunction */
     evaluated_wavefunction =
-        exp(-alpha*m_mass*m_omega*position_squared_sum/HBAR);
+        exp(-alpha*position_squared_sum);
 
     /* Return the evaluated result */
     return evaluated_wavefunction;
