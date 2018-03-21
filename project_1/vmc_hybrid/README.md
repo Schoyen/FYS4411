@@ -78,6 +78,12 @@ Its important to discuss how much faster (in terms of number of samples) we reac
 1. Compare variance decrease as a function of cycles for importance sampling and brute force.
 2. Try to plot variance as a function of `step_length` for different alphas.
 
+### Steepest descent
+Explain the theory.
+
+#### Figures
+1. Show how steepest descent finds the minimum value for several different alphas.
+
 ### Repulsive interaction
 
 #### Tables
