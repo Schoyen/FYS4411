@@ -11,5 +11,4 @@ class Hamiltonian
         virtual double compute_potential_energy(Wavefunction *wavefunction) = 0;
 
         double compute_local_energy(Wavefunction *wavefunction);
-        double compute_interaction(Wavefunction *wavefunction);
 };
