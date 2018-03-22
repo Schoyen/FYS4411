@@ -113,12 +113,12 @@ Explain the theory.
 ### Repulsive interaction
 
 #### Tables
-1. Compute statistics for a set of alphas.
+1. ~~Compute statistics for a set of alphas.~~
 2. Compute statistics for "true alpha" found from steepest descent.
   - Benchmark with references.
 
 #### Figures
-1. Plot energy and variance for table 1.
+1. ~~Plot energy and variance for table 1.~~
 2. Plot of alphas (show convergence for several alphas) found from steepest descent.
 
 ### Onebody densities
