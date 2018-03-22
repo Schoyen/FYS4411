@@ -29,8 +29,8 @@
 \usetikzlibrary{positioning}
 % Several figures in the same figure
 \usepackage{subfig}
-%% Appendix
-%\usepackage[toc, page]{appendix}
+% Appendix
+\usepackage[toc, page]{appendix}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -94,7 +94,10 @@
 \end{abstract}
 
 \maketitle
-\tableofcontents
+
+%\begin{widetext}
+
+%\end{widetext}
 
 \section{Introduction}
     We will in this project study the Variational Monte Carlo (VMC) method, and
@@ -796,67 +799,106 @@
         sample from one block is no longer correlated with a corresponding sample from an adjacent block.
         The block size for this point of convergence now functions as an estimate for the autocorrelation
         time $\tau$.
-
-
+        
+     	Instead of going by this "manual" method of looking at charts, we will construct a test statistic and
+     	let the computer do the necessary considerations in a more "automatic way.
+        
+        The easiest way to do this is by use of the \emph{automatic blocking scheme}, nicely illustrated 
+        with a flow chart in \autoref{fig:blocking}. The input parameter for the method is an array of the 
+        local energies, but it can be any array of time series data, which is why it is herein referred to as
+        $\mathbf{X}$. Any array of sequential data, where any particular data point depends on the previous
+        data point inhibits all attributes of a time series. Our array of local energies is therefor most definitely 
+        a time series. 
+        
+		From $\mathbf{X}$ we compute the variance and sample covariance between the series itself and a 
+		one-point lag of the series. This covariance is usually referred to as the first order autocovariance.
+		\begin{equation}
+			\gamma_i = \frac{1}{n}
+				\left(\sum_{k=1}^n\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right)
+				\left(\sum_{k=0}^{n-1}\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right).
+		\end{equation}
+		
+		Now we "block"! The next step is to perform a transformation of the our time series $\mathbf{x}_i$, where
+		we end up with an array that is half the length of the original time series,
+		\begin{equation}
+			(\mathbf{X}_i)_k = \frac{1}{2}\left((\mathbf{X}_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right).
+		\end{equation}
+		This process is were the term "blocking" stems from. There are a number of ways to perform the blocking -
+		we could have picked the data points used in the new ($i+1$) array randomly, or more orderly. Here we we have
+		picked them sequentially. We have obtained $\frac{n}{2}$ new "primed" stochastic variables. Assuming that the
+		reader is playing close attention, it is now needless to say that it is much easier to perform these sequential
+		blocking steps if we have an array of length $n= 2^d$, where $d$ is integer. Otherwise, problems would arise
+		because one would have arrays of different lengths when the original array is "split in two". The ailment is
+		easy to remedy by excluding an observation from the longest resulting array after splitting. 
+		
+		For each new time series $\mathbf{X}_{i+1}$ a new sample variance and sample covariance is computed.
+		The blocking transformation is allowed to continue until we are we run out of data, i.e. the length
+		of $\mathbf{X}_i < 2$. In other words, there is only a single number left. We now compute a test statistic,
+		\begin{equation}
+			M_j = \sum_{k=j}^{d-1} n_k \frac{\left[(n_k - 1)\frac{s^2_k}{n_k^2} y \gamma_k(1)\right] ^2}{s_k^4}.
+		\end{equation}
+		As luck would have it, this number $M$ is   $\chi^2$-distributed. The following step would be to look up a 
+		statistical table and find the first $k$, such that $M_k \leq q_{d-k}(1-\alpha)$, where $q$ is the statistical
+		limit and $\alpha$ is  the significance level that your hear desires. Finally, the correct sample standard deviation 
+		is $\frac{s_k^2}{n_k}$. Again, see \autoref{fig:blocking} for a summary of the algorithm. 
+		        
         % Flow chart for description of automatic blocking algorithm
-        \begin{figure}
-            \centering
-
-                % Defining blocks of flowchart
-                \tikzstyle{decision} = [diamond, draw, fill=blue!20,
-                    text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
-            \tikzstyle{block} = [rectangle, draw, fill=blue!20,
-                    text width=10em, text centered, rounded corners, minimum height=4em]
-            \tikzstyle{line} = [draw, -latex']
-
-                % Actual figure
-                \begin{tikzpicture}[node distance = 2.2cm, auto]
-
-                    % Nodes
-                    \node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
-                    \node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
-                    \node [block, below of=variance] (transform)
-                        {Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
-                    \node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
-                    \node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? };
-                    \node [block, below of=x_size] (m_test) {Compute test statistic $M_j$};
-                    \node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
-                    \node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
-
-                    % Edges
-                    \path [line] (init) -- (variance);
-                    \path [line] (variance) -- (transform);
-                    \path [line] (transform) -- (x_size);
-                        \path [line] (x_size) -| node [near start] {yes} (i+1);
-                        \path [line] (i+1) |- (variance);
-                    \path [line] (x_size) -- node [near start] {no} (m_test);
-                    \path [line] (m_test) -- (magic_numbers);
-                    \path [line] (magic_numbers) -- (return);
-                \end{tikzpicture}
-                \caption{Flow chart, blocking algorithm.}
-        \end{figure}
+		\begin{figure}
+			\centering
+        
+        		% Defining blocks of flowchart
+        		\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+   			 	text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
+			\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    				text width=11em, text centered, rounded corners, minimum height=4em]
+			\tikzstyle{line} = [draw, -latex']
+    			
+    			% Actual figure
+    			\begin{tikzpicture}[node distance = 2.2cm, auto]
+    			
+    				% Nodes
+    				\node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
+    				\node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
+    				\node [block, below of=variance] (transform) 
+    					{Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
+    				\node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
+    				\node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? }; 
+    				\node [block, below of=x_size] (m_test) {Compute test statistic $M_j$ from $s_j$ and $\gamma_j$ for all $j$.};
+    				\node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
+    				\node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
+    			
+    				% Edges
+    				\path [line] (init) -- (variance);
+    				\path [line] (variance) -- (transform);
+    				\path [line] (transform) -- (x_size);
+    					\path [line] (x_size) -| node [near start] {yes} (i+1);
+    					\path [line] (i+1) |- (variance);
+    				\path [line] (x_size) -- node [near start] {no} (m_test);
+    				\path [line] (m_test) -- (magic_numbers);
+    				\path [line] (magic_numbers) -- (return);
+    			\end{tikzpicture}
+    			\caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
+    			\label{fig:blocking}
+		\end{figure}
 
 \section{Results}
 
     \subsection{Non-Interacting Systems}
-    Initially we are interested in seeing how our implementation performs and to
-    what extent it functions properly.  the logical thing to do would be to look
-    at a non-interacting system with a simple Gaussian wavefunction and harmonic
-    oscillator potential. Such a system has a simple closed-form analytic
-    solution\footnote{A fact that every undergraduate physics student should be
-    well aware of.}, which is further simplified by the "god-given" analytic
-    units (\autoref{eq:closed_form_natural_units_local_energy}). This expression
-    is minimised for $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and
-    get an expression for the expected minimum local energy,
+    Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
+    the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
+    harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
+    undergraduate physics student should be well aware of.}, which is further simplified by the "god-given" analytic
+    units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
+    $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
+    expected minimum local energy,
     \begin{equation}
         E_L(\vb{r}) = \frac{dN}{2},
     \end{equation}
     which will be used as the benchmark we are ultimately aiming for.
 
-    We will start without importance sampling, that is by employing the simpler
-    and more naïve "brute force" Monte Carlo sampling. Moreover, we will compute
-    the value for the local energy analytically as well as with a numerical
-    approach.  In the numerical approach.
+    We will start without importance sampling, that is by employing the simpler and more naïve "brute force" Monte Carlo
+    sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
+    In the numerical approach.
 
     \begin{table}
         \centering
@@ -892,17 +934,17 @@
                 $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$
                 & $A$&$t_{\text{CPU}} [\si{\second}]$ \\
                 \hline
-                0.30&0.56675&0.00026&0.00135&0.89098&0.52634\\
-                0.34&0.53714&0.00019&0.00096&0.88479&0.52186\\
-                0.38&0.51836&0.00013&0.00062&0.87820&0.52351\\
-                0.42&0.50717&0.00009&0.00038&0.87180&0.52892\\
-                0.46&0.50184&0.00004&0.00017&0.86581&0.51759\\
-                0.50&0.50000&0.00001&0.00001&0.86024&0.52427\\
-                0.54&0.50133&0.00004&0.00015&0.85520&0.52052\\
-                0.58&0.50520&0.00007&0.00028&0.84971&0.52156\\
-                0.62&0.51120&0.00011&0.00039&0.84481&0.51830\\
-                0.66&0.51896&0.00014&0.00052&0.83990&0.51865\\
-                0.70&0.52794&0.00017&0.00061&0.83506&0.51255\\
+                0.30000&0.56675&0.00026&0.00135&0.89098&0.52634\\
+                0.34000&0.53714&0.00019&0.00096&0.88479&0.52186\\
+                0.38000&0.51836&0.00013&0.00062&0.87820&0.52351\\
+                0.42000&0.50717&0.00009&0.00038&0.87180&0.52892\\
+                0.46000&0.50184&0.00004&0.00017&0.86581&0.51759\\
+                0.50000&0.50000&0.00001&0.00001&0.86024&0.52427\\
+                0.54000&0.50133&0.00004&0.00015&0.85520&0.52052\\
+                0.58000&0.50520&0.00007&0.00028&0.84971&0.52156\\
+                0.62000&0.51120&0.00011&0.00039&0.84481&0.51830\\
+                0.66000&0.51896&0.00014&0.00052&0.83990&0.51865\\
+                0.70000&0.52794&0.00017&0.00061&0.83506&0.51255\\
             \end{tabular}
         \end{ruledtabular}
         \label{tab:1D1N_numeric}
@@ -937,80 +979,6 @@
         \end{ruledtabular}
         \label{tab:initial_optimum_comparison}
     \end{table}
-
-    \subsection{Interacting elliptical harmonic oscillator}
-        \begin{table}
-            \caption{In this table we show the expected energy, the standard
-            deviation, the acceptance ratio and the time spent for each $alpha$
-            for the elliptical potential with the interacting wavefunction. We
-            have used importance sampling with $\delta t = 0.1$ and $2^{21}$
-            Monte Carlo cycles and an additional $10\%$ of that as
-            thermalization steps. The hard sphere radius is set to $0.0043$ and
-            a $\beta = \lambda = \sqrt{8}$.}
-            \centering
-            \begin{ruledtabular}
-                \begin{tabular}{ccccc}
-                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                    &$A$&$t_C$ \\
-                    \hline
-                    0.2&35.17548&0.05399&0.98995&24.48868\\
-                    0.3&27.62004&0.02311&0.98187&13.65132\\
-                    0.4&24.97850&0.00827&0.97248&13.54666\\
-                    0.5&24.39877&0.00030&0.96140&13.38388\\
-                    0.6&24.83863&0.00604&0.94998&13.31570\\
-                    0.7&25.82855&0.01059&0.93766&13.20579\\
-                    0.8&27.22895&0.01436&0.92375&13.11933\\
-                \end{tabular}
-            \end{ruledtabular}
-            \label{tab:10_interacting}
-        \end{table}
-
-        \begin{table}
-            \caption{BLEH}
-            \centering
-            \begin{ruledtabular}
-                \begin{tabular}{ccccc}
-                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                    &$A$&$t_C$ \\
-                    \hline
-                    0.2&181.69371&0.25533&0.98756&199.95366\\
-                    0.3&142.61591&0.10782&0.97849&195.80928\\
-                    0.4&129.88615&0.04051&0.96862&190.44553\\
-                    0.5&127.29926&0.00595&0.95749&195.10368\\
-                    0.6&129.97630&0.03300&0.94595&193.22755\\
-                    0.7&135.67382&0.05785&0.93330&191.96391\\
-                    0.8&143.23238&0.07286&0.92061&192.72399\\
-                \end{tabular}
-            \end{ruledtabular}
-            \label{tab:50_interacting}
-        \end{table}
-
-        \begin{table}
-            \caption{BLEH}
-            \centering
-            \begin{ruledtabular}
-                \begin{tabular}{ccccc}
-                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                    &$A$&$t_C$ \\
-                    \hline
-                    0.2&375.04401&0.51475&0.98527&745.21438\\
-                    0.3&296.76879&0.20214&0.97534&741.04425\\
-                    0.4&270.60830&0.08113&0.94522&723.06823\\
-                    0.5&266.37263&0.02020&0.95314&702.71000\\
-                    0.6&272.51171&0.07366&0.94112&689.12862\\
-                    0.7&285.10285&0.11381&0.92895&707.48248\\
-                    0.8&301.40609&0.15458&0.91648&707.86118\\
-                \end{tabular}
-            \end{ruledtabular}
-            \label{tab:100_interacting}
-        \end{table}
-
-        \begin{figure}
-            \includegraphics[width=250px]{../data/figures/problem_e.pdf}
-            \caption{BLEH}
-            \label{fig:interacting}
-        \end{figure}
-
 
 \appendix
 \section{Brute Force Metropolis-Hastings}
