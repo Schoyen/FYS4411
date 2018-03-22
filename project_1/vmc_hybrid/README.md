@@ -8,6 +8,12 @@ Variational Monte Carlo simulations.
 To compile the code use:
 
 ```bash
+make build
+```
+
+or
+
+```bash
 python3 setup.py build_ext
 ```
 
@@ -18,12 +24,32 @@ directory.
 To do a global installation run
 
 ```bash
+make install
+```
+
+or the equivalent
+
+```bash
 pip install . --upgrade
 ```
 
 This builds the project in the `/path/to/python/lib/python3.6/site-packages/`
 directory, where `/path/to/python/` depends on the default Python installation
 and `/python3.6/` depends on the version of Python (Python 3.6 in this case).
+
+To make sure that you have the right requirements you can run
+
+```bash
+make installr
+```
+
+or the direct way
+
+```bash
+pip install . --upgrade -r requirements.txt
+```
+
+This will install the necessary requirements needed for the project along with the project itself.
 
 ### Local installation
 An alternative to this can be to define your own local build directory which can
@@ -87,12 +113,12 @@ Explain the theory.
 ### Repulsive interaction
 
 #### Tables
-1. Compute statistics for a set of alphas.
+1. ~~Compute statistics for a set of alphas.~~
 2. Compute statistics for "true alpha" found from steepest descent.
   - Benchmark with references.
 
 #### Figures
-1. Plot energy and variance for table 1.
+1. ~~Plot energy and variance for table 1.~~
 2. Plot of alphas (show convergence for several alphas) found from steepest descent.
 
 ### Onebody densities
