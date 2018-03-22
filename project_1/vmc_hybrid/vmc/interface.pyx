@@ -255,6 +255,46 @@ cdef class PySampler:
         self.sampler.set_one_body_parameters(
                 r_min, r_max, num_bins, &self.bins[0])
 
+    def find_minimum(self,
+            np.ndarray[double, ndim=1, mode="c"] start_parameters,
+            double gamma, double gamma_scale, unsigned int max_iterations,
+            *sample_args, quiet=False, **sample_kwargs):
+
+        cdef np.ndarray[double, ndim=1, mode="c"] parameters, gradient, \
+                gradient_prev
+        cdef unsigned int i
+
+        parameters = start_parameters
+        breadcrumbs = [parameters.copy()]
+
+        gradient_prev = np.ones(parameters.size)*1e10
+
+        for i in range(max_iterations):
+            self.initialize(parameters)
+            self.sample(*sample_args, **sample_kwargs)
+
+            gradient = self.get_parameter_gradient()
+
+            if not quiet:
+                print(
+"""
+Iteration: {0}
+Gradient: {1}
+Parameters: {2}
+""".format(i, gradient, parameters))
+
+            parameters += -gamma*gradient
+
+            if np.all(gradient**2 > gradient_prev**2):
+                gamma *= gamma_scale
+
+            # We only use positive variational parameters
+            mask = parameters < 0
+            parameters[mask] = -parameters[mask]
+            breadcrumbs.append(parameters.copy())
+
+        return np.asarray(breadcrumbs)
+
     def sample(self, unsigned int num_samples, double step_length,
             unsigned int num_thermalization_steps=0,
             sample_local_energies=False):
