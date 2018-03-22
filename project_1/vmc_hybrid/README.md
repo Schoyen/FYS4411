@@ -8,6 +8,12 @@ Variational Monte Carlo simulations.
 To compile the code use:
 
 ```bash
+make build
+```
+
+or
+
+```bash
 python3 setup.py build_ext
 ```
 
