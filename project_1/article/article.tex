@@ -881,6 +881,10 @@
     			\caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
     			\label{fig:blocking}
 		\end{figure}
+		
+		\subsection{Gradient Descent}
+		
+		The method of 
 
 \section{Results}
 
@@ -888,7 +892,8 @@
     Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
     the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
     harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
-    undergraduate physics student should be well aware of.}, which is further simplified by the "god-given" analytic
+    undergraduate physics student should be well aware of after finishing their first course in quantum physics}, 
+    which is further simplified by the "god-given" analytic
     units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
     $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
     expected minimum local energy,
@@ -953,6 +958,18 @@
         \end{ruledtabular}
         \label{tab:1D1N_numeric}
     \end{table}
+
+	For the first
+
+	\autoref{tab:1D1N_analytic} shows the expected local energy $\expval{E_L}$, standard deviations 
+	$\sigma$, $\sigma_b$, the share of accepted Monte Carlo reorientations $A$ and cpu time for 
+	the analytic computation at different values for the variational parameter $\alpha$.
+	\autoref{tab:1D1N_numeric} shows the same numbers but for the numeric scheme. The first column of
+	standard deviations $\sigma$ are the "naïve" standard deviations, while $\sigma_b$ marks the
+	standard deviations computed with the blocking method. One can clearly see, in both the analytic and numeric
+	case, that the former standard deviations are lower than the latter, meaning that autocorrelated data
+	can lead to a lower perceived uncertainty than what is reality. The blocking method takes this fact into account 
+	and for this reason, all other standard deviations will be computed with the blocking method from here on. 
 
     \begin{table}
         \caption{Comparison of energy, standard deviation and the CPU time for
