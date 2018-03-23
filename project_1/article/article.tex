@@ -884,7 +884,25 @@
 		
 		\subsection{Gradient Descent}
 		
-		The method of 
+		Scanning the entire space of variational parameters can be a somewhat despairing task. To aid us in the search we
+		therefore implement the method of gradient descent\footnote{Also known as steepest descent, easily confused
+		with the steepest descent method for integation.}. In any optimum we generally have that the derivative should equal
+		zero. In our case, we want to find the minimum of the expected local energy with respect to some variational
+		parameter $\alpha$, so that
+		\begin{equation}
+			\nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
+		\end{equation}	
+		The foundation for  the method of gradient descent lies in the fact that some analytic
+		\footnote{We use the term analytic quite recklessly.} function $F(\alpha)$ decreases fastest in the direction
+		of $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to an ensuing minimum by trailing along the
+		pathway of the following recursive relation,
+		\begin{equation}
+			\alpha_{k+1} = \alpha_k - \gamma \nabla_{alpha k} F(\alpha_k).
+		\end{equation}
+		If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
+		experience convergence to the desired minimum. 
+		
+		For our special case : INSERT DERIVATION OF LOCAL ENERGY??
 
 \section{Results}
 
@@ -906,7 +924,7 @@
     sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
     In the numerical approach we employ the well-know approximation for the second derivative,
     \begin{equation}
-    		f''(x= \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
+    		f''(x)= \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
     \end{equation}
 
     \begin{table}
