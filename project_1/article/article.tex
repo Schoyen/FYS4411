@@ -124,7 +124,7 @@
     \end{align}
     where the single particle one body operator, $h$, is given by
     \begin{align}
-        h(\vf{r}_i) = -\frac{\hbar^2}{2m}\nabla_i^2
+        h(\vf{r}_i) = -\frac{\hbar^2}{2m}_i^2
         + V_{\text{ext}}(\vf{r}_i),
     \end{align}
     (we assume equal mass)
@@ -897,12 +897,12 @@
 		of $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to an ensuing minimum by trailing along the
 		pathway of the following recursive relation,
 		\begin{equation}
-			\alpha_{k+1} = \alpha_k - \gamma \nabla_{alpha k} F(\alpha_k).
+			\alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha k} F(\alpha_k).
 		\end{equation}
 		If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
 		experience convergence to the desired minimum. 
 		
-		For our special case : INSERT DERIVATION OF LOCAL ENERGY??
+		For our special case : INSERT DERIVATION OF LOCAL ENERGY derivative wrt alpha??
 
 \section{Results}
 
@@ -924,7 +924,7 @@
     sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
     In the numerical approach we employ the well-know approximation for the second derivative,
     \begin{equation}
-    		f''(x)= \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
+    		f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
     \end{equation}
 
     \begin{table}
@@ -977,8 +977,6 @@
         \label{tab:1D1N_numeric}
     \end{table}
 
-	For the first
-
 	\autoref{tab:1D1N_analytic} shows the expected local energy $\expval{E_L}$, standard deviations 
 	$\sigma$, $\sigma_b$, the share of accepted Monte Carlo reorientations $A$ and cpu time for 
 	the analytic computation at different values for the variational parameter $\alpha$.
@@ -988,6 +986,11 @@
 	case, that the former standard deviations are lower than the latter, meaning that autocorrelated data
 	can lead to a lower perceived uncertainty than what is reality. The blocking method takes this fact into account 
 	and for this reason, all other standard deviations will be computed with the blocking method from here on. 
+	
+	The first initial observation of note is that we have found an optimum for the system in terms of a minimum
+	energy at $\alpha=\frac{1}{2}$. Moreover, notice how the standard deviation disappears completely.
+	This should already be apparent from \autoref{eq:closed_form_natural_units_local_energy}, as the term
+	involving particle positions disappears for the optimal $\alpha$.
 
     \begin{table}
         \caption{Comparison of energy, standard deviation and the CPU time for
@@ -1019,6 +1022,19 @@
         \label{tab:initial_optimum_comparison}
     \end{table}
 
+	Systems of optimum variational parameter warrants further investigation, as summed up in 
+	\autoref{tab:initial_optimum_comparison}. The analytical results are quite predictable and 
+	monotonous; the expected local energy $\expval{E_l}$ is perfectly proportional by a factor
+	$\frac{3}{2}$ to the number of particles and the standard deviation $\sigma_b$ is zero for
+	systems of any number of particles. The numerical results tells a more tortuous tale. As the 
+	number of particles increase, the uncertainty also increases rapidly. For the largest system,
+	with $N = 500$ particles, the energy misses its target critically - the true energy is more than
+	one standard deviation away. Lastly, the cpu time is notably higher for the numeric scheme. 
+
+	\subsubsection{Introducing Importance Sampling}
+	
+	Next we will introduce importance sampling..
+
 \subsection{Interacting elliptical harmonic oscillator}
          \begin{table}
              \caption{The expected energy, the standard
@@ -1047,7 +1063,7 @@
          \end{table}
  
          \begin{table}
-             \caption{BLEH}
+             \caption{$50$ interacting particles.}
              \centering
              \begin{ruledtabular}
                  \begin{tabular}{ccccc}
@@ -1067,7 +1083,7 @@
          \end{table}
  
          \begin{table}
-             \caption{BLEH}
+             \caption{$100$ Interacting particles.}
              \centering
              \begin{ruledtabular}
                  \begin{tabular}{ccccc}
@@ -1088,7 +1104,8 @@
  
          \begin{figure}
              \includegraphics[width=250px]{../data/figures/problem_e.pdf}
-             \caption{BLEH}
+             \caption{Local energies as a function of variational parameter $\alpha$
+             				 for different number of particles.}
              \label{fig:interacting}
          \end{figure}
 
