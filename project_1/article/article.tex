@@ -1037,7 +1037,36 @@
 
 	\subsubsection{Introducing Importance Sampling}
 	
-	Next we will introduce importance sampling.
+	Next we will introduce importance sampling, the first prediction for importance sampling compared to 
+	brute, naïve method is that we should approach an equilibrium much faster because we are now
+	making moves in a smarter way. This prediction is confirmed in \autoref{fig:problem_c1} and 
+	\autoref{fig:problem_c2}.
+	
+	\begin{figure}
+		\centering
+			\includegraphics[width=250px]{../data/figures/problem_c1.pdf}
+			\caption{As the number of Monte Carlo cycles increases the standard deviation of the local energies 
+			decrease. This effect is stronger when the importance sampling scheme is employed.}
+			\label{fig:problem_c1}
+	\end{figure}
+
+	\begin{figure}
+		\centering
+			\includegraphics[width=250px]{../data/figures/problem_c2.pdf}
+			\caption{The absolute difference between the expected energy and the exact energy for both brute force
+			and importance sampling. }
+			\label{fig:problem_c2}
+	\end{figure}
+
+	\autoref{fig:problem_c1} shows the standard deviation of the local energies for increasing number of Monte
+	Carlo cycles for both the regular sampling and the importance sampling methods. We see that the standard 
+	deviation decreases for both methods for a larger number of Monte Carlo cycles, but the standard deviation
+	is always lower for the importance sampling method. This is in accordance with our expectations.
+	
+	We have also compared the expected energy with the exact energy for different number of Monte Carlo
+	cycles. The result of this analysis is shown in \autoref{fig:problem_c2}. We see that both methods will  evnetually 
+	result in expected energies that are equal to the exact energies as $\abs{E - \expval{E}} \to 0$. However, for the 
+	method of importance sampling the error is consistently lower. 
 
 \subsection{Interacting elliptical harmonic oscillator}
          \begin{table}
