@@ -98,14 +98,14 @@ Include different variances.
 Its important to discuss how much faster (in terms of number of samples) we reach an equilibrium state.
 
 #### Tables
-1. Compare results (energy and variance) as a function of `step_length` for a fixed `alpha`.
+~~1. Compare results (energy and variance) as a function of `step_length` for a fixed `alpha`.~~
 
 #### Figures
-1. Compare variance decrease as a function of cycles for importance sampling and brute force.
+~~1. Compare variance decrease as a function of cycles for importance sampling and brute force.~~
 2. Try to plot variance as a function of `step_length` for different alphas.
 
 ### Steepest descent
-Explain the theory.
+~~Explain the theory.~
 
 #### Figures
 1. Show how steepest descent finds the minimum value for several different alphas.
