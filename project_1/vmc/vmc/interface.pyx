@@ -258,6 +258,7 @@ cdef class PySampler:
     def find_minimum(self,
             np.ndarray[double, ndim=1, mode="c"] start_parameters,
             double gamma, double gamma_scale, unsigned int max_iterations,
+            *sample_args, quiet=False, double magnitude_limit=5,
             double tol=1e-9, **sample_kwargs):
 
         cdef np.ndarray[double, ndim=1, mode="c"] parameters, \
@@ -287,6 +288,12 @@ Old parameters: {2}""".format(i, gradient, parameters))
 
             parameters_prev = parameters.copy()
             parameters += -gamma*gradient
+
+            mask = np.abs(parameters) > magnitude_limit*np.abs(parameters_prev)
+            while np.any(mask):
+                parameters[mask] /= magnitude_limit
+                mask = np.abs(parameters) \
+                        > magnitude_limit*np.abs(parameters_prev)
 
             # We only use positive variational parameters
             mask = parameters < 0
