@@ -887,256 +887,296 @@
 
         \subsection{Gradient Descent}
 
-        Scanning the entire space of variational parameters can be a somewhat
-        despairing task. To aid us in the search we therefore implement the
-        method of gradient descent\footnote{Also known as steepest descent,
-        easily confused with the steepest descent method for integation.}. In
-        any optimum we generally have that the derivative should equal zero. In
-        our case, we want to find the minimum of the expected local energy with
-        respect to some variational parameter $\alpha$, so that
+        Scanning the entire space of variational parameters can be a somewhat despairing task. To aid us in the search we
+        therefore implement the method of gradient descent\footnote{Also known as steepest descent, easily confused
+        with the steepest descent method for integation.}. In any optimum we generally have that the derivative should equal
+        zero. In our case, we want to find the minimum of the expected local energy with respect to some variational
+        parameter $\alpha$, so that
         \begin{equation}
             \nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
         \end{equation}
-        The foundation for  the method of gradient descent lies in the fact that
-        some analytic \footnote{We use the term analytic quite recklessly.}
-        function $F(\alpha)$ decreases fastest in the direction of
-        $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to
-        an ensuing minimum by trailing along the pathway of the following
-        recursive relation,
+        The foundation for  the method of gradient descent lies in the fact that some analytic
+        \footnote{We use the term analytic quite recklessly.} function $F(\alpha)$ decreases fastest in the direction
+        of $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to an ensuing minimum by trailing along the
+        pathway of the following recursive relation,
         \begin{equation}
-            \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha} F(\alpha_k).
+            \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha k} F(\alpha_k).
         \end{equation}
-        If $\gamma$ is small enough we should have $f(\alpha_k) \geq
-        F(\alpha_{k+1})$ for all $k$ and hopefully we will experience
-        convergence to the desired minimum.
+        If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
+        experience convergence to the desired minimum.
 
-        For our special case : INSERT DERIVATION OF LOCAL ENERGY derivative wrt alpha??
+        For our special case we only have one variational parameter, $\alpha$.  The expression for the derivative is,
+        \begin{equation}
+            \frac{d E_L}{d\alpha} =
+                2\left( \expval{\frac{1}{\psi_T}\frac{d\psi_T}{d\alpha} E_L} - \expval{\frac{1}{\psi_T} \frac{d\psi_T}{d\alpha}}\expval{E_L} \right).
+        \end{equation}
+
+        INSERT DERIVATION OF LOCAL ENERGY??
 
 \section{Results}
 
     \subsection{Non-Interacting Systems}
-    Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
-    the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
-    harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
-    undergraduate physics student should be well aware of after finishing their first course in quantum physics},
-    which is further simplified by the "god-given" analytic
-    units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
-    $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
-    expected minimum local energy,
-    \begin{equation}
-        E_L(\vb{r}) = \frac{dN}{2},
-    \end{equation}
-    which will be used as the benchmark we are ultimately aiming for.
+        Initially we are interested in seeing how our implementation performs
+        and to what extent it functions properly.  the logical thing to do would
+        be to look at a non-interacting system with a simple Gaussian
+        wavefunction and harmonic oscillator potential. Such a system has a
+        simple closed-form analytic solution\footnote{A fact that every
+        undergraduate physics student should be well aware of after finishing
+        their first course in quantum physics}, which is further simplified by
+        the "god-given" analytic units
+        (\autoref{eq:closed_form_natural_units_local_energy}). This expression
+        is minimised for $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$
+        and get an expression for the expected minimum local energy,
+        \begin{equation}
+            E_L(\vb{r}) = \frac{dN}{2},
+        \end{equation}
+        which will be used as the benchmark we are ultimately aiming for.
 
-    We will start without importance sampling, that is by employing the simpler and more naïve "brute force" Monte Carlo
-    sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
-    In the numerical approach we employ the well-know approximation for the second derivative,
-    \begin{equation}
-            f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
-    \end{equation}
+        We will start without importance sampling, that is by employing the
+        simpler and more naïve "brute force" Monte Carlo sampling. Moreover, we
+        will compute the value for the local energy analytically as well as with
+        a numerical approach.  In the numerical approach we employ the well-know
+        approximation for the second derivative,
+        \begin{equation}
+                f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
+        \end{equation}
 
-    \begin{table}
-        \centering
-        \caption{One particle in one dimension for the analytic expression with
-        $2^{21}$ Monte Carlo cycles and step length of $0.5$.}
-        \begin{ruledtabular}
-            \begin{tabular}{cccccc}
-                $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$ & $A$
-                & $t_{\text{CPU}} [\si{\second}]$ \\
-                \hline
-                0.30&0.56244&0.00026&0.00129&0.89185&0.43238\\
-                0.34&0.53652&0.00019&0.00094&0.88465&0.38340\\
-                0.38&0.51863&0.00013&0.00063&0.87844&0.37200\\
-                0.42&0.50805&0.00009&0.00038&0.87161&0.37978\\
-                0.46&0.50201&0.00004&0.00017&0.86594&0.37214\\
-                0.50&0.50000&0.00000&0.00000&0.86047&0.37162\\
-                0.54&0.50183&0.00004&0.00015&0.85543&0.37959\\
-                0.58&0.50566&0.00007&0.00029&0.84994&0.37778\\
-                0.62&0.51175&0.00011&0.00041&0.84479&0.37368\\
-                0.66&0.51906&0.00014&0.00052&0.84000&0.37257\\
-                0.70&0.52883&0.00017&0.00062&0.83570&0.37342\\
-            \end{tabular}
-        \end{ruledtabular}
-        \label{tab:1D1N_analytic}
-    \end{table}
-
-    \begin{table}
-        \centering
-        \caption{One particle in one dimension for the numeric expression with
-        $2^{21}$ Monte Carlo cycles and a step length of $0.5$.}
-        \begin{ruledtabular}
-            \begin{tabular}{cccccc}
-                $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$
-                & $A$&$t_{\text{CPU}} [\si{\second}]$ \\
-                \hline
-                0.30&0.56675&0.00026&0.00135&0.89098&0.52634\\
-                0.34&0.53714&0.00019&0.00096&0.88479&0.52186\\
-                0.38&0.51836&0.00013&0.00062&0.87820&0.52351\\
-                0.42&0.50717&0.00009&0.00038&0.87180&0.52892\\
-                0.46&0.50184&0.00004&0.00017&0.86581&0.51759\\
-                0.50&0.50000&0.00001&0.00001&0.86024&0.52427\\
-                0.54&0.50133&0.00004&0.00015&0.85520&0.52052\\
-                0.58&0.50520&0.00007&0.00028&0.84971&0.52156\\
-                0.62&0.51120&0.00011&0.00039&0.84481&0.51830\\
-                0.66&0.51896&0.00014&0.00052&0.83990&0.51865\\
-                0.70&0.52794&0.00017&0.00061&0.83506&0.51255\\
-            \end{tabular}
-        \end{ruledtabular}
-        \label{tab:1D1N_numeric}
-    \end{table}
-
-    \autoref{tab:1D1N_analytic} shows the expected local energy $\expval{E_L}$, standard deviations
-    $\sigma$, $\sigma_b$, the share of accepted Monte Carlo reorientations $A$ and cpu time for
-    the analytic computation at different values for the variational parameter $\alpha$.
-    \autoref{tab:1D1N_numeric} shows the same numbers but for the numeric scheme. The first column of
-    standard deviations $\sigma$ are the "naïve" standard deviations, while $\sigma_b$ marks the
-    standard deviations computed with the blocking method. One can clearly see, in both the analytic and numeric
-    case, that the former standard deviations are lower than the latter, meaning that autocorrelated data
-    can lead to a lower perceived uncertainty than what is reality. The blocking method takes this fact into account
-    and for this reason, all other standard deviations will be computed with the blocking method from here on.
-
-    The first initial observation of note is that we have found an optimum for the system in terms of a minimum
-    energy at $\alpha=\frac{1}{2}$. Moreover, notice how the standard deviation disappears completely.
-    This should already be apparent from \autoref{eq:closed_form_natural_units_local_energy}, as the term
-    involving particle positions disappears for the optimal $\alpha$.
-
-    \begin{table}
-        \caption{Comparison of energy, standard deviation and the CPU time for
-        $\alpha = 0.5$ (the correct minimum) for the analytic and numeric
-        schemes in three dimensions and $N$ particles. The step length is
-        $0.5$.}
-        \centering
-        \begin{ruledtabular}
-            \begin{tabular}{r|rrr|rrr}
-                & \multicolumn{3}{c|}{Analytic}
-                & \multicolumn{3}{c}{Numeric} \\
-                \hline
-                $N$
-                & $\langle E_L\rangle$ & $\sigma_b$
-                & $t_{\text{CPU}} [\si{\second}]$
-                & $\langle E_L\rangle$ & $\sigma_b$
-                & $t_{\text{CPU}} [\si{\second}]$ \\
-                \hline
-                1 & 1.5 & 0.0 & 0.50
-                & 1.49997 & 0.00008 & 0.73 \\
-                10 & 15.0 & 0.0 & 0.73
-                & 14.98278 & 0.00867 & 6.40 \\
-                100 & 150.0 & 0.0 & 4.13
-                & 149.81453 & 0.81501 & 387.60 \\
-                500 & 750.0 & 0.0 & 19.16
-                & 773.85435 & 20.69789 & 9595.02
-            \end{tabular}
-        \end{ruledtabular}
-        \label{tab:initial_optimum_comparison}
-    \end{table}
-
-    Systems of optimum variational parameter warrants further investigation, as summed up in
-    \autoref{tab:initial_optimum_comparison}. The analytical results are quite predictable and
-    monotonous; the expected local energy $\expval{E_l}$ is perfectly proportional by a factor
-    $\frac{3}{2}$ to the number of particles and the standard deviation $\sigma_b$ is zero for
-    systems of any number of particles. The numerical results tells a more tortuous tale. As the
-    number of particles increase, the uncertainty also increases rapidly. For the largest system,
-    with $N = 500$ particles, the energy misses its target critically - the true energy is more than
-    one standard deviation away. Lastly, the cpu time is notably higher for the numeric scheme.
-
-    In the appendices,  \autoref{fig:initial_problem_b} shows how both the analytic and numeric approach
-    matches the exact expression for the energy as a function of $\alpha$ for systems of increasing size.
-    We see also here that the uncertainty increases in the numeric scheme as the system gets larger.
-
-    \subsubsection{Introducing Importance Sampling}
-
-    Next we will introduce importance sampling, the first prediction for importance sampling compared to
-    brute, naïve method is that we should approach an equilibrium much faster because we are now
-    making moves in a smarter way. This prediction is confirmed in \autoref{fig:problem_c1} and
-    \autoref{fig:problem_c2}.
-
-    \begin{figure}
-        \centering
-            \includegraphics[width=250px]{../data/figures/problem_c1.pdf}
-            \caption{As the number of Monte Carlo cycles increases the standard deviation of the local energies
-            decrease. This effect is stronger when the importance sampling scheme is employed.}
-            \label{fig:problem_c1}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-            \includegraphics[width=250px]{../data/figures/problem_c2.pdf}
-            \caption{The absolute difference between the expected energy and the exact energy for both brute force
-            and importance sampling. }
-            \label{fig:problem_c2}
-    \end{figure}
-
-    \autoref{fig:problem_c1} shows the standard deviation of the local energies for increasing number of Monte
-    Carlo cycles for both the regular sampling and the importance sampling methods. We see that the standard
-    deviation decreases for both methods for a larger number of Monte Carlo cycles, but the standard deviation
-    is always lower for the importance sampling method. This is in accordance with our expectations.
-
-    We have also compared the expected energy with the exact energy for different number of Monte Carlo
-    cycles. The result of this analysis is shown in \autoref{fig:problem_c2}. We see that both methods will  evnetually
-    result in expected energies that are equal to the exact energies as $\abs{E - \expval{E}} \to 0$. However, for the
-    method of importance sampling the error is consistently lower.
-
-    \begin{table}
-        \caption{Importance sampled simulations of $n=10$ particles in $d=3$ dimensions. Average acceptance
-            ratios and standard deviations for eleven alpha values between $0.3$ and $0.7$.}
-        \centering
+        \begin{table}
+            \centering
+            \caption{One particle in one dimension for the analytic expression
+            with $2^{21}$ Monte Carlo cycles and step length of $0.5$.}
             \begin{ruledtabular}
-                \begin{tabular}{cccc}
-                    $\delta t$ & $\bar{\sigma}_b$ & $\bar{A}$
-                    & $\expval{E}\left(\alpha = \frac{1}{2}\right)$ \\
+                \begin{tabular}{cccccc}
+                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$ & $A$
+                    & $t_{\text{CPU}} [\si{\second}]$ \\
                     \hline
-                    $2^{+3}$ & 0.09363 & 0.00531 & 15.000 \\
-                    $2^{+2}$ & 0.01549  & 0.04123 & 15.000 \\
-                    $2^{+1}$ & 0.00706 & 0.21604 & 15.000 \\
-                    $2^{\ 0}$ & 0.00675 & 0.51030 & 15.000 \\
-                    $2^{-1}$ & 0.00932 & 0.73779 & 15.000 \\
-                    $2^{-2}$ & 0.01578 & 0.86633 & 15.000 \\
-                    $2^{-3}$ & 0.02723 & 0.93305 & 15.000 \\
-                    $2^{-4}$ & 0.05016 & 0.96654 & 15.000 \\
-                    $2^{-5}$ & 0.08474 & 0.98316 & 15.000 \\
-                    $2^{-6}$ & 0.11555 & 0.99174 & 15.000 \\
-                    $2^{-7}$ & 0.17070 & 0.99612 & 15.000 \\
+                    0.30&0.56244&0.00026&0.00129&0.89185&0.43238\\
+                    0.34&0.53652&0.00019&0.00094&0.88465&0.38340\\
+                    0.38&0.51863&0.00013&0.00063&0.87844&0.37200\\
+                    0.42&0.50805&0.00009&0.00038&0.87161&0.37978\\
+                    0.46&0.50201&0.00004&0.00017&0.86594&0.37214\\
+                    0.50&0.50000&0.00000&0.00000&0.86047&0.37162\\
+                    0.54&0.50183&0.00004&0.00015&0.85543&0.37959\\
+                    0.58&0.50566&0.00007&0.00029&0.84994&0.37778\\
+                    0.62&0.51175&0.00011&0.00041&0.84479&0.37368\\
+                    0.66&0.51906&0.00014&0.00052&0.84000&0.37257\\
+                    0.70&0.52883&0.00017&0.00062&0.83570&0.37342\\
                 \end{tabular}
             \end{ruledtabular}
-            \label{tab:imp_time_step}
-    \end{table}
+            \label{tab:1D1N_analytic}
+        \end{table}
 
-    \autoref{tab:imp_time_step} shows the standard deviations and acceptance
-    ratios for different time steps. The simulations in this table are from the
-    same span $\alpha \in [0.3, 07]$ as in \autoref{tab:1D1N_analytic} and
-    \autoref{tab:1D1N_numeric}. The optimum energies for $\alpha = \frac{1}{2}$
-    gives the same result for importance sampling as for the naïve way of
-    sampling. Notice that by lowering the time step, the uncertainty starts to
-    decrease and then starts to increase again. Moreover, the acceptance ratios
-    increases as the time step decreases.
+        \begin{table}
+            \centering
+            \caption{One particle in one dimension for the numeric expression
+            with $2^{21}$ Monte Carlo cycles and a step length of $0.5$.}
+            \begin{ruledtabular}
+                \begin{tabular}{cccccc}
+                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$
+                    & $A$&$t_{\text{CPU}} [\si{\second}]$ \\
+                    \hline
+                    0.30&0.56675&0.00026&0.00135&0.89098&0.52634\\
+                    0.34&0.53714&0.00019&0.00096&0.88479&0.52186\\
+                    0.38&0.51836&0.00013&0.00062&0.87820&0.52351\\
+                    0.42&0.50717&0.00009&0.00038&0.87180&0.52892\\
+                    0.46&0.50184&0.00004&0.00017&0.86581&0.51759\\
+                    0.50&0.50000&0.00001&0.00001&0.86024&0.52427\\
+                    0.54&0.50133&0.00004&0.00015&0.85520&0.52052\\
+                    0.58&0.50520&0.00007&0.00028&0.84971&0.52156\\
+                    0.62&0.51120&0.00011&0.00039&0.84481&0.51830\\
+                    0.66&0.51896&0.00014&0.00052&0.83990&0.51865\\
+                    0.70&0.52794&0.00017&0.00061&0.83506&0.51255\\
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:1D1N_numeric}
+        \end{table}
 
-    \subsubsection{Test of Gradient descent}
-        Before moving on to the interacting, more interesting systems, it would
-        be beneficial to test the gradient descent implementation now that we
-        are certain that it moves towards the optimum variational parameter
-        $\alpha = \frac{1}{2}$.
+        \autoref{tab:1D1N_analytic} shows the expected local energy
+        $\expval{E_L}$, standard deviations $\sigma$, $\sigma_b$, the share of
+        accepted Monte Carlo reorientations $A$ and cpu time for the analytic
+        computation at different values for the variational parameter $\alpha$.
+        \autoref{tab:1D1N_numeric} shows the same numbers but for the numeric
+        scheme. The first column of standard deviations $\sigma$ are the "naïve"
+        standard deviations, while $\sigma_b$ marks the standard deviations
+        computed with the blocking method. One can clearly see, in both the
+        analytic and numeric case, that the former standard deviations are lower
+        than the latter, meaning that autocorrelated data can lead to a lower
+        perceived uncertainty than what is reality. The blocking method takes
+        this fact into account and for this reason, all other standard
+        deviations will be computed with the blocking method from here on.
+
+        The first initial observation of note is that we have found an optimum
+        for the system in terms of a minimum energy at $\alpha=\frac{1}{2}$.
+        Moreover, notice how the standard deviation disappears completely.  This
+        should already be apparent from
+        \autoref{eq:closed_form_natural_units_local_energy}, as the term
+        involving particle positions disappears for the optimal $\alpha$.
+
+        \begin{table}
+            \caption{Comparison of energy, standard deviation and the CPU time
+            for $\alpha = 0.5$ (the correct minimum) for the analytic and
+            numeric schemes in three dimensions and $N$ particles. The step
+            length is $0.5$.}
+            \centering
+            \begin{ruledtabular}
+                \begin{tabular}{r|rrr|rrr}
+                    & \multicolumn{3}{c|}{Analytic}
+                    & \multicolumn{3}{c}{Numeric} \\
+                    \hline
+                    $N$
+                    & $\langle E_L\rangle$ & $\sigma_b$
+                    & $t_{\text{CPU}} [\si{\second}]$
+                    & $\langle E_L\rangle$ & $\sigma_b$
+                    & $t_{\text{CPU}} [\si{\second}]$ \\
+                    \hline
+                    1 & 1.5 & 0.0 & 0.50
+                    & 1.49997 & 0.00008 & 0.73 \\
+                    10 & 15.0 & 0.0 & 0.73
+                    & 14.98278 & 0.00867 & 6.40 \\
+                    100 & 150.0 & 0.0 & 4.13
+                    & 149.81453 & 0.81501 & 387.60 \\
+                    500 & 750.0 & 0.0 & 19.16
+                    & 773.85435 & 20.69789 & 9595.02
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:initial_optimum_comparison}
+        \end{table}
+
+
+        Systems of optimum variational parameter warrants further investigation,
+        as summed up in \autoref{tab:initial_optimum_comparison}. The analytical
+        results are quite predictable and monotonous; the expected local energy
+        $\expval{E_l}$ is perfectly proportional by a factor $\frac{3}{2}$ to
+        the number of particles and the standard deviation $\sigma_b$ is zero
+        for systems of any number of particles. The numerical results tells a
+        more tortuous tale. As the number of particles increase, the uncertainty
+        also increases rapidly. For the largest system, with $N = 500$
+        particles, the energy misses its target critically - the true energy is
+        more than one standard deviation away. Lastly, the cpu time is notably
+        higher for the numeric scheme.
+
+        In the appendices,  \autoref{fig:initial_problem_b} shows how both the
+        analytic and numeric approach matches the exact expression for the
+        energy as a function of $\alpha$ for systems of increasing size.  We see
+        also here that the uncertainty increases in the numeric scheme as the
+        system gets larger.
+
+        \subsubsection{Introducing Importance Sampling}
+
+            Next we will introduce importance sampling, the first prediction for
+            importance sampling compared to brute, naïve method is that we
+            should approach an equilibrium much faster because we are now making
+            moves in a smarter way. This prediction is confirmed in
+            \autoref{fig:problem_c1} and \autoref{fig:problem_c2}.
+
+            \begin{figure}
+                \centering
+                    \includegraphics[width=250px]
+                    {../data/figures/problem_c1.pdf}
+                    \caption{As the number of Monte Carlo cycles increases the
+                    standard deviation of the local energies decrease. This
+                    effect is stronger when the importance sampling scheme is
+                    employed.}
+                    \label{fig:problem_c1}
+            \end{figure}
+
+            \begin{figure}
+                \centering
+                    \includegraphics[width=250px]
+                    {../data/figures/problem_c2.pdf}
+                    \caption{The absolute difference between the expected energy
+                    and the exact energy for both brute force and importance
+                    sampling. }
+                    \label{fig:problem_c2}
+            \end{figure}
+
+            \autoref{fig:problem_c1} shows the standard deviation of the local
+            energies for increasing number of Monte Carlo cycles for both the
+            regular sampling and the importance sampling methods. We see that
+            the standard deviation decreases for both methods for a larger
+            number of Monte Carlo cycles, but the standard deviation is always
+            lower for the importance sampling method. This is in accordance with
+            our expectations.
+
+            We have also compared the expected energy with the exact energy for
+            different number of Monte Carlo cycles. The result of this analysis
+            is shown in \autoref{fig:problem_c2}. We see that both methods will
+            evnetually result in expected energies that are equal to the exact
+            energies as $\abs{E - \expval{E}} \to 0$. However, for the method of
+            importance sampling the error is consistently lower.
+
+            \begin{table}
+                \caption{Importance sampled simulations of $n=10$ particles in
+                $d=3$ dimensions. Average acceptance ratios and standard
+                deviations for eleven alpha values between $0.3$ and $0.7$.}
+                \centering
+                    \begin{ruledtabular}
+                        \begin{tabular}{cccc}
+                            $\delta t$ & $\bar{\sigma}_b$ & $\bar{A}$
+                            & $\expval{E}\left(\alpha = \frac{1}{2}\right)$ \\
+                            \hline
+                            $2^{+3}$ & 0.09363 & 0.00531 & 15.000 \\
+                            $2^{+2}$ & 0.01549  & 0.04123 & 15.000 \\
+                            $2^{+1}$ & 0.00706 & 0.21604 & 15.000 \\
+                            $2^{\ 0}$ & 0.00675 & 0.51030 & 15.000 \\
+                            $2^{-1}$ & 0.00932 & 0.73779 & 15.000 \\
+                            $2^{-2}$ & 0.01578 & 0.86633 & 15.000 \\
+                            $2^{-3}$ & 0.02723 & 0.93305 & 15.000 \\
+                            $2^{-4}$ & 0.05016 & 0.96654 & 15.000 \\
+                            $2^{-5}$ & 0.08474 & 0.98316 & 15.000 \\
+                            $2^{-6}$ & 0.11555 & 0.99174 & 15.000 \\
+                            $2^{-7}$ & 0.17070 & 0.99612 & 15.000 \\
+                        \end{tabular}
+                    \end{ruledtabular}
+                    \label{tab:imp_time_step}
+            \end{table}
+
+            \autoref{tab:imp_time_step} shows the standard deviations and
+            acceptance ratios for different time steps. The simulations in this
+            tabel are from the same span $\alpha \in [0.3, 07]$ as in
+            \autoref{tab:1D1N_analytic} and \autoref{tab:1D1N_numeric}. The
+            optimum energies for $\alpha = \frac{1}{2}$ gives the same result
+            for importance sampling as for the naïve way of sampling. Notice
+            that by lowering the time step, the uncertainty starts to decrease
+            and then starts to increase again. Moreover, the acceptance ratios
+            increases as the time step decreases.
+
+        \subsubsection{Test of Gradient descent}
+
+            Before moving on to the interacting, more interesting systems, it
+            would be beneficial to test the gradient descent implementation now
+            that we are certain that it moves towards the optimum variational
+            parameter $\alpha = \frac{1}{2}$.
 
     \subsection{Interacting elliptical harmonic oscillator}
-        We now look at the interacting, elliptical, harmonic oscillator with the
-        scaled system shown in \autoref{eq:scaled_hamiltonian} and scaled single
-        particle functions from \autoref{eq:scaled_spf} with the Jastrow factor.
-        Due to similarities with the spherical harmonic oscillator system we
-        make a guess that the true minimum of this new system should be situated
-        close the minimum of the previous system. Choosing seven values for
-        $\alpha \in [0.2, 0.7]$ we run importance sampling on this system for $N
-        = \{10, 50, 100\}$ particles in $d = 3$ dimensions using $2^{21}$ Monte
-        Carlo cycles\footnote{This turned out to be a little bit overkill due to
-        the fast convergence of importance sampling.} and an additional $10\%$
-        of the Monte Carlo cycles for thermalization of the system prior to
-        doing any sampling. We have used $\delta t = 0.1$ with $a_{\text{ho}} =
-        0.0043$ and $\lambda = \beta = \sqrt{8}$.
+        We now make a change to the simple systems in the previous section in
+        order to make everything a bit more interesting. The potential in the
+        one-body Hamiltonian is perturbed in the $z$-direction according to
+        \autoref{eq:scaled_hamiltonian} by setting $\lambda = \sqrt{8} \approx
+        2.82843$. This corresponds to enclosing particles of the simulation in
+        an elliptical trap instead of a spherical trap.
 
-        We have sampled the expectation value for the local energy, the standard
-        deviation using the blocking method, the acceptance ratio of the method
-        and the CPU time spent for each value $\alpha$. The results for $N = 10$
-        particles are shown in \autoref{tab:10_interacting}, $N = 50$ in
-        \autoref{tab:50_interacting} and finally for $N = 100$ in
-        \autoref{tab:100_interacting}.
+        We also choose a new trial wavefunction with the elliptical gaussian
+        single particle functions in \autoref{eq:scaled_spf} and the Jastrow
+        factor. The hard sphere radius is set to $a/a_{\text{ho}} = 0.0043$.
+
+        Due to similarities with the spherical harmonic oscillator
+        system we make a guess that the true minimum of this new system should
+        be situated close to the minimum of the previous system. Choosing seven
+        values for $\alpha \in [0.2, 0.7]$ we run importance sampling on this
+        system for $N = \{10, 50, 100\}$ particles in $d = 3$ dimensions using
+        $2^{21}$ Monte Carlo cycles\footnote{This turned out to be a little bit
+        overkill due to the fast convergence of importance sampling.} and an
+        additional $10\%$ of the Monte Carlo cycles for thermalization of the
+        system prior to doing any sampling. We have used $\delta t = 0.1$ yields
+        a high acceptance ratio, but slower convergence.
+
+        In \autoref{tab:10_interacting} the system is set to have $N = 10$
+        interacting particles. Notice first that the energy is higher in
+        the interacting system than for a comparable non-interacting system
+        (\autoref{tab:initial_optimum_comparison}).  Moreover, the standard
+        deviation gets lower as the system is close to an optimal variational
+        parameter.
 
         \begin{table}
             \caption{Simulation results for $N = 10$ bosonic interacting,
@@ -1165,6 +1205,12 @@
             \end{ruledtabular}
             \label{tab:10_interacting}
         \end{table}
+
+        The result of simulations with a higher number of particles, $N=50$ and
+        $N=100$, are  shown in \autoref{tab:50_interacting} and
+        \autoref{tab:100_interacting} respectively. We observe that the energy
+        for systems of interacting particles increases rapidly as the size of
+        the system increases.
 
         \begin{table}
             \caption{Simulation results for $N = 50$ bosonic interacting,
@@ -1270,6 +1316,7 @@
             \label{fig:interacting}
         \end{figure}
 
+
 \appendix
 \section{Brute Force Metropolis-Hastings}
 
@@ -1284,6 +1331,9 @@
         \label{fig:initial_problem_b}
     \end{figure*}
 
+\section{Derivation of Local Energy alpha derivative}
+
+TO BE INSERTED HERE??? Or whaaaat boiii...
 
 \bibliography{references}
 
