@@ -1030,159 +1030,245 @@
         \label{tab:initial_optimum_comparison}
     \end{table}
 
-	Systems of optimum variational parameter warrants further investigation, as summed up in 
-	\autoref{tab:initial_optimum_comparison}. The analytical results are quite predictable and 
-	monotonous; the expected local energy $\expval{E_l}$ is perfectly proportional by a factor
-	$\frac{3}{2}$ to the number of particles and the standard deviation $\sigma_b$ is zero for
-	systems of any number of particles. The numerical results tells a more tortuous tale. As the 
-	number of particles increase, the uncertainty also increases rapidly. For the largest system,
-	with $N = 500$ particles, the energy misses its target critically - the true energy is more than
-	one standard deviation away. Lastly, the cpu time is notably higher for the numeric scheme. 
-	
-	In the appendices,  \autoref{fig:initial_problem_b} shows how both the analytic and numeric approach
-	matches the exact expression for the energy as a function of $\alpha$ for systems of increasing size. 
-	We see also here that the uncertainty increases in the numeric scheme as the system gets larger. 
+    Systems of optimum variational parameter warrants further investigation, as summed up in
+    \autoref{tab:initial_optimum_comparison}. The analytical results are quite predictable and
+    monotonous; the expected local energy $\expval{E_l}$ is perfectly proportional by a factor
+    $\frac{3}{2}$ to the number of particles and the standard deviation $\sigma_b$ is zero for
+    systems of any number of particles. The numerical results tells a more tortuous tale. As the
+    number of particles increase, the uncertainty also increases rapidly. For the largest system,
+    with $N = 500$ particles, the energy misses its target critically - the true energy is more than
+    one standard deviation away. Lastly, the cpu time is notably higher for the numeric scheme.
 
-	\subsubsection{Introducing Importance Sampling}
-	
-	Next we will introduce importance sampling, the first prediction for importance sampling compared to 
-	brute, naïve method is that we should approach an equilibrium much faster because we are now
-	making moves in a smarter way. This prediction is confirmed in \autoref{fig:problem_c1} and 
-	\autoref{fig:problem_c2}.
-	
-	\begin{figure}
-		\centering
-			\includegraphics[width=250px]{../data/figures/problem_c1.pdf}
-			\caption{As the number of Monte Carlo cycles increases the standard deviation of the local energies 
-			decrease. This effect is stronger when the importance sampling scheme is employed.}
-			\label{fig:problem_c1}
-	\end{figure}
+    In the appendices,  \autoref{fig:initial_problem_b} shows how both the analytic and numeric approach
+    matches the exact expression for the energy as a function of $\alpha$ for systems of increasing size.
+    We see also here that the uncertainty increases in the numeric scheme as the system gets larger.
 
-	\begin{figure}
-		\centering
-			\includegraphics[width=250px]{../data/figures/problem_c2.pdf}
-			\caption{The absolute difference between the expected energy and the exact energy for both brute force
-			and importance sampling. }
-			\label{fig:problem_c2}
-	\end{figure}
+    \subsubsection{Introducing Importance Sampling}
 
-	\autoref{fig:problem_c1} shows the standard deviation of the local energies for increasing number of Monte
-	Carlo cycles for both the regular sampling and the importance sampling methods. We see that the standard 
-	deviation decreases for both methods for a larger number of Monte Carlo cycles, but the standard deviation
-	is always lower for the importance sampling method. This is in accordance with our expectations.
-	
-	We have also compared the expected energy with the exact energy for different number of Monte Carlo
-	cycles. The result of this analysis is shown in \autoref{fig:problem_c2}. We see that both methods will  evnetually 
-	result in expected energies that are equal to the exact energies as $\abs{E - \expval{E}} \to 0$. However, for the 
-	method of importance sampling the error is consistently lower. 
-	
-	\begin{table}
-		\caption{Importance sampled simulations of $n=10$ particles in $d=3$ dimensions. Average acceptance
-			ratios and standard deviations for eleven alpha values between $0.3$ and $0.7$.}
-		\centering
-			\begin{ruledtabular}
-				\begin{tabular}{cccc}
-				Time step & $\bar{\sigma}_b$ & $\bar{A}$ & $\expval{E}\left(\alpha = \frac{1}{2}\right)$ \\ \hline
-				$2^{+3}$ & 0.09363 & 0.00531 & 15.000 \\
-				$2^{+2}$ & 0.01549  & 0.04123 & 15.000 \\
-				$2^{+1}$ & 0.00706 & 0.21604 & 15.000 \\ 
-				$2^{\ 0}$ & 0.00675 & 0.51030 & 15.000 \\
-				$2^{-1}$ & 0.00932 & 0.73779 & 15.000 \\
-				$2^{-2}$ & 0.01578 & 0.86633 & 15.000 \\
-				$2^{-3}$ & 0.02723 & 0.93305 & 15.000 \\
-				$2^{-4}$ & 0.05016 & 0.96654 & 15.000 \\
-				$2^{-5}$ & 0.08474 & 0.98316 & 15.000 \\
-				$2^{-6}$ & 0.11555 & 0.99174 & 15.000 \\
-				$2^{-7}$ & 0.17070 & 0.99612 & 15.000 \\
-				\end{tabular}
-			\end{ruledtabular}
-			\label{tab:imp_time_step}
-	\end{table}
-	
-	\autoref{tab:imp_time_step} shows the standard deviations and acceptance ratios for different time steps. The
-	simulations in this tabel are from the same span $\alpha \in [0.3, 07]$ as in \autoref{tab:1D1N_analytic} and
-	\autoref{tab:1D1N_numeric}. The optimum energies for $\alpha = \frac{1}{2}$ gives the same result for importance
-	sampling as for the naïve way of sampling. Notice that by lowering the time step, the uncertainty starts to decrease
-	and then starts to increase again. Moreover, the acceptance ratios increases as the time step decreases.
-	
-	\subsubsection{Test of Gradient descent}
-	
-	Before moving on to the interacting, more interesting systems, it would be beneficial to test the gradient descent implementation
-	now that we are certain that it moves towards the optimum variational parameter $\alpha = \frac{1}{2}$.
+    Next we will introduce importance sampling, the first prediction for importance sampling compared to
+    brute, naïve method is that we should approach an equilibrium much faster because we are now
+    making moves in a smarter way. This prediction is confirmed in \autoref{fig:problem_c1} and
+    \autoref{fig:problem_c2}.
 
-\subsection{Interacting elliptical harmonic oscillator}
-         \begin{table}
-             \caption{The expected energy, the standard
-             deviation, the acceptance ratio and CPU time for each $alpha$
-             for the elliptical potential with the interacting wavefunction. We
-             have used importance sampling with $\delta t = 0.1$ and $2^{21}$
-             Monte Carlo cycles and an additional $10\%$ of that as
-             thermalization steps. The hard sphere radius is set to $0.0043$ and
-             a $\beta = \lambda = \sqrt{8}$.}
-             \centering
-             \begin{ruledtabular}
-                 \begin{tabular}{ccccc}
-                     $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                     &$A$&$t_C$ \\
-                     \hline
-                     0.2&35.17548&0.05399&0.98995&24.48868\\
-                     0.3&27.62004&0.02311&0.98187&13.65132\\
-                     0.4&24.97850&0.00827&0.97248&13.54666\\
-                     0.5&24.39877&0.00030&0.96140&13.38388\\
-                     0.6&24.83863&0.00604&0.94998&13.31570\\
-                     0.7&25.82855&0.01059&0.93766&13.20579\\
-                     0.8&27.22895&0.01436&0.92375&13.11933\\
-                 \end{tabular}
-             \end{ruledtabular}
-             \label{tab:10_interacting}
-         \end{table}
- 
-         \begin{table}
-             \caption{$50$ interacting particles.}
-             \centering
-             \begin{ruledtabular}
-                 \begin{tabular}{ccccc}
-                     $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                     &$A$&$t_C$ \\
-                     \hline
-                     0.2&181.69371&0.25533&0.98756&199.95366\\
-                     0.3&142.61591&0.10782&0.97849&195.80928\\
-                     0.4&129.88615&0.04051&0.96862&190.44553\\
-                     0.5&127.29926&0.00595&0.95749&195.10368\\
-                     0.6&129.97630&0.03300&0.94595&193.22755\\
-                     0.7&135.67382&0.05785&0.93330&191.96391\\
-                     0.8&143.23238&0.07286&0.92061&192.72399\\
-                 \end{tabular}
-             \end{ruledtabular}
-             \label{tab:50_interacting}
-         \end{table}
- 
-         \begin{table}
-             \caption{$100$ Interacting particles.}
-             \centering
-             \begin{ruledtabular}
-                 \begin{tabular}{ccccc}
-                     $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
-                     &$A$&$t_C$ \\
-                     \hline
-                     0.2&375.04401&0.51475&0.98527&745.21438\\
-                     0.3&296.76879&0.20214&0.97534&741.04425\\
-                     0.4&270.60830&0.08113&0.94522&723.06823\\
-                     0.5&266.37263&0.02020&0.95314&702.71000\\
-                     0.6&272.51171&0.07366&0.94112&689.12862\\
-                     0.7&285.10285&0.11381&0.92895&707.48248\\
-                     0.8&301.40609&0.15458&0.91648&707.86118\\
-                 \end{tabular}
-             \end{ruledtabular}
-             \label{tab:100_interacting}
-         \end{table}
- 
-         \begin{figure}
-             \includegraphics[width=250px]{../data/figures/problem_e.pdf}
-             \caption{Local energies as a function of variational parameter $\alpha$
-             				 for different number of particles.}
-             \label{fig:interacting}
-         \end{figure}
+    \begin{figure}
+        \centering
+            \includegraphics[width=250px]{../data/figures/problem_c1.pdf}
+            \caption{As the number of Monte Carlo cycles increases the standard deviation of the local energies
+            decrease. This effect is stronger when the importance sampling scheme is employed.}
+            \label{fig:problem_c1}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+            \includegraphics[width=250px]{../data/figures/problem_c2.pdf}
+            \caption{The absolute difference between the expected energy and the exact energy for both brute force
+            and importance sampling. }
+            \label{fig:problem_c2}
+    \end{figure}
+
+    \autoref{fig:problem_c1} shows the standard deviation of the local energies for increasing number of Monte
+    Carlo cycles for both the regular sampling and the importance sampling methods. We see that the standard
+    deviation decreases for both methods for a larger number of Monte Carlo cycles, but the standard deviation
+    is always lower for the importance sampling method. This is in accordance with our expectations.
+
+    We have also compared the expected energy with the exact energy for different number of Monte Carlo
+    cycles. The result of this analysis is shown in \autoref{fig:problem_c2}. We see that both methods will  evnetually
+    result in expected energies that are equal to the exact energies as $\abs{E - \expval{E}} \to 0$. However, for the
+    method of importance sampling the error is consistently lower.
+
+    \begin{table}
+        \caption{Importance sampled simulations of $n=10$ particles in $d=3$ dimensions. Average acceptance
+            ratios and standard deviations for eleven alpha values between $0.3$ and $0.7$.}
+        \centering
+            \begin{ruledtabular}
+                \begin{tabular}{cccc}
+                    $\delta t$ & $\bar{\sigma}_b$ & $\bar{A}$
+                    & $\expval{E}\left(\alpha = \frac{1}{2}\right)$ \\
+                    \hline
+                    $2^{+3}$ & 0.09363 & 0.00531 & 15.000 \\
+                    $2^{+2}$ & 0.01549  & 0.04123 & 15.000 \\
+                    $2^{+1}$ & 0.00706 & 0.21604 & 15.000 \\
+                    $2^{\ 0}$ & 0.00675 & 0.51030 & 15.000 \\
+                    $2^{-1}$ & 0.00932 & 0.73779 & 15.000 \\
+                    $2^{-2}$ & 0.01578 & 0.86633 & 15.000 \\
+                    $2^{-3}$ & 0.02723 & 0.93305 & 15.000 \\
+                    $2^{-4}$ & 0.05016 & 0.96654 & 15.000 \\
+                    $2^{-5}$ & 0.08474 & 0.98316 & 15.000 \\
+                    $2^{-6}$ & 0.11555 & 0.99174 & 15.000 \\
+                    $2^{-7}$ & 0.17070 & 0.99612 & 15.000 \\
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:imp_time_step}
+    \end{table}
+
+    \autoref{tab:imp_time_step} shows the standard deviations and acceptance
+    ratios for different time steps. The simulations in this table are from the
+    same span $\alpha \in [0.3, 07]$ as in \autoref{tab:1D1N_analytic} and
+    \autoref{tab:1D1N_numeric}. The optimum energies for $\alpha = \frac{1}{2}$
+    gives the same result for importance sampling as for the naïve way of
+    sampling. Notice that by lowering the time step, the uncertainty starts to
+    decrease and then starts to increase again. Moreover, the acceptance ratios
+    increases as the time step decreases.
+
+    \subsubsection{Test of Gradient descent}
+        Before moving on to the interacting, more interesting systems, it would
+        be beneficial to test the gradient descent implementation now that we
+        are certain that it moves towards the optimum variational parameter
+        $\alpha = \frac{1}{2}$.
+
+    \subsection{Interacting elliptical harmonic oscillator}
+        We now look at the interacting, elliptical, harmonic oscillator with the
+        scaled system shown in \autoref{eq:scaled_hamiltonian} and scaled single
+        particle functions from \autoref{eq:scaled_spf} with the Jastrow factor.
+        Due to similarities with the spherical harmonic oscillator system we
+        make a guess that the true minimum of this new system should be situated
+        close the minimum of the previous system. Choosing seven values for
+        $\alpha \in [0.2, 0.7]$ we run importance sampling on this system for $N
+        = \{10, 50, 100\}$ particles in $d = 3$ dimensions using $2^{21}$ Monte
+        Carlo cycles\footnote{This turned out to be a little bit overkill due to
+        the fast convergence of importance sampling.} and an additional $10\%$
+        of the Monte Carlo cycles for thermalization of the system prior to
+        doing any sampling. We have used $\delta t = 0.1$ with $a_{\text{ho}} =
+        0.0043$ and $\lambda = \beta = \sqrt{8}$.
+
+        We have sampled the expectation value for the local energy, the standard
+        deviation using the blocking method, the acceptance ratio of the method
+        and the CPU time spent for each value $\alpha$. The results for $N = 10$
+        particles are shown in \autoref{tab:10_interacting}, $N = 50$ in
+        \autoref{tab:50_interacting} and finally for $N = 100$ in
+        \autoref{tab:100_interacting}.
+
+        \begin{table}
+            \caption{Simulation results for $N = 10$ bosonic interacting,
+            elliptical, harmonic oscillators.}
+            \centering
+            \begin{ruledtabular}
+                \begin{tabular}{ccccc}
+                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
+                    &$A$ & $t_{\text{CPU}} [\si{\second}]$ \\
+                    \hline
+                    0.2&35.17548&0.05399&0.990%98995
+                    &24.5\\%48868\\
+                    0.3&27.62004&0.02311&0.981%98187
+                    &13.6\\%65132\\
+                    0.4&24.97850&0.00827&0.972%97248
+                    &13.5\\%54666\\
+                    0.5&24.39877&0.00030&0.961%96140
+                    &13.4\\%38388\\
+                    0.6&24.83863&0.00604&0.950%94998
+                    &13.3\\%31570\\
+                    0.7&25.82855&0.01059&0.938%93766
+                    &13.2\\%20579\\
+                    0.8&27.22895&0.01436&0.924%92375
+                    &13.1\\%11933\\
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:10_interacting}
+        \end{table}
+
+        \begin{table}
+            \caption{Simulation results for $N = 50$ bosonic interacting,
+            elliptical, harmonic oscillators.}
+            \centering
+            \begin{ruledtabular}
+                \begin{tabular}{ccccc}
+                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
+                    & $A$ & $t_{\text{CPU}} [\si{\second}]$ \\
+                    \hline
+                    0.2&181.69371&0.25533&0.987%98756
+                    &199.9\\%95366\\
+                    0.3&142.61591&0.10782&0.978%97849
+                    &195.8\\%80928\\
+                    0.4&129.88615&0.04051&0.969%96862
+                    &190.4\\%44553\\
+                    0.5&127.29926&0.00595&0.957%95749
+                    &195.1\\%10368\\
+                    0.6&129.97630&0.03300&0.946%94595
+                    &193.2\\%22755\\
+                    0.7&135.67382&0.05785&0.933%93330
+                    &192.0\\%191.96391\\
+                    0.8&143.23238&0.07286&0.921%92061
+                    &192.7\\%72399\\
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:50_interacting}
+        \end{table}
+
+        \begin{table}
+            \caption{Simulation results for $N = 100$ bosonic interacting,
+            elliptical, harmonic oscillators.}
+            \centering
+            \begin{ruledtabular}
+                \begin{tabular}{ccccc}
+                    $\alpha$ & $\langle  E_L\rangle$ & $\sigma_b$
+                    &$A$ & $t_{\text{CPU}} [\si{\second}]$ \\
+                    \hline
+                    0.2&375.04401&0.51475&0.985%98527
+                    &745.2\\%21438\\
+                    0.3&296.76879&0.20214&0.975%97534
+                    &741.0\\%04425\\
+                    0.4&270.60830&0.08113&0.945%94522
+                    &723.1\\%06823\\
+                    0.5&266.37263&0.02020&0.953%95314
+                    &702.8\\%71000\\
+                    0.6&272.51171&0.07366&0.941%94112
+                    &689.1\\%12862\\
+                    0.7&285.10285&0.11381&0.929%92895
+                    &707.5\\%48248\\
+                    0.8&301.40609&0.15458&0.916%91648
+                    &707.9\\%86118\\
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:100_interacting}
+        \end{table}
+
+        \subsubsection{Finding the minimum}
+            Using the method of gradient descent we choose a set of six starting
+            $\alpha_0 \in [0.2, 0.8]$ and try to locate a value for $\alpha$
+            where the gradient goes to zero. We looked at $N = 10$ with $d = 3$,
+            $\omega = 1$ and $\beta = \lambda = \sqrt{8}$. This yields the value
+            for the minimum $\alpha$ to be
+            \begin{align}
+                \alpha = 0.49744 \pm 0.00002.
+            \end{align}
+            In \autoref{fig:gradient_descent_interacting} we can see how the
+            conjugate gradient method ``moves'' to find the optimal value of
+            $\alpha$.
+
+            \begin{figure}
+                \includegraphics[width=250px]{../data/figures/problem_f.pdf}
+                \caption{In this figure we can see the convergence of different
+                starting values for $\alpha$ towards the true value of $\alpha$
+                that minimizes the expected energy in the interacting case.}
+                \label{fig:gradient_descent_interacting}
+            \end{figure}
+
+\section{Discussion}
+    \subsection{Energy per particle}
+        For the non-interacting harmonic oscillator system there is no
+        difference between a new ``particle'' and new dimensions
+        \footnote{This is not entirely true in the case of our implementation of
+        the Metropolis algorithms as we draw a single random particle and move
+        all dimensions instead of iterating over all particles and all
+        dimensions}. This means that the inclusion of a new particle or
+        dimension yields a linear scaling in the energy. Thus if we compute the
+        energy per particle for systems of varying size we expect to get the
+        same energy. This is most easily seen in \autoref{fig:initial_problem_b}
+        and in the expression for the exact energy \autoref{eq:exact_energy}.
+        This, however, is \textit{not} the case in the interacting system due to
+        the Jastrow factor. Looking at \autoref{tab:10_interacting} and
+        \autoref{tab:100_interacting} we see that multiplying the expected
+        energy of theformer with $10$ yields a lower number than the latter. We
+        can also see this behavior in \autoref{fig:interacting}, where the
+        energy per particle for $N = \{10, 50, 100\}$ have been plotted in the
+        same figure.
+
+        \begin{figure}
+            \includegraphics[width=250px]{../data/figures/problem_e.pdf}
+            \caption{Local energies as a function of variational parameter $\alpha$
+                             for different number of particles.}
+            \label{fig:interacting}
+        \end{figure}
 
 \appendix
 \section{Brute Force Metropolis-Hastings}
