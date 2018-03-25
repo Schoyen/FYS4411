@@ -210,40 +210,17 @@ cdef class PySampler:
         return self.sampler.get_acceptance_ratio()
 
     def get_parameter_gradient(self):
-        cdef np.ndarray[double, ndim=1, mode="c"] wave_grad, energy_grad
-        cdef double energy
-
-        energy = self.get_energy()
-        wave_grad = self._get_wavefunction_variational_gradient()
-        energy_grad = self._get_variational_energy_gradient()
-
-        return 2*(energy_grad - wave_grad*energy)
-
-    def _get_wavefunction_variational_gradient(self):
-        cdef valarray[double] _arr
-        cdef np.ndarray[double, ndim=1, mode="c"] arr
+        cdef np.ndarray[double, ndim=1, mode="c"] gradient
+        cdef valarray[double] _gradient
         cdef unsigned int i
 
-        _arr = self.sampler.get_wavefunction_variational_gradient()
-        arr = np.zeros(_arr.size())
+        _gradient = self.sampler.get_variational_parameters_gradient()
+        gradient = np.zeros(_gradient.size())
 
-        for i in range(arr.size):
-            arr[i] = _arr[i]
+        for i in range(gradient.size):
+            gradient[i] = _gradient[i]
 
-        return arr
-
-    def _get_variational_energy_gradient(self):
-        cdef valarray[double] _arr
-        cdef np.ndarray[double, ndim=1, mode="c"] arr
-        cdef unsigned int i
-
-        _arr = self.sampler.get_variational_energy_gradient()
-        arr = np.zeros(_arr.size())
-
-        for i in range(arr.size):
-            arr[i] = _arr[i]
-
-        return arr
+        return gradient
 
     def get_one_body_densities(self):
         return np.asarray(self.bins)
