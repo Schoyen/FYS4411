@@ -260,8 +260,8 @@ cdef class PySampler:
             double gamma, double gamma_scale, unsigned int max_iterations,
             *sample_args, quiet=False, **sample_kwargs):
 
-        cdef np.ndarray[double, ndim=1, mode="c"] parameters, gradient, \
-                gradient_prev
+        cdef np.ndarray[double, ndim=1, mode="c"] parameters, \
+                parameters_prev, gradient, gradient_prev
         cdef unsigned int i
 
         parameters = start_parameters
@@ -280,18 +280,21 @@ cdef class PySampler:
 """
 Iteration: {0}
 Gradient: {1}
-Parameters: {2}
-""".format(i, gradient, parameters))
-
-            parameters += -gamma*gradient
+Old parameters: {2}""".format(i, gradient, parameters))
 
             if np.all(gradient**2 > gradient_prev**2):
                 gamma *= gamma_scale
+
+            parameters_prev = parameters.copy()
+            parameters += -gamma*gradient
 
             # We only use positive variational parameters
             mask = parameters < 0
             parameters[mask] = -parameters[mask]
             breadcrumbs.append(parameters.copy())
+
+            if not quiet:
+                print("""Current parameters: {0}""".format(parameters))
 
         return np.asarray(breadcrumbs)
 
