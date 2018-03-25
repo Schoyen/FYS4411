@@ -104,13 +104,10 @@ class Sampler
             return ((double) m_num_accepted_steps)/((double) m_num_steps);
         }
 
-        std::valarray<double> get_wavefunction_variational_gradient()
+        std::valarray<double> get_variational_parameters_gradient()
         {
-            return m_wavefunction_variational_gradient;
-        }
-
-        std::valarray<double> get_variational_energy_gradient()
-        {
-            return m_variational_energy_gradient;
+            return 2*(m_variational_energy_gradient
+                    - m_wavefunction_variational_gradient*m_energy)
+                / m_wavefunction->get_num_particles();
         }
 };
