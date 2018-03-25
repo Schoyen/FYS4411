@@ -1369,9 +1369,71 @@
         \label{fig:initial_problem_b}
     \end{figure*}
 
-\section{Derivation of Local Energy alpha derivative}
-
-TO BE INSERTED HERE??? Or whaaaat boiii...
+\section{Variational parameter gradient of the expectation energy}
+    Here we show how to arrive at the expression shown in
+    \autoref{eq:variational_parameter_gradient}. This requires us to restrict
+    our view to real trial wavefunctions, i.e., $\Psi_T^{*} = \Psi_T$, which is
+    the case for the wavefunctions we are exploring.
+    \begin{align}
+        \nabla_{\alpha}\expval{E_L}
+        &=
+        \nabla_{\alpha}
+        \para{
+            \frac{
+                \int\dd\vf{r}\Psi_T^{*}H\Psi_T
+            }{
+                \int\dd\vf{r}|\Psi_T|^2
+            }
+        }
+        \\
+        &=
+        -
+        \frac{
+            2
+            \para{
+                \int\dd\vf{r}\Psi_T H\Psi_T
+            }
+        }{\para{\int\dd\vf{r}\Psi_T}^2}
+        \int\dd\vf{r}\Psi_T\nabla_{\alpha}\Psi_T
+        \\
+        &\qquad
+        +
+        \frac{2}{\int\dd\vf{r}\Psi_T^2}
+        \int\dd\vf{r}\Psi_TH\brak{
+            \nabla_{\alpha}\Psi_T
+        }
+        \\
+        &=
+        - 2\expval{E_L}
+        \frac{1}{
+            \int\dd\vf{r}\Psi_T^2
+        }
+        \int\dd\vf{r}\Psi_T^2\para{
+            \frac{\nabla_{\alpha}\Psi_T}{\Psi_T}
+        }
+        \\
+        &\qquad
+        +
+        \frac{2}{\int\dd\vf{r}\Psi_T^2}
+        \int\dd\vf{r}\Psi_T^2 E_L\para{
+            \frac{\nabla_{\alpha}\Psi_T}{\Psi_T}
+        }.
+    \end{align}
+    We now use the definition of the expectation value to group terms together.
+    We are thus left with
+    \begin{align}
+        \nabla_{\alpha}\expval{E_L}
+        =
+        2
+        \para{
+            \expval{
+                E_L\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T
+            }
+            - \expval{E_L}
+            \expval{\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T}
+        },
+    \end{align}
+    which is what we wanted to show.
 
 \bibliography{references}
 
