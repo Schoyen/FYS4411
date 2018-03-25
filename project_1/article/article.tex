@@ -833,11 +833,21 @@
 
         From $\mathbf{X}$ we compute the variance and sample covariance between the series itself and a
         one-point lag of the series. This covariance is usually referred to as the first order autocovariance.
-        \begin{equation}
-            \gamma_i = \frac{1}{n}
-                \left(\sum_{k=1}^n\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right)
-                \left(\sum_{k=0}^{n-1}\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right).
-        \end{equation}
+        \begin{align}
+            \gamma_i
+            &= \frac{1}{n}
+            \left(
+                \sum_{k=1}^n
+                \left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)
+            \right)
+            \nonumber \\
+            &\qquad
+            \times
+            \left(
+                \sum_{k=0}^{n-1}
+                \left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)
+            \right).
+        \end{align}
 
         Now we "block"! The next step is to perform a transformation of the our time series $\mathbf{x}_i$, where
         we end up with an array that is half the length of the original time series,
@@ -866,40 +876,39 @@
         % Flow chart for description of automatic blocking algorithm
         \begin{figure}
             \centering
-
-                % Defining blocks of flowchart
-                \tikzstyle{decision} = [diamond, draw, fill=blue!20,
-                    text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
+            % Defining blocks of flowchart
+            \tikzstyle{decision} = [diamond, draw, fill=blue!20,
+                text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
             \tikzstyle{block} = [rectangle, draw, fill=blue!20,
                     text width=11em, text centered, rounded corners, minimum height=4em]
             \tikzstyle{line} = [draw, -latex']
 
-                % Actual figure
-                \begin{tikzpicture}[node distance = 2.2cm, auto]
+            % Actual figure
+            \begin{tikzpicture}[node distance = 2.2cm, auto]
 
-                    % Nodes
-                    \node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
-                    \node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
-                    \node [block, below of=variance] (transform)
-                        {Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
-                    \node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
-                    \node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? };
-                    \node [block, below of=x_size] (m_test) {Compute test statistic $M_j$ from $s_j$ and $\gamma_j$ for all $j$.};
-                    \node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
-                    \node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
+                % Nodes
+                \node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
+                \node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
+                \node [block, below of=variance] (transform)
+                    {Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
+                \node [block, right=1.0cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
+                \node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? };
+                \node [block, below of=x_size] (m_test) {Compute test statistic $M_j$ from $s_j$ and $\gamma_j$ for all $j$.};
+                \node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
+                \node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
 
-                    % Edges
-                    \path [line] (init) -- (variance);
-                    \path [line] (variance) -- (transform);
-                    \path [line] (transform) -- (x_size);
-                        \path [line] (x_size) -| node [near start] {yes} (i+1);
-                        \path [line] (i+1) |- (variance);
-                    \path [line] (x_size) -- node [near start] {no} (m_test);
-                    \path [line] (m_test) -- (magic_numbers);
-                    \path [line] (magic_numbers) -- (return);
-                \end{tikzpicture}
-                \caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
-                \label{fig:blocking}
+                % Edges
+                \path [line] (init) -- (variance);
+                \path [line] (variance) -- (transform);
+                \path [line] (transform) -- (x_size);
+                    \path [line] (x_size) -| node [near start] {yes} (i+1);
+                    \path [line] (i+1) |- (variance);
+                \path [line] (x_size) -- node [near start] {no} (m_test);
+                \path [line] (m_test) -- (magic_numbers);
+                \path [line] (magic_numbers) -- (return);
+            \end{tikzpicture}
+            \caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
+            \label{fig:blocking}
         \end{figure}
 
         \subsection{Gradient Descent}
