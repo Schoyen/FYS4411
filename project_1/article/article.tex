@@ -913,31 +913,43 @@
 
         \subsection{Gradient Descent}
 
-        Scanning the entire space of variational parameters can be a somewhat despairing task. To aid us in the search we
-        therefore implement the method of gradient descent\footnote{Also known as steepest descent, easily confused
-        with the steepest descent method for integation.}. In any optimum we generally have that the derivative should equal
-        zero. In our case, we want to find the minimum of the expected local energy with respect to some variational
-        parameter $\alpha$, so that
-        \begin{equation}
-            \nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
-        \end{equation}
-        The foundation for  the method of gradient descent lies in the fact that some analytic
-        \footnote{We use the term analytic quite recklessly.} function $F(\alpha)$ decreases fastest in the direction
-        of $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to an ensuing minimum by trailing along the
-        pathway of the following recursive relation,
-        \begin{equation}
-            \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha k} F(\alpha_k).
-        \end{equation}
-        If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
-        experience convergence to the desired minimum.
+            Scanning the entire space of variational parameters can be a
+            somewhat despairing task. To aid us in the search we therefore
+            implement the method of gradient descent\footnote{Also known as
+            steepest descent, easily confused with the steepest descent method
+            for integation.}. In any optimum we generally have that the
+            derivative should equal zero. In our case, we want to find the
+            minimum of the expected local energy with respect to some
+            variational parameter $\alpha$, so that
+            \begin{equation}
+                \nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
+            \end{equation}
+            The foundation for  the method of gradient descent lies in the fact
+            that some analytic \footnote{We use the term analytic quite
+            recklessly.} function $F(\alpha)$ decreases fastest in the direction
+            of $-\nabla_\alpha F(\alpha)$. This means that we could eventually
+            get to an ensuing minimum by trailing along the pathway of the
+            following recursive relation,
+            \begin{equation}
+                \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha} F(\alpha_k).
+            \end{equation}
+            If $\gamma$ is small enough we should have $f(\alpha_k) \geq
+            F(\alpha_{k+1})$ for all $k$ and hopefully we will experience
+            convergence to the desired minimum.
 
-        For our special case we only have one variational parameter, $\alpha$.  The expression for the derivative is,
-        \begin{equation}
-            \frac{d E_L}{d\alpha} =
-                2\left( \expval{\frac{1}{\psi_T}\frac{d\psi_T}{d\alpha} E_L} - \expval{\frac{1}{\psi_T} \frac{d\psi_T}{d\alpha}}\expval{E_L} \right).
-        \end{equation}
+            For our special case we only have one variational parameter,
+            $\alpha$.  The expression for the derivative is,
+            \begin{equation}
+                \nabla_{\alpha}\expval{E_L}
+                =
+                2\left(
+                    \expval{E_L\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T}
+                    - \expval{\frac{1}{\Psi_T} \nabla_{\alpha}\Psi_T}\expval{E_L}
+                \right).
+                \label{eq:variational_parameter_gradient}
+            \end{equation}
 
-        INSERT DERIVATION OF LOCAL ENERGY??
+            %TODO: INSERT DERIVATION OF LOCAL ENERGY??
 
 \section{Results}
 
