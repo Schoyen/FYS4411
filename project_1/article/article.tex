@@ -599,6 +599,7 @@
                     {x_k'}^2 + {y_k'}^2 + \lambda^2{z_k'}^2
                 }
             },
+            \label{eq:one_body_hamiltonian}
         \end{align}
         where we have introduced the dimensionless frequency $\lambda =
         \omega_z/\omega$. The single particle functions also gets a scaling
@@ -902,7 +903,13 @@
 		If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
 		experience convergence to the desired minimum. 
 		
-		For our special case : INSERT DERIVATION OF LOCAL ENERGY derivative wrt alpha??
+		For our special case we only have one variational parameter, $\alpha$.  The expression for the derivative is, 
+		\begin{equation}
+			\frac{d E_L}{d\alpha} = 
+				2\left( \expval{\frac{1}{\psi_T}\frac{d\psi_T}{d\alpha} E_L} - \expval{\frac{1}{\psi_T} \frac{d\psi_T}{d\alpha}}\expval{E_L} \right).
+		\end{equation}
+		
+		INSERT DERIVATION OF LOCAL ENERGY??
 
 \section{Results}
 
@@ -1103,9 +1110,23 @@
 	now that we are certain that it moves towards the optimum variational parameter $\alpha = \frac{1}{2}$.
 
 \subsection{Interacting elliptical harmonic oscillator}
+         
+		We now make two changes to the simple systems in the previous section in order to make everything
+		a bit more interesting. First, the potential in the Hamiltonian is perturbed in the $z$-direction according to
+		\autoref{eq:one_body_hamiltonian} by setting $\lambda = \sqrt{8} \approx 2.82843$. This corresponds to enclosing particles
+		of the simulation in a spherical trap instead of a circular trap. Second, a particle-to-particle interaction is 
+		introduces in form of a hard shell with radius $\frac{a}{a_\text{ho}} = 0.0043$. Similarly to the non-interacting
+		case, the simulation results for different values of $\alpha$ are displayed in \autoref{tab:10_interacting}. 
+         
+		In \autoref{tab:10_interacting} the system is set to have $10$ interacting particles. Notice first that the energy is
+		higher than for the interacting system than for a comparable non-interacting system (\autoref{tab:initial_optimum_comparison}).
+		Moreover, the standard deviation gets lover as the system is close to an optimal variational parameter.  The importnance 
+		sampling method is used in this simulations, with a relatively low time step $\delta t = 0.1$, leading to a correspondingly
+		high acceptance ratio.  
+         
          \begin{table}
              \caption{The expected energy, the standard
-             deviation, the acceptance ratio and CPU time for each $alpha$
+             deviation, the acceptance ratio and CPU time for each $\alpha$
              for the elliptical potential with the interacting wavefunction. We
              have used importance sampling with $\delta t = 0.1$ and $2^{21}$
              Monte Carlo cycles and an additional $10\%$ of that as
@@ -1128,6 +1149,10 @@
              \end{ruledtabular}
              \label{tab:10_interacting}
          \end{table}
+ 
+		The result of simulations with a higher number of particles, $n=50$ and $n=100$, are  shown in \autoref{tab:50_interacting}
+		and \autoref{tab:100_interacting} respectively. We observe that the energy for systems of interacting particles increases
+		rapidly as the size of the system increases. 
  
          \begin{table}
              \caption{$50$ interacting particles.}
@@ -1190,6 +1215,9 @@
         \label{fig:initial_problem_b}
     \end{figure*}
 
+\section{Derivation of Local Energy alpha derivative}
+
+TO BE INSERTED HERE??? Or whaaaat boiii...
 
 \bibliography{references}
 
