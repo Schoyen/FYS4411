@@ -803,109 +803,114 @@
         sample from one block is no longer correlated with a corresponding sample from an adjacent block.
         The block size for this point of convergence now functions as an estimate for the autocorrelation
         time $\tau$.
-        
-     	Instead of going by this "manual" method of looking at charts, we will construct a test statistic and
-     	let the computer do the necessary considerations in a more "automatic way.
-        
-        The easiest way to do this is by use of the \emph{automatic blocking scheme}, nicely illustrated 
-        with a flow chart in \autoref{fig:blocking}. The input parameter for the method is an array of the 
+
+         Instead of going by this "manual" method of looking at charts, we will construct a test statistic and
+         let the computer do the necessary considerations in a more "automatic way.
+
+        The easiest way to do this is by use of the \emph{automatic blocking scheme}, nicely illustrated
+        with a flow chart in \autoref{fig:blocking}. The input parameter for the method is an array of the
         local energies, but it can be any array of time series data, which is why it is herein referred to as
         $\mathbf{X}$. Any array of sequential data, where any particular data point depends on the previous
-        data point inhibits all attributes of a time series. Our array of local energies is therefor most definitely 
-        a time series. 
-        
-		From $\mathbf{X}$ we compute the variance and sample covariance between the series itself and a 
-		one-point lag of the series. This covariance is usually referred to as the first order autocovariance.
-		\begin{equation}
-			\gamma_i = \frac{1}{n}
-				\left(\sum_{k=1}^n\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right)
-				\left(\sum_{k=0}^{n-1}\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right).
-		\end{equation}
-		
-		Now we "block"! The next step is to perform a transformation of the our time series $\mathbf{x}_i$, where
-		we end up with an array that is half the length of the original time series,
-		\begin{equation}
-			(\mathbf{X}_i)_k = \frac{1}{2}\left((\mathbf{X}_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right).
-		\end{equation}
-		This process is were the term "blocking" stems from. There are a number of ways to perform the blocking -
-		we could have picked the data points used in the new ($i+1$) array randomly, or more orderly. Here we we have
-		picked them sequentially. We have obtained $\frac{n}{2}$ new "primed" stochastic variables. Assuming that the
-		reader is playing close attention, it is now needless to say that it is much easier to perform these sequential
-		blocking steps if we have an array of length $n= 2^d$, where $d$ is integer. Otherwise, problems would arise
-		because one would have arrays of different lengths when the original array is "split in two". The ailment is
-		easy to remedy by excluding an observation from the longest resulting array after splitting. 
-		
-		For each new time series $\mathbf{X}_{i+1}$ a new sample variance and sample covariance is computed.
-		The blocking transformation is allowed to continue until we are we run out of data, i.e. the length
-		of $\mathbf{X}_i < 2$. In other words, there is only a single number left. We now compute a test statistic,
-		\begin{equation}
-			M_j = \sum_{k=j}^{d-1} n_k \frac{\left[(n_k - 1)\frac{s^2_k}{n_k^2} y \gamma_k(1)\right] ^2}{s_k^4}.
-		\end{equation}
-		As luck would have it, this number $M$ is   $\chi^2$-distributed. The following step would be to look up a 
-		statistical table and find the first $k$, such that $M_k \leq q_{d-k}(1-\alpha)$, where $q$ is the statistical
-		limit and $\alpha$ is  the significance level that your hear desires. Finally, the correct sample standard deviation 
-		is $\frac{s_k^2}{n_k}$. Again, see \autoref{fig:blocking} for a summary of the algorithm. 
-		        
+        data point inhibits all attributes of a time series. Our array of local energies is therefor most definitely
+        a time series.
+
+        From $\mathbf{X}$ we compute the variance and sample covariance between the series itself and a
+        one-point lag of the series. This covariance is usually referred to as the first order autocovariance.
+        \begin{equation}
+            \gamma_i = \frac{1}{n}
+                \left(\sum_{k=1}^n\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right)
+                \left(\sum_{k=0}^{n-1}\left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)\right).
+        \end{equation}
+
+        Now we "block"! The next step is to perform a transformation of the our time series $\mathbf{x}_i$, where
+        we end up with an array that is half the length of the original time series,
+        \begin{equation}
+            (\mathbf{X}_i)_k = \frac{1}{2}\left((\mathbf{X}_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right).
+        \end{equation}
+        This process is were the term "blocking" stems from. There are a number of ways to perform the blocking -
+        we could have picked the data points used in the new ($i+1$) array randomly, or more orderly. Here we we have
+        picked them sequentially. We have obtained $\frac{n}{2}$ new "primed" stochastic variables. Assuming that the
+        reader is playing close attention, it is now needless to say that it is much easier to perform these sequential
+        blocking steps if we have an array of length $n= 2^d$, where $d$ is integer. Otherwise, problems would arise
+        because one would have arrays of different lengths when the original array is "split in two". The ailment is
+        easy to remedy by excluding an observation from the longest resulting array after splitting.
+
+        For each new time series $\mathbf{X}_{i+1}$ a new sample variance and sample covariance is computed.
+        The blocking transformation is allowed to continue until we are we run out of data, i.e. the length
+        of $\mathbf{X}_i < 2$. In other words, there is only a single number left. We now compute a test statistic,
+        \begin{equation}
+            M_j = \sum_{k=j}^{d-1} n_k \frac{\left[(n_k - 1)\frac{s^2_k}{n_k^2} y \gamma_k(1)\right] ^2}{s_k^4}.
+        \end{equation}
+        As luck would have it, this number $M$ is   $\chi^2$-distributed. The following step would be to look up a
+        statistical table and find the first $k$, such that $M_k \leq q_{d-k}(1-\alpha)$, where $q$ is the statistical
+        limit and $\alpha$ is  the significance level that your hear desires. Finally, the correct sample standard deviation
+        is $\frac{s_k^2}{n_k}$. Again, see \autoref{fig:blocking} for a summary of the algorithm.
+
         % Flow chart for description of automatic blocking algorithm
-		\begin{figure}
-			\centering
-        
-        		% Defining blocks of flowchart
-        		\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-   			 	text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
-			\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-    				text width=11em, text centered, rounded corners, minimum height=4em]
-			\tikzstyle{line} = [draw, -latex']
-    			
-    			% Actual figure
-    			\begin{tikzpicture}[node distance = 2.2cm, auto]
-    			
-    				% Nodes
-    				\node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
-    				\node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
-    				\node [block, below of=variance] (transform) 
-    					{Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
-    				\node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
-    				\node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? }; 
-    				\node [block, below of=x_size] (m_test) {Compute test statistic $M_j$ from $s_j$ and $\gamma_j$ for all $j$.};
-    				\node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
-    				\node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
-    			
-    				% Edges
-    				\path [line] (init) -- (variance);
-    				\path [line] (variance) -- (transform);
-    				\path [line] (transform) -- (x_size);
-    					\path [line] (x_size) -| node [near start] {yes} (i+1);
-    					\path [line] (i+1) |- (variance);
-    				\path [line] (x_size) -- node [near start] {no} (m_test);
-    				\path [line] (m_test) -- (magic_numbers);
-    				\path [line] (magic_numbers) -- (return);
-    			\end{tikzpicture}
-    			\caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
-    			\label{fig:blocking}
-		\end{figure}
-		
-		\subsection{Gradient Descent}
-		
-		Scanning the entire space of variational parameters can be a somewhat despairing task. To aid us in the search we
-		therefore implement the method of gradient descent\footnote{Also known as steepest descent, easily confused
-		with the steepest descent method for integation.}. In any optimum we generally have that the derivative should equal
-		zero. In our case, we want to find the minimum of the expected local energy with respect to some variational
-		parameter $\alpha$, so that
-		\begin{equation}
-			\nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
-		\end{equation}	
-		The foundation for  the method of gradient descent lies in the fact that some analytic
-		\footnote{We use the term analytic quite recklessly.} function $F(\alpha)$ decreases fastest in the direction
-		of $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to an ensuing minimum by trailing along the
-		pathway of the following recursive relation,
-		\begin{equation}
-			\alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha k} F(\alpha_k).
-		\end{equation}
-		If $\gamma$ is small enough we should have $f(\alpha_k) \geq F(\alpha_{k+1})$ for all $k$ and hopefully we will
-		experience convergence to the desired minimum. 
-		
-		For our special case : INSERT DERIVATION OF LOCAL ENERGY derivative wrt alpha??
+        \begin{figure}
+            \centering
+
+                % Defining blocks of flowchart
+                \tikzstyle{decision} = [diamond, draw, fill=blue!20,
+                    text width=5em, text badly centered, node distance=3cm, inner sep=0pt]
+            \tikzstyle{block} = [rectangle, draw, fill=blue!20,
+                    text width=11em, text centered, rounded corners, minimum height=4em]
+            \tikzstyle{line} = [draw, -latex']
+
+                % Actual figure
+                \begin{tikzpicture}[node distance = 2.2cm, auto]
+
+                    % Nodes
+                    \node [block] (init) {Start with $\mathbf{X}_i$, $i=0$};
+                    \node [block, below of=init] (variance) {Compute variance and autocovariance of $\mathbf{X}_i$, $s_i$ and $\gamma_i$};
+                    \node [block, below of=variance] (transform)
+                        {Transform data $(\mathbf{X}_{i+1})_k = \frac{1}{2}\left((\mathbf{X})_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right)$};
+                    \node [block, right=1.5cm of transform] (i+1) {Next iteration: $i = i + 1$.} ;
+                    \node [decision, below of = transform] (x_size) {Length of $\mathbf{X}_{i + 1} \geq 2$ ? };
+                    \node [block, below of=x_size] (m_test) {Compute test statistic $M_j$ from $s_j$ and $\gamma_j$ for all $j$.};
+                    \node [block, below of=m_test] (magic_numbers) {Find first $k$ so that $M_k \leq q_{d-k}(1-\alpha)$};
+                    \node [block, below of=magic_numbers] (return) {Return $s_k^2/n_k$};
+
+                    % Edges
+                    \path [line] (init) -- (variance);
+                    \path [line] (variance) -- (transform);
+                    \path [line] (transform) -- (x_size);
+                        \path [line] (x_size) -| node [near start] {yes} (i+1);
+                        \path [line] (i+1) |- (variance);
+                    \path [line] (x_size) -- node [near start] {no} (m_test);
+                    \path [line] (m_test) -- (magic_numbers);
+                    \path [line] (magic_numbers) -- (return);
+                \end{tikzpicture}
+                \caption{Flow chart depicting the automatic blocking method for finding a better estimate for sample variance.}
+                \label{fig:blocking}
+        \end{figure}
+
+        \subsection{Gradient Descent}
+
+        Scanning the entire space of variational parameters can be a somewhat
+        despairing task. To aid us in the search we therefore implement the
+        method of gradient descent\footnote{Also known as steepest descent,
+        easily confused with the steepest descent method for integation.}. In
+        any optimum we generally have that the derivative should equal zero. In
+        our case, we want to find the minimum of the expected local energy with
+        respect to some variational parameter $\alpha$, so that
+        \begin{equation}
+            \nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
+        \end{equation}
+        The foundation for  the method of gradient descent lies in the fact that
+        some analytic \footnote{We use the term analytic quite recklessly.}
+        function $F(\alpha)$ decreases fastest in the direction of
+        $-\nabla_\alpha F(\alpha)$. This means that we could eventually get to
+        an ensuing minimum by trailing along the pathway of the following
+        recursive relation,
+        \begin{equation}
+            \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha} F(\alpha_k).
+        \end{equation}
+        If $\gamma$ is small enough we should have $f(\alpha_k) \geq
+        F(\alpha_{k+1})$ for all $k$ and hopefully we will experience
+        convergence to the desired minimum.
+
+        For our special case : INSERT DERIVATION OF LOCAL ENERGY derivative wrt alpha??
 
 \section{Results}
 
@@ -913,7 +918,7 @@
     Initially we are interested in seeing how our implementation performs and to what extent it functions properly.
     the logical thing to do would be to look at a non-interacting system with a simple Gaussian wavefunction and
     harmonic oscillator potential. Such a system has a simple closed-form analytic solution\footnote{A fact that every
-    undergraduate physics student should be well aware of after finishing their first course in quantum physics}, 
+    undergraduate physics student should be well aware of after finishing their first course in quantum physics},
     which is further simplified by the "god-given" analytic
     units (\autoref{eq:closed_form_natural_units_local_energy}). This expression is minimised for
     $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$ and get an expression for the
@@ -927,7 +932,7 @@
     sampling. Moreover, we will compute the value for the local energy analytically as well as with a numerical approach.
     In the numerical approach we employ the well-know approximation for the second derivative,
     \begin{equation}
-    		f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
+            f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
     \end{equation}
 
     \begin{table}
@@ -980,20 +985,20 @@
         \label{tab:1D1N_numeric}
     \end{table}
 
-	\autoref{tab:1D1N_analytic} shows the expected local energy $\expval{E_L}$, standard deviations 
-	$\sigma$, $\sigma_b$, the share of accepted Monte Carlo reorientations $A$ and cpu time for 
-	the analytic computation at different values for the variational parameter $\alpha$.
-	\autoref{tab:1D1N_numeric} shows the same numbers but for the numeric scheme. The first column of
-	standard deviations $\sigma$ are the "naïve" standard deviations, while $\sigma_b$ marks the
-	standard deviations computed with the blocking method. One can clearly see, in both the analytic and numeric
-	case, that the former standard deviations are lower than the latter, meaning that autocorrelated data
-	can lead to a lower perceived uncertainty than what is reality. The blocking method takes this fact into account 
-	and for this reason, all other standard deviations will be computed with the blocking method from here on. 
-	
-	The first initial observation of note is that we have found an optimum for the system in terms of a minimum
-	energy at $\alpha=\frac{1}{2}$. Moreover, notice how the standard deviation disappears completely.
-	This should already be apparent from \autoref{eq:closed_form_natural_units_local_energy}, as the term
-	involving particle positions disappears for the optimal $\alpha$.
+    \autoref{tab:1D1N_analytic} shows the expected local energy $\expval{E_L}$, standard deviations
+    $\sigma$, $\sigma_b$, the share of accepted Monte Carlo reorientations $A$ and cpu time for
+    the analytic computation at different values for the variational parameter $\alpha$.
+    \autoref{tab:1D1N_numeric} shows the same numbers but for the numeric scheme. The first column of
+    standard deviations $\sigma$ are the "naïve" standard deviations, while $\sigma_b$ marks the
+    standard deviations computed with the blocking method. One can clearly see, in both the analytic and numeric
+    case, that the former standard deviations are lower than the latter, meaning that autocorrelated data
+    can lead to a lower perceived uncertainty than what is reality. The blocking method takes this fact into account
+    and for this reason, all other standard deviations will be computed with the blocking method from here on.
+
+    The first initial observation of note is that we have found an optimum for the system in terms of a minimum
+    energy at $\alpha=\frac{1}{2}$. Moreover, notice how the standard deviation disappears completely.
+    This should already be apparent from \autoref{eq:closed_form_natural_units_local_energy}, as the term
+    involving particle positions disappears for the optimal $\alpha$.
 
     \begin{table}
         \caption{Comparison of energy, standard deviation and the CPU time for
