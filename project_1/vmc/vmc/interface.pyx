@@ -258,7 +258,7 @@ cdef class PySampler:
     def find_minimum(self,
             np.ndarray[double, ndim=1, mode="c"] start_parameters,
             double gamma, double gamma_scale, unsigned int max_iterations,
-            *sample_args, quiet=False, **sample_kwargs):
+            double tol=1e-9, **sample_kwargs):
 
         cdef np.ndarray[double, ndim=1, mode="c"] parameters, \
                 parameters_prev, gradient, gradient_prev
@@ -295,6 +295,9 @@ Old parameters: {2}""".format(i, gradient, parameters))
 
             if not quiet:
                 print("""Current parameters: {0}""".format(parameters))
+
+            if np.all((parameters - parameters_prev)**2 < tol):
+                break
 
         return np.asarray(breadcrumbs)
 
