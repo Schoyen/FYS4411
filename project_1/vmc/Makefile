@@ -1,49 +1,18 @@
-# Define the force removal command. This lets the clean-recipe remove the
-# build-directory with all its subfolders
-RM=rm -r
-MK=mkdir -p
+RM=rm -rf
 
-# Define the target directories
-SDIR=src
-IDIR=include
 BDIR=build
-ODIR=$(BDIR)/obj
-
-# Define the compiler to use
-CXX=g++
-
-# Define compiler flags
-#
-#  -I$(IDIR) => Look in include-directory for header files
-#  -g => Debug flag, this lets us debug with Valgrind and gdb
-#  -Wall => Include all compiler warnings
-#  -std=c++11 => Compiler as C++11
-#  -O3 => Optimize as much as possible
-CXXFLAGS=-I$(IDIR) -I /usr/local/include/eigen3/ -g -Wall -std=c++11 -O3
-
-# Define libraries to use
-LIBS=-larmadillo
-
-# Add headers as seen in $(IDIR)
-_HEADERS=particles.h system.h wavefunction.h simplegaussian.h
-# Tell make to look in $(IDIR) for the header-files defined in $(_HEADERS)
-HEADERS=$(patsubst %, $(IDIR)/%, $(_HEADERS))
-
-# Add object files to be generated
-_OBJECTS=particles.o teststuff.o system.o wavefunction.o simplegaussian.o
-# Tell make to look in $(ODIR) for the object files defined $(_OBJECTS)
-OBJECTS=$(patsubst %, $(ODIR)/%, $(_OBJECTS))
-
-$(ODIR)/%.o: $(SDIR)/%.cpp $(HEADERS) | build
-	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
-
-particles.x: $(OBJECTS)
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
-
-.PHONY: clean build
+CYTHONDIR=vmc
 
 build:
-	$(MK) $(BDIR) $(ODIR)
+	@python3 setup.py build_ext
+
+install:
+	@pip install . --upgrade
+
+installr:
+	@pip install . --upgrade -r requirements.txt
+
+.PHONY: clean
 
 clean:
-	$(RM) $(BDIR) particles.x
+	$(RM) $(BDIR) $(CYTHONDIR)/*.cpp .cache
