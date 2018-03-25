@@ -119,7 +119,7 @@ Its important to discuss how much faster (in terms of number of samples) we reac
 
 #### Figures
 1. ~~Plot energy and variance for table 1.~~
-2. Plot of alphas (show convergence for several alphas) found from steepest descent.
+2. ~~Plot of alphas (show convergence for several alphas) found from steepest descent.~~
 
 ### Onebody densities
 Cool figures with and without Jastrow.
