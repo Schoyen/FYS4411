@@ -710,10 +710,10 @@
             \begin{align}
                 \vf{r}_{i + 1}
                 &=
-                \vf{r}_i + D\vf{F}(\vf{r}_i)\Delta t
-                + \vfg{\xi}\sqrt{\Delta t},
+                \vf{r}_i + D\vf{F}(\vf{r}_i)\delta t
+                + \vfg{\xi}\sqrt{\delta t},
             \end{align}
-            for a given time step $\Delta t$
+            for a given time step $\delta t$
             \footnote{
                 Bear in mind that \autoref{eq:langevin} is only valid as $\Delta
                 t \to 0$, a property stemming from the use of Euler's method.
@@ -727,30 +727,30 @@
                 q(\vf{r}_{i + 1}, \vf{r}_i)
                 &=
                 \frac{
-                    G(\vf{r}_{i + 1}, \vf{r}_{i}, \Delta t)
+                    G(\vf{r}_{i + 1}, \vf{r}_{i}, \delta t)
                     \left|\Psi_T(\vf{r}_{i + 1})\right|^2
                 }
                 {
-                    G(\vf{r}_{i}, \vf{r}_{i + 1}, \Delta t)
+                    G(\vf{r}_{i}, \vf{r}_{i + 1}, \delta t)
                     \left|\Psi_T(\vf{r}_{i})\right|^2
                 },
             \end{align}
             where $G$ is the Green's function of the Fokker-Planck equation
             given by
             \begin{align}
-                G(\vf{r}_{i + 1}, \vf{r}_i, \Delta t)
+                G(\vf{r}_{i + 1}, \vf{r}_i, \delta t)
                 &=
                 \exp\Biggl(
                     -\frac{\bigl[
                         \vf{r}_{i + 1}
                         - \vf{r}_{i}
-                        - D\vf{F}(\vf{r}_i)\Delta t
-                    \bigr]^2}{4D\Delta t}
+                        - D\vf{F}(\vf{r}_i)\delta t
+                    \bigr]^2}{4D\delta t}
                 \Biggr)
                 \nonumber \\
                 &\qquad
                 \times
-                \frac{1}{(4\pi D\Delta t)^{dN/2}},
+                \frac{1}{(4\pi D\delta t)^{dN/2}},
             \end{align}
             where $d$ is the dimensionality.
 
