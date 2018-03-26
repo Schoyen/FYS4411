@@ -1,4 +1,3 @@
-#include <cassert>
 #include <valarray>
 
 #include "hamiltonian.h"
