@@ -21,7 +21,7 @@ class Sampler
         double m_r_max = 0;
         double m_bin_step = 0;
         unsigned int m_num_bins = 0;
-        double *m_bins = 0;
+        double **m_bins = 0;
 
         std::valarray<double> m_wavefunction_variational_gradient;
         std::valarray<double> m_variational_energy_gradient;
@@ -35,9 +35,11 @@ class Sampler
                 Hamiltonian *hamiltonian,
                 MonteCarloMethod *solver);
 
+        virtual ~Sampler();
+
         void initialize()
         {
-            unsigned int i;
+            unsigned int i, j;
 
             m_num_steps = 0;
             m_num_accepted_steps = 0;
@@ -49,14 +51,16 @@ class Sampler
 
             if (m_bins != 0) {
                 for (i = 0; i < m_num_bins; i++) {
-                    m_bins[i] = 0;
+                    for (j = 0; j < m_wavefunction->get_num_dimensions(); j++) {
+                        m_bins[i][j] = 0;
+                    }
                 }
             }
         }
 
         void normalize()
         {
-            unsigned int i;
+            unsigned int i, j;
 
             m_energy /= m_num_steps;
             m_energy_squared /= m_num_steps;
@@ -65,8 +69,10 @@ class Sampler
 
             if (m_bins != 0) {
                 for (i = 0; i < m_num_bins; i++) {
-                    m_bins[i] /=
-                        (m_num_steps*m_wavefunction->get_num_particles());
+                    for (j = 0; j < m_wavefunction->get_num_dimensions(); j++) {
+                        m_bins[i][j] /=
+                            (m_num_steps*m_wavefunction->get_num_particles());
+                    }
                 }
             }
         }
@@ -77,11 +83,18 @@ class Sampler
         void set_one_body_parameters(
                 double r_min, double r_max, unsigned int num_bins, double *bins)
         {
+            unsigned int i, num_dimensions;
+
             m_r_min = r_min;
             m_r_max = r_max;
             m_num_bins = num_bins;
             m_bin_step = (m_r_max - m_r_min)/(m_num_bins - 1);
-            m_bins = bins;
+            m_bins = new double *[m_num_bins];
+
+            num_dimensions = m_wavefunction->get_num_dimensions();
+            for (i = 0; i < m_num_bins; i++) {
+                m_bins[i] = &bins[i*num_dimensions];
+            }
         }
 
         double get_variance()

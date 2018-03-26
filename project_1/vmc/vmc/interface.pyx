@@ -173,13 +173,14 @@ cdef class PyMonteCarloMethod:
 cdef class PySampler:
     cdef Sampler *sampler
     cdef double[::1] local_energies
-    cdef double[::1] bins
+    cdef double[:, ::1] bins
     cdef PyWavefunction wavefunction
 
     def __init__(self, PyWavefunction wavefunction, PyHamiltonian hamiltonian,
             PyMonteCarloMethod solver):
 
         self.local_energies = np.zeros(1)
+        self.bins = np.zeros((1, 1))
         self.wavefunction = wavefunction
 
         self.sampler = new Sampler(
@@ -227,10 +228,11 @@ cdef class PySampler:
 
     def initialize_one_body_densities(self, double r_min, double r_max,
             unsigned int num_bins):
-        self.bins = np.zeros(num_bins)
+        num_dimensions = self.wavefunction.get_num_dimensions()
+        self.bins = np.zeros((num_bins, num_dimensions))
 
         self.sampler.set_one_body_parameters(
-                r_min, r_max, num_bins, &self.bins[0])
+                r_min, r_max, num_bins, &self.bins[0, 0])
 
     def find_minimum(self,
             np.ndarray[double, ndim=1, mode="c"] start_parameters,
@@ -301,6 +303,9 @@ Old parameters: {2}""".format(i, gradient, parameters))
                     num_samples, step_length, &self.local_energies[0])
         else:
             self.sampler.sample(num_samples, step_length, <double *> 0)
+
+    def __dealloc__(self):
+        del self.sampler
 
 cdef class PyMetropolisAlgorithm(PyMonteCarloMethod):
 

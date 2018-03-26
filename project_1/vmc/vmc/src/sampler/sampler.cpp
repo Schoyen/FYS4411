@@ -21,6 +21,13 @@ Sampler::Sampler(
         std::valarray<double>(m_wavefunction->get_num_parameters());
 }
 
+Sampler::~Sampler()
+{
+    if (m_num_bins != 0) {
+        delete[] m_bins;
+    }
+}
+
 void Sampler::sample(unsigned int num_samples, double step_length,
         double *local_energies)
 {
@@ -68,20 +75,24 @@ void Sampler::sample(unsigned int num_samples, double step_length,
 
         /* Check if we should sample one body densities */
         if (m_bins != 0) {
-            double radius;
-            unsigned int p_i, bin_index, num_particles;
+            unsigned int p_i, i, bin_index, num_particles, num_dimensions;
 
+            num_dimensions = m_wavefunction->get_num_dimensions();
             num_particles = m_wavefunction->get_num_particles();
 
+            double position[num_dimensions];
             for (p_i = 0; p_i < num_particles; p_i++) {
-                radius = m_wavefunction->get_radial_position(p_i);
+                m_wavefunction->copy_particle_position(position, p_i);
 
-                if (radius < m_r_min || radius > m_r_max) {
-                    continue;
+                for (i = 0; i < num_dimensions; i++) {
+                    position[i] = fabs(position[i]);
+                    if (position[i] < m_r_min || position[i] > m_r_max) {
+                        continue;
+                    }
+
+                    bin_index = (int) floor((position[i] - m_r_min)/m_bin_step);
+                    m_bins[bin_index][i] += 1;
                 }
-
-                bin_index = (int) floor((radius - m_r_min)/m_bin_step);
-                m_bins[bin_index] += 1;
             }
         }
     }
