@@ -85,7 +85,6 @@ void Sampler::sample(unsigned int num_samples, double step_length,
                 m_wavefunction->copy_particle_position(position, p_i);
 
                 for (i = 0; i < num_dimensions; i++) {
-                    position[i] = fabs(position[i]);
                     if (position[i] < m_r_min || position[i] > m_r_max) {
                         continue;
                     }
@@ -96,7 +95,7 @@ void Sampler::sample(unsigned int num_samples, double step_length,
             }
         }
     }
-    /* Normalize accumulated energy, energy squared and energy gradient */
+    /* Normalize sampled quantities */
     normalize();
 
     /* Compute the variance */
