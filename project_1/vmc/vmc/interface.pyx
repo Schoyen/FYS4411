@@ -167,6 +167,11 @@ cdef class PyEllipticalHarmonicOscillator(PyHamiltonian):
     def __cinit__(self, double _lambda):
         self.hamiltonian = new EllipticalHarmonicOscillator(_lambda)
 
+cdef class PyDoubleWell(PyHamiltonian):
+
+    def __cinit__(self, double radius, unsigned int axis=0):
+        self.hamiltonian = new DoubleWell(radius, axis)
+
 cdef class PyMonteCarloMethod:
     cdef MonteCarloMethod *method
 

@@ -61,6 +61,10 @@ cdef extern from "elliptical_harmonic_oscillator.h":
     cdef cppclass EllipticalHarmonicOscillator(Hamiltonian):
         EllipticalHarmonicOscillator(double _lambda) except +
 
+cdef extern from "double_well.h":
+    cdef cppclass DoubleWell(HarmonicOscillator):
+        DoubleWell(double radius, unsigned int axis) except +
+
 cdef extern from "monte_carlo_method.h":
     cdef cppclass MonteCarloMethod:
         MonteCarloMethod() except +
