@@ -271,7 +271,7 @@
         will use the Metropolis-Hastings algorithm with the additions of
         \emph{Importance Sampling}  (which will be discussed in due time). This
         alteration of the algorithm is dependent on the \emph{drift force} of
-        the system.
+        the system\footnote{Also known as the \emph{quantum force}}.
         \begin{align}
             \vf{F}(\vf{r})
             &=
@@ -285,7 +285,8 @@
         Using this expression we are able to move towards parts of
         configuration space where the gradient increases or decreases yielding a
         better choice of movements. We will mainly be interested in the drift
-        force of a single particle $k$.
+        force of a single particle $k$ as the Monte Carlo sampling involves
+        choosing a single particle at a time.
 
 \subsection{Non-interacting harmonic oscillators}
     We start by looking at a simple system of non-interacting harmonic
