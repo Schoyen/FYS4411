@@ -1,0 +1,14 @@
+Interacting
+---
+ alpha &      energy &      variance &       std &  acceptance &  sampling_time &  block_var &  block_std &  energy_per_particle
+0.4974 &  266.290366 &  9.986384e-07 &  0.000999 &    0.953573 &     956.155482 &   0.000882 &   0.029707 &  2.662904
+
+Non-interacting
+---
+ alpha &      energy &      variance &       std &  acceptance &  sampling_time &  block_var &  block_std &  energy_per_particle
+0.4974 &  241.424836 &  1.324285e-08 &  0.000115 &    0.962858 &     366.677343 &   0.000006 &   0.002487 &  2.414248
+
+Simple
+---
+alpha &  energy &  variance &  std &  acceptance &  sampling_time &  block_var &  block_std &  energy_per_particle
+  0.5 &   150.0 &       0.0 &  0.0 &    0.985629 &       4.128788 &        0.0 &        0.0 &  1.5
