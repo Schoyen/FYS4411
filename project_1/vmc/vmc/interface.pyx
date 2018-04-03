@@ -109,30 +109,50 @@ cdef class PyInteractingEllipticalGaussian(PyWavefunction):
         self.radius = radius
         super().__init__(num_particles, num_dimensions, num_parameters, spread)
 
-        self._remove_overlap()
+        self.redistribute()
 
         self.wavefunction = new InteractingEllipticalGaussian(
                 num_particles, num_dimensions, mass, omega, beta, radius,
                 &self.parameters[0], &self.particles[0, 0])
 
-    def _remove_overlap(self):
-        cdef unsigned int p_i, i, p_j, j
+    def redistribute(self, double spread=-1):
+        if spread < 0:
+            spread = self.spread
+
+        assert spread/self.num_particles > (2*self.radius), \
+                "Distance between each particle must be larger than the " \
+                + "diameter"
+
+        cdef double start, end, step_length, center
+        cdef np.ndarray[double, ndim=1, mode="c"] steps
+        cdef list indices
+        cdef unsigned int p_i, i, carry
+
+        start = -spread
+        end = spread
+
+        step_length = (end - start)/(self.num_particles - 1)
+        center = step_length/2.0
+
+        steps = np.linspace(
+                -spread + center, spread - center,
+                int(np.ceil(self.num_particles**(1.0/self.num_dimensions))))
+
+        indices = [0]*self.num_dimensions
 
         for p_i in range(self.num_particles):
-            for p_j in range(self.num_particles):
-                if p_i == p_j:
-                    continue
+            for i in range(self.num_dimensions):
+                self.particles[p_i, i] = steps[indices[i]]
 
-                for i in range(self.num_dimensions):
+            carry = 1
+            for i in range(self.num_dimensions):
+                indices[i] += carry
+                if indices[i] >= steps.size:
+                    indices[i] = 0
+                    carry = 1
+                else:
+                    carry = 0
 
-                    while abs(self.particles[p_i, i] - self.particles[p_j, i]) \
-                            <= self.radius:
-                        self.particles[p_j, i] = \
-                                self.spread*(2.0*np.random.random() - 1.0)
-
-    def redistribute(self, double spread=-1):
-        super().redistribute(spread=spread)
-        self._remove_overlap()
 
 cdef class PyHamiltonian:
     cdef Hamiltonian *hamiltonian
