@@ -1,7 +1,7 @@
 /*
  * Gaussian wavefunction for use with elliptic traph
- * 
- */ 
+ *
+ */
 
 #include <valarray>
 #include <cmath>
@@ -66,7 +66,7 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
 
     for (i = 0; i < m_num_dimensions; i++) {
 
-        // The z-coordinates will be perturbed. 
+        // The z-coordinates will be perturbed.
         position_sum +=
             (i != 2) ? SQUARE(position[i]) : (m_beta*SQUARE(position[i]));
     }
@@ -202,7 +202,7 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
         r_m = m_particles[p_m];
         r_km = get_distance_between_particles(p_k, p_m);
 
-        // Adding contribution. 
+        // Adding contribution.
         for (i = 0; i < m_num_dimensions; i++) {
             gradient[i] += (r_k[i] - r_m[i])*a/(SQUARE(r_km)*(r_km - a));
         }
@@ -211,7 +211,7 @@ InteractingEllipticalGaussian::compute_gradient_correlation_wavefunction(
     return gradient;
 }
 
-// Private method. Computes CW laplacian for specific particle. 
+// Private method. Computes CW laplacian for specific particle.
 double
 InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
         unsigned int p_k)
@@ -240,14 +240,14 @@ InteractingEllipticalGaussian::compute_laplacian_correlation_wavefunction(
     return laplacian;
 }
 
-// Public method. Full gradient for particular particle. 
+// Public method. Full gradient for particular particle.
 void InteractingEllipticalGaussian::compute_gradient(
         double *gradient, unsigned int p_i)
 {
     unsigned int i;
     std::valarray<double> spf_gradient, corr_gradient;
 
-    // Calling private helper methods. 
+    // Calling private helper methods.
     spf_gradient = compute_gradient_single_particle_function(p_i);
     corr_gradient = compute_gradient_correlation_wavefunction(p_i);
 
@@ -267,7 +267,7 @@ InteractingEllipticalGaussian::compute_variational_gradient()
 
     particle_gradient = 0;
 
-    // Iterating over all particles and coordinates. Adding up contributions. 
+    // Iterating over all particles and coordinates. Adding up contributions.
     for (p_i = 0; p_i < m_num_particles; p_i++) {
         for (i = 0; i < m_num_dimensions; i++) {
             particle_gradient +=
