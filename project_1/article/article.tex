@@ -967,30 +967,51 @@
             \end{equation}
             The foundation for  the method of gradient descent lies in the fact
             that some analytic \footnote{We use the term analytic quite
-            recklessly.} function $F(\alpha)$ decreases fastest in the direction
-            of $-\nabla_\alpha F(\alpha)$. This means that we could eventually
+            recklessly.} function $\vf{F}(\alpha)$ decreases fastest in the direction
+            of $-\nabla_\alpha \cdot \vf{F}(\alpha)$. This means that we could eventually
             get to an ensuing minimum by trailing along the pathway of the
             following recursive relation,
             \begin{equation}
-                \alpha_{k+1} = \alpha_k - \gamma \nabla_{\alpha} F(\alpha_k).
+                \vfg{\alpha}_{k+1}
+                = \vfg{\alpha}_k - \gamma \nabla_{\alpha}\cdot \vf{F}(\alpha_k).
+                \label{eq:parameter_difference}
             \end{equation}
-            If $\gamma$ is small enough we should have $f(\alpha_k) \geq
-            F(\alpha_{k+1})$ for all $k$ and hopefully we will experience
+            If $\gamma$ is small enough we should have $\vf{F}(\alpha_k) \geq
+            \vf{F}(\alpha_{k+1})$ for all $k$ and hopefully we will experience
             convergence to the desired minimum.
 
             For our special case we only have one variational parameter,
             $\alpha$.  The expression for the derivative is,
-            \begin{equation}
+            \begin{align}
                 \nabla_{\alpha}\expval{E_L}
                 =
                 2\left(
                     \expval{E_L\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T}
-                    - \expval{\frac{1}{\Psi_T} \nabla_{\alpha}\Psi_T}\expval{E_L}
+                    - \expval{\frac{1}{\Psi_T} \nabla_{\alpha}\Psi_T}
+                    \expval{E_L}
                 \right).
                 \label{eq:variational_parameter_gradient}
-            \end{equation}
+            \end{align}
 
-            %TODO: INSERT DERIVATION OF LOCAL ENERGY??
+            To evaluate this expression we sample the local energy, the
+            parameter gradient of the wavefunction, and the combined expression
+             of these at each Monte Carlo cycle.
+
+            \subsubsection{Stability of the algorithm}
+                When employing the method of gradient descent to locate a
+                minimum value for the variational parameters we expect some
+                issues due to stability of the Monte Carlo methods and the
+                steepness of the expected energy curves. If our guess of the
+                location of the minimum is far off we can expect the method to
+                diverge as the gradient will become huge. This will yield a
+                new value for $\vfg{\alpha}$ in
+                \autoref{eq:parameter_difference} which will be further away and
+                might result in a local minimum ``trapping'' the method. To
+                prevent this from happening we have added a limit to the allowed
+                change in $\vfg{\alpha}$. If the change in $\vfg{\alpha}$ is
+                larger than a set order of magnitude we keep dividing
+                $\vfg{\alpha}$ with this number until this criteria is
+                fulfilled.
 
 \section{Results}
 
