@@ -1215,13 +1215,6 @@
             and then starts to increase again. Moreover, the acceptance ratios
             increases as the time step decreases.
 
-        \subsubsection{Test of Gradient descent}
-
-            Before moving on to the interacting, more interesting systems, it
-            would be beneficial to test the gradient descent implementation now
-            that we are certain that it moves towards the optimum variational
-            parameter $\alpha = \frac{1}{2}$.
-
     \subsection{Interacting elliptical harmonic oscillator}
         We now make a change to the simple systems in the previous section in
         order to make everything a bit more interesting. The potential in the
@@ -1364,6 +1357,16 @@
             \end{figure}
 
 \section{Discussion}
+
+	\subsection{Validity of Results}
+		The non-interacting tests compared against the analytic "solution" showed
+		to a very high degree the validity of the method. One can see this quite clearly 
+		from \autoref{fig:initial_problem_b}. Because we get results from simulations
+		that correspond to the analytic results we can be fairly certain that the method
+		can be expanded upon to include attributes outside the realm problems that are 
+		analytically solvable. The systems with elliptic traps and interacting particles are
+		such systems. 
+
     \subsection{Energy per particle}
         For the non-interacting harmonic oscillator system there is no
         difference between a new ``particle'' and new dimensions
@@ -1390,6 +1393,7 @@
             \label{fig:interacting}
         \end{figure}
 
+\section{Summary Remarks}
 
 \appendix
 \section{Brute Force Metropolis-Hastings}
