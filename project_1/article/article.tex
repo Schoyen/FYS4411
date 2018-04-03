@@ -205,7 +205,7 @@
             -\alpha(x_i^2 + y_i^2 + \beta z_i^2)
         \bigr] \equiv \phi(\vf{r}_i),
     \end{align}
-    and $\Phi_T(\vf{r})$ is the \textit{Slater permanent} consisting of the $N$
+    and $\Phi_T(\vf{r})$ is the \emph{Slater permanent} consisting of the $N$
     first single particle wavefunctions, and the correlation wavefunction, $f$,
     given by
     \begin{align}
@@ -229,7 +229,7 @@
         As the many-body wavefunction creates a very large configuration space,
         where much of the wavefunction is small, we use the Metropolis algorithm
         in order to move towards regions in configuration space with
-        ``sensible'' values. We define the \textit{local energy}, $E_L{\vf{r}}$,
+        ``sensible'' values. We define the \emph{local energy}, $E_L(\vf{r})$,
         by
         \begin{align}
             E_L(\vf{r})
@@ -238,9 +238,8 @@
         If $\Psi_T(\vf{r})$ is an exact eigenfunction of the Hamiltonian, $E_L$
         will be constant. The closer $\Psi_T(\vf{r})$ is to the exact wave
         function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
-        One of the most computationally intensive parts of the VMC algorithm
-        will be to compute $E_L$. We therefore find an analytical expression for
-        $E_L$ in terms of the trial wavefunction.
+        This leads us to searching for values of $\vf{r}$ yielding the lowest
+        variance in $E_L$.
 
         When we are performing the Monte Carlo sampling we are interested in the
         expected value of the local energy as this will serve as our estimate of
@@ -260,14 +259,19 @@
         where we have multiplied and divided by the trial wavefunction to get
         the latter expression.
 
+        One of the most computationally intensive parts of the Variational Monte
+        Carlo algorithm will be to compute $E_L$. We will therefore find an
+        analytical expression for $E_L$ in terms of the trial wavefunctions and
+        the system we are exploring.
+
     \subsection{The drift force}
-        A disadvantage in the use of the brute-force Metropolis-Hastings algorithm is
-        that we might be spending much computational resources in an
-        uninteresting part of configuration space. To make smarter moves we will
-        use the Metropolis-Hastings algorithm with the additions of
-        \emph{Importance Sampling}  (which will be discussed in due
-        time). This alteration of the algorithm is dependent on the
-        \emph{drift force} of the system.
+        A disadvantage in the use of the brute force Metropolis-Hastings
+        algorithm is that we might be spending much computational resources in
+        an uninteresting part of configuration space. To make smarter moves we
+        will use the Metropolis-Hastings algorithm with the additions of
+        \emph{Importance Sampling}  (which will be discussed in due time). This
+        alteration of the algorithm is dependent on the \emph{drift force} of
+        the system.
         \begin{align}
             \vf{F}(\vf{r})
             &=
@@ -403,7 +407,7 @@
     \end{align}
     where $\ket{\Phi_T}$ is the same Slater permanent as in
     \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
-    \textit{Jastrow factor} given by
+    \emph{Jastrow factor} given by
     \begin{align}
         J(\vf{r})
         &=
@@ -526,7 +530,7 @@
         \phi_k.
     \end{align}
     Note that the subscripts on the unit vectors $\vf{e}_i$ are
-    \textit{not} the same as the subscripts used for its components. The
+    \emph{not} the same as the subscripts used for its components. The
     Laplacian yields
     \begin{align}
         \nabla_k^2\phi_k
@@ -1045,7 +1049,7 @@
         which will be used as the benchmark we are ultimately aiming for.
 
         We will start without importance sampling, that is by employing the
-        simpler and more naïve "brute force" Monte Carlo sampling. Moreover, we
+        simpler and more naïve ``brute force'' Monte Carlo sampling. Moreover, we
         will compute the value for the local energy analytically as well as with
         a numerical approach.  In the numerical approach we employ the well-know
         approximation for the second derivative,
@@ -1455,7 +1459,7 @@
         energy per particle for systems of varying size we expect to get the
         same energy. This is most easily seen in \autoref{fig:initial_problem_b}
         and in the expression for the exact energy \autoref{eq:exact_energy}.
-        This, however, is \textit{not} the case in the interacting system due to
+        This, however, is \emph{not} the case in the interacting system due to
         the Jastrow factor. Looking at \autoref{tab:10_interacting} and
         \autoref{tab:100_interacting} we see that multiplying the expected
         energy of theformer with $10$ yields a lower number than the latter. We
