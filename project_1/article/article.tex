@@ -148,7 +148,115 @@
     interesting aspects of this study in a discussion of the results before
     ending on some summary remarks.
 
-\section{Theory}
+\section{Variational Monte Carlo}
+    The variational principle states that for a given \emph{trial wavefunction},
+    $\ket{\Psi_T}$, the expectation value of the Hamiltonian, $H$, will be an
+    upper bound to the ground state energy, $E_0$ of the system.
+    \begin{align}
+        E_0 \leq E
+        = \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}},
+    \end{align}
+    The complicated part of the variational principle is finding the minimum, or
+    values close to the minimum. For a select few systems we can calculate this
+    analytically, but for the interesting systems we quickly hit an intractable
+    wall. To get around this we try to calculate the energy for a given
+    Hamiltonian and a trial wavefunction for different variational parameters.
+    The variance of the variational energy is given by
+    \begin{align}
+        \sigma^2
+        &=
+        \bra{\Psi_T}H^2\ket{\Psi_T}
+        - \bra{\Psi_T}H\ket{\Psi_T}^2.
+    \end{align}
+    If we have found the ``true'' trial wavefunction $\ket{\Psi_T}$, i.e., the
+    eigenfunction to the Hamiltonian $H$, we get $\sigma^2 = 0$. We are thus
+    interested in trying to find the variational parameters in the trial
+    wavefunction that minimizes the variance $\sigma^2$.
+
+    \subsection{Monte Carlo integration}
+        Unfortunately the evaluation of the expectation value of the energy for
+        a given trial wavefunction involves a large integral.
+        \begin{align}
+            E
+            &= \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+            =
+            \frac{\int\dd\vf{r}\Psi_T^{*}(\vf{r})H\Psi_T(\vf{r})}
+            {\int\dd\vf{r}|\Psi_T|^2},
+        \end{align}
+        where $\vf{r} = (\vf{r}_1, \vf{r}_2, \dots \vf{r}_N)$ are the
+        positions\footnote{This can include both spatial and spin parts, but we
+        will in the remainder of the project ignore spin.} of the particles
+        contained in the system.
+
+        To get around\footnote{Not exactly \emph{get around} per se, but make
+        the problem solvable at all.} the trouble of evaluating the integral we
+        employ the method of Monte Carlo integration.
+
+
+    \subsection{Local energy}
+        As the many-body wavefunction creates a very large configuration space,
+        where much of the wavefunction is small, we use the Metropolis algorithm
+        in order to move towards regions in configuration space with
+        ``sensible'' values. We define the \emph{local energy}, $E_L(\vf{r})$,
+        by
+        \begin{align}
+            E_L(\vf{r})
+            &= \frac{H\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+        \end{align}
+        If $\Psi_T(\vf{r})$ is an exact eigenfunction of the Hamiltonian, $E_L$
+        will be constant. The closer $\Psi_T(\vf{r})$ is to the exact wave
+        function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
+        This leads us to searching for values of $\vf{r}$ yielding the lowest
+        variance in $E_L$.
+
+        When we are performing the Monte Carlo sampling we are interested in the
+        expected value of the local energy as this will serve as our estimate of
+        the true energy. Mathematically this is expressed as
+        \begin{align}
+            \expval{E_L}
+            &=
+            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T{\vf{r}}}
+            {\int\dd \vf{r}|\Psi_T(\vf{r})|^2}
+            =
+            \frac{
+                \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L
+            }{
+                \int\dd \vf{r}|\Psi_T(\vf{r})|^2
+            },
+        \end{align}
+        where we have multiplied and divided by the trial wavefunction to get
+        the latter expression.
+
+        One of the most computationally intensive parts of the Variational Monte
+        Carlo algorithm will be to compute $E_L$. We will therefore find an
+        analytical expression for $E_L$ in terms of the trial wavefunctions and
+        the system we are exploring.
+
+    \subsection{The drift force}
+        A disadvantage in the use of the brute force Metropolis-Hastings
+        algorithm is that we might be spending much computational resources in
+        an uninteresting part of configuration space. To make smarter moves we
+        will use the Metropolis-Hastings algorithm with the additions of
+        \emph{Importance Sampling}  (which will be discussed in due time). This
+        alteration of the algorithm is dependent on the \emph{drift force} of
+        the system\footnote{Also known as the \emph{quantum force}.}.
+        \begin{align}
+            \vf{F}(\vf{r})
+            &=
+            \sum_{k = 1}^N
+            \vf{F}_k(\vf{r})
+            =
+            \sum_{k = 1}^N
+            \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+            \label{eq:drift_force}
+        \end{align}
+        Using this expression we are able to move towards parts of
+        configuration space where the gradient increases or decreases yielding a
+        better choice of movements. We will mainly be interested in the drift
+        force of a single particle $k$ as the Monte Carlo sampling involves
+        choosing a single particle at a time.
+
+\section{Systems}
     To model the trapped bosonic gas particles we use the potential
     \begin{align}
         v(\vf{r})
@@ -225,6 +333,7 @@
     probability density of zero from \autoref{eq:correlation_wavefunction} thus
     rejecting the state completely.
 
+<<<<<<< HEAD
     \subsection{Local energy}
         As the many-body wavefunction creates a very large configuration space,
         where much of the wavefunction is small, we use the Metropolis algorithm
@@ -286,6 +395,121 @@
         configuration space where the gradient increases or decreases yielding a
         better choice of movements. We will mainly be interested in the drift
         force of a single particle $k$.
+=======
+    \subsection{Non-interacting harmonic oscillators}
+        We start by looking at a simple system of non-interacting harmonic
+        oscillators, where $a = 0$ and $\beta = 1$. This means that there is no
+        hard-shell interaction between the particles and that we use a spherical
+        potential trap.  We thus get the trial  wavefunction
+        \begin{align}
+            \Psi_T(\vf{r})
+            = \Phi_T(\vf{r})
+            = \prod_{i = 1}^N \exp\para{
+                -\alpha |\vf{r}_i|^2
+            },
+        \end{align}
+        where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
+        $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
+        (in the spherical case)
+        \begin{align}
+            H &= \sum_{i = 1}^N h(\vf{r}_i)
+            = \sum_{i = 1}^N \Biggl(
+                -\frac{\hbar^2}{2m}\nabla_i^2
+                + \half m \omega^2 r_i^2
+            \Biggr).
+        \end{align}
+        To find the drift force and the local energy we have to compute the
+        gradient and the Laplacian of the trial wavefunction. The gradient is
+        given by
+        \begin{align}
+            \nabla_k\Psi_T(\vf{r})
+            &= -2\alpha \vf{r}_k\Psi_T(\vf{r}),
+        \end{align}
+        whereas the Laplacian yields
+        \begin{align}
+            \nabla^2_k\Psi_T(\vf{r})
+            &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
+        \end{align}
+        where $d$ is the dimensionality of the problem determined by $\vf{r}_k
+        \in \mathbb{R}^d$. We can thus use the gradient to find an expression
+        for the drift force for particle $k$.
+        \begin{align}
+            \vf{F}_k(\vf{r})
+            &= -4\alpha\vf{r}_k.
+        \end{align}
+        Using the Laplacian we can compute the kinetic term in the expression
+        for the local energy. We get
+        \begin{align}
+            E_L(\vf{r})
+            &=
+            \sum_{i = 1}^N
+            \Biggl(
+                -\frac{\hbar^2}{2m}
+                \bigl[
+                    -2d\alpha + 4\alpha^2 r_i^2
+                \bigr]
+                + \half m\omega^2 r_i^2
+            \Biggr).
+        \end{align}
+        In natural units, $\hbar = c = 1$, and with the mass set to unity, $m =
+        1$, this reduces to
+        \begin{align}
+            E_L(\vf{r})
+            &=
+            \alpha dN
+            + \biggl(
+                \half\omega^2
+                - 2\alpha^2
+            \biggr)
+            \sum_{i = 1}^N r_i^2.
+            \label{eq:closed_form_natural_units_local_energy}
+        \end{align}
+        It is worth noting that for $\alpha = \omega/2$\footnote{Note that
+        $\alpha$ is required to be positive.} we get a stable value for the
+        local energy.
+        \begin{align}
+            E_L(\vf{r})
+            &\equiv
+            E_L
+            =
+            \frac{\omega d N}{2},
+            \label{eq:minimum_energy_simple}
+        \end{align}
+        which is the stable minimum for $\alpha = \omega/2$.
+
+        \subsubsection{Exact variational energy}
+            As the system is non-interacting and consisting of Gaussians we can
+            find an expression for the exact energy as a function of the
+            variational parameter $\alpha$, i.e.,
+            \begin{align}
+                E(\alpha)
+                &=
+                \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+                \\
+                &=
+                \left(
+                    \frac{\hbar^2 \alpha}{2m}
+                    + \frac{m\omega^2}{8\alpha}
+                \right)dN.
+                \label{eq:exact_energy}
+            \end{align}
+            By minimizing this expression with respect to $\alpha$ yields
+            \begin{align}
+                \dod[]{E(\alpha)}{\alpha} = 0
+                \implies
+                \alpha_0 = \frac{m\omega}{2\hbar},
+            \end{align}
+            which in natural units reduces to $\alpha_0 = \omega/2$. The energy
+            at this value of $\alpha$ (in natural units) is then
+            \begin{align}
+                E(\alpha_0)
+                &=
+                \frac{\omega dN}{2},
+            \end{align}
+            in perfect accordance with \autoref{eq:minimum_energy_simple} which
+            yields high hopes for the latter equation and the expected minimum.
+
+>>>>>>> c0daf32b017990a4c5a01dd4d0ceb8aebe429a99
 
 \subsection{Non-interacting harmonic oscillators}
     We start by looking at a simple system of non-interacting harmonic
@@ -387,14 +611,19 @@
             \implies
             \alpha_0 = \frac{m\omega}{2\hbar},
         \end{align}
+<<<<<<< HEAD
         which in natural units reduces to $\alpha_0 = \half\omega$. The energy at
         this value of $\alpha$ (in natural units) is then
+=======
+        The drift force for particle $k$ in this system becomes
+>>>>>>> c0daf32b017990a4c5a01dd4d0ceb8aebe429a99
         \begin{align}
             E(\alpha_0)
             &=
             \frac{\omega dN}{2}.
         \end{align}
 
+<<<<<<< HEAD
 
 \subsection{Interacting hard sphere bosons}
     Moving to the full system allowing $\beta$ to vary and setting $a
@@ -465,6 +694,36 @@
         \nabla_k\Psi_T(\vf{r})
         &=
         \Biggl(
+=======
+        The Laplacian of particle $k$ divided by the trial wavefunction is
+        \begin{widetext}
+            \begin{align}
+                \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+                &=
+                \frac{\nabla_k^2\phi_k}{\phi_k}
+                + 2\frac{\nabla_k\phi_k}{\phi_k}
+                \sum_{m \neq k}^N
+                \frac{\Delta\vf{r}_{km}}{r_{km}}
+                \dpd[]{u_{km}}{r_{km}}
+                + \sum_{m\neq k}^N
+                \para{
+                    \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
+                    + \dpd[2]{u_{km}}{r_{km}}
+                }
+                +
+                \para{
+                    \sum_{m \neq k}^N
+                    \frac{\Delta\vf{r}_{km}}{r_{km}}
+                    \dpd[]{u_{km}}{r_{km}}
+                }^2,
+                \label{eq:laplacian_full_system}
+            \end{align}
+        \end{widetext}
+        where $\Delta \vf{r}_{km} = \vf{r}_k - \vf{r}_m$ and $d$ is the
+        dimensionality. Evaluating the gradient and Laplacian of the single
+        particle functions yields
+        \begin{gather}
+>>>>>>> c0daf32b017990a4c5a01dd4d0ceb8aebe429a99
             \frac{\nabla_k\phi_k}{\phi_k}
             + \sum_{m \neq k}^N
             \nabla_k u_{km}
@@ -650,6 +909,40 @@
             &=
             \frac{1}{a_{\text{ho}}^2}{\nabla_k'}^2.
         \end{align}
+<<<<<<< HEAD
+=======
+        The local energy is thus
+        \begin{align}
+            E_L(\vf{r})
+            &=
+            \sum_{k = 1}^N
+            \brac{
+                -\frac{\hbar^2}{2m}
+                \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+                + v(\vf{r}_k)
+            },
+        \end{align}
+        where the Laplcian is given by \autoref{eq:laplacian_full_system}.  We
+        will avoid writing out the full expression for the local energy for this
+        system due to the size of the equation.
+
+        \subsubsection{Scaling the system}
+            We now introduce a scaled distance $\vf{r}' = \vf{r}/a_{\text{ho}}$
+            \cite{dubois2001bose}, where
+            \begin{align}
+                a_{\text{ho}}
+                &=
+                \sqrt{\frac{\hbar}{m\omega}}.
+            \end{align}
+            We can then rewrite the Hamiltonian for the elliptic potential in terms
+            of this new distance. By doing a variable substitution for each
+            direction in the Laplace operator we get
+            \begin{align}
+                \nabla_k^2
+                &=
+                \frac{1}{a_{\text{ho}}^2}{\nabla_k'}^2.
+            \end{align}
+>>>>>>> c0daf32b017990a4c5a01dd4d0ceb8aebe429a99
 
         Looking at the one-body part of the Hamiltonian we get
         \begin{align}
@@ -662,6 +955,7 @@
                     \omega^2(x_k^2 + y_k^2)
                     + \omega_z^2 z_k^2
                 }
+<<<<<<< HEAD
             }
             \\
             &=
@@ -693,6 +987,38 @@
         The correlation wavefunction and the interaction potential remain the
         same, but using the scaled hard core sphere radius $a/a_{\text{ho}} =
         0.0043$. For brevity we will remove the ticks on the variables.
+=======
+                \\
+                &=
+                \frac{\hbar\omega}{2}
+                \sum_{k = 1}^N
+                \brac{
+                    -{\nabla_k'}^2
+                    +
+                    \brak{
+                        {x_k'}^2 + {y_k'}^2 + \lambda^2{z_k'}^2
+                    }
+                },
+                \label{eq:scaled_hamiltonian}
+            \end{align}
+            where we have introduced the dimensionless frequency $\lambda =
+            \omega_z/\omega$. The single particle functions also get a scaling
+            factor
+            \begin{align}
+                \phi_k
+                &=
+                \exp\brak{
+                    -\frac{\alpha\hbar}{m\omega}
+                    ({x_k'}^2 + {y_k'}^2 + \beta^2{z_k'}^2)
+                }
+                \equiv
+                \phi(\vf{r}_k').
+                \label{eq:scaled_spf}
+            \end{align}
+            The correlation wavefunction and the interaction potential remain the
+            same, but using the scaled hard core radius $a/a_{\text{ho}} =
+            0.0043$.
+>>>>>>> c0daf32b017990a4c5a01dd4d0ceb8aebe429a99
 
 
 \section{Algorithms}
