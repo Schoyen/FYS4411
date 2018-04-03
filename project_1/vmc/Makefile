@@ -7,10 +7,10 @@ build:
 	@python3 setup.py build_ext
 
 install:
-	@pip install . --upgrade
+	@pip3 install . --upgrade
 
 installr:
-	@pip install . --upgrade -r requirements.txt
+	@pip3 install . --upgrade -r requirements.txt
 
 .PHONY: clean
 
