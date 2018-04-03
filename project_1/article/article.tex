@@ -148,7 +148,111 @@
     interesting aspects of this study in a discussion of the results before
     ending on some summary remarks.
 
-\section{Theory}
+\section{Variational Monte Carlo}
+    The variational principle states that for a given \emph{trial wavefunction},
+    $\ket{\Psi_T}$, the expectation value of the Hamiltonian, $H$, will be an
+    upper bound to the ground state energy, $E_0$ of the system.
+    \begin{align}
+        E_0 \leq E
+        = \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}},
+    \end{align}
+    The complicated part of the variational principle is finding the minimum, or
+    values close to the minimum. For a select few systems we can calculate this
+    analytically, but for the interesting systems we quickly hit an intractable
+    wall. To get around this we try to calculate the energy for a given
+    Hamiltonian and a trial wavefunction for different variational parameters.
+    The variance of the variational energy is given by
+    \begin{align}
+        \sigma^2
+        &=
+        \bra{\Psi_T}H^2\ket{\Psi_T}
+        - \bra{\Psi_T}H\ket{\Psi_T}^2.
+    \end{align}
+    If we have found the ``true'' trial wavefunction $\ket{\Psi_T}$, i.e., the
+    eigenfunction to the Hamiltonian $H$, we get $\sigma^2 = 0$. We are thus
+    interested in trying to find the variational parameters in the trial
+    wavefunction that minimizes the variance $\sigma^2$.
+
+    \subsection{Monte Carlo integration}
+        Unfortunately the evaluation of the expectation value of the energy for
+        a given trial wavefunction involves a large integral.
+        \begin{align}
+            E
+            &= \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+            =
+            \frac{\int\dd\vf{r}\Psi_T^{*}(\vf{r})H\Psi_T(\vf{r})}
+            {\int\dd\vf{r}|\Psi_T|^2},
+        \end{align}
+        where $\vf{r} = (\vf{r}_1, \vf{r}_2, \dots \vf{r}_N)$ are the
+        positions\footnote{This can include both spatial and spin parts, but we
+        will in the remainder of the project ignore spin.} of the particles
+        contained in the system.
+
+
+    \subsection{Local energy}
+        As the many-body wavefunction creates a very large configuration space,
+        where much of the wavefunction is small, we use the Metropolis algorithm
+        in order to move towards regions in configuration space with
+        ``sensible'' values. We define the \emph{local energy}, $E_L(\vf{r})$,
+        by
+        \begin{align}
+            E_L(\vf{r})
+            &= \frac{H\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+        \end{align}
+        If $\Psi_T(\vf{r})$ is an exact eigenfunction of the Hamiltonian, $E_L$
+        will be constant. The closer $\Psi_T(\vf{r})$ is to the exact wave
+        function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
+        This leads us to searching for values of $\vf{r}$ yielding the lowest
+        variance in $E_L$.
+
+        When we are performing the Monte Carlo sampling we are interested in the
+        expected value of the local energy as this will serve as our estimate of
+        the true energy. Mathematically this is expressed as
+        \begin{align}
+            \expval{E_L}
+            &=
+            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T{\vf{r}}}
+            {\int\dd \vf{r}|\Psi_T(\vf{r})|^2}
+            =
+            \frac{
+                \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L
+            }{
+                \int\dd \vf{r}|\Psi_T(\vf{r})|^2
+            },
+        \end{align}
+        where we have multiplied and divided by the trial wavefunction to get
+        the latter expression.
+
+        One of the most computationally intensive parts of the Variational Monte
+        Carlo algorithm will be to compute $E_L$. We will therefore find an
+        analytical expression for $E_L$ in terms of the trial wavefunctions and
+        the system we are exploring.
+
+    \subsection{The drift force}
+        A disadvantage in the use of the brute force Metropolis-Hastings
+        algorithm is that we might be spending much computational resources in
+        an uninteresting part of configuration space. To make smarter moves we
+        will use the Metropolis-Hastings algorithm with the additions of
+        \emph{Importance Sampling}  (which will be discussed in due time). This
+        alteration of the algorithm is dependent on the \emph{drift force} of
+        the system\footnote{Also known as the \emph{quantum force}.}.
+        \begin{align}
+            \vf{F}(\vf{r})
+            &=
+            \sum_{k = 1}^N
+            \vf{F}_k(\vf{r})
+            =
+            \sum_{k = 1}^N
+            \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
+            \label{eq:drift_force}
+        \end{align}
+        Using this expression we are able to move towards parts of
+        configuration space where the gradient increases or decreases yielding a
+        better choice of movements. We will mainly be interested in the drift
+        force of a single particle $k$ as the Monte Carlo sampling involves
+        choosing a single particle at a time.
+
+\section{Systems}
     To model the trapped bosonic gas particles we use the potential
     \begin{align}
         v(\vf{r})
@@ -224,69 +328,6 @@
     unnecessary as the situtation where $r_{jk} \leq a$ automatically yields a
     probability density of zero from \autoref{eq:correlation_wavefunction} thus
     rejecting the state completely.
-
-    \subsection{Local energy}
-        As the many-body wavefunction creates a very large configuration space,
-        where much of the wavefunction is small, we use the Metropolis algorithm
-        in order to move towards regions in configuration space with
-        ``sensible'' values. We define the \emph{local energy}, $E_L(\vf{r})$,
-        by
-        \begin{align}
-            E_L(\vf{r})
-            &= \frac{H\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
-        \end{align}
-        If $\Psi_T(\vf{r})$ is an exact eigenfunction of the Hamiltonian, $E_L$
-        will be constant. The closer $\Psi_T(\vf{r})$ is to the exact wave
-        function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
-        This leads us to searching for values of $\vf{r}$ yielding the lowest
-        variance in $E_L$.
-
-        When we are performing the Monte Carlo sampling we are interested in the
-        expected value of the local energy as this will serve as our estimate of
-        the true energy. Mathematically this is expressed as
-        \begin{align}
-            \expval{E_L}
-            &=
-            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T{\vf{r}}}
-            {\int\dd \vf{r}|\Psi_T(\vf{r})|^2}
-            =
-            \frac{
-                \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L
-            }{
-                \int\dd \vf{r}|\Psi_T(\vf{r})|^2
-            },
-        \end{align}
-        where we have multiplied and divided by the trial wavefunction to get
-        the latter expression.
-
-        One of the most computationally intensive parts of the Variational Monte
-        Carlo algorithm will be to compute $E_L$. We will therefore find an
-        analytical expression for $E_L$ in terms of the trial wavefunctions and
-        the system we are exploring.
-
-    \subsection{The drift force}
-        A disadvantage in the use of the brute force Metropolis-Hastings
-        algorithm is that we might be spending much computational resources in
-        an uninteresting part of configuration space. To make smarter moves we
-        will use the Metropolis-Hastings algorithm with the additions of
-        \emph{Importance Sampling}  (which will be discussed in due time). This
-        alteration of the algorithm is dependent on the \emph{drift force} of
-        the system\footnote{Also known as the \emph{quantum force}}.
-        \begin{align}
-            \vf{F}(\vf{r})
-            &=
-            \sum_{k = 1}^N
-            \vf{F}_k(\vf{r})
-            =
-            \sum_{k = 1}^N
-            \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
-            \label{eq:drift_force}
-        \end{align}
-        Using this expression we are able to move towards parts of
-        configuration space where the gradient increases or decreases yielding a
-        better choice of movements. We will mainly be interested in the drift
-        force of a single particle $k$ as the Monte Carlo sampling involves
-        choosing a single particle at a time.
 
     \subsection{Non-interacting harmonic oscillators}
         We start by looking at a simple system of non-interacting harmonic
@@ -427,7 +468,7 @@
             = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr]
             \equiv u_{jk}
         \end{align}
-        The drift force for particle $k$ for this system becomes
+        The drift force for particle $k$ in this system becomes
         \begin{align}
             \vf{F}_k(\vf{r})
             &=
@@ -459,6 +500,7 @@
                     \frac{\Delta\vf{r}_{km}}{r_{km}}
                     \dpd[]{u_{km}}{r_{km}}
                 }^2,
+                \label{eq:laplacian_full_system}
             \end{align}
         \end{widetext}
         where $\Delta \vf{r}_{km} = \vf{r}_k - \vf{r}_m$ and $d$ is the
@@ -490,8 +532,20 @@
             \dpd[2]{u_{km}}{r_{km}}
             &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
         \end{align}
-        We will avoid writing out the full expression for the local energy for
-        this system due to the size of the equation.
+        The local energy is thus
+        \begin{align}
+            E_L(\vf{r})
+            &=
+            \sum_{k = 1}^N
+            \brac{
+                -\frac{\hbar^2}{2m}
+                \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
+                + v(\vf{r}_k)
+            },
+        \end{align}
+        where the Laplcian is given by \autoref{eq:laplacian_full_system}.  We
+        will avoid writing out the full expression for the local energy for this
+        system due to the size of the equation.
 
         \subsubsection{Scaling the system}
             We now introduce a scaled distance $\vf{r}' = \vf{r}/a_{\text{ho}}$
@@ -536,7 +590,7 @@
                 \label{eq:scaled_hamiltonian}
             \end{align}
             where we have introduced the dimensionless frequency $\lambda =
-            \omega_z/\omega$. The single particle functions also gets a scaling
+            \omega_z/\omega$. The single particle functions also get a scaling
             factor
             \begin{align}
                 \phi_k
@@ -550,7 +604,7 @@
                 \label{eq:scaled_spf}
             \end{align}
             The correlation wavefunction and the interaction potential remain the
-            same, but using the scaled hard core sphere radius $a/a_{\text{ho}} =
+            same, but using the scaled hard core radius $a/a_{\text{ho}} =
             0.0043$.
 
 
