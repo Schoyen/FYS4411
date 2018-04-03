@@ -290,15 +290,15 @@
 
 \subsection{Non-interacting harmonic oscillators}
     We start by looking at a simple system of non-interacting harmonic
-    oscillators. That is, where $a = 0$ and $\beta = 1$, i.e. there is no hard-shell
-    interaction between particles and the particles are confined in a spherical trap.
-    We thus get the trial  wavefunction
+    oscillators, where $a = 0$ and $\beta = 1$. This means that there is no
+    hard-shell interaction between the particles and that we use a spherical
+    potential trap.  We thus get the trial  wavefunction
     \begin{align}
         \Psi_T(\vf{r})
         = \Phi_T(\vf{r})
-        = \prod_{i = 1}^N \exp\bigl[
+        = \prod_{i = 1}^N \exp\para{
             -\alpha |\vf{r}_i|^2
-        \bigr],
+        },
     \end{align}
     where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
     $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
@@ -342,7 +342,8 @@
             + \half m\omega^2 r_i^2
         \Biggr).
     \end{align}
-    In natural units, with $\hbar = c = m = 1$, this reduces to
+    In natural units, $\hbar = c = 1$, and with the mass set to unity, $m = 1$,
+    this reduces to
     \begin{align}
         E_L(\vf{r})
         &=
@@ -354,10 +355,17 @@
         \sum_{i = 1}^N r_i^2.
         \label{eq:closed_form_natural_units_local_energy}
     \end{align}
-    It is worth noting that for $\alpha = \half\omega$ ($\alpha$ is required to
-    be positive) we will find a stable value which turns out to be the exact
-    energy minimum. This happens as the sum over all particles
-    disappears.
+    It is worth noting that for $\alpha = \omega/2$\footnote{Note that $\alpha$
+    is required to be positive.} we get a stable value for the local energy.
+    \begin{align}
+        E_L(\vf{r})
+        &\equiv
+        E_L
+        =
+        \frac{\omega d N}{2},
+        \label{eq:minimum_energy_simple}
+    \end{align}
+    which is the stable minimum for $\alpha = \omega/2$.
 
     \subsubsection{Exact variational energy}
         As the system is non-interacting and consisting of Gaussians we can
@@ -366,13 +374,8 @@
         \begin{align}
             E(\alpha)
             &=
-            \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}.
-        \end{align}
-
-        % TODO: Add the computation of this expression
-        The final result for the energy is
-        \begin{align}
-            E(\alpha)
+            \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+            \\
             &=
             \left(
                 \frac{\hbar^2 \alpha}{2m}
@@ -380,21 +383,21 @@
             \right)dN.
             \label{eq:exact_energy}
         \end{align}
-        By minimizing this expression, i.e., finding the derivative of the
-        energy with respect to $\alpha$ and equating this to zero, yields the
-        expected minimum of variational energy to be
+        By minimizing this expression with respect to $\alpha$ yields
         \begin{align}
             \dod[]{E(\alpha)}{\alpha} = 0
             \implies
             \alpha_0 = \frac{m\omega}{2\hbar},
         \end{align}
-        which in natural units reduces to $\alpha_0 = \half\omega$. The energy at
+        which in natural units reduces to $\alpha_0 = \omega/2$. The energy at
         this value of $\alpha$ (in natural units) is then
         \begin{align}
             E(\alpha_0)
             &=
-            \frac{\omega dN}{2}.
+            \frac{\omega dN}{2},
         \end{align}
+        in perfect accordance with \autoref{eq:minimum_energy_simple} which
+        yields high hopes for the latter equation and the expected minimum.
 
 
 \subsection{Interacting hard sphere bosons}
