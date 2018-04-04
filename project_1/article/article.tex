@@ -190,7 +190,68 @@
         To get around\footnote{Not exactly \emph{get around} per se, but make
         the problem solvable at all.} the trouble of evaluating the
         multidimensional-integral we employ the method of Monte Carlo
-        integration.
+        integration. This consists of approximating an integral of the
+        expectation value of a certain quantitity by a sum.
+        \begin{align}
+            \expval{x}
+            &=
+            \int_{\mathbb{R}}xp(x)\dd x
+            \approx
+            \frac{1}{N}\sum_{i = 1}^N x_ip(x_i),
+        \end{align}
+        where $x$ is a random variable with a probability density function
+        $p(x)$ and $\{x_i\}$ for $i \in \{1, \dots, N\}$ is the set of drawn
+        random variables. Here $N$ is the number of Monte Carlo samples chosen
+        to approximate the integral. By the law of large numbers we expect that
+        \begin{align}
+            \lim_{N \to \infty}\frac{1}{N}\sum_{i = 1}^N x_ip(x_i)
+            = \expval{x}.
+        \end{align}
+
+        For us to be able to take Monte Carlo integration to the quantum realm
+        we have to construct a probability density function from the
+        wavefunction. Luckily the wavefunction squared is just such a quantity.
+        Given a normalized wavefunction $\ket{\psi}$ we can compute the
+        expectation value of a quantum observable $\mathcal{O}$ using Monte
+        Carlo integration.
+        \begin{align}
+            \expval{\mathcal{O}}
+            &= \bra{\psi}\mathcal{O}\ket{\psi}
+            =
+            \int\dd\vf{r}
+            \psi^{*}(\vf{r})\mathcal{O}\psi(\vf{r})
+            \\
+            &=
+            \int\dd\vf{r}
+            |\psi(\vf{r})|^2
+            \frac{\mathcal{O}\psi(\vf{r})}{\psi(\vf{r})},
+        \end{align}
+        where we have multiplied and divided by the wavefunction. We now define
+        the probability density function, $p(\vf{r})$, as
+        \begin{align}
+            p(\vf{r}) = |\psi(\vf{r})|^2,
+        \end{align}
+        and the local quantum observable
+        \begin{align}
+            \mathcal{O}_L(\vf{r})
+            &= \frac{\mathcal{O}\psi(\vf{r})}{\psi(\vf{r})}.
+        \end{align}
+        We see that if the chosen wavefunction is an eigenstate of the quantum
+        operator, the local quantum observable becomes a constant.  We can thus
+        approximate the expecatation value of the quantum observable using Monte
+        Carlo integration.
+        \begin{align}
+            \expval{O}
+            &=
+            \int\dd\vf{r}
+            p(\vf{r})
+            \mathcal{O}_L(\vf{r})
+            \approx
+            \frac{1}{N}\sum_{i = 1}^N
+            p(\vf{r}_i)\mathcal{O}_L(\vf{r}_i).
+        \end{align}
+        In the case of a non-normalized wavefunction we need to divide by a
+        normalization factor in the probability density function.
 
 
     \subsection{Local energy}
@@ -215,11 +276,11 @@
         \begin{align}
             \expval{E_L}
             &=
-            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T{\vf{r}}}
+            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T(\vf{r})}
             {\int\dd \vf{r}|\Psi_T(\vf{r})|^2}
             =
             \frac{
-                \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L
+                \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L(\vf{r})
             }{
                 \int\dd \vf{r}|\Psi_T(\vf{r})|^2
             },
