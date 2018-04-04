@@ -446,115 +446,42 @@
             in perfect accordance with \autoref{eq:minimum_energy_simple} which
             yields high hopes for the latter equation and the expected minimum.
 
-\subsection{Non-interacting harmonic oscillators}
-    We start by looking at a simple system of non-interacting harmonic
-    oscillators. That is, where $a = 0$ and $\beta = 1$, i.e. there is no hard-shell
-    interaction between particles and the particles are confined in a spherical trap.
-    We thus get the trial  wavefunction
-    \begin{align}
-        \Psi_T(\vf{r})
-        = \Phi_T(\vf{r})
-        = \prod_{i = 1}^N \exp\bigl[
-            -\alpha |\vf{r}_i|^2
-        \bigr],
-    \end{align}
-    where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
-    $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
-    (in the spherical case)
-    \begin{align}
-        H &= \sum_{i = 1}^N h(\vf{r}_i)
-        = \sum_{i = 1}^N \Biggl(
-            -\frac{\hbar^2}{2m}\nabla_i^2
-            + \half m \omega^2 r_i^2
-        \Biggr).
-    \end{align}
-    To find the drift force and the local energy we have to compute the gradient
-    and the Laplacian of the trial wavefunction. The gradient is given by
-    \begin{align}
-        \nabla_k\Psi_T(\vf{r})
-        &= -2\alpha \vf{r}_k\Psi_T(\vf{r}),
-    \end{align}
-    whereas the Laplacian yields
-    \begin{align}
-        \nabla^2_k\Psi_T(\vf{r})
-        &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
-    \end{align}
-    where $d$ is the dimensionality of the problem determined by
-    $\vf{r}_k \in \mathbb{R}^d$. We can thus use the gradient to find an
-    expression for the drift force for particle $k$.
-    \begin{align}
-        \vf{F}_k(\vf{r})
-        &= -4\alpha\vf{r}_k.
-    \end{align}
-    Using the Laplacian we can compute the kinetic term in the expression for the
-    local energy. We get
-    \begin{align}
-        E_L(\vf{r})
-        &=
-        \sum_{i = 1}^N
-        \Biggl(
-            -\frac{\hbar^2}{2m}
-            \bigl[
-                -2d\alpha + 4\alpha^2 r_i^2
-            \bigr]
-            + \half m\omega^2 r_i^2
-        \Biggr).
-    \end{align}
-    In natural units, with $\hbar = c = m = 1$, this reduces to
-    \begin{align}
-        E_L(\vf{r})
-        &=
-        \alpha dN
-        + \biggl(
-            \half\omega^2
-            - 2\alpha^2
-        \biggr)
-        \sum_{i = 1}^N r_i^2.
-        \label{eq:closed_form_natural_units_local_energy}
-    \end{align}
-    It is worth noting that for $\alpha = \half\omega$ ($\alpha$ is required to
-    be positive) we will find a stable value which turns out to be the exact
-    energy minimum. This happens as the sum over all particles
-    disappears.
 
-    \subsubsection{Exact variational energy}
-        As the system is non-interacting and consisting of Gaussians we can
-        find an expression for the exact energy as a function of the
-        variational parameter $\alpha$, i.e.,
+    \subsection{Interacting hard sphere bosons}
+        Moving to the full elliptical system for $\beta \neq 1$ and setting $a
+        \neq 0$ we can write the trial wavefunction as
         \begin{align}
-            E(\alpha)
+            \Psi_T(\vf{r})
             &=
-            \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}.
+            \Phi_T(\vf{r})
+            J(\vf{r}),
         \end{align}
-
-        % TODO: Add the computation of this expression
-        The final result for the energy is
+        where $\Phi_T(\vf{r})$ is the same Slater permanent as in
+        \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
+        \emph{Jastrow factor} given by
         \begin{align}
-            E(\alpha)
+            J(\vf{r})
             &=
-            \left(
-                \frac{\hbar^2 \alpha}{2m}
-                + \frac{m\omega^2}{8\alpha}
-            \right)dN.
-            \label{eq:exact_energy}
+            \exp\para{
+                \sum_{j < l}^N u(r_{jl})
+            },
         \end{align}
-        By minimizing this expression, i.e., finding the derivative of the
-        energy with respect to $\alpha$ and equating this to zero, yields the
-        expected minimum of variational energy to be
+        where
         \begin{align}
-            \dod[]{E(\alpha)}{\alpha} = 0
-            \implies
-            \alpha_0 = \frac{m\omega}{2\hbar},
+            u(r_{jk})
+            = \ln\bigl[f(a, \vf{r}_j, \vf{r}_k)\bigr]
+            \equiv u_{jk}
         \end{align}
-
         The drift force for particle $k$ in this system becomes
-
         \begin{align}
-            E(\alpha_0)
+            \vf{F}_k(\vf{r})
             &=
-            \frac{\omega dN}{2}.
+            2\Biggl(
+                \frac{\nabla_k\phi_k}{\phi_k}
+                + \sum_{m \neq k}^N
+                \nabla_k u_{km}
+            \Biggr).
         \end{align}
-
 
         The Laplacian of particle $k$ divided by the trial wavefunction is
         \begin{widetext}
@@ -585,191 +512,30 @@
         particle functions yields
         \begin{gather}
             \frac{\nabla_k\phi_k}{\phi_k}
-            + \sum_{m \neq k}^N
-            \nabla_k u_{km}
-        		\Biggr)
-       		 \Psi_T(\vf{r}).
-        		\label{eq:gradient_full_wavefunction}
-    		\end{gather}
-
-    The Laplcian of the trial wavefunction is found by finding the divergence of
-    \autoref{eq:gradient_full_wavefunction}.
-    \begin{align}
-        \nabla_k^2\Psi_T(\vf{r})
-        &=
-        \Biggl(
-            \nabla_k\Biggl[
-                \frac{\nabla_k\phi_k}{\phi_k}
-            \Biggr]
-            +
-            \sum_{m \neq k}^N \nabla_k^2 u_{km}
-        \Biggr)\Psi_T(\vf{r})
-        \\
-        &\qquad
-        +
-        \Biggl(
-            \frac{\nabla_k\phi_k}{\phi_k}
-            + \sum_{m \neq k}^N
-            \nabla_k u_{km}
-        \Biggr)^2
-        \Psi_T(\vf{r}),
-    \end{align}
-    where the squared term came from taking the gradient of the trial
-    wavefunction.  To further simplify we divide by the trial
-    wavefunction. This yields
-    \begin{align}
-        \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-        &=
-        \frac{\nabla_k^2\phi_k}{\phi_k}
-        + 2\frac{\nabla_k\phi_k}{\phi_k}
-        \sum_{m \neq k}\nabla_k u_{km}
-        \nonumber \\
-        &\qquad
-        + \sum_{m\neq k}^N\nabla_k^2 u_{km}
-        + \Biggl(
-            \sum_{m \neq k}^N\nabla_k u_{km}
-        \Biggr)^2.
-    \end{align}
-    From here, the next step is to find the gradient and the Laplacian of
-    the single particle functions, $\phi_k$, and the interaction
-    functions $u_{km}$. For the single particle functions we use
-    Cartesian coordinates when finding the derivatives while for
-    the interaction functions we use spherical coordinates and do a
-    variable substitution. Beginning with the gradient of the single
-    particle functions we get
-    \begin{align}
-        \nabla_k\phi_k
-        &=
-        \nabla_k\exp\bigl[
-            -\alpha(x_k^2 + y_k^2 + \beta z_k^2)
-        \bigr] \\
-        &=
-        -2\alpha
-        (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
-        \phi_k.
-    \end{align}
-    Note that the subscripts on the unit vectors $\vf{e}_i$ are
-    \emph{not} the same as the subscripts used for its components. The
-    Laplacian yields
-    \begin{align}
-        \nabla_k^2\phi_k
-        &=
-        \Bigl[
+            =
+            -2\alpha
+            (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k),
+            \\
+            \frac{\nabla_k^2\phi_k}{\phi_k}
+            =
             -2\alpha
             \big(
                 d - 1 + \beta
             \bigr)
-            \nonumber \\
-            &\qquad
             + 4\alpha^2
             \bigl(
                 x_k^2 + y_k^2 + \beta^2z_k^2
-            \bigr)
-        \Bigr]
-        \phi_k,
-    \end{align}
-    with $d$ as the dimensionality of the problem.
-    In order to derive the interaction functions we have to do a
-    variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
-    then rewrite the $\nabla_k$-operator as
-    \begin{align}
-        \nabla_k
-        &=
-        \nabla_k
-        \dpd[]{r_{km}}{r_{km}}
-        =
-        \nabla_k r_{km} \dpd[]{}{r_{km}}
-        \\
-        &=
-        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}\dpd[]{}{r_{km}}.
-    \end{align}
-    Applying this version of the $\nabla_k$-operator to $u_{km}$ yields
-    \begin{align}
-        \nabla_k u_{km}
-        &=
-        \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-        \dpd[]{u_{km}}{r_{km}}.
-    \end{align}
-
-    \begin{widetext}
-        For the Laplacian we switch a little back and forth between the
-        two ways of representing the $\nabla_k$-operator. We thus get
+            \bigr).
+        \end{gather}
+        Repeating this for the correlation functions yields
         \begin{align}
-            \nabla_k^2 u_{km}
-            &=
-            \frac{\nabla_k \vf{r}_k}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-            + \Biggl[
-                \nabla_k \frac{1}{r_{km}}
-            \Biggr]
-            (\vf{r}_k - \vf{r}_m)\dpd[]{u_{km}}{r_{km}}
-            + \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-            \nabla_k \dpd[]{u_{km}}{r_{km}} \\
-            &= \frac{d}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-            - \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^3}
             \dpd[]{u_{km}}{r_{km}}
-            + \frac{(\vf{r}_k - \vf{r}_m)^2}{r_{km}^2}
-            \dpd[2]{u_{km}}{r_{km}} \\
             &=
-            \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-            + \dpd[2]{u_{km}}{r_{km}},
+            \frac{a}{r_{km}(r_{km} - a)},
+            \\
+            \dpd[2]{u_{km}}{r_{km}}
+            &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
         \end{align}
-        where $d$ is again the dimensionality of the problem. In total
-        we can state an intermediate version of the Laplacian occuring
-        in the local energy as
-        \begin{align}
-            \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
-            &=
-            \frac{\nabla_k^2\phi_k}{\phi_k}
-            + 2\frac{\nabla_k\phi_k}{\phi_k}
-            \sum_{m \neq k}^N
-            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-            \dpd[]{u_{km}}{r_{km}}
-            + \sum_{m\neq k}^N
-            \Biggl(
-                \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
-                + \dpd[2]{u_{km}}{r_{km}}
-            \Biggr)
-            \nonumber \\
-            &\qquad
-            +
-            \sum_{m, n \neq k}^N
-            \frac{\vf{r}_k - \vf{r}_m}{r_{km}}
-            \frac{\vf{r}_k - \vf{r}_n}{r_{kn}}
-            \dpd[]{u_{km}}{r_{km}}
-            \dpd[]{u_{kn}}{r_{kn}}.
-        \end{align}
-    \end{widetext}
-    Moving on to the derivatives of the interaction terms, $u_{km}$, to
-    get an explicit expression for the Laplacian.
-    \begin{align}
-        \dpd[]{u_{km}}{r_{km}}
-        &=
-        \frac{a}{r_{km}(r_{km} - a)},
-        \\
-        \dpd[2]{u_{km}}{r_{km}}
-        &= \frac{a^2 - 2ar_{km}}{r_{km}^2(r_{km} - a)^2}.
-    \end{align}
-    The local energy and the drift force can now be found by combining these
-    expressions. We will not write out the explicit expressions as
-    these will be called by separated functions in our programs.
-
-    \subsubsection{Scaling the system}
-        We now introduce a scaled distance $\vf{r}' = \vf{r}/a_{\text{ho}}$
-        \cite{dubois2001bose}, where
-        \begin{align}
-            a_{\text{ho}}
-            &=
-            \sqrt{\frac{\hbar}{m\omega}}.
-        \end{align}
-        We can then rewrite the Hamiltonian for the elliptic potential in terms
-        of this new distance. By doing a variable substitution for each
-        direction in the Laplace operator we get
-        \begin{align}
-            \nabla_k^2
-            &=
-            \frac{1}{a_{\text{ho}}^2}{\nabla_k'}^2.
-        \end{align}
-
         The local energy is thus
         \begin{align}
             E_L(\vf{r})
@@ -802,17 +568,18 @@
                 \frac{1}{a_{\text{ho}}^2}{\nabla_k'}^2.
             \end{align}
 
-        Looking at the one-body part of the Hamiltonian we get
-        \begin{align}
-            H
-            &=
-            \sum_{k = 1}^N
-            \brac{
-                -\frac{\hbar^2}{2m}\nabla_k^2
-                + \half m\brak{
-                    \omega^2(x_k^2 + y_k^2)
-                    + \omega_z^2 z_k^2
-                }}
+            Looking at the one-body part of the Hamiltonian we get
+            \begin{align}
+                H
+                &=
+                \sum_{k = 1}^N
+                \brac{
+                    -\frac{\hbar^2}{2m}\nabla_k^2
+                    + \half m\brak{
+                        \omega^2(x_k^2 + y_k^2)
+                        + \omega_z^2 z_k^2
+                    }
+                }
                 \\
                 &=
                 \frac{\hbar\omega}{2}
@@ -823,7 +590,7 @@
                     \brak{
                         {x_k'}^2 + {y_k'}^2 + \lambda^2{z_k'}^2
                     }
-             	    },
+                },
                 \label{eq:scaled_hamiltonian}
             \end{align}
             where we have introduced the dimensionless frequency $\lambda =
@@ -843,6 +610,7 @@
             The correlation wavefunction and the interaction potential remain the
             same, but using the scaled hard core radius $a/a_{\text{ho}} =
             0.0043$.
+
 
 \section{Algorithms}
     In this project we rely on a Monte Carlo approach of random sampling to
@@ -1736,7 +1504,7 @@
         \Biggl(
             \sum_{m = 1}^{k - 1}\nabla_k u_{mk}
             \sum_{n = k + 1}^N\nabla_k u_{kn}
-         \Biggr)
+        \Biggr)
         \\
         &=
         J(\vf{r})
@@ -1917,6 +1685,7 @@
     The local energy and the drift force can now be found by combining these
     expressions. We will not write out the explicit expressions as
     these will be called by separated functions in our programs.
+
 
 
 \section{Brute Force Metropolis-Hastings}
