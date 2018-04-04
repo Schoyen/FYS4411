@@ -92,7 +92,7 @@
     In this project we use Quantum Variational Monte Carlo on a toy model of a  bosonic gas  in an elliptic trap. The framework
     we have built is first tested against analytic solutions of simple non-interacting systems. From there the system
     is extended to include perturbed harmonic oscillator traps and particle interaction. We compute one-body
-    densities for the interacting case and discuss why this tool is important and how our toy model has similar 
+    densities for the interacting case and discuss why this tool is important and how our toy model has similar
     attributes to real-world systems.
 \end{abstract}
 
@@ -1307,11 +1307,11 @@
             In \autoref{fig:gradient_descent_interacting} we can see how the
             conjugate gradient method ``moves'' to find the optimal value of
             $\alpha$.
-            
+
             For this optimal, interacting $\alpha$ we have computed the expected
             energy and standard deviation for systems of $n = \{10, 50, 100\}$
-            particles. These results are shown in \autoref{tab:10_optimal}, the 
-            non-interacting case, excluding Jastrow factor is included as a 
+            particles. These results are shown in \autoref{tab:10_optimal}, the
+            non-interacting case, excluding Jastrow factor is included as a
             comparison.
 
             \begin{figure}
@@ -1326,11 +1326,11 @@
             We now look at one-body densities for the value of $\alpha$ found in
             \autoref{eq:optimal_interacting_alpha}. The results for a system consisting
             of $n=100$ particles are displayed in \autoref{fig:one_body_density_100}.
-            In this figure we see the densities for for a system confined to a 
+            In this figure we see the densities for for a system confined to a
             perturbed elliptic trap with and without interaction. We see that for the
-            interacting case, the one-body density is skewed towards a larger 
+            interacting case, the one-body density is skewed towards a larger
             $\abs{\vf{r}}$, as is expected. The ``ideal'' density, a system with spherical
-            trap, is also included in the figure. 
+            trap, is also included in the figure.
 
             \begin{table}
                 \caption{Comparison of the elliptical system with an elliptical
@@ -1376,25 +1376,25 @@
         attributes outside the realm problems that are analytically solvable.
         The systems with elliptic traps and interacting particles are such
         systems.
-        
-        That said, the way to get the best confirmation of the results presented 
+
+        That said, the way to get the best confirmation of the results presented
         above is in comparison to experiment. This would be quite difficult
         as the systems presented are very theoretical in nature and most likely
-        far from anything we would see in nature. Without being able to compare 
+        far from anything we would see in nature. Without being able to compare
         our result with anything happening in the real world this entire study would
         have no value except for the instrumental value, being no more than
         a theoretical exercise.  However, the one-body
         density is a measure of the role of many-body correlations which in
-        some cases can be related to experiment. For a system of charged 
+        some cases can be related to experiment. For a system of charged
         particles it can be used to determine a charge distribution, which in
         turn can be linked to experiment. It would be very fruitful to simulate a
         system of such particles that is more natural, i.e. real, but we realise the
-        purpose of this study is first and foremost to introduce variational 
+        purpose of this study is first and foremost to introduce variational
         Monte Carlo as a tool in computational physics. We assume, however,
         that this study is easy enough to expand into a study of alkali atoms like
         $^{87}Rb$, $^{23}Na$ or $^7Li$.
 
-	\subsection{Energy per particle}
+    \subsection{Energy per particle}
         For the non-interacting harmonic oscillator system there is no
         difference between a new ``particle'' and new dimensions
         \footnote{This is not entirely true in the case of our implementation of
@@ -1419,28 +1419,28 @@
             $\alpha$ for different number of particles.}
             \label{fig:interacting}
         \end{figure}
-        
+
         The reason for the increase in energy per particle can be ascribed to the
         repulsive interaction added by the Jastrow factor. The repulsive force can
-        be explain thusly; The Jastrow factor  increases the value of the 
+        be explain thusly; The Jastrow factor  increases the value of the
         wavefunctions for any given particle if that particle is some distance away
          from any other particle. An increased value in the wavefucntion is equivalent
          to an increase in probability amplitude, again correpsonding to an increase in
-         probability density, giving rise the the fact that particles are more likely to 
-         appear further from one another. 
-         
-	\subsection{Low density system}
-		It is safe to say that the effect of adding a Jastrow factor is significant, 
-		i.e. the increase in
-        	energy for the system as the interaction is switched on is much higher
-        	than the uncertainty of the energy. A simple look at \autoref{fig:interacting}
-        	will be proof enough as the error bars of the figure are not discernible. 
+         probability density, giving rise the the fact that particles are more likely to
+         appear further from one another.
+
+    \subsection{Low density system}
+        It is safe to say that the effect of adding a Jastrow factor is significant,
+        i.e. the increase in
+            energy for the system as the interaction is switched on is much higher
+            than the uncertainty of the energy. A simple look at \autoref{fig:interacting}
+            will be proof enough as the error bars of the figure are not discernible.
         On the other hand, the energy added to the system by including interaction
-        is not very high compared to the energy of the system as a whole. For the 
+        is not very high compared to the energy of the system as a whole. For the
         larger of the interacting systems we have looked at, with $n=100$ particles,
         The interaction add only a mere $9\%$ extra energy (see \autoref{tab:10_optimal}).
         Studying \autoref{fig:one_body_density_100} will reveal the same.
-        
+
         The reason for this stems from the assumption which justifies that
         adding only two-body interaction is sufficient to model all interaction to a
         reasonable extent. This assumption is justified by the fact that alkali and
@@ -1448,27 +1448,31 @@
         are dilute. For gases of alkali atoms confined in magnetic or optical traps
         the average distance between atoms is much larger than the range of
         inter-atomic interaction. The probability is high that atoms very seldom
-        interact and if so, just with one other atom. 
+        interact and if so, just with one other atom.
 
 \section{Summary Remarks}
 
-	In this study we have built a functional variational Monte Carlo solver framework for 
-	a gas following Bose-Einstein statistics confined in an elliptic trap. Monte Carlo 
-	methods is a broad class of computational algorithms, whereas the variational
-	Monte Carlo is a subset. Other applications of such methods within the physical
-	sciences includes, but is not limited to, quantum chromodynamics, the modeling of
-	aearodynamic forms, particle physics detector design and galaxy evolution. 
-	Needless to say, Monte Carlo method is a valuable tool for a computational physicist.
-	
-	To prove the 
-	validity of the framework we tested it against an analytically solved case, an ideal
-	non-interacting system. Thereafter we have shown how our implementation can
-	handle large systems of interacting particles and perturbed traps. Even though
-	this study is somewhat theoretic in nature, we have discussed the possibility of
-	expanding our machinery to a case bearing a larger resemblance to a system
-	found in nature. To this end we have computed one-body densities for the 
-	interacting system, which can be compared to real physical properties as
-	measured in an experiment. 
+    In this study we have built a functional variational Monte Carlo solver framework for
+    a gas following Bose-Einstein statistics confined in an elliptic trap. Monte Carlo
+    methods is a broad class of computational algorithms, whereas the variational
+    Monte Carlo is a subset. Other applications of such methods within the physical
+    sciences includes, but is not limited to, quantum chromodynamics, the modeling of
+    aearodynamic forms, particle physics detector design and galaxy evolution.
+    Needless to say, Monte Carlo method is a valuable tool for a computational physicist.
+
+    To prove the
+    validity of the framework we tested it against an analytically solved case, an ideal
+    non-interacting system. Thereafter we have shown how our implementation can
+    handle large systems of interacting particles and perturbed traps. Even though
+    this study is somewhat theoretic in nature, we have discussed the possibility of
+    expanding our machinery to a case bearing a larger resemblance to a system
+    found in nature. To this end we have computed one-body densities for the
+    interacting system, which can be compared to real physical properties as
+    measured in an experiment.
+
+
+\bibliography{references}
+\clearpage
 
 \appendix
 \section{Computing the drift force and local energy of the full system}
@@ -1767,7 +1771,6 @@
     \end{align}
     which is what we wanted to show.
 
-\bibliography{references}
 
 
 
