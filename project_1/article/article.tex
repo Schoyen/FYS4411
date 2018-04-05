@@ -278,39 +278,31 @@
 
 
     \subsection{Local energy}
-        As the many-body wavefunction creates a very large configuration space,
-        where much of the wavefunction is small, we use the Metropolis algorithm
-        in order to move towards regions in configuration space with
-        ``sensible'' values. We define the \emph{local energy}, $E_L(\vf{r})$,
-        by
+        As is mostly the case in physics, the quantity we are looking for is the
+        energy. We therefore define the \emph{local energy} by
         \begin{align}
             E_L(\vf{r})
             &= \frac{H\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
         \end{align}
-        If $\Psi_T(\vf{r})$ is an exact eigenfunction of the Hamiltonian, $E_L$
-        will be constant. The closer $\Psi_T(\vf{r})$ is to the exact wave
-        function, the less variation in $E_L$ as a function of $\vf{r}$ we get.
-        This leads us to searching for values of $\vf{r}$ yielding the lowest
-        variance in $E_L$.
-
-        When we are performing the Monte Carlo sampling we are interested in the
-        expected value of the local energy as this will serve as our estimate of
-        the true energy. Mathematically this is expressed as
+        The energy of the system is thus found by computing the expectation
+        value of the local energy.
         \begin{align}
             \expval{E_L}
-            &=
-            \frac{\int\dd \vf{r}\Psi_T^{*}(\vf{r})H\Psi_T(\vf{r})}
-            {\int\dd \vf{r}|\Psi_T(\vf{r})|^2}
             =
             \frac{
                 \int\dd \vf{r}|\Psi_T(\vf{r})|^2 E_L(\vf{r})
             }{
                 \int\dd \vf{r}|\Psi_T(\vf{r})|^2
-            },
+            }
+            \approx
+            \frac{1}{N}\sum_{i = 1}^N
+            p(\vf{r}_i)E_L(\vf{r}_i).
         \end{align}
-        where we have multiplied and divided by the trial wavefunction to get
-        the latter expression.
-
+        To determine if we have found a minimum we compute the variance of the
+        expectation value of the local energy.
+        \begin{align}
+            \sigma^2 = \langle E_L^2\rangle - \expval{E_L}^2.
+        \end{align}
         One of the most computationally intensive parts of the Variational Monte
         Carlo algorithm will be to compute $E_L$. We will therefore find an
         analytical expression for $E_L$ in terms of the trial wavefunctions and
