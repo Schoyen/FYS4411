@@ -466,11 +466,10 @@
             = \Phi_T(\vf{r})
             = \prod_{i = 1}^N \exp\para{
                 -\alpha |\vf{r}_i|^2
-            },
+            }.
         \end{align}
-        where $|\vf{r}_i| = r_i$. As $a = 0$ the interaction term,
-        $w(\vf{r}_i, \vf{r}_j)$, vanishes and the Hamiltonian is given by
-        (in the spherical case)
+        As $a = 0$ the interaction term, $w(\vf{r}_i, \vf{r}_j)$, vanishes and
+        the Hamiltonian is given by (in the spherical case)
         \begin{align}
             H &= \sum_{i = 1}^N h(\vf{r}_i)
             = \sum_{i = 1}^N \Biggl(
@@ -488,9 +487,9 @@
         whereas the Laplacian yields
         \begin{align}
             \nabla^2_k\Psi_T(\vf{r})
-            &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}),
+            &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}).
         \end{align}
-        where $d$ is the dimensionality of the problem determined by $\vf{r}_k
+        Here $d$ is the dimensionality of the problem determined by $\vf{r}_k
         \in \mathbb{R}^d$. We can thus use the gradient to find an expression
         for the drift force for particle $k$.
         \begin{align}
@@ -511,8 +510,8 @@
                 + \half m\omega^2 r_i^2
             \Biggr).
         \end{align}
-        In natural units, $\hbar = c = 1$, and with the mass set to unity, $m =
-        1$, this reduces to
+        In natural units, $\hbar = c = 1$, and with the mass set to unity this
+        reduces to
         \begin{align}
             E_L(\vf{r})
             &=
@@ -528,14 +527,15 @@
         $\alpha$ is required to be positive.} we get a stable value for the
         local energy.
         \begin{align}
-            E_L(\vf{r})
+            E_L(\vf{r}; \alpha = \omega/2)
             &\equiv
             E_L
             =
             \frac{\omega d N}{2},
             \label{eq:minimum_energy_simple}
         \end{align}
-        which is the stable minimum for $\alpha = \omega/2$.
+        which turns out to be the exact minimum for the ground state energy of
+        this system.
 
         \subsubsection{Exact variational energy}
             As the system is non-interacting and consisting of Gaussians we can
@@ -545,8 +545,7 @@
                 E(\alpha)
                 &=
                 \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
-                \\
-                &=
+                =
                 \left(
                     \frac{\hbar^2 \alpha}{2m}
                     + \frac{m\omega^2}{8\alpha}
