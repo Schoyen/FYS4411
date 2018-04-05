@@ -381,9 +381,7 @@
         \end{cases}
     \end{align}
     where we can choose between a spherical (S) or an elliptical (E) harmonic
-    oscillator trap.  In the latter potential the oscillatory frequency is
-    different in the $z$-direction, i.e., $\omega_z \neq \omega$.  The full
-    Hamiltonian of the system is given by
+    oscillator trap. The full Hamiltonian of the system is given by
     \begin{align}
         H = \sum_{i = 1}^{N}h(\vf{r}_i) + \sum_{i < j}^{N}w(\vf{r}_i, \vf{r}_j),
     \end{align}
@@ -392,7 +390,7 @@
         h(\vf{r}_i) = -\frac{\hbar^2}{2m}\nabla_i^2
         + v(\vf{r}_i),
     \end{align}
-    for equal masses, and the two-body interaction operator, $w(\vf{r}_i,
+    for equal masses. The two-body interaction operator, $w(\vf{r}_i,
     \vf{r}_j)$, is
     \begin{align}
         w(\vf{r}_i, \vf{r}_j)
@@ -402,32 +400,40 @@
         \end{cases}
         \label{eq:two-body_interaction}
     \end{align}
-    where $a$ is the hard sphere of the particle.  The trial wavefunction,
-    $\Psi_T(\vf{r})$, we will be looking at is given by
+    where $a$ is the hard sphere of the particle.  The trial wavefunction we
+    will be looking at is given by
     \begin{align}
         \Psi_T(\vf{r})
         &= \Phi_T(\vf{r})
-        \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k) \\
-        &= \Biggl(
-            \prod_{i = 1}^N g(\alpha, \beta, \vf{r}_i)
-        \Biggr)
-        \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k),
+        J(\vf{r}),
+        %\\
+        %&= \Biggl(
+        %    \prod_{i = 1}^N g(\alpha, \beta, \vf{r}_i)
+        %\Biggr)
+        %\prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k),
         \label{eq:initial_trial_wavefunction}
     \end{align}
-    where $\alpha$ is a variational parameter and
+    where $\vf{r} = (\vf{r}_1, \dots, \vf{r}_N)$. The Slater permanent,
+    $\Phi_T(\vf{r})$, is given by the $N$ first single-particle functions
     \begin{align}
-        \vf{r} = (\vf{r}_1, \vf{r}_2, \dots, \vf{r}_N, \alpha, \beta).
-    \end{align}
-    Here $g$ are the single particle wavefunctions given by
-    \begin{align}
-        g(\alpha, \beta, \vf{r}_i)
-        = \exp\bigl[
+        \Phi_T(\vf{r})
+        &=
+        \prod_{i = 1}^N \phi(\vf{r}_i)
+        = \prod_{i = 1}^N\exp\bigl[
             -\alpha(x_i^2 + y_i^2 + \beta z_i^2)
-        \bigr] \equiv \phi(\vf{r}_i),
+        \bigr].
     \end{align}
-    and $\Phi_T(\vf{r})$ is the \emph{Slater permanent} consisting of the $N$
-    first single particle wavefunctions, and the correlation wavefunction, $f$,
-    given by
+    Here $\alpha$ is the variational parameter of the trial
+    wavefunction.\footnote{We can also treat $\beta$ as a variational parameter,
+    but we will in this project limit ourselves to a single variational
+    parameter, i.e., $\alpha$.} The Jastrow factor, $J(\vf{r})$ contributes with
+    correlations between the particles and is represented as
+    \begin{align}
+        J(\vf{r})
+        &=
+        \prod_{j < k}^N f(a, \vf{r}_j, \vf{r}_k),
+    \end{align}
+    where the correlation wavefunctions are given by
     \begin{align}
         f(a, \vf{r}_j, \vf{r}_k)
         &=
@@ -439,8 +445,13 @@
         \end{cases}
         \label{eq:correlation_wavefunction}
     \end{align}
-    We will for brevity use the notation $\phi(\vf{r}_i) = \phi_i$ and $r_{jk} =
-    |\vf{r}_j - \vf{r}_k|$. In practice \autoref{eq:two-body_interaction} is
+    We will for brevity define the notation
+    \begin{gather}
+        \phi_i \equiv \phi(\vf{r}_i),
+        \\
+        r_{jk} \equiv \abs{\vf{r}_j - \vf{r}_k}.
+    \end{gather}
+    In practice \autoref{eq:two-body_interaction} is
     unnecessary as the situtation where $r_{jk} \leq a$ automatically yields a
     probability density of zero from \autoref{eq:correlation_wavefunction} thus
     rejecting the state completely.
