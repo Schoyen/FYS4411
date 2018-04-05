@@ -189,7 +189,7 @@
             }
         }^2.
     \end{align}
-    If we have found the ``true'' trial wavefunction $\ket{\Psi_T}$ with the
+    If we have found the "true" trial wavefunction $\ket{\Psi_T}$ with the
     correct variational parameters, i.e., the eigenfunction to the Hamiltonian
     we get $\sigma^2 = 0$. We are thus interested in trying to find the
     variational parameters in the trial wavefunction that minimizes the
@@ -738,21 +738,25 @@
 
         \begin{enumerate}
             \item The system is initialised by a certain number $N$ of randomly
-                generated positions, or particles. This allows us to evaluate
-                the wavefunction at these points and compute the local energy
-                $E_L$.
+                generated positions, $\vf{r} = (\vf{r}_1, \dots, \vf{r}_N)$,
+                which represent the particles. This allows us to evaluate the
+                wavefunction at these points and compute the local energy
+                $E_L(\vf{r})$.
 
             \item The initial configuration is changed by setting a new position
                 for one of these particles. The particle is picked at random.
 
-            \item A ratio between new wavefunction density and the previous
-                (initial) density is computed and compared to a random number.
-                This acceptance probability decides if the particle move is
-                rejected or accepted.  The particle is only allowed to move a
+            \item A ratio, $q$, between the probability density of the new
+                wavefunction and the previous probability density is computed.
+                We accept the step if $q \geq 1$, else we accept the step with a
+                probability $p$. The latter is done by drawing a random uniform
+                number, $x \in [0, 1]$, and checking if $q > x$.  This
+                acceptance probability decides if the particle move is rejected
+                or accepted.  The particle is only allowed to move a
                 predetermined step length.
 
-            \item If the particle movement is accepted and the local energy
-                $E_L$ is computed for the new system.
+            \item If the particle movement is accepted then the local energy is
+                computed for the new system.
 
             \item Repeat steps until convergence and an optimum is reached.
 
@@ -762,7 +766,7 @@
         of the parameter space in order to find the optimal parameters.  Whether
         a proposed move is accepted or not is determined by a transition
         probability and the acceptance probability.  The strength of the
-        algorithm is that the transition algorithm need not be known. For
+        algorithm lies in that the transition algorithm need not be known. For
         example, the simplest case is to accept the new state, i.e., the new
         position for the random walker, if the ratio
         \begin{align}
@@ -772,7 +776,7 @@
             {\left|\Psi_T(\vf{r}_{i})\right|^2},
         \end{align}
         where $\vf{r}_{i + 1}$ are all the positions at step $i + 1$, is greater
-        than a uniform probability $p \in [0, 1)$.
+        than a uniform probability $p \in [0, 1]$.
 
         \subsubsection{Importance Sampling}
             A problem with the naïve Metropolis-Hastings sampling approach is
@@ -1052,7 +1056,7 @@
                 diverge as the gradient will become huge. This will yield a
                 new value for $\vfg{\alpha}$ in
                 \autoref{eq:parameter_difference} which will be further away and
-                might result in a local minimum ``trapping'' the method. To
+                might result in a local minimum "trapping" the method. To
                 prevent this from happening we have added a limit to the allowed
                 change in $\vfg{\alpha}$. If the change in $\vfg{\alpha}$ is
                 larger than a set order of magnitude we keep dividing
@@ -1079,7 +1083,7 @@
         which will be used as the benchmark we are ultimately aiming for.
 
         We will start without importance sampling, that is by employing the
-        simpler and more naïve ``brute force'' Monte Carlo sampling. Moreover, we
+        simpler and more naïve "brute force" Monte Carlo sampling. Moreover, we
         will compute the value for the local energy analytically as well as with
         a numerical approach.  In the numerical approach we employ the well-know
         approximation for the second derivative,
@@ -1418,7 +1422,7 @@
                 \label{eq:optimal_interacting_alpha}
             \end{align}
             In \autoref{fig:gradient_descent_interacting} we can see how the
-            conjugate gradient method ``moves'' to find the optimal value of
+            conjugate gradient method "moves" to find the optimal value of
             $\alpha$.
 
             For this optimal, interacting $\alpha$ we have computed the expected
@@ -1442,7 +1446,7 @@
             In this figure we see the densities for for a system confined to a
             perturbed elliptic trap with and without interaction. We see that for the
             interacting case, the one-body density is skewed towards a larger
-            $\abs{\vf{r}}$, as is expected. The ``ideal'' density, a system with spherical
+            $\abs{\vf{r}}$, as is expected. The "ideal" density, a system with spherical
             trap, is also included in the figure.
 
             \begin{table}
@@ -1471,7 +1475,7 @@
                 {../data/figures/problem_g_100N.pdf}
                 \caption{In this figure the interacting and non-interacting
                 densities correspond to the elliptical potential with and
-                without the Jastrow factor respectively. The ``ideal'' system is
+                without the Jastrow factor respectively. The "ideal" system is
                 the spherical potential with the non-interacting Gaussian trial
                 wavefunction.}
                 \label{fig:one_body_density_100}
@@ -1509,7 +1513,7 @@
 
     \subsection{Energy per particle}
         For the non-interacting harmonic oscillator system there is no
-        difference between a new ``particle'' and new dimensions
+        difference between a new particle and new dimensions
         \footnote{This is not entirely true in the case of our implementation of
         the Metropolis algorithms as we draw a single random particle and move
         all dimensions instead of iterating over all particles and all
