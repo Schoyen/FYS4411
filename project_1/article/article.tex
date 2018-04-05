@@ -467,6 +467,7 @@
             = \prod_{i = 1}^N \exp\para{
                 -\alpha |\vf{r}_i|^2
             }.
+            \label{eq:trial_simple_gaussian}
         \end{align}
         As $a = 0$ the interaction term, $w(\vf{r}_i, \vf{r}_j)$, vanishes and
         the Hamiltonian is given by (in the spherical case)
@@ -488,6 +489,7 @@
         \begin{align}
             \nabla^2_k\Psi_T(\vf{r})
             &= \big(-2d\alpha + 4\alpha^2 r_k^2\bigr)\Psi_T(\vf{r}).
+            \label{eq:laplacian_simple_gaussian}
         \end{align}
         Here $d$ is the dimensionality of the problem determined by $\vf{r}_k
         \in \mathbb{R}^d$. We can thus use the gradient to find an expression
@@ -1597,6 +1599,113 @@
 \clearpage
 
 \appendix
+\section{Computing the exact energy of the non-interacting system}
+    Here we show how to arrive at \autoref{eq:exact_energy}. We need to solve
+    two integrals consisting of $N$, $d$-dimensional, Gaussians from
+    \autoref{eq:trial_simple_gaussian}. We will label the position in the $j$-th
+    coordinate for the $i$-th particle by $x_{ij}$. Starting with the
+    normalization factor we get
+    \begin{align}
+        \bra{\Psi_T}\ket{\Psi_T}
+        &=
+        \int\dd\vf{r}\abs{\Psi_T(\vf{r})}^2
+        \\
+        &=
+        \prod_{i = 1}^N
+        \int\dd\vf{r}_i\exp(-2\alpha\vf{r}_i^2)
+        \\
+        &=
+        \prod_{i = 1}^N
+        \prod_{j = 1}^d
+        \int\dd x_{ij}\exp(-2\alpha x_{ij}^2)
+        \\
+        &=
+        \prod_{i = 1}^N
+        \prod_{j = 1}^d
+        \sqrt{\frac{\pi}{2\alpha}}
+        = \para{
+            \sqrt{\frac{\pi}{2\alpha}}
+        }^{dN}.
+    \end{align}
+    From the Hamiltonian we get two integrals containing $\vf{r}_i^2$ for each
+    particle $i$.
+    \begin{align}
+        \bra{\Psi_T}\vf{r}_i^2\ket{\Psi_T}
+        &=
+        \int\dd\vf{r}\abs{\Psi_T(\vf{r})}^2\vf{r}_i^2
+        \\
+        &=
+        \int\dd\vf{r}_i\exp(-2\alpha\vf{r}_i^2)\vf{r}_i^2
+        \nonumber \\
+        &\qquad
+        \times
+        \prod_{j \neq i}^N
+        \int\dd\vf{r}_j\exp(-2\alpha\vf{r}_j^2)
+        \\
+        &=
+        \sum_{l = 1}^d
+        \int
+        \para{
+            \prod_{k = 1}^d
+            \dd x_{ik}\exp(-2\alpha x_{ik}^2)
+        } x_{il}^2
+        \nonumber\\
+        &\qquad
+        \times
+        \para{
+            \sqrt{\frac{\pi}{2\alpha}}
+        }^{d(N - 1)}
+        \\
+        &=
+        \sum_{l = 1}^d
+        \frac{1}{4\alpha}\sqrt{\frac{\pi}{2\alpha}}
+        \para{
+            \sqrt{\frac{\pi}{2\alpha}}
+        }^{d - 1}
+        \nonumber\\
+        &\qquad
+        \times
+        \para{
+            \sqrt{\frac{\pi}{2\alpha}}
+        }^{d(N - 1)}
+        \\
+        &= \frac{d}{4\alpha}\para{
+            \sqrt{\frac{\pi}{2\alpha}}
+        }^{dN}.
+    \end{align}
+    We thus have that
+    \begin{align}
+        \frac{\bra{\Psi_T}\vf{r}_i^2\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+        &=
+        \frac{d}{4\alpha}.
+    \end{align}
+    Using \autoref{eq:laplacian_simple_gaussian} we can find the exact energy
+    expression we are looking for.
+    \begin{align}
+        E(\alpha)
+        &=
+        \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}}
+        \\
+        &=
+        \sum_{i = 1}^N
+        \brac{
+            -\frac{\hbar^2}{2m}
+            \brak{
+                -2d\alpha
+                + 4\alpha^2\frac{d}{4\alpha}
+            }
+            + \frac{1}{2}m\omega^2\frac{d}{4\alpha}
+        }
+        \\
+        &=
+        \para{
+            \frac{\alpha\hbar^2}{2m}
+            + \frac{m\omega^2}{8\alpha}
+        }dN,
+    \end{align}
+    which is what we wanted to show.
+
+
 \section{Computing the drift force and local energy of the full system}
     Computing the gradient of the wavefunction we get
     \begin{align}
