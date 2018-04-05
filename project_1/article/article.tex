@@ -1788,20 +1788,6 @@
     these will be called by separated functions in our programs.
 
 
-
-\section{Brute Force Metropolis-Hastings}
-
-    \begin{figure*}
-        \makebox[\textwidth][c]{
-            \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}
-        }
-        \caption{Comparison of analytic and numeric results with the exact
-        expression for the energy as a function of $\alpha$. The plots show the
-        standard deviation from the blocking method as error ticks. In the
-        figure $N$ is the number of particles and $d$ the number of dimensions.}
-        \label{fig:initial_problem_b}
-    \end{figure*}
-
 \section{Variational parameter gradient of the expectation energy}
     Here we show how to arrive at the expression shown in
     \autoref{eq:variational_parameter_gradient}. This requires us to restrict
@@ -1868,7 +1854,20 @@
     \end{align}
     which is what we wanted to show.
 
-
+\clearpage
+\onecolumngrid
+\section{Brute Force Metropolis-Hastings}
+    \begin{figure}[b]
+        \makebox[\textwidth][c]{
+            \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}      
+        }
+        \caption{Comparison of analytic and numeric results with the exact
+        expression for the energy as a function of $\alpha$. The plots show the
+        standard deviation from the blocking method as error ticks. In the
+        figure $N$ is the number of particles and $d$ the number of dimensions.}
+        \label{fig:initial_problem_b}       
+		\vspace{2cm}
+    \end{figure}
 
 
 \end{document}
