@@ -85,7 +85,7 @@ We compare the naive and the blocking standard deviation in this section.
 Discuss the quality of each and explain that we will in the remainder use the blocking standard deviation.
 
 #### Tables
-Include different variances.
+~~Include different variances.~~
 
 1. ~~Numerical and analytical results for one dimension and one particle.~~
 2. ~~Numerical and analytical results for `num_samples = [10, 100, 500]` and `num_dimensions = [2, 3]` for `alpha = 0.5`.~~
@@ -95,31 +95,31 @@ Include different variances.
 1. ~~Figures corresponding to tables in appendices. Compare with exact answer.~~
 
 ### Importance sampling
-Its important to discuss how much faster (in terms of number of samples) we reach an equilibrium state.
+~~Its important to discuss how much faster (in terms of number of samples) we reach an equilibrium state.~~
 
 #### Tables
 1. ~~Compare results (energy and variance) as a function of `step_length` for a fixed `alpha`.~~
 
 #### Figures
 1. ~~Compare variance decrease as a function of cycles for importance sampling and brute force.~~
-2. Try to plot variance as a function of `step_length` for different alphas.
+2. ~~Try to plot variance as a function of `step_length` for different alphas.~~
 
 ### Steepest descent
 ~~Explain the theory.~
 
 #### Figures
-1. Show how steepest descent finds the minimum value for several different alphas.
+1. ~~Show how steepest descent finds the minimum value for several different alphas.~~
 
 ### Repulsive interaction
 
 #### Tables
 1. ~~Compute statistics for a set of alphas.~~
-2. Compute statistics for "true alpha" found from steepest descent.
-  - Benchmark with references.
+2. ~~Compute statistics for "true alpha" found from steepest descent.~~
+  - Benchmark with references. __We were unable to find references for comparison!__
 
 #### Figures
 1. ~~Plot energy and variance for table 1.~~
 2. ~~Plot of alphas (show convergence for several alphas) found from steepest descent.~~
 
 ### Onebody densities
-Cool figures with and without Jastrow.
+~~Cool figures with and without Jastrow.~~
