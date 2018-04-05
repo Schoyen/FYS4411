@@ -573,16 +573,9 @@
 
     \subsection{Interacting hard sphere bosons}
         Moving to the full elliptical system for $\beta \neq 1$ and setting $a
-        \neq 0$ we can write the trial wavefunction as
-        \begin{align}
-            \Psi_T(\vf{r})
-            &=
-            \Phi_T(\vf{r})
-            J(\vf{r}),
-        \end{align}
-        where $\Phi_T(\vf{r})$ is the same Slater permanent as in
-        \autoref{eq:initial_trial_wavefunction} and $J(\vf{r})$ is the
-        \emph{Jastrow factor} given by
+        \neq 0$ we use the trial wavefunction from
+        \autoref{eq:initial_trial_wavefunction}. We rewrite the Jastrow factor
+        to
         \begin{align}
             J(\vf{r})
             &=
@@ -606,8 +599,7 @@
                 \nabla_k u_{km}
             \Biggr).
         \end{align}
-
-        The Laplacian of particle $k$ divided by the trial wavefunction is
+        The Laplacian of particle $k$ divided by the trial wavefunction is then
         \begin{widetext}
             \begin{align}
                 \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
@@ -632,7 +624,7 @@
             \end{align}
         \end{widetext}
         where $\Delta \vf{r}_{km} = \vf{r}_k - \vf{r}_m$ and $d$ is the
-        dimensionality. Evaluating the gradient and Laplacian of the single
+        dimensionality. Evaluating the gradient and the Laplacian of the single
         particle functions yields
         \begin{gather}
             \frac{\nabla_k\phi_k}{\phi_k}
@@ -671,7 +663,7 @@
                 + v(\vf{r}_k)
             },
         \end{align}
-        where the Laplcian is given by \autoref{eq:laplacian_full_system}.  We
+        where the Laplacian is given by \autoref{eq:laplacian_full_system}.  We
         will avoid writing out the full expression for the local energy for this
         system due to the size of the equation.
 
