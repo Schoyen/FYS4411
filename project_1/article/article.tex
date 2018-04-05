@@ -122,17 +122,17 @@
     shall see that the system converges to a proper \footnote{Global, as far as
     we can tell.} minimum for only a certain set of parameters.
 
-	First, we provide the theoretical foundation for the Variational Monte Carlo
-	method. This includes explaining how Monte Carlo integration works, and
-	introducing the important quantities \emph{local energy}, \emph{drift force}
-	and \emph{one-body densities}.  
-   	
+    First, we provide the theoretical foundation for the Variational Monte Carlo
+    method. This includes explaining how Monte Carlo integration works, and
+    introducing the important quantities \emph{local energy}, \emph{drift force}
+    and \emph{one-body densities}.
+
     Second, we outline in more detailed algebra the nature of the systems we
     will be studying. For the non-interacting system we are able to derive an
     exact variational energy to which we can compare the results from our
     simulations. We furthermore give a description of an interacting system
-    implemented as if each particle is a hard sphere. 
-    
+    implemented as if each particle is a hard sphere.
+
     Third, we provide a thorough description of algorithms and statistical
     methods employed in this study. Here we introduce the Metropolis-Hastings
     algorithm. This algorithm can by a deft trick be expanded with the method of
@@ -142,12 +142,12 @@
     is autocorrelated and computation of variance must be done with the
     \emph{blocking method} for time series data.  As an automated way of finding
     the optimal variational parameter, we sketch out the method of
-    \emph{gradient descent}.  
-    
+    \emph{gradient descent}.
+
     Fourth, we put the machinery described in the previous sections to work. We
     test against the actual values in a non-interacting system before analyzing
-    the more interesting perturbed-trap system with interacting particles.  
-    
+    the more interesting perturbed-trap system with interacting particles.
+
     Lastly, we highlight interesting aspects of this study in a discussion of
     the results before ending on some summary remarks.
 
@@ -207,14 +207,14 @@
         \end{align}
         where $\vf{r} = (\vf{r}_1, \vf{r}_2, \dots \vf{r}_N)$ are the
         positions\footnote{This can include both spatial and spin parts, but we
-        will in the remainder of the project ignore spin.} of the particles
+        will in the remainder of this project ignore spin.} of the particles
         contained in the system.
 
-        To get around\footnote{Not exactly \emph{get around} per se, but make
-        the problem solvable at all.} the trouble of evaluating the
-        multidimensional-integral we employ the method of Monte Carlo
-        integration. This consists of approximating an integral of the
-        expectation value of a certain quantitity by a sum.
+        To get around\footnote{Not exactly \emph{get around} per se. We still
+        have to evaluate the integral, but we make the problem solvable at all.}
+        the trouble of evaluating the multidimensional-integral we employ the
+        method of Monte Carlo integration. This consists of approximating an
+        integral of the expectation value of a certain quantitity by a sum.
         \begin{align}
             \expval{x}
             &=
@@ -235,7 +235,7 @@
         we have to construct a probability density function from the
         wavefunction. Luckily the wavefunction squared is just such a quantity.
         Given a normalized wavefunction $\ket{\psi}$ we can compute the
-        expectation value of a quantum observable $\mathcal{O}$ using Monte
+        expectation value of a quantum operator $\mathcal{O}$ using Monte
         Carlo integration.
         \begin{align}
             \expval{\mathcal{O}}
@@ -252,16 +252,16 @@
         where we have multiplied and divided by the wavefunction. We now define
         the probability density function, $p(\vf{r})$, as
         \begin{align}
-            p(\vf{r}) = |\psi(\vf{r})|^2,
+            p(\vf{r}) \equiv |\psi(\vf{r})|^2,
         \end{align}
-        and the local quantum observable
+        and the local quantum operator
         \begin{align}
             \mathcal{O}_L(\vf{r})
-            &= \frac{\mathcal{O}\psi(\vf{r})}{\psi(\vf{r})}.
+            &\equiv \frac{\mathcal{O}\psi(\vf{r})}{\psi(\vf{r})}.
         \end{align}
         We see that if the chosen wavefunction is an eigenstate of the quantum
-        operator, the local quantum observable becomes a constant.  We can thus
-        approximate the expecatation value of the quantum observable using Monte
+        operator, the local quantum operator becomes a constant.  We can thus
+        approximate the expecatation value of the quantum operator using Monte
         Carlo integration.
         \begin{align}
             \expval{O}
@@ -344,27 +344,27 @@
         % TODO: Fill in this part.
         % SEB: Sure thing, buddy
         In order to make some conclusion towards where the particles in our systems
-        are most prone to exist, we need a good way to visualise our wavefunctions.        
-        It is impossible for a human being to visualise a probability density in three dimensions, 
+        are most prone to exist, we need a good way to visualise our wavefunctions.
+        It is impossible for a human being to visualise a probability density in three dimensions,
         because this measure would have to be represented in four dimensions. The fact that
         we will be studying systems of up to $n=500$ particles only adds to the headache.
         We therefore introduce the single-particle density function, or \emph{one-body density}
         $\rho(x, t)$. The one-body density is defined by the integral over all coordinates
         except one,
         \begin{align}
-        		\rho(x_1) \equiv \int \abs{\Psi(x_1, \dots, x_n)}^2 dx_2 \dots dx_n.
+                \rho(x_1) \equiv \int \abs{\Psi(x_1, \dots, x_n)}^2 dx_2 \dots dx_n.
         \end{align}
         The one-body density can be interpreted as one-dimensional probability density for
         finding a particle in $x_1$-direction. We also have the following relation,
         \begin{align}
-        		n = \int \rho(x_1)dx_1,
+                n = \int \rho(x_1)dx_1,
         \end{align}
         in other words, the integral over the entire one-dimensional space in $x_1$-direction
         gives us the total number of particles in our system. This can be a bit odd at first sight
         as we are used to getting the number $1$ when we integrate over the entire density.
-        
+
         It is best to think of the one-body density as the multivariate probability density
-        for the entire system collapsed down to one dimension in a representation than looks very 
+        for the entire system collapsed down to one dimension in a representation than looks very
         familiar to every physicist with a basic knowledge of quantum mechanics.
 
 \section{Systems}
@@ -1873,14 +1873,14 @@
 \section{Brute Force Metropolis-Hastings}
     \begin{figure}[b]
         \makebox[\textwidth][c]{
-            \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}      
+            \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}
         }
         \caption{Comparison of analytic and numeric results with the exact
         expression for the energy as a function of $\alpha$. The plots show the
         standard deviation from the blocking method as error ticks. In the
         figure $N$ is the number of particles and $d$ the number of dimensions.}
-        \label{fig:initial_problem_b}       
-		\vspace{2cm}
+        \label{fig:initial_problem_b}
+        \vspace{2cm}
     \end{figure}
 
 
