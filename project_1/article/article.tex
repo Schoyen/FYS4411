@@ -159,22 +159,41 @@
         E_0 \leq E
         = \frac{\bra{\Psi_T}H\ket{\Psi_T}}{\bra{\Psi_T}\ket{\Psi_T}},
     \end{align}
-    The complicated part of the variational principle is finding the minimum, or
-    values close to the minimum. For a select few systems we can calculate this
+    The complicated part of the variational principle is finding the trial
+    wavefunction that minimizes the energy. The strength in this method lies in
+    introducing variational parameters in the trial wavefunction. Using these as
+    degrees of freedom we can minimize the energy with respect to these in order
+    to find an infimum to the ground state energy for the given trial
+    wavefunction and Hamiltonian. For a select few systems we can calculate this
     analytically, but for the interesting systems we quickly hit an intractable
-    wall. To get around this we try to calculate the energy for a given
-    Hamiltonian and a trial wavefunction for different variational parameters.
-    The variance of the variational energy is given by
+    wall as the systems become analytically unsolvable. To get around this we
+    try to calculate the energy for a given Hamiltonian and a trial wavefunction
+    for different variational parameters numerically.
+
+
+    To determine if we have located a minimum we can use the variance of the
+    variational energy.
     \begin{align}
         \sigma^2
         &=
-        \bra{\Psi_T}H^2\ket{\Psi_T}
-        - \bra{\Psi_T}H\ket{\Psi_T}^2.
+        \frac{
+            \bra{\Psi_T}H^2\ket{\Psi_T}
+        }{
+            \bra{\Psi_T}\ket{\Psi_T}
+        }
+        - \para{
+            \frac{
+                \bra{\Psi_T}H\ket{\Psi_T}
+            }{
+                \bra{\Psi_T}\ket{\Psi_T}
+            }
+        }^2.
     \end{align}
-    If we have found the ``true'' trial wavefunction $\ket{\Psi_T}$, i.e., the
-    eigenfunction to the Hamiltonian $H$, we get $\sigma^2 = 0$. We are thus
-    interested in trying to find the variational parameters in the trial
-    wavefunction that minimizes the variance $\sigma^2$.
+    If we have found the ``true'' trial wavefunction $\ket{\Psi_T}$ with the
+    correct variational parameters, i.e., the eigenfunction to the Hamiltonian
+    we get $\sigma^2 = 0$. We are thus interested in trying to find the
+    variational parameters in the trial wavefunction that minimizes the
+    variance.
 
     \subsection{Monte Carlo integration}
         Unfortunately the evaluation of the expectation value of the energy for
