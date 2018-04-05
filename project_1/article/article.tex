@@ -312,10 +312,10 @@
         A disadvantage in the use of the brute force Metropolis-Hastings
         algorithm is that we might be spending much computational resources in
         an uninteresting part of configuration space. To make smarter moves we
-        will use the Metropolis-Hastings algorithm with the additions of
-        \emph{Importance Sampling}  (which will be discussed in due time). This
-        alteration of the algorithm is dependent on the \emph{drift force} of
-        the system\footnote{Also known as the \emph{quantum force}.}.
+        will add importance sampling (which will be discussed in due time) to
+        the algorithm. This alteration of the algorithm needs a new quantity
+        called the \emph{drift force} of the system\footnote{Also known as the
+        \emph{quantum force}.}.
         \begin{align}
             \vf{F}(\vf{r})
             &=
@@ -326,11 +326,11 @@
             \frac{2\nabla_k\Psi_T(\vf{r})}{\Psi_T(\vf{r})}.
             \label{eq:drift_force}
         \end{align}
-        Using this expression we are able to move towards parts of
-        configuration space where the gradient increases or decreases yielding a
-        better choice of movements. We will mainly be interested in the drift
-        force of a single particle $k$ as the Monte Carlo sampling involves
-        choosing a single particle at a time.
+        Using the drift force we are able to move towards more interesting parts
+        of configuration space as we are following the gradient of the
+        wavefunction. We will mainly be interested in the drift force of a
+        single particle $k$ as the Monte Carlo sampling involves choosing a
+        single particle at a time.
 
     \subsection{One-Body Densities}
         % TODO: Fill in this part.
