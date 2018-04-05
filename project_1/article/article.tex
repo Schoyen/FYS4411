@@ -327,7 +327,31 @@
         choosing a single particle at a time.
 
     \subsection{One-Body Densities}
-        % TODO: Fill in this
+        % TODO: Fill in this part.
+        % SEB: Sure thing, buddy
+        In order to make some conclusion towards where the particles in our systems
+        are most prone to exist, we need a good way to visualise our wavefunctions.        
+        It is impossible for a human being to visualise a probability density in three dimensions, 
+        because this measure would have to be represented in four dimensions. The fact that
+        we will be studying systems of up to $n=500$ particles only adds to the headache.
+        We therefore introduce the single-particle density function, or \emph{one-body density}
+        $\rho(x, t)$. The one-body density is defined by the integral over all coordinates
+        except one,
+        \begin{align}
+        		\rho(x_1) \equiv \int \abs{\Psi(x_1, \dots, x_n)}^2 dx_2 \dots dx_n.
+        \end{align}
+        The one-body density can be interpreted as one-dimensional probability density for
+        finding a particle in $x_1$-direction. We also have the following relation,
+        \begin{align}
+        		n = \int \rho(x_1)dx_1,
+        \end{align}
+        in other words, the integral over the entire one-dimensional space in $x_1$-direction
+        gives us the total number of particles in our system. This can be a bit odd at first sight
+        as we are used to getting the number $1$ when we integrate over the entire density.
+        
+        It is best to think of the one-body density as the multivariate probability density
+        for the entire system collapsed down to one dimension in a representation than looks very 
+        familiar to every physicist with a basic knowledge of quantum mechanics.
 
 \section{Systems}
     To model the trapped bosonic gas particles we use the potential
