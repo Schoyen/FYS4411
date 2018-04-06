@@ -1326,21 +1326,20 @@
         system gets larger.
 
         \subsubsection{Introducing Importance Sampling}
-
-            Next we will introduce importance sampling, the first prediction for
-            importance sampling compared to brute, naïve method is that we
-            should approach an equilibrium much faster because we are now making
-            moves in a smarter way. This prediction is confirmed in
+            Next we will introduce importance sampling. The first prediction for
+            importance sampling compared to the brute force, naïve method is
+            that we should approach an equilibrium much faster because we are
+            now making moves in a smarter way. This prediction is confirmed in
             \autoref{fig:problem_c1} and \autoref{fig:problem_c2}.
 
             \begin{figure}
                 \centering
                     \includegraphics[width=244px]
                     {../data/figures/problem_c1.pdf}
-                    \caption{As the number of Monte Carlo cycles increases the
-                    standard deviation of the local energies decrease. This
-                    effect is stronger when the importance sampling scheme is
-                    employed.}
+                    \caption{As the number of Monte Carlo cycles increases, the
+                    standard deviation of the expectation value of the energy
+                    for the brute force and importance sampling schemes
+                    decreases.}
                     \label{fig:problem_c1}
             \end{figure}
 
@@ -1349,30 +1348,30 @@
                     \includegraphics[width=244px]
                     {../data/figures/problem_c2.pdf}
                     \caption{The absolute difference between the expected energy
-                    and the exact energy for both brute force and importance
-                    sampling. }
+                    and the exact energy for both the brute force method and
+                    importance sampling.}
                     \label{fig:problem_c2}
             \end{figure}
 
-            \autoref{fig:problem_c1} shows the standard deviation of the local
-            energies for increasing number of Monte Carlo cycles for both the
-            regular sampling and the importance sampling methods. We see that
-            the standard deviation decreases for both methods for a larger
-            number of Monte Carlo cycles, but the standard deviation is always
-            lower for the importance sampling method. This is in accordance with
-            our expectations.
+            In \autoref{fig:problem_c1} we can see the standard deviation of the
+            local energies for an increasing number of Monte Carlo cycles for
+            both the brute force sampling and the importance sampling methods.
+            We see that the standard deviation decreases for both methods for a
+            larger number of Monte Carlo cycles, but the standard deviation is
+            always lower for the importance sampling method. This is in
+            accordance with our expectations.
 
             We have also compared the expected energy with the exact energy for
-            different number of Monte Carlo cycles. The result of this analysis
-            is shown in \autoref{fig:problem_c2}. We see that both methods will
-            evnetually result in expected energies that are equal to the exact
-            energies as $\abs{E - \expval{E}} \to 0$. However, for the method of
-            importance sampling the error is consistently lower.
+            a different number of Monte Carlo cycles. The result of this
+            analysis is shown in \autoref{fig:problem_c2}. We see that both
+            methods will eventually result in expected energies that are equal
+            to the exact energies as $\abs{E - \expval{E}} \to 0$. However, for
+            the method of importance sampling the error is consistently lower.
 
             \begin{table}
-                \caption{Importance sampled simulations of $n=10$ particles in
+                \caption{Importance sampled simulations of $N=10$ particles in
                 $d=3$ dimensions. Average acceptance ratios and standard
-                deviations for eleven alpha values between $0.3$ and $0.7$.}
+                deviations for eleven values of $\alpha \in [0.3, 0.7]$.}
                 \centering
                     \begin{ruledtabular}
                         \begin{tabular}{cccc}
@@ -1396,14 +1395,16 @@
             \end{table}
 
             \autoref{tab:imp_time_step} shows the standard deviations and
-            acceptance ratios for different time steps. The simulations in this
-            tabel are from the same span $\alpha \in [0.3, 07]$ as in
-            \autoref{tab:1D1N_analytic} and \autoref{tab:1D1N_numeric}. The
-            optimum energies for $\alpha = \frac{1}{2}$ gives the same result
-            for importance sampling as for the naïve way of sampling. Notice
-            that by lowering the time step, the uncertainty starts to decrease
-            and then starts to increase again. Moreover, the acceptance ratios
-            increases as the time step decreases.
+            acceptance ratios for different time steps, $\delta t$ using the
+            importance sampling method. The simulations in this table are from
+            the same values of $\alpha$ as in \autoref{tab:1D1N_analytic} and
+            \autoref{tab:1D1N_numeric}. The optimum energies for $\alpha = 1/2$
+            gives the same result for importance sampling as for the naïve way
+            of sampling. Notice that by lowering $\delta t$, the uncertainty
+            starts to decrease and then starts to increase again. Moreover, the
+            acceptance ratios increases as $\delta t \to 0$. This happens as the
+            change in the wavefunction grows minuscule and $q(\vf{r}_{i + 1},
+            \vf{r}_i) \approx 1$.
 
     \subsection{Interacting elliptical harmonic oscillator}
         We now make a change to the simple systems in the previous section in
