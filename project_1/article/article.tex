@@ -926,100 +926,139 @@
             \sigma = \sqrt{\frac{1}{N}(\ev{E^2_L} - \ev{E_L}^2},
             \label{eq:standard_deviation}
         \end{equation}
-        where $N$ is the number of samples, or Monte-Carlo cycles, in the experiment.
-        However, it is reasonable to assume that the data we are dealing with in this
-        study is liable to suffer from \emph{autocorrelation} and \autoref{eq:standard_deviation}
-        does not hold. The prevailing
-        definition of autocorrelation in a data stream or signal is correlation
-        between a delay of the signal and the original signal. One would be interested to find the
-        delay, or lag, in the signal at which the "self-correlation" is highest. We refer to this
-        spacing as $d$, and define the following correlation function,
+        where $N$ is the number of samples, or Monte-Carlo cycles, in the
+        experiment.  However, it is reasonable to assume that the data we are
+        dealing with in this study is liable to suffer from
+        \emph{autocorrelation} and \autoref{eq:standard_deviation} does not
+        hold. The prevailing definition of autocorrelation in a data stream or
+        signal is correlation between a delay of the signal and the original
+        signal. One would be interested to find the delay, or lag, in the signal
+        at which the "self-correlation" is highest. We refer to this spacing as
+        $d$, and define the following correlation function,
         \begin{equation}
-            f_d = \frac{1}{n -d} \sum_{k=1}^{n-d} (x_k - \bar{x}_n)(x_{k+d} - \bar{x}_n).
+            f_d
+            = \frac{1}{n -d} \sum_{k=1}^{n-d}
+            (x_k - \bar{x}_n)(x_{k+d} - \bar{x}_n).
             \label{eq:correlation_f_d}
         \end{equation}
-        The keen reader would have noticed that the function $f_d$ in \autoref{eq:correlation_f_d}
-        would be equal to the sample variance for $d=0$. We can now define the \emph{autocorrelation function}
+        The keen reader would have noticed that the function $f_d$ in
+        \autoref{eq:correlation_f_d} would be equal to the sample variance for
+        $d=0$. We can now define the \emph{autocorrelation function}
         \begin{equation}
             \kappa_d = \frac{f_d}{\text{Var}(x)},
             \label{eq:autocorrelation_function}
         \end{equation}
-        which is equal to $1$ if the data exhibits no autocorrealtions, equating to $d=0$. From the autocorrelation
-        function (\ref{eq:autocorrelation_function}) we in turn define the \emph{autocorrelation time},
+        which is equal to $1$ if the data exhibits no autocorrealtions, equating
+        to $d=0$. From the autocorrelation function in
+        \autoref{eq:autocorrelation_function} we in turn define the
+        \emph{autocorrelation time},
         \begin{equation}
-            \tau = 1 + 2 \sum_{d=1}^{n-1}\kappa_d,
+            \tau = 1 + 2 \sum_{d=1}^{n-1}\kappa_d.
         \end{equation}
-        notice that the autocorrelation time is $1$ for a correlation free experiment.
+        Notice that the autocorrelation time is $1$ for a correlation free
+        experiment.
 
-        We are now able to make a correction to the expression for the standard deviation
-        improving on \autoref{eq:standard_deviation} by taking correlation into account,
+        We are now able to make a correction to the expression for the standard
+        deviation improving on \autoref{eq:standard_deviation} by taking
+        correlation into account,
         \begin{equation}
-            \sigma =\sqrt{\frac{1 + 2\tau / \Delta t}{N}(\ev{E^2_L} - \ev{E_L}^2)},
+            \sigma =\sqrt{\frac{1 + 2\tau / \Delta t}{N}
+            (\ev{E^2_L} - \ev{E_L}^2)},
         \end{equation}
-        where $\Delta t$ is the time between each sample. The main problem at this point is to
-        find $\tau$, which we do not know for any given system and it is generally very expensive to
-        compute. In order to find a good estimate of $\tau$ we use a procedure called \emph{blocking}.
+        where $\Delta t$ is the time between each sample. The main problem at
+        this point is to find $\tau$, which we do not know for any given system
+        and it is generally very expensive to compute. In order to find a good
+        estimate of $\tau$ we use a procedure called \emph{blocking}.
 
         \subsubsection{Blocking}
-        In the method of blocking we group the samples into blocks of increasing size. If one where to compute
-        the standard deviation for each block, one should see the variance increase with the block size.
-        The standard deviation would only increase up to a certain point, from whence it would stay
-        almost constant. What is happening is that we have reached a point where a particular
-        sample from one block is no longer correlated with a corresponding sample from an adjacent block.
-        The block size for this point of convergence now functions as an estimate for the autocorrelation
-        time $\tau$.
+            In the method of blocking we group the samples into blocks of
+            increasing size. If one where to compute the standard deviation for
+            each block, one should see the variance increase with the block
+            size.  The standard deviation would only increase up to a certain
+            point, from whence it would stay almost constant. What is happening
+            is that we have reached a point where a particular sample from one
+            block is no longer correlated with a corresponding sample from an
+            adjacent block.  The block size for this point of convergence now
+            functions as an estimate for the autocorrelation time $\tau$.
 
-         Instead of going by this "manual" method of looking at charts, we will construct a test statistic and
-         let the computer do the necessary considerations in a more "automatic way.
+            Instead of going by this "manual" method of looking at charts, we
+            will construct a test statistic and let the computer do the
+            necessary considerations in a more "automatic way.
 
-        The easiest way to do this is by use of the \emph{automatic blocking scheme}, nicely illustrated
-        with a flow chart in \autoref{fig:blocking}. The input parameter for the method is an array of the
-        local energies, but it can be any array of time series data, which is why it is herein referred to as
-        $\mathbf{X}$. Any array of sequential data, where any particular data point depends on the previous
-        data point inhibits all attributes of a time series. Our array of local energies is therefor most definitely
-        a time series.
+            The easiest way to do this is by use of the \emph{automatic blocking
+            scheme}, nicely illustrated with a flow chart in
+            \autoref{fig:blocking}. The input parameter for the method is an
+            array of the local energies, but it can be any array of time series
+            data, which is why it is herein referred to as $\mathbf{X}$. Any
+            array of sequential data, where any particular data point depends on
+            the previous data point inhibits all attributes of a time series.
+            Our array of local energies is therefore most definitely a time
+            series.
 
-        From $\mathbf{X}$ we compute the variance and sample covariance between the series itself and a
-        one-point lag of the series. This covariance is usually referred to as the first order autocovariance.
-        \begin{align}
-            \gamma_i
-            &= \frac{1}{n}
-            \left(
-                \sum_{k=1}^n
-                \left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)
-            \right)
-            \nonumber \\
-            &\qquad
-            \times
-            \left(
-                \sum_{k=0}^{n-1}
-                \left((\mathbf{X}_i)_k - (\bar{\mathbf{X}}_i)_k\right)
-            \right).
-        \end{align}
+            From $\mathbf{X}$ we compute the variance and sample covariance
+            between the series itself and a one-point lag of the series. This
+            covariance is usually referred to as the first order autocovariance.
+            \begin{align}
+                \gamma_i
+                &= \frac{1}{n}
+                \left(
+                    \sum_{k=1}^n
+                    \left((\mathbf{X}_i)_k - \bar{\mathbf{X}}\right)
+                \right)
+                \nonumber \\
+                &\qquad
+                \times
+                \left(
+                    \sum_{k=0}^{n-1}
+                    \left((\mathbf{X}_i)_k - \bar{\mathbf{X}}\right)
+                \right).
+            \end{align}
+            Note that $i$ represents the iteration in the blocking process
+            whereas $k$ is the index into the array $\mathbf{X}_i$.
 
-        Now we "block"! The next step is to perform a transformation of the our time series $\mathbf{x}_i$, where
-        we end up with an array that is half the length of the original time series,
-        \begin{equation}
-            (\mathbf{X}_i)_k = \frac{1}{2}\left((\mathbf{X}_i)_{2k-1} + (\mathbf{X}_i)_{2k} \right).
-        \end{equation}
-        This process is were the term "blocking" stems from. There are a number of ways to perform the blocking -
-        we could have picked the data points used in the new ($i+1$) array randomly, or more orderly. Here we we have
-        picked them sequentially. We have obtained $\frac{n}{2}$ new "primed" stochastic variables. Assuming that the
-        reader is playing close attention, it is now needless to say that it is much easier to perform these sequential
-        blocking steps if we have an array of length $n= 2^d$, where $d$ is integer. Otherwise, problems would arise
-        because one would have arrays of different lengths when the original array is "split in two". The ailment is
-        easy to remedy by excluding an observation from the longest resulting array after splitting.
+            Now we "block"! The next step is to perform a transformation of the
+            our time series $\mathbf{X}_i$, where we end up with an array that
+            is half the length of the original time series,
+            \begin{equation}
+                (\mathbf{X}_i)_k
+                = \frac{1}{2}\left((\mathbf{X}_i)_{2k-1}
+                + (\mathbf{X}_i)_{2k} \right).
+            \end{equation}
+            This process is were the term "blocking" stems from. There are a
+            number of ways to perform the blocking - we could have picked the
+            data points used in the new ($i+1$) array randomly, or more orderly.
+            Here we have picked them sequentially. We have obtained $n/2$ new
+            "primed" stochastic variables. Assuming that the reader is playing
+            close attention, it is now needless to say that it is much easier to
+            perform these sequential blocking steps if we have an array of
+            length $n= 2^d$, where $d$ is integer. Otherwise, problems would
+            arise because one would have arrays of different lengths when the
+            original array is split in two. The ailment is easy to remedy by
+            excluding an observation from the longest resulting array after
+            splitting.
 
-        For each new time series $\mathbf{X}_{i+1}$ a new sample variance and sample covariance is computed.
-        The blocking transformation is allowed to continue until we are we run out of data, i.e. the length
-        of $\mathbf{X}_i < 2$. In other words, there is only a single number left. We now compute a test statistic,
-        \begin{equation}
-            M_j = \sum_{k=j}^{d-1} n_k \frac{\left[(n_k - 1)\frac{s^2_k}{n_k^2} y \gamma_k(1)\right] ^2}{s_k^4}.
-        \end{equation}
-        As luck would have it, this number $M$ is   $\chi^2$-distributed. The following step would be to look up a
-        statistical table and find the first $k$, such that $M_k \leq q_{d-k}(1-\alpha)$, where $q$ is the statistical
-        limit and $\alpha$ is  the significance level that your hear desires. Finally, the correct sample standard deviation
-        is $\frac{s_k^2}{n_k}$. Again, see \autoref{fig:blocking} for a summary of the algorithm.
+            For each new time series $\mathbf{X}_{i+1}$ a new sample variance
+            and sample covariance is computed.  The blocking transformation is
+            allowed to continue until we run out of data, i.e. the length of
+            $\mathbf{X}_i < 2$. In other words, there is only a single number
+            left.  We now compute a test statistic,
+            \begin{equation}
+                M_j
+                = \sum_{k=j}^{d-1}
+                n_k \frac{\left[(n_k - 1)
+                \sigma^2_k/n_k^2 + \gamma_k\right] ^2}{\sigma_k^4},
+            \end{equation}
+            As luck would have it, this number $M$ is   $\chi^2$-distributed.
+            The following step would be to look up a statistical table and find
+            the first $k$, such that $M_k \leq q_{d-k}(1-\alpha)$, where $q$ is
+            the statistical limit and $\alpha$ is your favorite  significance
+            level. Finally, the correct sample variance is $\sigma_k^2/n_k$. In
+            the rest of the project we use the labeling
+            \begin{align}
+                \sigma_b^2 \equiv \frac{\sigma_k^2}{n_k},
+            \end{align}
+            for the correct sample variance found from the blocking method.
+            Again, see \autoref{fig:blocking} for a summary of the algorithm.
 
         % Flow chart for description of automatic blocking algorithm
         \begin{figure}
