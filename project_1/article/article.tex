@@ -1748,10 +1748,6 @@
         \\
         &=
         \prod_{i = 1}^N
-        \int\dd\vf{r}_i\exp(-2\alpha\vf{r}_i^2)
-        \\
-        &=
-        \prod_{i = 1}^N
         \prod_{j = 1}^d
         \int\dd x_{ij}\exp(-2\alpha x_{ij}^2)
         \\
@@ -1781,11 +1777,14 @@
         &=
         \sum_{l = 1}^d
         \int
-        \para{
-            \prod_{k = 1}^d
+        \dd x_{il}\exp(-2\alpha x_{il}^2)x_{il}^2
+        \nonumber \\
+        &\qquad
+        \times
+            \int
+            \prod_{k \neq l}^d
             \dd x_{ik}\exp(-2\alpha x_{ik}^2)
-        } x_{il}^2
-        \nonumber\\
+        \nonumber \\
         &\qquad
         \times
         \para{
