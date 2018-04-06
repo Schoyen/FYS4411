@@ -745,7 +745,7 @@
                 We accept the step if $q \geq 1$, else we accept the step with a
                 probability $p$. The latter is done by drawing a random uniform
                 number, $x \in [0, 1]$, and checking if $q > x$.  This
-                acceptance probability decides if the particle move is rejected
+                transition probability decides if the particle move is rejected
                 or accepted.
 
             \item If the particle movement is accepted we compute the local
@@ -776,10 +776,11 @@
         than a uniform probability $p \in [0, 1]$. This transition criteria
         results in what we call the brute force Metropolis-Hastings algorithm.
         By counting the number of accepted steps and dividing by the total
-        number of Monte Carlo cycles we get the \emph{acceptance probability}.
-        The acceptance probability helps in choosing a decent length for the
-        proposed new step. If the acceptance probability is very low we can
-        lower the step length to get more accepted steps and vice versa.
+        number of Monte Carlo cycles we get the \emph{acceptance probability},
+        denoted $A$.  The acceptance probability helps in choosing a decent
+        length for the proposed new step. If the acceptance probability is very
+        low we can lower the step length to get more accepted steps and vice
+        versa.
 
         \subsubsection{Initial distribution of particles}
             Prior to performing the Metropolis-Hastings algorithm we have to
@@ -1180,7 +1181,7 @@
 
     \subsection{Non-Interacting Systems}
         Initially we are interested in seeing how our implementation performs
-        and to what extent it functions properly.  the logical thing to do would
+        and to what extent it functions properly. The logical thing to do would
         be to look at a non-interacting system with a simple Gaussian
         wavefunction and harmonic oscillator potential. Such a system has a
         simple closed-form analytic solution\footnote{A fact that every
@@ -1188,26 +1189,26 @@
         their first course in quantum physics}, which is further simplified by
         the "god-given" analytic units
         (\autoref{eq:closed_form_natural_units_local_energy}). This expression
-        is minimised for $\alpha = \frac{1}{2}\omega$. We also set $\omega = 1$
+        is minimised for $\alpha = \omega/2$. We also set $\omega = 1$
         and get an expression for the expected minimum local energy,
         \begin{equation}
             E_L(\vb{r}) = \frac{dN}{2},
         \end{equation}
         which will be used as the benchmark we are ultimately aiming for.
 
-        We will start without importance sampling, that is by employing the
-        simpler and more naïve "brute force" Monte Carlo sampling. Moreover, we
-        will compute the value for the local energy analytically as well as with
-        a numerical approach.  In the numerical approach we employ the well-know
-        approximation for the second derivative,
+        We will start without importance sampling, that is by employing brute
+        force Monte Carlo sampling. Moreover, we will compute the value for the
+        local energy analytically as well as with a numerical approach.  In the
+        numerical approach we employ the second order central difference
+        approximation
         \begin{equation}
-                f''(x) \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
+            \dod[]{f(x)}{x} \approx \frac{f(x-h) - 2f(x) + f(x+h)}{h^2}.
         \end{equation}
 
         \begin{table}
             \centering
             \caption{One particle in one dimension for the analytic expression
-            with $2^{21}$ Monte Carlo cycles and step length of $0.5$.}
+            with $2^{21}$ Monte Carlo cycles and a step length of $0.5$.}
             \begin{ruledtabular}
                 \begin{tabular}{cccccc}
                     $\alpha$ & $\langle  E_L\rangle$ & $\sigma$ & $\sigma_b$
@@ -1255,31 +1256,31 @@
         \end{table}
 
         \autoref{tab:1D1N_analytic} shows the expected local energy
-        $\expval{E_L}$, standard deviations $\sigma$, $\sigma_b$, the share of
-        accepted Monte Carlo reorientations $A$ and cpu time for the analytic
-        computation at different values for the variational parameter $\alpha$.
+        $\expval{E_L}$, the uncorrelated standard deviation, $\sigma$, the
+        standard deviation found from blocking, $\sigma_b$, the accpetance
+        probability, $A$, and the CPU time for the analytic computation at
+        different values for the variational parameter $\alpha$.
         \autoref{tab:1D1N_numeric} shows the same numbers but for the numeric
-        scheme. The first column of standard deviations $\sigma$ are the "naïve"
-        standard deviations, while $\sigma_b$ marks the standard deviations
-        computed with the blocking method. One can clearly see, in both the
-        analytic and numeric case, that the former standard deviations are lower
-        than the latter, meaning that autocorrelated data can lead to a lower
-        perceived uncertainty than what is reality. The blocking method takes
-        this fact into account and for this reason, all other standard
-        deviations will be computed with the blocking method from here on.
+        scheme.  One can clearly see, in both the analytic and numeric case,
+        that the uncorrelated standard deviations are lower than the standard
+        deviations found from the blocking method. This means that
+        autocorrelated data can lead to a lower perceived uncertainty than what
+        is the reality. The blocking method takes this fact into account and for
+        this reason, all other standard deviations will be computed with the
+        blocking method from here on.
 
         The first initial observation of note is that we have found an optimum
-        for the system in terms of a minimum energy at $\alpha=\frac{1}{2}$.
+        for the system in terms of a minimum energy at $\alpha = 1/2$.
         Moreover, notice how the standard deviation disappears completely.  This
         should already be apparent from
         \autoref{eq:closed_form_natural_units_local_energy}, as the term
-        involving particle positions disappears for the optimal $\alpha$.
+        involving particle positions disappears for the optimal $\alpha$ thus
+        rendering the entire Monte Carlo process of moving particles void.
 
         \begin{table}
             \caption{Comparison of energy, standard deviation and the CPU time
-            for $\alpha = 0.5$ (the correct minimum) for the analytic and
-            numeric schemes in three dimensions and $N$ particles. The step
-            length is $0.5$.}
+            for $\alpha = 0.5$ for the analytic and numeric schemes in three
+            dimensions and $N$ particles. The step length is $0.5$.}
             \centering
             \begin{ruledtabular}
                 \begin{tabular}{r|rrr|rrr}
@@ -1309,13 +1310,13 @@
         Systems of optimum variational parameter warrants further investigation,
         as summed up in \autoref{tab:initial_optimum_comparison}. The analytical
         results are quite predictable and monotonous; the expected local energy
-        $\expval{E_L}$ is perfectly proportional by a factor $\frac{3}{2}$ to
+        $\expval{E_L}$ is perfectly proportional by a factor $3/2$ to
         the number of particles and the standard deviation $\sigma_b$ is zero
         for systems of any number of particles. The numerical results tells a
         more tortuous tale. As the number of particles increase, the uncertainty
         also increases rapidly. For the largest system, with $N = 500$
         particles, the energy misses its target critically - the true energy is
-        more than one standard deviation away. Lastly, the cpu time is notably
+        more than one standard deviation away. Lastly, the CPU time is notably
         higher for the numeric scheme.
 
         In the appendices,  \autoref{fig:initial_problem_b} shows how both the
@@ -2097,6 +2098,10 @@
 \clearpage
 \onecolumngrid
 \section{Brute Force Metropolis-Hastings}
+    In \autoref{fig:initial_problem_b} we see how the expectation value of the
+    energy for the analytic and numeric expression of the local energy using
+    Monte Carlo sampling matches the exact energy from \autoref{eq:exact_energy}
+    for $\alpha \in [0.3, 0.7]$.
     \begin{figure}[b]
         \makebox[\textwidth][c]{
             \includegraphics[width=1.2\textwidth]{../data/figures/problem_b.pdf}
