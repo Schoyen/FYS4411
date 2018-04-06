@@ -105,7 +105,6 @@
 \section{Introduction}
     We will in this project study the Variational Monte Carlo method, and use it
     to evaluate the ground state energy of a trapped, hard sphere Bose gas.
-    \cite{dubois2001bose} \cite{nilsen2005vortices}
 
     By building up an increasingly intricate system we eloquently illustrate the
     strength of the Variational Monte Carlo methods. Any Monte Carlo method
@@ -710,20 +709,11 @@
                 \label{eq:scaled_hamiltonian}
             \end{align}
             where we have introduced the dimensionless frequency $\lambda =
-            \omega_z/\omega$. The single particle functions also get a scaling
-            factor
-            \begin{align}
-                \phi_k
-                &=
-                \exp\brak{
-                    -\frac{\alpha\hbar}{m\omega}
-                    ({x_k'}^2 + {y_k'}^2 + \beta^2{z_k'}^2)
-                }.
-                \label{eq:scaled_spf}
-            \end{align}
-            The correlation wavefunction and the interaction potential remain the
-            same, but using the scaled hard core radius $a/a_{\text{ho}} =
-            0.0043$.
+            \omega_z/\omega$. The wavefunction does not need to be scaled as the
+            exponentials are already dimensionless. We only need to use the
+            scaled hard core radius $a' = a/a_{\text{ho}}$. We are interested in
+            using the radius $a' = 0.0043$ as in the references
+            \cite{dubois2001bose} and \cite{nilsen2005vortices}.
 
 
 \section{Algorithms}
@@ -1180,6 +1170,10 @@
                 larger than a set order of magnitude we keep dividing
                 $\vfg{\alpha}$ with this number until this criteria is
                 fulfilled.
+
+                This is a so-called "hacky" solution, but it does the trick. It
+                is also the reason why the result figure in
+                \autoref{fig:gradient_descent_interacting}.
 
 \section{Results}
 
