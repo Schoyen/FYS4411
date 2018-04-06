@@ -1144,12 +1144,12 @@
             thus
             \begin{align}
                 \nabla_{\vfg{\alpha}}\expval{E_L}
-                =
-                2\left(
-                    \expval{E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}
-                    - \expval{\frac{1}{\Psi_T} \nabla_{\vfg{\alpha}}\Psi_T}
-                    \expval{E_L}
-                \right).
+                &=
+                2\expval{E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}
+                \nonumber \\
+                &\qquad
+                - 2\expval{\frac{1}{\Psi_T} \nabla_{\vfg{\alpha}}\Psi_T}
+                \expval{E_L}.
                 \label{eq:variational_parameter_gradient}
             \end{align}
             To evaluate this expression we sample the local energy, the
@@ -2108,15 +2108,15 @@
     We are thus left with
     \begin{align}
         \nabla_{\vfg{\alpha}}\expval{E_L}
-        =
+        &=
         2
-        \para{
-            \expval{
-                E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T
-            }
-            - \expval{E_L}
-            \expval{\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}
-        },
+        \expval{
+            E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T
+        }
+        \nonumber \\
+        &\qquad
+        - 2\expval{E_L}
+        \expval{\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}.
     \end{align}
     which is what we wanted to show.
 
