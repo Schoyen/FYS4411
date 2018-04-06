@@ -1540,11 +1540,11 @@
             conjugate gradient method "moves" to find the optimal value of
             $\alpha$.
 
-            For this optimal, interacting $\alpha$ we have computed the expected
-            energy and standard deviation for systems of $n = \{10, 50, 100\}$
-            particles. These results are shown in \autoref{tab:10_optimal}, the
-            non-interacting case, excluding Jastrow factor is included as a
-            comparison.
+            For this value of $\alpha$ we have computed the expected energy and
+            standard deviation for systems of $N = \{10, 50, 100\}$ particles.
+            These results are shown in \autoref{tab:interacting_optimal}. We have
+            compared with the non-interacting case, i.e., where the Jastrow
+            factor is zero ($a = 0$).
 
             \begin{figure}
                 \includegraphics[width=244px]{../data/figures/problem_f.pdf}
@@ -1554,20 +1554,9 @@
                 \label{fig:gradient_descent_interacting}
             \end{figure}
 
-        \subsubsection{One-Body Densities}
-            We now look at one-body densities for the value of $\alpha$ found in
-            \autoref{eq:optimal_interacting_alpha}. The results for a system consisting
-            of $n=100$ particles are displayed in \autoref{fig:one_body_density_100}.
-            In this figure we see the densities for for a system confined to a
-            perturbed elliptic trap with and without interaction. We see that for the
-            interacting case, the one-body density is skewed towards a larger
-            $\abs{\vf{r}}$, as is expected. The "ideal" density, a system with spherical
-            trap, is also included in the figure.
-
             \begin{table}
-                \caption{Comparison of the elliptical system with an elliptical
-                gaussian trial wavefunction with and without the Jastrow
-                factor.}
+                \caption{Comparison of an elliptical gaussian trial wavefunction
+                with and without the Jastrow factor using the elliptical trap.}
                 \centering
                 \begin{ruledtabular}
                     \begin{tabular}{r|rr|rr}
@@ -1582,8 +1571,19 @@
                         100 & 266.2904 & 0.0297 & 241.4248 & 0.0025
                     \end{tabular}
                 \end{ruledtabular}
-                \label{tab:10_optimal}
+                \label{tab:interacting_optimal}
             \end{table}
+
+        \subsubsection{One-Body Densities}
+            We now look at one-body densities for the value of $\alpha$ found in
+            \autoref{eq:optimal_interacting_alpha}. The results for a system consisting
+            of $n=100$ particles are displayed in \autoref{fig:one_body_density_100}.
+            In this figure we see the densities for for a system confined to a
+            perturbed elliptic trap with and without interaction. We see that for the
+            interacting case, the one-body density is skewed towards a larger
+            $\abs{\vf{r}}$, as is expected. The "ideal" density, a system with spherical
+            trap, is also included in the figure.
+
 
             \begin{figure}
                 \includegraphics[width=244px]
@@ -1670,7 +1670,7 @@
         On the other hand, the energy added to the system by including interaction
         is not very high compared to the energy of the system as a whole. For the
         larger of the interacting systems we have looked at, with $n=100$ particles,
-        The interaction add only a mere $9\%$ extra energy (see \autoref{tab:10_optimal}).
+        The interaction add only a mere $9\%$ extra energy (see \autoref{tab:interacting_optimal}).
         Studying \autoref{fig:one_body_density_100} will reveal the same.
 
         The reason for this stems from the assumption which justifies that
