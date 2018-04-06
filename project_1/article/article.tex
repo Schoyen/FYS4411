@@ -1608,9 +1608,9 @@
         this quite clearly from \autoref{fig:initial_problem_b}. Because we get
         results from simulations that correspond to the analytic results we can
         be fairly certain that the method can be expanded upon to include
-        attributes outside the realm problems that are analytically solvable.
-        The systems with elliptic traps and interacting particles are such
-        systems.
+        attributes outside the realm of problems that are analytically solvable.
+        The systems with the elliptic traps and the interacting particles have
+        just such attributes.
 
         That said, the way to get the best confirmation of the results presented
         above is in comparison to experiment. This would be quite difficult
@@ -1625,21 +1625,22 @@
         turn can be linked to experiment. It would be very fruitful to simulate a
         system of such particles that is more natural, i.e. real, but we realise the
         purpose of this study is first and foremost to introduce variational
-        Monte Carlo as a tool in computational physics. We assume, however,
-        that this study is easy enough to expand into a study of alkali atoms like
-        $^{87}Rb$, $^{23}Na$ or $^7Li$.
+        Monte Carlo as a tool in computational physics. We assume, however, that
+        this study is a good starting point for studies of alkali atoms like
+        $^{87}$Rb, $^{23}$Na or $^7Li$.
 
     \subsection{Energy per particle}
         For the non-interacting harmonic oscillator system there is no
-        difference between a new particle and new dimensions
-        \footnote{This is not entirely true in the case of our implementation of
-        the Metropolis algorithms as we draw a single random particle and move
-        all dimensions instead of iterating over all particles and all
+        difference between a new particle and a new dimension\footnote{This is
+        not entirely true in the case of our implementation of the
+        Metropolis-Hastings algorithm as we draw a single random particle and
+        move all dimensions instead of iterating over all particles and all
         dimensions.}. This means that the inclusion of a new particle or
         dimension yields a linear scaling in the energy. Thus if we compute the
         energy per particle for systems of varying size we expect to get the
         same energy. This is most easily seen in \autoref{fig:initial_problem_b}
         and in the expression for the exact energy \autoref{eq:exact_energy}.
+
         This, however, is \emph{not} the case in the interacting system due to
         the Jastrow factor. Looking at \autoref{tab:10_interacting} and
         \autoref{tab:100_interacting} we see that multiplying the expected
@@ -1650,19 +1651,21 @@
 
         \begin{figure}
             \includegraphics[width=244px]{../data/figures/problem_e.pdf}
-            \caption{Local energies as a function of variational parameter
-            $\alpha$ for different number of particles.}
+            \caption{Expected energy per particle as a function of variational
+            parameter $\alpha$ for a varying number of particles.}
             \label{fig:interacting}
         \end{figure}
 
-        The reason for the increase in energy per particle can be ascribed to the
-        repulsive interaction added by the Jastrow factor. The repulsive force can
-        be explain thusly; The Jastrow factor  increases the value of the
-        wavefunctions for any given particle if that particle is some distance away
-         from any other particle. An increased value in the wavefucntion is equivalent
-         to an increase in probability amplitude, again correpsonding to an increase in
-         probability density, giving rise the the fact that particles are more likely to
-         appear further from one another.
+        The reason for the increase in energy per particle can be ascribed to
+        the repulsive interaction added by the Jastrow factor. The repulsive
+        force can be explained thusly: the Jastrow factor  increases the value
+        of the local energy for any given particle if that particle is some
+        distance away from any other particle. The closer the particles are, the
+        more the local energy increases. The Jastrow factor will lower the
+        probability for the particles to get too close to one another by
+        reducing the probability density in the vicinity of other particles.
+        However, if there are many particles in the system they will be closer
+        to another particle and therefore increase the energy of the system.
 
     \subsection{Low density system}
         It is safe to say that the effect of adding a Jastrow factor is significant,
