@@ -1841,8 +1841,9 @@
     which is what we wanted to show.
 
 
-\section{Computing the drift force and local energy of the full system}
-    Computing the gradient of the wavefunction we get
+\section{Computing the drift force and local energy of the interacting system}
+    Using the trial wavefunction from \autoref{eq:initial_trial_wavefunction} we
+    start by computing the gradient.
     \begin{align}
         \nabla_k\Psi_T(\vf{r})
         &=
@@ -1854,7 +1855,7 @@
         + \Phi_T(\vf{r})
         \nabla_k J(\vf{r}).
     \end{align}
-    The gradient of the Slater permament for particle $k$ is given by
+    The gradient of the Slater permanent for particle $k$ is given by
     \begin{align}
         \nabla_k
         \Phi_T(\vf{r})
@@ -1895,8 +1896,8 @@
         \label{eq:gradient_full_wavefunction}
     \end{align}
 
-    The Laplacian of the trial wavefunction is found by finding the
-    divergence of \autoref{eq:gradient_full_wavefunction}.
+    The Laplacian of the trial wavefunction is found by finding the divergence
+    of \autoref{eq:gradient_full_wavefunction}.
     \begin{align}
         \nabla_k^2\Psi_T(\vf{r})
         &=
@@ -1918,8 +1919,8 @@
         \Psi_T(\vf{r}),
     \end{align}
     where the squared term came from taking the gradient of the trial
-    wavefunction.  To further simplify we divide by the trial
-    wavefunction. This yields
+    wavefunction.  To further simplify we divide by the trial wavefunction. This
+    yields
     \begin{align}
         \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
         &=
@@ -1933,13 +1934,12 @@
             \sum_{m \neq k}^N\nabla_k u_{km}
         \Biggr)^2.
     \end{align}
-    From here, the next step is to find the gradient and the Laplacian of
-    the single particle functions, $\phi_k$, and the interaction
-    functions $u_{km}$. For the single particle functions we use
-    Cartesian coordinates when finding the derivatives while for
-    the interaction functions we use spherical coordinates and do a
-    variable substitution. Beginning with the gradient of the single
-    particle functions we get
+    From here, the next step is to find the gradient and the Laplacian of the
+    single particle functions, $\phi_k$, and the interaction functions $u_{km}$.
+    For the single particle functions we use Cartesian coordinates when finding
+    the derivatives while for the interaction functions we use spherical
+    coordinates and do a variable substitution. Beginning with the gradient of
+    the single particle functions we get
     \begin{align}
         \nabla_k\phi_k
         &=
@@ -1951,9 +1951,8 @@
         (x_k\vf{e}_i + y_k\vf{e}_j + \beta z_k\vf{e}_k)
         \phi_k.
     \end{align}
-    Note that the subscripts on the unit vectors $\vf{e}_i$ are
-    \emph{not} the same as the subscripts used for its components. The
-    Laplacian yields
+    Note that the subscripts on the unit vectors $\vf{e}_i$ are \emph{not} the
+    same as the subscripts used for its components. The Laplacian yields
     \begin{align}
         \nabla_k^2\phi_k
         &=
@@ -1971,10 +1970,9 @@
         \Bigr]
         \phi_k,
     \end{align}
-    with $d$ as the dimensionality of the problem.
-    In order to derive the interaction functions we have to do a
-    variable substitution using $r_{km} = |\vf{r}_k - \vf{r}_m|$. We can
-    then rewrite the $\nabla_k$-operator as
+    with $d$ as the dimensionality of the problem.  In order to derive the
+    interaction functions we have to do a variable substitution using $r_{km} =
+    |\vf{r}_k - \vf{r}_m|$. We can then rewrite the $\nabla_k$-operator as
     \begin{align}
         \nabla_k
         &=
@@ -2016,8 +2014,7 @@
             \frac{d - 1}{r_{km}}\dpd[]{u_{km}}{r_{km}}
             + \dpd[2]{u_{km}}{r_{km}},
         \end{align}
-        where $d$ is again the dimensionality of the problem. In total
-        we can state an intermediate version of the Laplacian occuring
+        In total we can state an intermediate version of the Laplacian occuring
         in the local energy as
         \begin{align}
             \frac{\nabla_k^2\Psi_T(\vf{r})}{\Psi_T(\vf{r})}
@@ -2042,7 +2039,7 @@
             \dpd[]{u_{kn}}{r_{kn}}.
         \end{align}
     \end{widetext}
-    Moving on to the derivatives of the interaction terms, $u_{km}$, to
+    Finally we compute the derivatives of the interaction terms, $u_{km}$, to
     get an explicit expression for the Laplacian.
     \begin{align}
         \dpd[]{u_{km}}{r_{km}}
