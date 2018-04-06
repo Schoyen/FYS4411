@@ -1699,6 +1699,17 @@
                 just with one other atom.
         \end{enumerate}
 
+    \subsection{Stability of the program}
+        An interesting thing would be to model large systems of many particles
+        and with large hard sphere radii. Unfortunately, due to the shape of the
+        single particle functions this turns out to be quite tricky. As the
+        single particle function consists of a sum squared positions from a
+        given center, many particles and/or spread out systems will yield a
+        large sum. This means that the Slater permanent grows smaller and
+        smaller making it much harder to keep the system confined. By lowering
+        the frequency and thus lowering the minimum $\alpha$ we can remedy some
+        of this behaviour.
+
 \section{Summary Remarks}
 
     In this study we have built a functional variational Monte Carlo solver framework for
