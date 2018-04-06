@@ -71,7 +71,7 @@ double inline InteractingEllipticalGaussian::evaluate_single_particle_function(
             (i != 2) ? SQUARE(position[i]) : (m_beta*SQUARE(position[i]));
     }
 
-    return exp(-(alpha*HBAR/(m_mass*m_omega))*position_sum);
+    return exp(-alpha*position_sum);
 }
 
 // Private method. Interaction (correlation) contributions.
