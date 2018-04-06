@@ -1120,49 +1120,50 @@
             \end{figure}
 
         \subsection{Gradient Descent}
-
             Scanning the entire space of variational parameters can be a
             somewhat despairing task. To aid us in the search we therefore
             implement the method of gradient descent\footnote{Also known as
             steepest descent, easily confused with the steepest descent method
             for integation.}. In any optimum we generally have that the
-            derivative should equal zero. In our case, we want to find the
-            minimum of the expected local energy with respect to some
-            variational parameter $\alpha$, so that
+            derivative should equal zero. Our goal is to find the minimum of the
+            expected local energy with respect to the variational parameters
+            $\vfg{\alpha}$.
             \begin{equation}
-                \nabla_\alpha \expval{E_L(\mathbf{R}; \alpha)} = 0.
+                \nabla_{\vfg{\alpha}} \expval{E_L(\mathbf{R}; \vfg{\alpha})}
+                = 0.
             \end{equation}
             The foundation for  the method of gradient descent lies in the fact
             that some analytic \footnote{We use the term analytic quite
-            recklessly.} function $\vf{F}(\alpha)$ decreases fastest in the direction
-            of $-\nabla_\alpha \cdot \vf{F}(\alpha)$. This means that we could eventually
-            get to an ensuing minimum by trailing along the pathway of the
-            following recursive relation,
+            recklessly.} function $\vf{F}(\vfg{\alpha})$ decreases fastest in
+            the direction of $-\nabla_{\vfg{\alpha}} \cdot
+            \vf{F}(\vfg{\alpha})$. This means that we could eventually get to an
+            ensuing minimum by trailing along the pathway of the following
+            recursive relation,
             \begin{equation}
                 \vfg{\alpha}_{k+1}
-                = \vfg{\alpha}_k - \gamma \nabla_{\alpha}\cdot \vf{F}(\alpha_k).
+                = \vfg{\alpha}_k
+                - \gamma \nabla_{\vfg{\alpha}}\cdot \vf{F}(\vfg{\alpha}_k).
                 \label{eq:parameter_difference}
             \end{equation}
-            If $\gamma$ is small enough we should have $\vf{F}(\alpha_k) \geq
-            \vf{F}(\alpha_{k+1})$ for all $k$ and hopefully we will experience
-            convergence to the desired minimum.
+            If $\gamma$ is small enough we should have $\vf{F}(\vfg{\alpha}_k)
+            \geq \vf{F}(\vfg{\alpha}_{k+1})$ for all $k$ and hopefully we will
+            experience convergence to the desired minimum.
 
-            For our special case we only have one variational parameter,
-            $\alpha$.  The expression for the derivative is,
+            The variational gradient of the expectation value of the energy is
+            thus
             \begin{align}
-                \nabla_{\alpha}\expval{E_L}
+                \nabla_{\vfg{\alpha}}\expval{E_L}
                 =
                 2\left(
-                    \expval{E_L\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T}
-                    - \expval{\frac{1}{\Psi_T} \nabla_{\alpha}\Psi_T}
+                    \expval{E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}
+                    - \expval{\frac{1}{\Psi_T} \nabla_{\vfg{\alpha}}\Psi_T}
                     \expval{E_L}
                 \right).
                 \label{eq:variational_parameter_gradient}
             \end{align}
-
             To evaluate this expression we sample the local energy, the
             parameter gradient of the wavefunction, and the combined expression
-             of these at each Monte Carlo cycle.
+            of these at each Monte Carlo cycle.
 
             \subsubsection{Stability of the algorithm}
                 When employing the method of gradient descent to locate a
@@ -2038,9 +2039,9 @@
     our view to real trial wavefunctions, i.e., $\Psi_T^{*} = \Psi_T$, which is
     the case for the wavefunctions we are exploring.
     \begin{align}
-        \nabla_{\alpha}\expval{E_L}
+        \nabla_{\vfg{\alpha}}\expval{E_L}
         &=
-        \nabla_{\alpha}
+        \nabla_{\vfg{\alpha}}
         \para{
             \frac{
                 \int\dd\vf{r}\Psi_T^{*}H\Psi_T
@@ -2057,13 +2058,13 @@
                 \int\dd\vf{r}\Psi_T H\Psi_T
             }
         }{\para{\int\dd\vf{r}\Psi_T}^2}
-        \int\dd\vf{r}\Psi_T\nabla_{\alpha}\Psi_T
+        \int\dd\vf{r}\Psi_T\nabla_{\vfg{\alpha}}\Psi_T
         \\
         &\qquad
         +
         \frac{2}{\int\dd\vf{r}\Psi_T^2}
         \int\dd\vf{r}\Psi_TH\brak{
-            \nabla_{\alpha}\Psi_T
+            \nabla_{\vfg{\alpha}}\Psi_T
         }
         \\
         &=
@@ -2072,28 +2073,28 @@
             \int\dd\vf{r}\Psi_T^2
         }
         \int\dd\vf{r}\Psi_T^2\para{
-            \frac{\nabla_{\alpha}\Psi_T}{\Psi_T}
+            \frac{\nabla_{\vfg{\alpha}}\Psi_T}{\Psi_T}
         }
         \\
         &\qquad
         +
         \frac{2}{\int\dd\vf{r}\Psi_T^2}
         \int\dd\vf{r}\Psi_T^2 E_L\para{
-            \frac{\nabla_{\alpha}\Psi_T}{\Psi_T}
+            \frac{\nabla_{\vfg{\alpha}}\Psi_T}{\Psi_T}
         }.
     \end{align}
     We now use the definition of the expectation value to group terms together.
     We are thus left with
     \begin{align}
-        \nabla_{\alpha}\expval{E_L}
+        \nabla_{\vfg{\alpha}}\expval{E_L}
         =
         2
         \para{
             \expval{
-                E_L\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T
+                E_L\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T
             }
             - \expval{E_L}
-            \expval{\frac{1}{\Psi_T}\nabla_{\alpha}\Psi_T}
+            \expval{\frac{1}{\Psi_T}\nabla_{\vfg{\alpha}}\Psi_T}
         },
     \end{align}
     which is what we wanted to show.
