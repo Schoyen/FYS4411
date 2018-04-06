@@ -739,12 +739,15 @@
         \begin{enumerate}
             \item The system is initialised by a certain number $N$ of randomly
                 generated positions, $\vf{r} = (\vf{r}_1, \dots, \vf{r}_N)$,
-                which represent the particles. This allows us to evaluate the
+                which represent the particles\footnote{Also known as
+                \emph{random walkers}.}. This allows us to evaluate the
                 wavefunction at these points and compute the local energy
                 $E_L(\vf{r})$.
 
             \item The initial configuration is changed by setting a new position
-                for one of these particles. The particle is picked at random.
+                for one of these particles. The particle is picked at random and
+                is only allowed to move a predetermined step length.
+
 
             \item A ratio, $q$, between the probability density of the new
                 wavefunction and the previous probability density is computed.
@@ -752,23 +755,26 @@
                 probability $p$. The latter is done by drawing a random uniform
                 number, $x \in [0, 1]$, and checking if $q > x$.  This
                 acceptance probability decides if the particle move is rejected
-                or accepted.  The particle is only allowed to move a
-                predetermined step length.
+                or accepted.
 
-            \item If the particle movement is accepted then the local energy is
-                computed for the new system.
+            \item If the particle movement is accepted we compute the local
+                energy for the new system. If not, we reset the system to the
+                previous state and reuse the last local energy.
 
-            \item Repeat steps until convergence and an optimum is reached.
+            \item Accumulate the local energy. Repeat the steps until
+                convergence is reached or a set number of iterations has been
+                done. When finished divide the accumulated energy by the number
+                of cycles to compute the expectation value of the energy.
 
         \end{enumerate}
 
         The algorithm described above can be applied in an "exhaustive" search
         of the parameter space in order to find the optimal parameters.  Whether
-        a proposed move is accepted or not is determined by a transition
-        probability and the acceptance probability.  The strength of the
-        algorithm lies in that the transition algorithm need not be known. For
-        example, the simplest case is to accept the new state, i.e., the new
-        position for the random walker, if the ratio
+        a proposed move is accepted or not is determined by a \emph{transition
+        probability}. The strength of the algorithm lies in that the transition
+        algorithm need not be known. For example, the simplest case is to accept
+        the new state, i.e., the new position for the random walker, if the
+        ratio
         \begin{align}
             q(\vf{r}_{i + 1}, \vf{r}_i)
             &=
@@ -776,16 +782,60 @@
             {\left|\Psi_T(\vf{r}_{i})\right|^2},
         \end{align}
         where $\vf{r}_{i + 1}$ are all the positions at step $i + 1$, is greater
-        than a uniform probability $p \in [0, 1]$.
+        than a uniform probability $p \in [0, 1]$. This transition criteria
+        results in what we call the brute force Metropolis-Hastings algorithm.
+        By counting the number of accepted steps and dividing by the total
+        number of Monte Carlo cycles we get the \emph{acceptance probability}.
+        The acceptance probability helps in choosing a decent length for the
+        proposed new step. If the acceptance probability is very low we can
+        lower the step length to get more accepted steps and vice versa.
+
+        \subsubsection{Initial distribution of particles}
+            Prior to performing the Metropolis-Hastings algorithm we have to an
+            initial distribution of the particles. As the algorithm is supposed
+            to move particles in the right direction this distribution can be
+            \emph{somewhat} arbitrary. There are however a few caveats to this
+            approach.
+
+            \begin{enumerate}
+                \item The distribution is unphysical. This results in the
+                    particles taking up positions which can yield bogus values
+                    for the local energy. A remedy is to allow for some
+                    \emph{thermalization steps}, i.e., scatter the particles and
+                    run the algorithm for a set number of steps prior to
+                    starting the actual sampling.
+                \item The initial \emph{spread} of the particles is too small or
+                    too large. The former can lead to an acceptance ratio of
+                    zero if no steps are accepted due to overlap. This is
+                    something that can happen to the interacting system as an
+                    overlap between the particles makes the wavefunction
+                    evaluate to zero thus rejecting all steps in the ratio test.
+                    The latter can lead to the system never reaching a true
+                    state as they are scattered too far away from the
+                    interesting regions in the configuration space.
+                \item The system imposes some restrictions on the distribution.
+                    This can mean that we have to distribute the particles in a
+                    certain way to make sure that we don't break the
+                    restrictions. This resembles the former case when the spread
+                    is too small for our systems.
+            \end{enumerate}
+
+            In the case of the interacting system we are looking at we have to
+            take some measures to make sure that the initial spread does not
+            break the Monte Carlo cycles. We therefore distribute all the
+            particles on a grid with a distance larger than the diameter of the
+            hard sphere before letting the system thermalize. After the
+            thermaliztion we start the sampling.
 
         \subsubsection{Importance Sampling}
-            A problem with the naïve Metropolis-Hastings sampling approach is
-            that the sampling of position space is done with no regard for where
-            we are likely to find a particle. This problem can be remedied
-            through \emph{importance sampling}.  It is reasonable to assume that
-            the particles we erratically scatter in space are prone to movement
-            towards the peaks of the probability density as dictated by the wave
-            function. Consider therefore the Fokker-Planck equation,
+            A problem with the naïve Metropolis-Hastings sampling approach
+            described above is that the sampling of position space is done with
+            no regard for where we are likely to find a particle. This problem
+            can be remedied through \emph{importance sampling}.  It is
+            reasonable to assume that the particles we erratically scatter in
+            space are prone to movement towards the peaks of the probability
+            density as dictated by the wave function. Consider therefore the
+            Fokker-Planck equation,
             \begin{align}
                 \dpd[]{\Psi_T}{t}
                 &=
