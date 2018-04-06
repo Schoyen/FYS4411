@@ -792,11 +792,11 @@
         lower the step length to get more accepted steps and vice versa.
 
         \subsubsection{Initial distribution of particles}
-            Prior to performing the Metropolis-Hastings algorithm we have to an
-            initial distribution of the particles. As the algorithm is supposed
-            to move particles in the right direction this distribution can be
-            \emph{somewhat} arbitrary. There are however a few caveats to this
-            approach.
+            Prior to performing the Metropolis-Hastings algorithm we have to
+            have an initial distribution of the particles. As the algorithm is
+            supposed to move particles in the right direction this distribution
+            can be \emph{somewhat} arbitrary. There are however a few caveats to
+            this approach.
 
             \begin{enumerate}
                 \item The distribution is unphysical. This results in the
@@ -805,15 +805,17 @@
                     \emph{thermalization steps}, i.e., scatter the particles and
                     run the algorithm for a set number of steps prior to
                     starting the actual sampling.
+
                 \item The initial \emph{spread} of the particles is too small or
                     too large. The former can lead to an acceptance ratio of
                     zero if no steps are accepted due to overlap. This is
-                    something that can happen to the interacting system as an
-                    overlap between the particles makes the wavefunction
-                    evaluate to zero thus rejecting all steps in the ratio test.
-                    The latter can lead to the system never reaching a true
-                    state as they are scattered too far away from the
-                    interesting regions in the configuration space.
+                    something that can happen to the interacting system we are
+                    studying as an overlap between the particles makes the
+                    wavefunction evaluate to zero thus rejecting all steps in
+                    the ratio test.  The latter can lead to the system never
+                    reaching a true state as they are scattered too far away
+                    from the interesting regions in the configuration space.
+
                 \item The system imposes some restrictions on the distribution.
                     This can mean that we have to distribute the particles in a
                     certain way to make sure that we don't break the
