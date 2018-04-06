@@ -850,11 +850,13 @@
                 \label{eq:fokker_planck}
             \end{align}
             which describes the evolution in time of a probability density
-            function. In our case this is the trial wavefunction $\Psi_T$.
-            Originaly an equation that models diffusion, we have a diffusion
-            term $D$ and the drift force \autoref{eq:drift_force}. In our case
-            the diffusion term $D$ is simply $1/2$ from the kinetic energy (in
-            natural units).
+            function. In our case this is the trial wavefunction
+            $\Psi_T$\footnote{The trial wavefunction is not a probability
+            density, but the Fokker-Planck equation is robust enough to handle
+            the wavefunction as is.}.  Originaly an equation that models
+            diffusion, we have a diffusion term $D$ and the drift force
+            \autoref{eq:drift_force}. In our case the diffusion term $D$ is
+            simply $1/2$ from the kinetic energy (in natural units).
 
             We use the Langevin equation to find the new position of the
             particle.
@@ -881,31 +883,31 @@
             }
             and a normally distributed stochastic variable $\vfg{\xi}$.
 
-            Now we need to change the acceptance probability of the metropolis
-            algorithm to something that takes the new sampling method into
-            account.
+            Now we need to change the ratio computation in the
+            Metropolis-Hastings algorithm to something that takes the new
+            sampling method into account.
             \begin{align}
                 q(\vf{r}_{i + 1}, \vf{r}_i)
                 &=
                 \frac{
-                    G(\vf{r}_{i + 1}, \vf{r}_{i}, \delta t)
+                    G(\vf{r}_{i}, \vf{r}_{i + 1}, \delta t)
                     \left|\Psi_T(\vf{r}_{i + 1})\right|^2
                 }
                 {
-                    G(\vf{r}_{i}, \vf{r}_{i + 1}, \delta t)
+                    G(\vf{r}_{i + 1}, \vf{r}_{i}, \delta t)
                     \left|\Psi_T(\vf{r}_{i})\right|^2
                 },
             \end{align}
             where $G$ is the Green's function of the Fokker-Planck equation
             given by
             \begin{align}
-                G(\vf{r}_{i + 1}, \vf{r}_i, \delta t)
+                G(\vf{r}_{i}, \vf{r}_{i + 1}, \delta t)
                 &=
                 \exp\Biggl(
                     -\frac{\bigl[
-                        \vf{r}_{i + 1}
-                        - \vf{r}_{i}
-                        - D\vf{F}(\vf{r}_i)\delta t
+                        \vf{r}_{i}
+                        - \vf{r}_{i + 1}
+                        - D\vf{F}(\vf{r}_{i + 1})\delta t
                     \bigr]^2}{4D\delta t}
                 \Biggr)
                 \nonumber \\
@@ -913,7 +915,9 @@
                 \times
                 \frac{1}{(4\pi D\delta t)^{dN/2}},
             \end{align}
-            where $d$ is the dimensionality.
+            where $d$ is the dimensionality. The new ratio, $q$, is still
+            subjected to the same ratio test as in the brute force
+            Metropolis-Hastings algortihm.
 
     \subsection{Statistical Analysis}
         If the results of the metropolis sampling were completely uncorrelated,
