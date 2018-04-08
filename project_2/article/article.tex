@@ -1,0 +1,101 @@
+\documentclass[
+    a4paper, aps, twocolumn, floatfix, superscriptaddress,
+    nofootinbib]{revtex4-1}
+
+% It's nice to be able to write your own name
+\usepackage[T1]{fontenc}
+% Automatic clickable links
+\usepackage{hyperref}
+% SI-units
+\usepackage{siunitx}
+% Enhanced math formatting
+\usepackage{amsmath}
+% Extended math symbols
+\usepackage{amssymb}
+% Include proof environment
+\usepackage{amsthm}
+% Import physics package to include bra-ket
+\usepackage{physics}
+\usepackage{enumerate}
+% Import the tensor package for tensors
+\usepackage{tensor}
+% Include dod and dpd fracs
+\usepackage{commath}
+% Include font for the identity operator
+\usepackage{dsfont}
+% Include Tikz
+\usepackage{tikz}
+% Tikz add-on
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+% Several figures in the same figure
+\usepackage{subfig}
+% Appendix
+\usepackage[toc, page]{appendix}
+
+% Macro for latin-letter vectors
+\newcommand{\vf}{\mathbf}
+% Macro for greek-letter vectors
+\newcommand{\vfg}{\boldsymbol}
+
+% Fast macro for real-numbers R
+\newcommand{\R}{\mathbb{R}}
+% Fast macro for complex-numbers C
+\newcommand{\C}{\mathbb{C}}
+% Fast macro for polynomial room P
+\renewcommand{\P}{\mathbb{P}}
+% New command for the identity operator
+\newcommand{\1}{\mathds{1}}
+% New command for the Lagrangian density
+\newcommand{\cL}{\mathcal{L}}
+% New command for the Hamiltonian density
+\newcommand{\cH}{\mathcal{H}}
+% Fast macro for partial differential tensors
+\newcommand{\tpl}[1]{\tensor{\partial}{_#1}} % Lower
+\newcommand{\tpu}[1]{\tensor{\partial}{^#1}} % Upper
+% Fast macro for tensors
+\newcommand{\te}[1]{\tensor{#1}}
+% Fast macro for commutation and anti-commutation relations
+\newcommand{\com}[2]{\left[#1, #2\right]}
+\newcommand{\acom}[2]{\left\{#1, #2\right\}}
+
+% Macros for writing auto-sized paranthesis, brackets and braces
+\newcommand{\para}[1]{\left(#1\right)}
+\newcommand{\brak}[1]{\left[#1\right]}
+\newcommand{\brac}[1]{\left\{#1\right\}}
+
+% Macro for creating orbital bra-ket's, i.e., bra-ket with paranthesis edges
+\newcommand{\obra}[1]{( #1 \lvert}
+\newcommand{\oket}[1]{\rvert #1 )}
+\newcommand{\obraket}[2]{( #1 \lvert #2 )}
+
+% Macro for expectation value
+\newcommand{\expv}[1]{\langle #1 \rangle}
+
+\newcommand{\half}{\frac{1}{2}}
+
+
+
+
+\begin{document}
+
+\title{Ground state energy of quantum dots using the coupled cluster method}
+\author{Winther-Larsen, Sebastian Gregorius}
+\homepage[Project code: ]{https://github.com/Schoyen/FYS4411}
+\affiliation{University of Oslo}
+\author{Schøyen, Øyvind Sigmundson}
+\homepage[Project code: ]{https://github.com/Schoyen/FYS4411}
+\affiliation{University of Oslo}
+\date{\today}
+
+\begin{abstract}
+    Something about coupled-cluster... Preferably doubles.
+\end{abstract}
+
+\maketitle
+\tableofcontents
+
+
+\bibliography{references}
+
+\end{document}
