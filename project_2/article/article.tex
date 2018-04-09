@@ -14,8 +14,6 @@
 \usepackage{amssymb}
 % Include proof environment
 \usepackage{amsthm}
-% Import physics package to include bra-ket
-\usepackage{physics}
 \usepackage{enumerate}
 % Import the tensor package for tensors
 \usepackage{tensor}
@@ -74,6 +72,10 @@
 
 \newcommand{\half}{\frac{1}{2}}
 
+\newcommand{\bra}[1]{\langle #1\lvert}
+\newcommand{\ket}[1]{\rvert #1\rangle}
+\newcommand{\braket}[2]{\langle #1 \vert #2 \rangle}
+
 
 
 
@@ -116,6 +118,21 @@
     \begin{align}
         H &= \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j).
     \end{align}
+    Next we define the reference Slater determinant as
+    \begin{align}
+        \ket{\Phi_0} &\equiv \ket{1, 2, \dots, N},
+    \end{align}
+    where $\ket{p}$ are the single particle functions that satisfies the
+    equation
+    \begin{align}
+        h\ket{p} = \varepsilon_p\ket{p}.
+    \end{align}
+    They are the eigenfunctions to the one-body part of the Hamiltonian and are
+    thus harmonic oscillator functions. Note that $\ket{\Phi_0}$ consists of the
+    $N$ first occupied single particle functions. We will denote the occupied
+    indices with $i, j, k, l, \dots \in \{1, \dots, N\}$, the virtual states
+    with $a, b, c, d, \dots \in \{N + 1, \dots, L\}$ and general indices with
+    $p, q, r, s, \dots \in \{1, \dots, L\}$.
 
 
 \bibliography{references}
