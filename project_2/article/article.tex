@@ -98,6 +98,25 @@
 \section{Introduction}
     In this project we will study the ground state energy of quantum dots.
 
+\section{Theory}
+    In this project we will study a system of $N$ interacting electrons. We will
+    be looking at a Hamiltonian consisting of a one-body and a two-body part.
+    The one-body part is given by
+    \begin{align}
+        h(\vf{r}_i)
+        &= -\half\nabla_i^2 + \half\omega^2 \vf{r}_i^2,
+    \end{align}
+    where we use natural units $\hbar = c = e = 1$ and set the mass to unity.
+    The two-body part is the Coulomb interaction potential.
+    \begin{align}
+        v(\vf{r}_i, \vf{r}_j)
+        &= \frac{1}{\abs{\vf{r}_i - \vf{r}_j}}.
+    \end{align}
+    We thus get the total Hamiltonian
+    \begin{align}
+        H &= \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j).
+    \end{align}
+
 
 \bibliography{references}
 
