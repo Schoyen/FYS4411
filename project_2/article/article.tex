@@ -76,6 +76,9 @@
 \newcommand{\ket}[1]{\rvert #1\rangle}
 \newcommand{\braket}[2]{\langle #1 \vert #2 \rangle}
 
+\newcommand{\acr}[1]{a_{#1}^{\dagger}}
+\newcommand{\ade}[1]{a_{#1}}
+
 
 
 
@@ -134,6 +137,31 @@
     with $a, b, c, d, \dots \in \{N + 1, \dots, L\}$ and general indices with
     $p, q, r, s, \dots \in \{1, \dots, L\}$.
 
+    \subsection{Second quantization}
+        We now move over to a use second quantization. Employing the creation
+        operators, $\acr{p}$, and the destruction operators, $\ade{p}$, we can
+        write the Hamiltonian as
+        \begin{align}
+            H
+            &=
+            \sum_{pq}h_{q}^{p}\acr{p}\ade{q}
+            + \sum_{pqrs}w_{rs}^{pq}\acr{p}\acr{q}\ade{s}\ade{r},
+        \end{align}
+        where the sums are general indices over all $L$ basis states and the
+        matrix elements are defined as
+        \begin{gather}
+            h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
+            w_{rs}^{pq} \equiv \bra{pq}v\ket{rs}.
+        \end{gather}
+        In the case of the eigenstates we have that the one-body operator
+        reduces to a diagonal matrix.
+        \begin{align}
+            h^{p}_{q}
+            &= \bra{p}h\ket{q}
+            = \varepsilon_q\braket{p}{q}
+            = \varepsilon_q\delta_{pq},
+        \end{align}
+        where $\delta_{pq}$ is the Kronecker-Delta.
 
 \bibliography{references}
 
