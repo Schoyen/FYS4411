@@ -30,6 +30,7 @@
 \usepackage{subfig}
 % Appendix
 \usepackage[toc, page]{appendix}
+\usepackage{simpler-wick}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -200,37 +201,79 @@
             T = T_{\text{CCD}} \equiv T_2.
         \end{align}
 
-        \subsubsection{Energy of the coupled cluster approximation}
-            When we're going to compute the energy of a system using the coupled
-            cluster approximation we would ideally want to find the expectation
-            value of the energy using the coupled cluster wavefunction.
+    \subsection{Energy of the coupled cluster approximation}
+        When we're going to compute the energy of a system using the coupled
+        cluster approximation we would ideally want to find the expectation
+        value of the energy using the coupled cluster wavefunction.
+        \begin{align}
+            E = \bcc H\kcc.
+        \end{align}
+        As it turns out, this is an uncomfortable way of finding the energy
+        as $T \neq T^{\dagger}$. Instead we will define what we call the
+        \emph{similarity transformed Hamiltonian}. We plug the coupled
+        cluster wavefunction into the Schrödinger equation.
+        \begin{align}
+            H\kcc = E\kcc.
+        \end{align}
+        Next, we left multiply with the inverse of the cluster expansion,
+        i.e.,
+        \begin{align}
+            e^{-T}H\kcc = e^{-T}E\kcc
+            = E \kslat.
+        \end{align}
+        Projecting this equation on the reference state we get
+        \begin{align}
+            E = \bslat e^{-T}H\kcc
+            = \bslat e^{-T}He^{T}\kslat,
+        \end{align}
+        where in the latter inner-product we have located the similarity
+        transformed Hamiltonian defined by
+        \begin{align}
+            \bar{H} \equiv e^{-T}He^{T}.
+            \label{eq:similarity_transformed_hamiltonian}
+        \end{align}
+
+        \subsubsection{Normal ordered Hamiltonian}
+            To get to the coupled cluster equations we need to write the
+            Hamiltonian on a normal ordered form. We use Wick's theorem on the
+            Fermi vacuum\footnote{Fermi vacuum corresponds to the reference
+            Slater.}. The one-body part of the Hamiltonian thus becomes
             \begin{align}
-                E = \bcc H\kcc.
+                h &= \sum_{pq}h^p_q\acr{p}\ade{q}
+                = \sum_{pq}h^p_q\para{
+                    \{\acr{p}\ade{q}\}
+                    + \{
+                        \wick{\c a_{p}^{\dagger} \c a_{q}}
+                    \}
+                }
+                \\
+                &= h_N + \sum_{pq}\varepsilon_i.
             \end{align}
-            As it turns out, this is an uncomfortable way of finding the energy
-            as $T \neq T^{\dagger}$. Instead we will define what we call the
-            \emph{similarity transformed Hamiltonian}. We plug the coupled
-            cluster wavefunction into the Schrödinger equation.
+            The two-body part yields
             \begin{align}
-                H\kcc = E\kcc.
+                v &= \sum_{pqrs}w^{pq}_{rs}\acr{p}\acr{q}\ade{s}\ade{r}
             \end{align}
-            Next, we left multiply with the inverse of the cluster expansion,
-            i.e.,
+            % TODO: Fill in the remainder. Preferably in the appendix.
+            We can then write the Hamiltonian in terms of the reference energy
+            and the normal ordered Hamiltonian.
             \begin{align}
-                e^{-T}H\kcc = e^{-T}E\kcc
-                = E \kslat.
+                H = H_N + \bslat H\kslat.
             \end{align}
-            Projecting this equation on the reference state we get
+            The energy equation thus becomes
             \begin{align}
-                E = \bslat e^{-T}H\kcc
-                = \bslat e^{-T}He^{T}\kslat,
+                E &= \bslat\bar{H}\kslat
+                = E_{\text{ref}} + \bslat e^{-T}H_N e^T\kslat.
             \end{align}
-            where in the latter inner-product we have located the similarity
-            transformed Hamiltonian defined by
-            \begin{align}
-                \bar{H} \equiv e^{-T}He^{T}.
-                \label{eq:similarity_transformed_hamiltonian}
-            \end{align}
+
+
+        By expanding the exponentials the similarity transformed Hamiltonian and
+        recognizing the commutators we get the Baker-Campbell-Hausdorff
+        expansion.
+        \begin{align}
+            \bar{H}
+            &=
+            H + \com{H}{T} + \half\com{\com{H}{T}}{T} + \dots.
+        \end{align}
 
 \bibliography{references}
 
