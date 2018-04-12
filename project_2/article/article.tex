@@ -79,6 +79,12 @@
 \newcommand{\acr}[1]{a_{#1}^{\dagger}}
 \newcommand{\ade}[1]{a_{#1}}
 
+\newcommand{\kslat}{\ket{\Phi_0}}
+\newcommand{\bslat}{\bra{\Phi_0}}
+
+\newcommand{\kcc}{\ket{\Psi_{\text{CC}}}}
+\newcommand{\bcc}{\bra{\Psi_{\text{CC}}}}
+
 
 
 
@@ -173,8 +179,58 @@
         coupled cluster wavefunction, $\ket{\Psi_{\text{CC}}}$, defined as
         \begin{align}
             \ket{\Psi_{\text{CC}}}
-            &\equiv e^{T}\ket{\Phi_0}.
+            &\equiv e^{T}\ket{\Phi_0}
+            = \para{
+                \sum_{i = 0}^n
+                \frac{1}{n!}T^n
+            }\ket{\Phi_0},
         \end{align}
+        where the \emph{cluster operator}, $T$, is given by a sum of
+        $p$-excitation operators
+        \begin{align}
+            T &= T_1 + T_2 + \dots \\
+            &=
+            \sum_{ia}t_i^a\acr{a}\ade{i}
+            + \para{\frac{1}{2!}}^2\sum_{ijab}
+            t_{ij}^{ab}\acr{a}\acr{b}\ade{i}\ade{j}
+            + \dots.
+        \end{align}
+        We will be looking at the \emph{doubles} approximation, that is
+        \begin{align}
+            T = T_{\text{CCD}} \equiv T_2.
+        \end{align}
+
+        \subsubsection{Energy of the coupled cluster approximation}
+            When we're going to compute the energy of a system using the coupled
+            cluster approximation we would ideally want to find the expectation
+            value of the energy using the coupled cluster wavefunction.
+            \begin{align}
+                E = \bcc H\kcc.
+            \end{align}
+            As it turns out, this is an uncomfortable way of finding the energy
+            as $T \neq T^{\dagger}$. Instead we will define what we call the
+            \emph{similarity transformed Hamiltonian}. We plug the coupled
+            cluster wavefunction into the Schrödinger equation.
+            \begin{align}
+                H\kcc = E\kcc.
+            \end{align}
+            Next, we left multiply with the inverse of the cluster expansion,
+            i.e.,
+            \begin{align}
+                e^{-T}H\kcc = e^{-T}E\kcc
+                = E \kslat.
+            \end{align}
+            Projecting this equation on the reference state we get
+            \begin{align}
+                E = \bslat e^{-T}H\kcc
+                = \bslat e^{-T}He^{T}\kslat,
+            \end{align}
+            where in the latter inner-product we have located the similarity
+            transformed Hamiltonian defined by
+            \begin{align}
+                \bar{H} \equiv e^{-T}He^{T}.
+                \label{eq:similarity_transformed_hamiltonian}
+            \end{align}
 
 \bibliography{references}
 
