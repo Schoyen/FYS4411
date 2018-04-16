@@ -86,6 +86,9 @@
 \newcommand{\kcc}{\ket{\Psi_{\text{CC}}}}
 \newcommand{\bcc}{\bra{\Psi_{\text{CC}}}}
 
+\newcommand{\ecc}{E_{\text{CC}}}
+\newcommand{\eccd}{E_{\text{CCD}}}
+
 
 
 
@@ -131,10 +134,14 @@
     \end{align}
     We thus get the total Hamiltonian
     \begin{align}
-        H &= \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j).
+        H &= h + W
+        =
+        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j),
     \end{align}
-    Working in a basis of $L$ single particle functions, $\{\ket{p}\}_{p =
-    1}^L$. We define the reference Slater determinant as
+    where $h$ is the full one-body operator and $W$ the full two-body
+    operator, i.e., over the entire system.  Working in a basis of $L$ single
+    particle functions, $\{\ket{p}\}_{p = 1}^L$. We define the reference Slater
+    determinant as
     \begin{align}
         \ket{\Phi_0} &\equiv \ket{1, 2, \dots, N},
     \end{align}
@@ -152,7 +159,19 @@
         \{\ket{a}\}_{a = N + 1}^L,
     \end{align}
     i.e., the general indexed states consists of both occupied and virtual
-    states.
+    states. Note that the single particle functions are orthonormal, i.e.,
+    \begin{align}
+        \braket{p}{q} = \delta_{pq}.
+    \end{align}
+    We can construct other Slater determinants in this basis by exciting
+    or de-exciting the reference determinant. A general excitation is labeled
+    $\ket{\Phi_{ij\dots}^{ab\dots}}$ which means that we have removed the single
+    particle functions with indices $i, j, \dots$ from the reference and added
+    $a, b, \dots$. Note that
+    \begin{align}
+        \braket{\Phi^{ab\dots}_{ij\dots}}{\Phi_0} = 0,
+    \end{align}
+    for any excitation.
 
     \subsection{Second quantization}
         Employing the creation operators, $\acr{p}$, and the destruction
@@ -173,7 +192,7 @@
 
     \subsection{The coupled cluster approximation}
         We approximate the true wavefunction, $\ket{\Psi}$, of the system by the
-        coupled cluster wavefunction, $\ket{\Psi_{\text{CC}}}$, defined as
+        coupled cluster wavefunction, $\ket{\Psi_{\text{CC}}}$, defined by
         \begin{align}
             \ket{\Psi_{\text{CC}}}
             &\equiv e^{T}\ket{\Phi_0}
@@ -183,44 +202,50 @@
             }\ket{\Phi_0},
         \end{align}
         where the \emph{cluster operator}, $T$, is given by a sum of
-        $p$-excitation operators
+        $p$-excitation operators labeled $T_p$. They consist of \emph{cluster
+        amplitudes}, $t_{i\dots}^{a\dots}$, and creation and annihilation
+        operators.
         \begin{align}
             T &= T_1 + T_2 + \dots + T_p \\
             &=
             \sum_{ia}t_i^a\acr{a}\ade{i}
             + \para{\frac{1}{2!}}^2\sum_{ijab}
             t_{ij}^{ab}\acr{a}\acr{b}\ade{i}\ade{j}
-            + \dots,
+            + \dots.
         \end{align}
-        where $t_{i\dots}^{a\dots}$
-        We will be looking at the \emph{doubles} approximation, that is
+        In the doubles approximation we limit the cluster operator to
         \begin{align}
-            T = T_{\text{CCD}} \equiv T_2.
+            T \equiv T_2
+            = \frac{1}{4}\sum_{ijab}t_{ij}^{ab}\acr{a}\acr{b}\ade{j}\ade{i}.
+            \label{eq:T_2}
         \end{align}
+        The first part of the coupled cluster method consists of constructing
+        the cluster amplitudes using the \emph{amplitude equations}. After we
+        have found the amplitudes we can compute the energy.
 
     \subsection{Energy of the coupled cluster approximation}
         When we're going to compute the energy of a system using the coupled
         cluster approximation we would ideally want to find the expectation
         value of the energy using the coupled cluster wavefunction.
         \begin{align}
-            E = \bcc H\kcc.
+            \ecc = \bcc H\kcc.
         \end{align}
         As it turns out, this is an uncomfortable way of finding the energy
         as $T \neq T^{\dagger}$. Instead we will define what we call the
         \emph{similarity transformed Hamiltonian}. We plug the coupled
         cluster wavefunction into the Schrödinger equation.
         \begin{align}
-            H\kcc = E\kcc.
+            H\kcc = \ecc\kcc.
         \end{align}
         Next, we left multiply with the inverse of the cluster expansion,
         i.e.,
         \begin{align}
-            e^{-T}H\kcc = e^{-T}E\kcc
-            = E \kslat.
+            e^{-T}H\kcc = e^{-T}\ecc\kcc
+            = \ecc \kslat.
         \end{align}
         Projecting this equation on the reference state we get
         \begin{align}
-            E = \bslat e^{-T}H\kcc
+            \ecc = \bslat e^{-T}H\kcc
             = \bslat e^{-T}He^{T}\kslat,
         \end{align}
         where in the latter inner-product we have located the similarity
@@ -230,49 +255,95 @@
             \label{eq:similarity_transformed_hamiltonian}
         \end{align}
 
-        \subsubsection{Normal ordered Hamiltonian}
-            To get to the coupled cluster equations we need to write the
-            Hamiltonian on a normal ordered form. We use Wick's theorem on the
-            Fermi vacuum\footnote{Fermi vacuum corresponds to the reference
-            Slater.}. The one-body part of the Hamiltonian thus becomes
-            \begin{align}
-                h &= \sum_{pq}h^p_q\acr{p}\ade{q}
-                = \sum_{pq}h^p_q\para{
-                    \{\acr{p}\ade{q}\}
-                    + \{
-                        \wick{\c a_{p}^{\dagger} \c a_{q}}
-                    \}
-                }
-                \\
-                &= h_N + \sum_{pq}\varepsilon_i.
-            \end{align}
-            The two-body part yields
-            \begin{align}
-                v &= \sum_{pqrs}w^{pq}_{rs}\acr{p}\acr{q}\ade{s}\ade{r}
-            \end{align}
-            % TODO: Fill in the remainder. Preferably in the appendix.
-            We can then write the Hamiltonian in terms of the reference energy
-            and the normal ordered Hamiltonian.
-            \begin{align}
-                H = H_N + \bslat H\kslat.
-            \end{align}
-            The energy equation thus becomes
-            \begin{align}
-                E &= \bslat\bar{H}\kslat
-                = E_{\text{ref}} + \bslat e^{-T}H_N e^T\kslat.
-            \end{align}
-            In this equation the unknowns are the cluster amplitudes
-
-
-        By expanding the exponentials the similarity transformed Hamiltonian and
-        recognizing the commutators we get the Baker-Campbell-Hausdorff
-        expansion.
+        To simplify the energy equation and the amplitude equations we use the
+        normal ordered Hamiltonian.
         \begin{align}
-            \bar{H}
-            &=
-            H + \com{H}{T} + \half\com{\com{H}{T}}{T} + \dots.
+            H = H_N + \bslat H\kslat.
         \end{align}
+        The energy equation thus becomes
+        \begin{align}
+            \ecc &= \bslat\bar{H}\kslat
+            = E_{\text{ref}} + \bslat e^{-T}H_N e^T\kslat,
+        \end{align}
+        where the reference energy is given by
+        \begin{align}
+            E_{\text{ref}} = \bslat H\kslat.
+        \end{align}
+        We now define the normal ordered similiarity transformed Hamiltonian as
+        \begin{align}
+            \bar{H}_N \equiv e^{-T}H_N e^T.
+        \end{align}
+        By expanding the exponentials of this Hamiltonian and recognizing the
+        commutators we get the Baker-Campbell-Hausdorff expansion.
+        \begin{align}
+            \bar{H}_N
+            &=
+            H_N + \com{H_N}{T} + \frac{1}{2!}\com{\com{H_N}{T}}{T} + \dots.
+        \end{align}
+        From the connected cluster theorem we know that the only nonzero terms
+        in the Baker-Campbell-Hausdorff expansion will be the terms where the
+        normal ordered Hamiltonian has at least one contraction\footnote{In the
+        Wick's theorem sense.} with every cluster operator on its right. This
+        lets us write the expansion as
+        \begin{align}
+            \bar{H}_N
+            &=
+            H_N + \para{H_N T}_c + \frac{1}{2!}\para{H_N T^2}_c + \dots,
+            \label{eq:sim_norm_hamiltionian_expansion}
+        \end{align}
+        where the subscript $c$ signifies that only contributions where at least
+        one contraction between $H_N$ and $T$ has been performed will be
+        included.
+
+        \subsubsection{Coupled cluster doubles energy equation}
+            Using the doubles approximation with the cluster operator $T_2$
+            defined in \autoref{eq:T_2} the energy equation becomes
+            \begin{align}
+                \eccd
+                &=
+                E_{\text{ref}}
+                + \bslat e^{-T_2}H_N e^{T_2}\kslat.
+            \end{align}
+            As the doubles cluster operator doubly excites the reference and
+            using the expansion in \autoref{eq:sim_norm_hamiltionian_expansion}
+            we see that we can write the energy equation as
+            \begin{align}
+                \eccd
+                &=
+                E_{\text{ref}}
+                + \bslat H_N(1 + T_2)\kslat,
+            \end{align}
+            as the Hamiltonian is only able to de-excite one pair of single
+            particle functions.
 
 \bibliography{references}
+
+\appendix
+\section{The normal ordered Hamiltonian}
+    When constructing the normal ordered Hamiltonian we use Wick's theorem to
+    write the one-body, $h$, and the two-body, $W$, operators onto a normal
+    ordered form. Specifically we define the normal ordered form in terms of
+    Fermi vacuum. That is, an operator on normal ordered form destroys the
+    reference Slater determinant.
+    \begin{align}
+        h &= \sum_{pq}h^p_q\acr{p}\ade{q}
+        = \sum_{pq}h^p_q\para{
+            \{\acr{p}\ade{q}\}
+            + \{
+                \wick{\c a_{p}^{\dagger} \c a_{q}}
+            \}
+        }
+        \\
+        &= \sum_{pq}h^p_q\{
+            \acr{p}\ade{q}
+        \}
+        + \sum_{pq}h^p_q\delta_{p \in i}\delta_{pq}
+        \\
+        &= h_N + \sum_{i}h^i_i,
+    \end{align}
+    where we have used $\delta_{p \in i}$ to mean that $p$ must be an occupied
+    index.
+    \cite{crawford2007introduction}
+    % TODO: Fill in the rest of this expansion
 
 \end{document}
