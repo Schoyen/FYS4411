@@ -170,6 +170,7 @@
     $a, b, \dots$. Note that
     \begin{align}
         \braket{\Phi^{ab\dots}_{ij\dots}}{\Phi_0} = 0,
+        \label{eq:excited_overlap}
     \end{align}
     for any excitation.
 
@@ -242,6 +243,7 @@
         \begin{align}
             e^{-T}H\kcc = e^{-T}\ecc\kcc
             = \ecc \kslat.
+            \label{eq:clean_schrodinger}
         \end{align}
         Projecting this equation on the reference state we get
         \begin{align}
@@ -263,11 +265,11 @@
         The energy equation thus becomes
         \begin{align}
             \ecc &= \bslat\bar{H}\kslat
-            = E_{\text{ref}} + \bslat e^{-T}H_N e^T\kslat,
+            = E_0 + \bslat e^{-T}H_N e^T\kslat,
         \end{align}
         where the reference energy is given by
         \begin{align}
-            E_{\text{ref}} = \bslat H\kslat.
+            E_0 = \bslat H\kslat.
         \end{align}
         We now define the normal ordered similiarity transformed Hamiltonian as
         \begin{align}
@@ -301,7 +303,7 @@
             \begin{align}
                 \eccd
                 &=
-                E_{\text{ref}}
+                E_0
                 + \bslat e^{-T_2}H_N e^{T_2}\kslat.
             \end{align}
             As the doubles cluster operator doubly excites the reference and
@@ -310,11 +312,32 @@
             \begin{align}
                 \eccd
                 &=
-                E_{\text{ref}}
+                E_0
                 + \bslat H_N(1 + T_2)\kslat,
             \end{align}
             as the Hamiltonian is only able to de-excite one pair of single
             particle functions.
+
+    \subsection{Coupled cluster amplitude equations}
+        In order for us to solve the energy equation using the coupled cluster
+        approximation we need to figure out what the cluster amplitudes,
+        $t_{ij\dots}^{ab\dots}$, are. This is done by projecting
+        \autoref{eq:clean_schrodinger} onto an excited Slater determinant, i.e.,
+        \begin{align}
+            \bra{\Phi_{ij\dots}^{ab\dots}}e^{-T}He^{T}\kslat
+            = 0.
+        \end{align}
+        Note that in the amplitude equations we can use both the regular and the
+        normal ordered Hamiltonian. They are equal as the reference energy term
+        disappears due to \autoref{eq:excited_overlap}. The order of the
+        excitation in the projection determines the order of the amplitudes you
+        will find. In our case we are only interested in the second order
+        ampltiudes found in the doubles approximation, hence we will solve the
+        equation
+        \begin{align}
+            \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
+        \end{align}
+        to find $t_{ij}^{ab}$.
 
 \bibliography{references}
 
