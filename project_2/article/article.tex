@@ -181,15 +181,17 @@
             H
             &=
             \sum_{pq}h_{q}^{p}\acr{p}\ade{q}
-            + \sum_{pqrs}w_{rs}^{pq}\acr{p}\acr{q}\ade{s}\ade{r},
+            + \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}\acr{p}\acr{q}\ade{s}\ade{r},
         \end{align}
         where the sums are general indices over all $L$ basis states and the
         matrix elements are defined as
         \begin{gather}
             h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
-            w_{rs}^{pq} \equiv \bra{pq}v\ket{rs}.
+            \bra{pq}\ket{rs} \equiv \bra{pq}w\ket{rs} - \bra{pq}w\ket{sr}.
         \end{gather}
-        Note that the two-body matrix elements are not antisymmetric yet.
+        Note that we use the chemists notation to label the antisymmetric matrix
+        elements.
+
 
     \subsection{The coupled cluster approximation}
         We approximate the true wavefunction, $\ket{\Psi}$, of the system by the
@@ -373,7 +375,114 @@
     keep the non-zero contributions.
     \begin{align}
         \acr{p}\acr{q}\ade{s}\ade{r}
+        &=
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        + \{
+            \wick{\c a_p^{\dagger} a_{q}^{\dagger} \c a_{s} a_{r}}
+        \}
+        + \{
+            \wick{\c a_p^{\dagger} a_{q}^{\dagger} a_{s} \c a_{r}}
+        \}
+        \nonumber \\
+        &\qquad
+        + \{
+            \wick{a_p^{\dagger} \c a_{q}^{\dagger} \c a_{s} a_{r}}
+        \}
+        + \{
+            \wick{a_p^{\dagger} \c a_{q}^{\dagger} a_{s} \c a_{r}}
+        \}
+        \nonumber \\
+        &\qquad
+        + \{
+            \wick{\c1 a_p^{\dagger} \c2 a_{q}^{\dagger} \c1 a_{s} \c2 a_{r}}
+        \}
+        + \{
+            \wick{\c2 a_p^{\dagger} \c1 a_{q}^{\dagger} \c1 a_{s} \c2 a_{r}}
+        \}
+        \\
+        &=
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        - \delta_{p \in i}\delta_{ps}\{\acr{q}\ade{r}\}
+        + \delta_{p \in i}\delta_{pr}\{\acr{q}\ade{s}\}
+        \nonumber \\
+        &\qquad
+        + \delta_{q \in i}\delta_{qs}\{\acr{p}\ade{r}\}
+        - \delta_{q \in i}\delta_{qr}\{\acr{p}\ade{s}\}
+        \nonumber \\
+        &\qquad
+        - \delta_{p \in i}\delta_{ps}\delta_{q \in j}\delta_{qr}
+        + \delta_{p \in i}\delta_{pr}\delta_{q \in j}\delta_{qs}.
     \end{align}
-    \cite{crawford2007introduction}
+    Inserted into the full two-body operator and sorting out the sums we get
+    \begin{align}
+        W
+        &=
+        \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        - \frac{1}{4}\sum_{iqr}\bra{iq}\ket{ri}\{\acr{q}\ade{r}\}
+        \nonumber \\
+        &\qquad
+        + \frac{1}{4}\sum_{iqs}\bra{iq}\ket{is}\{\acr{q}\ade{s}\}
+        + \frac{1}{4}\sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
+        \nonumber \\
+        &\qquad
+        - \frac{1}{4}\sum_{pis}\bra{pi}\ket{is}\{\acr{p}\ade{s}\}
+        - \frac{1}{4}\sum_{ij}\bra{ij}\ket{ji}
+        \nonumber \\
+        &\qquad
+        + \frac{1}{4}\sum_{ij}\bra{ij}\ket{ij}.
+    \end{align}
+    Using the antisymmetric properties of the two-body matrix elements,
+    \begin{align}
+        \bra{pq}\ket{rs}
+        = - \bra{pq}\ket{sr}
+        = - \bra{qp}\ket{rs}
+        = \bra{qp}\ket{sr},
+    \end{align}
+    and relabeling of the indices we can rearrange and collect some terms.
+    \begin{align}
+        W
+        &=
+        W_N + \sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
+        + \half\sum_{ij}\bra{ij}\ket{ij},
+    \end{align}
+    where the normal ordered two-body operator is
+    \begin{align}
+        W_N = \frac{1}{4}\sum_{pqrs}
+        \bra{pq}\ket{rs}\{\acr{p}\acr{q}\ade{s}\ade{r}\}.
+    \end{align}
+    When we now construct the full Hamiltonian we can collect some terms. The
+    constants in both the one-body and the two-body operator in total constitues
+    the reference energy.
+    \begin{align}
+        \bslat H\kslat
+        = \sum_{i}h_i^i + \frac{1}{2}\sum_{ij}\bra{ij}\ket{ij}.
+    \end{align}
+    Combining the normal ordered one-body operator and the second term in the
+    two-body operator, i.e., the term with a single creation and annihilation
+    operator pair, we get the normal ordered Fock-operator.
+    \begin{align}
+        F_N
+        &=
+        \sum_{pq}h_{q}^{p}\{\acr{p}\ade{q}\}
+        + \sum_{pqi}\bra{pi}\ket{qi}\{\acr{p}\ade{q}\}
+        \\
+        &= \sum_{pq}f_{q}^{p}\{\acr{p}\ade{q}\},
+    \end{align}
+    where we have defined the Fock matrix elements as
+    \begin{align}
+        f_{q}^{p}
+        &=
+        h_q^p + \sum_{i}\bra{pi}\ket{qi}.
+    \end{align}
+    In total we get the full Hamiltonian
+    \begin{align}
+        H
+        &=
+        F_N + W_N + \bslat H\kslat
+        \\
+        &= H_N + \bslat H\kslat,
+    \end{align}
+    which is what we wanted to show.\cite{crawford2007introduction}
 
 \end{document}
