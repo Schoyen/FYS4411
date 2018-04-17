@@ -315,10 +315,31 @@
                 \eccd
                 &=
                 E_0
-                + \bslat H_N(1 + T_2)\kslat,
+                + \bslat H_N \kslat + \bslat (H_N T_2)_c\kslat,
             \end{align}
             as the Hamiltonian is only able to de-excite one pair of single
-            particle functions.
+            particle functions. By construction we have that
+            \begin{align}
+                \bslat H_N \kslat = 0.
+            \end{align}
+            In the second term only the normal ordered two-body operator can
+            contribute as the cluster operator gives a total excitation of $+2$.
+            As we are projecting onto the reference we have to de-excite to zero
+            again. The normal ordered Fock operator is at most able to excite
+            and de-excite by $1$ and does therefore not contribute to the
+            overall expression.
+            \begin{align}
+                \bslat (W_N T_2)_c \kslat
+                &= \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab}.
+            \end{align}
+            In total the energy equation reduces to
+            \begin{align}
+                \eccd
+                &= \sum_{i} h_i^i + \half \sum_{ij}\bra{ij}\ket{ij}
+                + \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab},
+            \end{align}
+            where the first two terms come from the reference energy as shown in
+            \autoref{eq:reference_energy}.
 
     \subsection{Coupled cluster amplitude equations}
         In order for us to solve the energy equation using the coupled cluster
@@ -455,8 +476,9 @@
     constants in both the one-body and the two-body operator in total constitues
     the reference energy.
     \begin{align}
-        \bslat H\kslat
+        E_0 \equiv \bslat H\kslat
         = \sum_{i}h_i^i + \frac{1}{2}\sum_{ij}\bra{ij}\ket{ij}.
+        \label{eq:reference_energy}
     \end{align}
     Combining the normal ordered one-body operator and the second term in the
     two-body operator, i.e., the term with a single creation and annihilation
