@@ -129,14 +129,14 @@
     where we use natural units $\hbar = c = e = 1$ and set the mass to unity.
     The two-body part is the Coulomb interaction potential.
     \begin{align}
-        v(\vf{r}_i, \vf{r}_j)
+        w(\vf{r}_i, \vf{r}_j)
         &= \frac{1}{\abs{\vf{r}_i - \vf{r}_j}}.
     \end{align}
     We thus get the total Hamiltonian
     \begin{align}
         H &= h + W
         =
-        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j),
+        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j),
     \end{align}
     where $h$ is the full one-body operator and $W$ the full two-body
     operator, i.e., over the entire system.  Working in a basis of $L$ single
@@ -337,7 +337,7 @@
         \begin{align}
             \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
         \end{align}
-        to find $t_{ij}^{ab}$.
+        to find an expression that can be used to solve for $t_{ij}^{ab}$.
 
 \bibliography{references}
 
@@ -345,9 +345,12 @@
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
     write the one-body, $h$, and the two-body, $W$, operators onto a normal
-    ordered form. Specifically we define the normal ordered form in terms of
-    Fermi vacuum. That is, an operator on normal ordered form destroys the
-    reference Slater determinant.
+    ordered form. Specifically we define the normal ordered form in terms of the
+    \emph{Fermi vacuum}\footnote{Fermi vacuum defines the reference state, i.e.,
+    $\kslat$, as the vacuum.}. That is, an operator on normal ordered form
+    destroys the reference Slater determinant.
+
+    We start by writing the one-body operator, $h$, to its normal-ordered form.
     \begin{align}
         h &= \sum_{pq}h^p_q\acr{p}\ade{q}
         = \sum_{pq}h^p_q\para{
@@ -365,8 +368,12 @@
         &= h_N + \sum_{i}h^i_i,
     \end{align}
     where we have used $\delta_{p \in i}$ to mean that $p$ must be an occupied
-    index.
+    index. Doing the same for the two-body operator is a slightly more tedious
+    endeavor. For brevity we will only write out the operator strings and only
+    keep the non-zero contributions.
+    \begin{align}
+        \acr{p}\acr{q}\ade{s}\ade{r}
+    \end{align}
     \cite{crawford2007introduction}
-    % TODO: Fill in the rest of this expansion
 
 \end{document}
