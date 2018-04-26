@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import numpy as np
 from .resampling_methods import bootstrap, blocking
+import numba
 
 def sample_local_energies(sampler, wavefunction, parameters, time=True,
         **sampler_kwargs):
@@ -25,6 +26,7 @@ def sample_local_energies(sampler, wavefunction, parameters, time=True,
 
     return df
 
+@numba.jit
 def run_all(sampler, parameters, parameter_names, bootstrap_samples,
         timeit=True, **sampler_kwargs):
 
