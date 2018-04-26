@@ -30,6 +30,7 @@
 \usepackage{subfig}
 % Appendix
 \usepackage[toc, page]{appendix}
+\usepackage{simpler-wick}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -76,6 +77,18 @@
 \newcommand{\ket}[1]{\rvert #1\rangle}
 \newcommand{\braket}[2]{\langle #1 \vert #2 \rangle}
 
+\newcommand{\acr}[1]{a_{#1}^{\dagger}}
+\newcommand{\ade}[1]{a_{#1}}
+
+\newcommand{\kslat}{\ket{\Phi_0}}
+\newcommand{\bslat}{\bra{\Phi_0}}
+
+\newcommand{\kcc}{\ket{\Psi_{\text{CC}}}}
+\newcommand{\bcc}{\bra{\Psi_{\text{CC}}}}
+
+\newcommand{\ecc}{E_{\text{CC}}}
+\newcommand{\eccd}{E_{\text{CCD}}}
+
 
 
 
@@ -98,6 +111,11 @@
 \tableofcontents
 
 \section{Introduction}
+    %TODO: Add explanation on why the many-body problem becomes intractable.
+    % This can be shown by demonstrating that the true wavefunction of the system
+    % must be a linear combination of all possible Slater detemerminants built up
+    % from permutations of the single particle functions in the basis. Thus the
+    % energy equation becomes too large.
     In this project we will study the ground state energy of quantum dots.
 
 \section{Theory}
@@ -111,30 +129,386 @@
     where we use natural units $\hbar = c = e = 1$ and set the mass to unity.
     The two-body part is the Coulomb interaction potential.
     \begin{align}
-        v(\vf{r}_i, \vf{r}_j)
+        w(\vf{r}_i, \vf{r}_j)
         &= \frac{1}{\abs{\vf{r}_i - \vf{r}_j}}.
     \end{align}
     We thus get the total Hamiltonian
     \begin{align}
-        H &= \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N v(\vf{r}_i, \vf{r}_j).
+        H &= h + W
+        =
+        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j),
     \end{align}
-    Next we define the reference Slater determinant as
+    where $h$ is the full one-body operator and $W$ the full two-body
+    operator, i.e., over the entire system.  Working in a basis of $L$ single
+    particle functions, $\{\ket{p}\}_{p = 1}^L$. We define the reference Slater
+    determinant as
     \begin{align}
         \ket{\Phi_0} &\equiv \ket{1, 2, \dots, N},
     \end{align}
-    where $\ket{p}$ are the single particle functions that satisfies the
-    equation
+    i.e., a tensorproduct of the $N$ first single particle functions, $\ket{i}$,
+    of the system. We call these single particle functions \emph{occupied} as
+    they are contained in the Slater determinant.  We will denote the occupied
+    indices with $i, j, k, l, \dots \in \{1, \dots, N\}$, the \emph{virtual}
+    states with $a, b, c, d, \dots \in \{N + 1, \dots, L\}$ and general indices
+    with $p, q, r, s, \dots \in \{1, \dots, L\}$. In terms of sets of basis
+    functions we can write this as
     \begin{align}
-        h\ket{p} = \varepsilon_p\ket{p}.
+        \{\ket{p}\}_{p = 1}^L
+        = \{\ket{i}\}_{i = 1}^N
+        \cup
+        \{\ket{a}\}_{a = N + 1}^L,
     \end{align}
-    They are the eigenfunctions to the one-body part of the Hamiltonian and are
-    thus harmonic oscillator functions. Note that $\ket{\Phi_0}$ consists of the
-    $N$ first occupied single particle functions. We will denote the occupied
-    indices with $i, j, k, l, \dots \in \{1, \dots, N\}$, the virtual states
-    with $a, b, c, d, \dots \in \{N + 1, \dots, L\}$ and general indices with
-    $p, q, r, s, \dots \in \{1, \dots, L\}$.
+    i.e., the general indexed states consists of both occupied and virtual
+    states. Note that the single particle functions are orthonormal, i.e.,
+    \begin{align}
+        \braket{p}{q} = \delta_{pq}.
+    \end{align}
+    We can construct other Slater determinants in this basis by exciting
+    or de-exciting the reference determinant. A general excitation is labeled
+    $\ket{\Phi_{ij\dots}^{ab\dots}}$ which means that we have removed the single
+    particle functions with indices $i, j, \dots$ from the reference and added
+    $a, b, \dots$. Note that
+    \begin{align}
+        \braket{\Phi^{ab\dots}_{ij\dots}}{\Phi_0} = 0,
+        \label{eq:excited_overlap}
+    \end{align}
+    for any excitation.
 
+    \subsection{Second quantization}
+        Employing the creation operators, $\acr{p}$, and the destruction
+        operators, $\ade{p}$, we can write the Hamiltonian as
+        \begin{align}
+            H
+            &=
+            \sum_{pq}h_{q}^{p}\acr{p}\ade{q}
+            + \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}\acr{p}\acr{q}\ade{s}\ade{r},
+        \end{align}
+        where the sums are general indices over all $L$ basis states and the
+        matrix elements are defined as
+        \begin{gather}
+            h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
+            \bra{pq}\ket{rs} \equiv \bra{pq}w\ket{rs} - \bra{pq}w\ket{sr}.
+        \end{gather}
+        Note that we use the chemists notation to label the antisymmetric matrix
+        elements.
+
+
+    \subsection{The coupled cluster approximation}
+        We approximate the true wavefunction, $\ket{\Psi}$, of the system by the
+        coupled cluster wavefunction, $\ket{\Psi_{\text{CC}}}$, defined by
+        \begin{align}
+            \ket{\Psi_{\text{CC}}}
+            &\equiv e^{T}\ket{\Phi_0}
+            = \para{
+                \sum_{i = 0}^n
+                \frac{1}{n!}T^n
+            }\ket{\Phi_0},
+        \end{align}
+        where the \emph{cluster operator}, $T$, is given by a sum of
+        $p$-excitation operators labeled $T_p$. They consist of \emph{cluster
+        amplitudes}, $t_{i\dots}^{a\dots}$, and creation and annihilation
+        operators.
+        \begin{align}
+            T &= T_1 + T_2 + \dots + T_p \\
+            &=
+            \sum_{ia}t_i^a\acr{a}\ade{i}
+            + \para{\frac{1}{2!}}^2\sum_{ijab}
+            t_{ij}^{ab}\acr{a}\acr{b}\ade{i}\ade{j}
+            + \dots.
+        \end{align}
+        In the doubles approximation we limit the cluster operator to
+        \begin{align}
+            T \equiv T_2
+            = \frac{1}{4}\sum_{ijab}t_{ij}^{ab}\acr{a}\acr{b}\ade{j}\ade{i}.
+            \label{eq:T_2}
+        \end{align}
+        The first part of the coupled cluster method consists of constructing
+        the cluster amplitudes using the \emph{amplitude equations}. After we
+        have found the amplitudes we can compute the energy.
+
+    \subsection{Energy of the coupled cluster approximation}
+        When we're going to compute the energy of a system using the coupled
+        cluster approximation we would ideally want to find the expectation
+        value of the energy using the coupled cluster wavefunction.
+        \begin{align}
+            \ecc = \bcc H\kcc.
+        \end{align}
+        As it turns out, this is an uncomfortable way of finding the energy
+        as $T \neq T^{\dagger}$. Instead we will define what we call the
+        \emph{similarity transformed Hamiltonian}. We plug the coupled
+        cluster wavefunction into the Schrödinger equation.
+        \begin{align}
+            H\kcc = \ecc\kcc.
+        \end{align}
+        Next, we left multiply with the inverse of the cluster expansion,
+        i.e.,
+        \begin{align}
+            e^{-T}H\kcc = e^{-T}\ecc\kcc
+            = \ecc \kslat.
+            \label{eq:clean_schrodinger}
+        \end{align}
+        Projecting this equation on the reference state we get
+        \begin{align}
+            \ecc = \bslat e^{-T}H\kcc
+            = \bslat e^{-T}He^{T}\kslat,
+        \end{align}
+        where in the latter inner-product we have located the similarity
+        transformed Hamiltonian defined by
+        \begin{align}
+            \bar{H} \equiv e^{-T}He^{T}.
+            \label{eq:similarity_transformed_hamiltonian}
+        \end{align}
+
+        To simplify the energy equation and the amplitude equations we use the
+        normal ordered Hamiltonian.
+        \begin{align}
+            H = H_N + \bslat H\kslat.
+        \end{align}
+        The energy equation thus becomes
+        \begin{align}
+            \ecc &= \bslat\bar{H}\kslat
+            = E_0 + \bslat e^{-T}H_N e^T\kslat,
+        \end{align}
+        where the reference energy is given by
+        \begin{align}
+            E_0 = \bslat H\kslat.
+        \end{align}
+        We now define the normal ordered similiarity transformed Hamiltonian as
+        \begin{align}
+            \bar{H}_N \equiv e^{-T}H_N e^T.
+        \end{align}
+        By expanding the exponentials of this Hamiltonian and recognizing the
+        commutators we get the Baker-Campbell-Hausdorff expansion.
+        \begin{align}
+            \bar{H}_N
+            &=
+            H_N + \com{H_N}{T} + \frac{1}{2!}\com{\com{H_N}{T}}{T} + \dots.
+        \end{align}
+        From the connected cluster theorem we know that the only nonzero terms
+        in the Baker-Campbell-Hausdorff expansion will be the terms where the
+        normal ordered Hamiltonian has at least one contraction\footnote{In the
+        Wick's theorem sense.} with every cluster operator on its right. This
+        lets us write the expansion as
+        \begin{align}
+            \bar{H}_N
+            &=
+            H_N + \para{H_N T}_c + \frac{1}{2!}\para{H_N T^2}_c + \dots,
+            \label{eq:sim_norm_hamiltionian_expansion}
+        \end{align}
+        where the subscript $c$ signifies that only contributions where at least
+        one contraction between $H_N$ and $T$ has been performed will be
+        included.
+
+        \subsubsection{Coupled cluster doubles energy equation}
+            Using the doubles approximation with the cluster operator $T_2$
+            defined in \autoref{eq:T_2} the energy equation becomes
+            \begin{align}
+                \eccd
+                &=
+                E_0
+                + \bslat e^{-T_2}H_N e^{T_2}\kslat.
+            \end{align}
+            As the doubles cluster operator doubly excites the reference and
+            using the expansion in \autoref{eq:sim_norm_hamiltionian_expansion}
+            we see that we can write the energy equation as
+            \begin{align}
+                \eccd
+                &=
+                E_0
+                + \bslat H_N \kslat + \bslat (H_N T_2)_c\kslat,
+            \end{align}
+            as the Hamiltonian is only able to de-excite one pair of single
+            particle functions. By construction we have that
+            \begin{align}
+                \bslat H_N \kslat = 0.
+            \end{align}
+            In the second term only the normal ordered two-body operator can
+            contribute as the cluster operator gives a total excitation of $+2$.
+            As we are projecting onto the reference we have to de-excite to zero
+            again. The normal ordered Fock operator is at most able to excite
+            and de-excite by $1$ and does therefore not contribute to the
+            overall expression.
+            \begin{align}
+                \bslat (W_N T_2)_c \kslat
+                &= \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab}.
+            \end{align}
+            In total the energy equation reduces to
+            \begin{align}
+                \eccd
+                &= \sum_{i} h_i^i + \half \sum_{ij}\bra{ij}\ket{ij}
+                + \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab},
+            \end{align}
+            where the first two terms come from the reference energy as shown in
+            \autoref{eq:reference_energy}.
+
+    \subsection{Coupled cluster amplitude equations}
+        In order for us to solve the energy equation using the coupled cluster
+        approximation we need to figure out what the cluster amplitudes,
+        $t_{ij\dots}^{ab\dots}$, are. This is done by projecting
+        \autoref{eq:clean_schrodinger} onto an excited Slater determinant, i.e.,
+        \begin{align}
+            \bra{\Phi_{ij\dots}^{ab\dots}}e^{-T}He^{T}\kslat
+            = 0.
+        \end{align}
+        Note that in the amplitude equations we can use both the regular and the
+        normal ordered Hamiltonian. They are equal as the reference energy term
+        disappears due to \autoref{eq:excited_overlap}. The order of the
+        excitation in the projection determines the order of the amplitudes you
+        will find. In our case we are only interested in the second order
+        ampltiudes found in the doubles approximation, hence we will solve the
+        equation
+        \begin{align}
+            \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
+        \end{align}
+        to find an expression that can be used to solve for $t_{ij}^{ab}$.
 
 \bibliography{references}
+
+\appendix
+\section{The normal ordered Hamiltonian}
+    When constructing the normal ordered Hamiltonian we use Wick's theorem to
+    write the one-body, $h$, and the two-body, $W$, operators onto a normal
+    ordered form. Specifically we define the normal ordered form in terms of the
+    \emph{Fermi vacuum}\footnote{Fermi vacuum defines the reference state, i.e.,
+    $\kslat$, as the vacuum.}. That is, an operator on normal ordered form
+    destroys the reference Slater determinant.
+
+    We start by writing the one-body operator, $h$, to its normal-ordered form.
+    \begin{align}
+        h &= \sum_{pq}h^p_q\acr{p}\ade{q}
+        = \sum_{pq}h^p_q\para{
+            \{\acr{p}\ade{q}\}
+            + \{
+                \wick{\c a_{p}^{\dagger} \c a_{q}}
+            \}
+        }
+        \\
+        &= \sum_{pq}h^p_q\{
+            \acr{p}\ade{q}
+        \}
+        + \sum_{pq}h^p_q\delta_{p \in i}\delta_{pq}
+        \\
+        &= h_N + \sum_{i}h^i_i,
+    \end{align}
+    where we have used $\delta_{p \in i}$ to mean that $p$ must be an occupied
+    index. Doing the same for the two-body operator is a slightly more tedious
+    endeavor. For brevity we will only write out the operator strings and only
+    keep the non-zero contributions.
+    \begin{align}
+        \acr{p}\acr{q}\ade{s}\ade{r}
+        &=
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        + \{
+            \wick{\c a_p^{\dagger} a_{q}^{\dagger} \c a_{s} a_{r}}
+        \}
+        + \{
+            \wick{\c a_p^{\dagger} a_{q}^{\dagger} a_{s} \c a_{r}}
+        \}
+        \nonumber \\
+        &\qquad
+        + \{
+            \wick{a_p^{\dagger} \c a_{q}^{\dagger} \c a_{s} a_{r}}
+        \}
+        + \{
+            \wick{a_p^{\dagger} \c a_{q}^{\dagger} a_{s} \c a_{r}}
+        \}
+        \nonumber \\
+        &\qquad
+        + \{
+            \wick{\c1 a_p^{\dagger} \c2 a_{q}^{\dagger} \c1 a_{s} \c2 a_{r}}
+        \}
+        + \{
+            \wick{\c2 a_p^{\dagger} \c1 a_{q}^{\dagger} \c1 a_{s} \c2 a_{r}}
+        \}
+        \\
+        &=
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        - \delta_{p \in i}\delta_{ps}\{\acr{q}\ade{r}\}
+        + \delta_{p \in i}\delta_{pr}\{\acr{q}\ade{s}\}
+        \nonumber \\
+        &\qquad
+        + \delta_{q \in i}\delta_{qs}\{\acr{p}\ade{r}\}
+        - \delta_{q \in i}\delta_{qr}\{\acr{p}\ade{s}\}
+        \nonumber \\
+        &\qquad
+        - \delta_{p \in i}\delta_{ps}\delta_{q \in j}\delta_{qr}
+        + \delta_{p \in i}\delta_{pr}\delta_{q \in j}\delta_{qs}.
+    \end{align}
+    Inserted into the full two-body operator and sorting out the sums we get
+    \begin{align}
+        W
+        &=
+        \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        - \frac{1}{4}\sum_{iqr}\bra{iq}\ket{ri}\{\acr{q}\ade{r}\}
+        \nonumber \\
+        &\qquad
+        + \frac{1}{4}\sum_{iqs}\bra{iq}\ket{is}\{\acr{q}\ade{s}\}
+        + \frac{1}{4}\sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
+        \nonumber \\
+        &\qquad
+        - \frac{1}{4}\sum_{pis}\bra{pi}\ket{is}\{\acr{p}\ade{s}\}
+        - \frac{1}{4}\sum_{ij}\bra{ij}\ket{ji}
+        \nonumber \\
+        &\qquad
+        + \frac{1}{4}\sum_{ij}\bra{ij}\ket{ij}.
+    \end{align}
+    Using the antisymmetric properties of the two-body matrix elements,
+    \begin{align}
+        \bra{pq}\ket{rs}
+        = - \bra{pq}\ket{sr}
+        = - \bra{qp}\ket{rs}
+        = \bra{qp}\ket{sr},
+    \end{align}
+    and relabeling of the indices we can rearrange and collect some terms.
+    \begin{align}
+        W
+        &=
+        W_N + \sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
+        + \half\sum_{ij}\bra{ij}\ket{ij},
+    \end{align}
+    where the normal ordered two-body operator is
+    \begin{align}
+        W_N = \frac{1}{4}\sum_{pqrs}
+        \bra{pq}\ket{rs}\{\acr{p}\acr{q}\ade{s}\ade{r}\}.
+    \end{align}
+    When we now construct the full Hamiltonian we can collect some terms. The
+    constants in both the one-body and the two-body operator in total constitues
+    the reference energy.
+    \begin{align}
+        E_0 \equiv \bslat H\kslat
+        = \sum_{i}h_i^i + \frac{1}{2}\sum_{ij}\bra{ij}\ket{ij}.
+        \label{eq:reference_energy}
+    \end{align}
+    Combining the normal ordered one-body operator and the second term in the
+    two-body operator, i.e., the term with a single creation and annihilation
+    operator pair, we get the normal ordered Fock-operator.
+    \begin{align}
+        F_N
+        &=
+        \sum_{pq}h_{q}^{p}\{\acr{p}\ade{q}\}
+        + \sum_{pqi}\bra{pi}\ket{qi}\{\acr{p}\ade{q}\}
+        \\
+        &= \sum_{pq}f_{q}^{p}\{\acr{p}\ade{q}\},
+    \end{align}
+    where we have defined the Fock matrix elements as
+    \begin{align}
+        f_{q}^{p}
+        &=
+        h_q^p + \sum_{i}\bra{pi}\ket{qi}.
+    \end{align}
+    In total we get the full Hamiltonian
+    \begin{align}
+        H
+        &=
+        F_N + W_N + \bslat H\kslat
+        \\
+        &= H_N + \bslat H\kslat,
+    \end{align}
+    which is what we wanted to show.\cite{crawford2007introduction}
+
+\section{Coupled cluster doubles diagrams}
+    In order to get an expression for the energy equation and the amplitude
+    equations we use a diagrammatic approach.
 
 \end{document}
