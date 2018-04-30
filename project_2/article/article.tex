@@ -373,23 +373,21 @@
         \subsubsection{Harmonic oscillator basis}
             We will be looking at a system of two-dimensional quantum dots with
             a Coulomb repulsion.  If we assume, or make it so, that the
-            repulsive two-body part is small we can use the harmonic oscillator
-            functions as our basis functions and compute the matrix elements
-            before feeding it into the coupled cluster code. We will label these
-            basis functions using greek letters, viz.
-            \begin{align}
-                h\ket{\alpha} = \epsilon_{\alpha}\ket{\alpha}.
-            \end{align}
+            repulsive two-body part is small we can use eigenfunctions of the
+            one-body part our basis. In this case we have two-dimensional
+            harmonic oscillator functions as eigenfunctions. We can then compute
+            the matrix elements, $h_q^p$ and $u_{rs}^{pq}$, before feeding these
+            into the coupled cluster code.
+
             In polar coordinates we can write the harmonic oscillator
-            wavefunction for a single particle in two dimensions\footnote{Note
-            that this is without spin. As we are looking at fermions this means
-            that each mode of the harmonic oscillator functions will be repeated
-            twice.}.
+            wavefunction for a single particle in two dimensions
+            as\footnote{Note that this is without spin. As we are looking at
+            fermions this means that each mode of the harmonic oscillator
+            functions will be repeated twice.}.
             \begin{align}
                 \phi_{nm}(r, \theta)
                 &=
                 N_{nm}
-                %a\sqrt{\frac{n!}{\pi(n + \abs{m})!}}
                 (ar)^{\abs{m}}L_n^{\abs{m}}(a^2 r^2)e^{-a^2 r^2/2}
                 e^{im\theta},
             \end{align}
@@ -401,6 +399,76 @@
                 N_{nm}
                 &= a\sqrt{\frac{n!}{\pi(n + \abs{m})!}}.
             \end{align}
+            Included is also the spin, $\sigma$, of the wavefunction, which can
+            be either up or down. This means each level, $(n, m)$, is doubly
+            occupied. We also have that the wavefunctions are orthonormal
+            \begin{align}
+                \braket{n_1m_1\sigma_1}{n_2m_2\sigma_2}
+                = \delta_{n_1n_2}\delta_{m_1m_2}\delta_{\sigma_1\sigma_2}.
+            \end{align}
+            The eigenenergy of a single harmonic oscillator is given by
+            \begin{align}
+                \epsilon_{nm} &= \hbar\omega(2n + \abs{m} + 1).
+            \end{align}
+            As the wavefunctions are eigenfunctions to the one-body part we will
+            get a diagonal one-body matrix $h$,
+            \begin{align}
+                h\ket{\alpha} = \epsilon_{\alpha}\ket{\alpha},
+            \end{align}
+            where we have labeled the harmonic oscillator basis functions with
+            greek letters, i.e., $\alpha = (n_{\alpha}, m_{\alpha},
+            \sigma_{\alpha})$. Our next job is now to create a mapping between
+            the quantum number $\alpha$ and the three quantum numbers $n$, $m$
+            and $\sigma$.
+
+            \begin{figure}
+                \begin{center}
+                    \begin{tikzpicture}[scale=0.8]
+                        \begin{scope}
+                            \foreach \i in {1, 2, 3} {
+                                \draw(-1, \i - 1) node[anchor=east]
+                                {$\epsilon = \i$};
+                            }
+
+                            % Highest energy level
+                            \foreach \i in {0, 3, 6} {
+                                \draw (\i, 2) -- (\i + 2, 2);
+                                \node at (\i + 0.75, 2) {$\uparrow$};
+                                \node at (\i + 1.25, 2) {$\downarrow$};
+                            }
+                            \node[below, inner sep=.2cm] at (1, 2)
+                            {$n = 0, m = -2$};
+                            \node[below, inner sep=.2cm] at (4, 2)
+                            {$n = 1, m = 0$};
+                            \node[below, inner sep=.2cm] at (7, 2)
+                            {$n = 0, m = 2$};
+
+                            % Middle energy level
+                            \foreach \i in {1.5, 4.5} {
+                                \draw (\i, 1) -- (\i + 2, 1);
+                                \node at (\i + 0.75, 1) {$\uparrow$};
+                                \node at (\i + 1.25, 1) {$\downarrow$};
+                            }
+                            \node[below, inner sep=.2cm] at (2.5, 1)
+                            {$n = 0, m = -1$};
+                            \node[below, inner sep=.2cm] at (5.5, 1)
+                            {$n = 0, m = 1$};
+
+                            % Lowest energy level
+                            \draw (3, 0) -- (5, 0);
+                            \node at (3 + 0.75, 0) {$\uparrow$};
+                            \node at (3 + 1.25, 0) {$\downarrow$};
+                            \node[below, inner sep=.2cm] at (4, 0)
+                            {$n = 0, m = 0$};
+                        \end{scope}
+                    \end{tikzpicture}
+                \end{center}
+                \caption{In this plot we can see the energy degeneracy of the
+                lowest three energy levels in the two-dimensional quantum dot.
+                Each arrow representes a spin up or a spin down state with the
+                quantum numbers $n$ and $m$ as listed below.}
+                \label{fig:basis_states}
+            \end{figure}
 
             From E. Anisimovas and A. Matulis\cite{anisimovas1998energy} we can
             get an analytical expression for the two-body matrix elements.
