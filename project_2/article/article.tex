@@ -410,17 +410,11 @@
             \begin{align}
                 \epsilon_{nm} &= \hbar\omega(2n + \abs{m} + 1).
             \end{align}
-            As the wavefunctions are eigenfunctions to the one-body part we will
-            get a diagonal one-body matrix $h$,
-            \begin{align}
-                h\ket{\alpha} = \epsilon_{\alpha}\ket{\alpha},
-            \end{align}
-            where we have labeled the harmonic oscillator basis functions with
-            greek letters, i.e., $\alpha = (n_{\alpha}, m_{\alpha},
-            \sigma_{\alpha})$. Our next job is now to create a mapping between
-            the quantum number $\alpha$ and the three quantum numbers $n$, $m$
-            and $\sigma$.
-
+            Our next job is now to create a mapping from the three quantum
+            numbers $n$, $m$ and $\sigma$ to a single quantum number $\alpha$ as
+            the matrices $h$ and $u$ use single indices for each wavefunction.
+            In \autoref{fig:basis_states} we can see the energy levels that
+            needs to be mapped.
             \begin{figure}
                 \begin{center}
                     \begin{tikzpicture}[scale=0.8]
@@ -470,8 +464,30 @@
                 \label{fig:basis_states}
             \end{figure}
 
-            From E. Anisimovas and A. Matulis\cite{anisimovas1998energy} we can
-            get an analytical expression for the two-body matrix elements.
+            Starting from the bottom and working our way upwards from left to
+            right we can label each line from $0$ to $n$ in increasing
+            order. This enumeration will serve as our common quantum number
+            $\alpha$\footnote{Note that we use greek letters $\alpha, \beta,
+            \dots$ for the harmonic oscillator wavefunctions as opposed to latin
+            letters for the general indices.}.
+
+            The normalization condition now reads
+            \begin{align}
+                \braket{\alpha}{\beta} = \delta_{\alpha\beta},
+            \end{align}
+            when $\ket{\alpha}$ and $\ket{\beta}$ share the same spin direction.
+            The one-body matrix will now be a diagonal matrix with the
+            eigenenergies of single particle harmonic oscillator functions as
+            elements.
+            \begin{align}
+                \bra{\alpha}h\ket{\beta} = \epsilon_{\beta}\delta_{\alpha\beta}.
+            \end{align}
+
+            The two-body matrix elements are a little harder to work out as the
+            harmonic oscillator wavefunctions are not eigenfunctions to the
+            correlation operator. Luckily, from E. Anisimovas and A.
+            Matulis\cite{anisimovas1998energy} we can get an analytical
+            expression for the two-body matrix elements.
 
 \bibliography{references}
 
