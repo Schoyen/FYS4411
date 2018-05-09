@@ -1,7 +1,8 @@
 #include "coulomb_elements.hpp"
 
-double coulomb_ho(double &hw, int &ni, int &mi, int &nj, int &mj, int &nk, int
-        &mk, int &nl, int &ml) {
+double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
+        int ml)
+{
     int g1, g2, g3, g4, G, L;
     double dir = 0.0;
     double exch = 0.0;
@@ -55,7 +56,7 @@ double coulomb_ho(double &hw, int &ni, int &mi, int &nj, int &mj, int &nk, int
         }
     }
     dir *= product1(ni, mi, nj, mj, nl, ml, nk, mk);
-    return std::sqrt(hw)*(dir - exch);
+    return dir - exch;
 }
 
 double logfac(int &n) {

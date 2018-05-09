@@ -6,8 +6,8 @@
 #include <cstdlib>
 #include <cmath>
 
-double coulomb_ho(double &hw, int &ni, int &mi, int &nj, int &mj, int &nk, int
-        &mk, int &nl, int &ml);
+double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
+        int ml);
 double logratio1(int &int1, int &int2, int &int3, int &int4);
 double logratio2(int &G);
 double logfac(int &n);
