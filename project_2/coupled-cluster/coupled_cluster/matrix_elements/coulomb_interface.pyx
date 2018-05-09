@@ -3,6 +3,9 @@ cimport numpy as np
 
 np.import_array()
 
+def get_energy(int n, int m):
+    return 2*n + abs(m) + 1
+
 def get_coulomb_element(p, q, r, s):
     n_p, m_p = p
     n_q, m_q = q
