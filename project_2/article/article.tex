@@ -471,16 +471,20 @@
             order. This enumeration will serve as our common quantum number
             $\alpha$\footnote{Note that we use greek letters $\alpha, \beta,
             \dots$ for the harmonic oscillator wavefunctions as opposed to latin
-            letters for the general indices.}.
+            letters for the general indices.}. We will only work with full
+            \emph{shells}, i.e., we restrict our views to systems of $N$
+            particles where $N$ will be a magic number which we get by counting
+            all spin states for each energy level and the energy levels below.
+            In \autoref{fig:basis_states} we can see the magic number $N \in [2,
+            6, 12]$.
 
             The normalization condition now reads
             \begin{align}
                 \braket{\alpha}{\beta}
                 = \delta_{\alpha\beta}\delta_{\sigma_\alpha\sigma_\beta},
             \end{align}
-            The one-body matrix will now be a diagonal matrix with the
-            eigenenergies of single particle harmonic oscillator functions as
-            elements.
+            The one-body matrix will be a diagonal matrix with the eigenenergies
+            of the single particle harmonic oscillator functions as elements.
             \begin{align}
                 \bra{\alpha}h\ket{\beta}
                 = \epsilon_{\beta}
@@ -489,9 +493,25 @@
 
             The two-body matrix elements are a little harder to work out as the
             harmonic oscillator wavefunctions are not eigenfunctions to the
-            correlation operator. Luckily, from E. Anisimovas and A.
-            Matulis\cite{anisimovas1998energy} we can get an analytical
-            expression for the two-body matrix elements.
+            correlation operator. Luckily, from E. Anisimovas and A.  Matulis
+            (Equation A2)\cite{anisimovas1998energy} we can get an analytical
+            expression for the two-body matrix elements. We can then construct
+            the antisymmetric two-body matrix elements in the harmonic
+            oscillator basis.
+            \begin{align}
+                \bra{\alpha\beta}\ket{\gamma\delta}
+                &= \braket{\alpha\beta}{\gamma\delta}
+                - \braket{\alpha\beta}{\delta\gamma}.
+            \end{align}
+            As we only need to compute these once it is a good idea to save all
+            non-zero values of $\bra{\alpha\beta}\ket{\gamma\delta}$ to a file.
+
+        \subsubsection{Constructing the Hartree-Fock basis}
+            Having found the matrix elements of $h$ and $u$ we can now use the
+            \emph{self-consistent field iteration} method to construct $h$ and
+            $u$ in a \emph{restricted Hartree-Fock} basis. This will yield a
+            better estimate to the actual, unknown basis functions of the
+            system.
 
 \appendix
 \section{The normal ordered Hamiltonian}
