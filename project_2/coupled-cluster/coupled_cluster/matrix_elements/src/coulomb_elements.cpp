@@ -1,4 +1,4 @@
-#include "coulomb_elements.hpp"
+#include "coulomb_elements.h"
 
 double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
         int ml)
