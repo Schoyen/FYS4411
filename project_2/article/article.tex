@@ -132,16 +132,16 @@
     % Why not write $\hbar = c = e = m = 1$?
     The two-body part is the Coulomb interaction potential.
     \begin{align}
-        w(\vf{r}_i, \vf{r}_j)
+        u(\vf{r}_i, \vf{r}_j)
         &= \frac{1}{\abs{\vf{r}_i - \vf{r}_j}}.
     \end{align}
     We thus get the total Hamiltonian
     \begin{align}
-        H &= h + W
+        H &= h + u
         =
-        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N w(\vf{r}_i, \vf{r}_j),
+        \sum_{i = 1}^N h(\vf{r}_i) + \sum_{i < j}^N u(\vf{r}_i, \vf{r}_j),
     \end{align}
-    where $h$ is the full one-body operator and $W$ the full two-body
+    where $h$ is the full one-body operator and $u$ the full two-body
     operator, i.e., over the entire system.  Working in a basis of $L$ single
     particle functions, $\{\ket{p}\}_{p = 1}^L$. We define the reference Slater
     determinant as
@@ -190,7 +190,7 @@
         matrix elements are defined as
         \begin{gather}
             h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
-            \bra{pq}\ket{rs} \equiv \bra{pq}w\ket{rs} - \bra{pq}w\ket{sr}.
+            \bra{pq}\ket{rs} \equiv \bra{pq}u\ket{rs} - \bra{pq}u\ket{sr}.
         \end{gather}
         Note that we use the chemists notation to label the antisymmetric matrix
         elements.
@@ -496,7 +496,7 @@
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
-    write the one-body, $h$, and the two-body, $W$, operators onto a normal
+    write the one-body, $h$, and the two-body, $u$, operators onto a normal
     ordered form. Specifically we define the normal ordered form in terms of the
     \emph{Fermi vacuum}\footnote{Fermi vacuum defines the reference state, i.e.,
     $\kslat$, as the vacuum.}. That is, an operator on normal ordered form
@@ -565,7 +565,7 @@
     \end{align}
     Inserted into the full two-body operator and sorting out the sums we get
     \begin{align}
-        W
+        u
         &=
         \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
         \{\acr{p}\acr{q}\ade{s}\ade{r}\}
@@ -591,7 +591,7 @@
     \end{align}
     and relabeling of the indices we can rearrange and collect some terms.
     \begin{align}
-        W
+        u
         &=
         W_N + \sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
         + \half\sum_{ij}\bra{ij}\ket{ij},
