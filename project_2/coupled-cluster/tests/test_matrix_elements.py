@@ -18,10 +18,10 @@ def test_two_body_generation_one():
             for r in range(l//2):
                 for s in range(l//2):
                     gen_val = get_coulomb_element(
-                            get_indices_nm(p),
-                            get_indices_nm(q),
-                            get_indices_nm(r),
-                            get_indices_nm(s)
+                            *get_indices_nm(p),
+                            *get_indices_nm(q),
+                            *get_indices_nm(r),
+                            *get_indices_nm(s)
                     )
 
                     assert abs(orbital_integrals[p, q, r, s] - gen_val) < 1e-5
