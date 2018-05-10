@@ -2,3 +2,4 @@ numpy
 cython
 pytest
 sparse
+pandas
