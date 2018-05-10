@@ -29,3 +29,16 @@ def get_orbital_integrals():
     return orbital_integrals.to_coo()
 
 orbital_integrals = get_orbital_integrals()
+
+@pytest.fixture
+def index_map():
+    i_map = {
+        0: (0, 0),
+        1: (0, -1),
+        2: (0, 1),
+        3: (0, -2),
+        4: (1, 0),
+        5: (0, 2)
+    }
+
+    return i_map
