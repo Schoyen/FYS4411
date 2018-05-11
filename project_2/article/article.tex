@@ -398,7 +398,34 @@
 			\bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0} \\
 			 =& \sum_{pq}f_{pq}\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa_q\}\ket{\Phi_0} \\
 			 &+\frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
-			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}
+			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}.
+		\end{aligned}
+		\end{equation}
+		The one-electron component does not have any full contractions, while the
+		two-electron component produces one contributing integral,
+		\begin{equation}
+		\begin{aligned}
+			\bra{\Phi_{ij}^{ab}} &(V_N)\ket{\Phi_0} \\
+				=& \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0} \\
+			 	=& \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} \\ &\times\Big(
+			 		\{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
+			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+			 		+
+			 		\{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c4 a_b \c3 a_a
+			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\} \\
+			 	  &\ +
+			 	 	\{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c3 a_b \c4 a_a
+			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+			 		+
+			 		\{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c4 a_b \c3 a_a
+			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+			 	\Big) \\
+			 	=&  \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} 
+			 	( \delta_{ap}\delta_{bq}\delta_{js}\delta_{ir}
+			 	 -\delta_{aq}\delta_{bp}\delta_{js}\delta_{ir} \\
+			     &\ -\delta_{ap}\delta_{bq}\delta_{jr}\delta_{is}
+			 	 +\delta_{aq}\delta_{bp}\delta_{jr}\delta_{is}) = \bra{ab}\ket{ij}.
 		\end{aligned}
 		\end{equation}
 		
