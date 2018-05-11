@@ -361,9 +361,47 @@
         equation
         \begin{align}
             \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
+            \label{eq:doubles_amplitude_1}
         \end{align}
         to find an expression that can be used to solve for $t_{ij}^{ab}$.
-
+        By employing the Baker-Campbell-Haussdorf (BCH) expansion we find
+        \begin{equation}
+        \begin{aligned}
+        		\bar{H} 
+        			=& \Big(
+        					H_N + H_NT_1 + H_NT_2 + \frac{1}{2}H_NT_1^2 
+        					+ \frac{1}{2}H_NT_2^2 \\
+        				  &+ H_NT_1T_2 + \frac{1}{6}H_NT_1^3 
+        				    + \frac{1}{2}H_NT_1^2T_2 + \frac{1}{2}H_NT_1T_2^2 \\
+        				  &+ \frac{1}{6}H_NT_2^3 + \frac{1}{24}H_NT_1^4 
+        				    + \frac{1}{6}H_NT_1^3T_2 \\
+        				 &+ \frac{1}{6}H_NT_1^2T_2^2 + \frac{1}{6}H_NT_1T_2^3
+        				   + \frac{1}{24} H_NT_2^4
+        				 \Big)_c.
+        \end{aligned}
+        \label{eq:normal_order_expansion}
+        \end{equation}
+		The subscript $c$ indicates that only those terms in which the 
+		Hamiltonian is connected\footnote{In a Wick's theorem sense}
+		to every cluster operator on its right should be included. Since
+		the Hamiltonian contains at most four annihilation and creation 
+		operators, $H_N$ can connect to at most four cluster operators
+		at once. Therefor, the BCH expansion must truncate at the
+		fourth-order terms. 
+		
+		Now comes the rather tedious task of evaluating all the terms 
+		that arises from inserting \autoref{eq:normal_order_expansion}
+		into \autoref{eq:doubles_amplitude_1}. The first of such terms
+		is
+		\begin{equation}
+		\begin{aligned}
+			\bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0} \\
+			 =& \sum_{pq}f_{pq}\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa_q\}\ket{\Phi_0} \\
+			 &+\frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}
+		\end{aligned}
+		\end{equation}
+		
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
         ground state energy using the coupled cluster doubles approximation is a
