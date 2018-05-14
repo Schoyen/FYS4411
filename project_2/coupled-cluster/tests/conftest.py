@@ -6,10 +6,15 @@ n = 2
 l = 12
 filename = "tests/dat/coulomb.dat"
 
-def pytest_namespace():
-    return {"n": n, "l": l, "orbital_integrals": orbital_integrals}
+def spin_delta(p, q):
+    return not ((p & 0x1) ^ (q & 0x1))
 
-def get_orbital_integrals():
+def pytest_namespace():
+    return {
+            "n": n, "l": l, "orbital_integrals": orbital_integrals, "u": u,
+            "h": h}
+
+def get_file_orbital_integrals():
     orbital_integrals = sparse.DOK((l//2, l//2, l//2, l//2))
 
     with open(filename, "r") as f:
@@ -28,7 +33,47 @@ def get_orbital_integrals():
 
     return orbital_integrals.to_coo()
 
-orbital_integrals = get_orbital_integrals()
+orbital_integrals = get_file_orbital_integrals()
+
+def get_file_antisymmetrized_integrals():
+    u = sparse.DOK((l, l, l, l))
+
+    for p in range(l):
+        for q in range(l):
+            for r in range(l):
+                for s in range(l):
+                    u_pqrs = spin_delta(p, r) * spin_delta(q, s) \
+                            * orbital_integrals[p//2, q//2, r//2, s//2]
+                    u_pqsr = spin_delta(p, s) * spin_delta(q, r) \
+                            * orbital_integrals[p//2, q//2, s//2, r//2]
+
+                    u_as = u_pqrs - u_pqsr
+                    if abs(u_as) < 1e-8:
+                        continue
+
+                    u[p, q, r, s] = u_as
+
+    u = u.to_coo()
+    return u
+
+u = get_file_antisymmetrized_integrals()
+
+def one_body_integrals():
+    h = sparse.DOK((l, l))
+
+    for p in range(l):
+        if p < 2:
+            h[p, p] = 1.0
+        elif 2 <= p < 6:
+            h[p, p] = 2.0
+        elif 6 <= p < 12:
+            h[p, p] = 3.0
+        else:
+            raise NotImplementedError("Testing only supports l = 12")
+
+    return h.to_coo()
+
+h = one_body_integrals()
 
 @pytest.fixture
 def index_map():
