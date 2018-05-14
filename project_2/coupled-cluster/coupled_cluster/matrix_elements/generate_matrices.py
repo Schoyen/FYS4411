@@ -1,7 +1,7 @@
 import sparse
 import pickle
 import numba
-from .coulomb_interface import get_coulomb_element
+from .coulomb_interface import get_coulomb_element, get_energy
 from .index_map import get_indices_nm
 
 ORBITAL_INTEGRALS = None
@@ -71,3 +71,11 @@ def get_antisymmetrized_elements(l: int, filename="") -> sparse.COO:
             pickle.dump(u, f)
 
     return u
+
+def get_one_body_elements(l: int) -> sparse.COO:
+    h = sparse.DOK((l, l))
+
+    for p in range(l):
+        h[p, p] = get_energy(*get_indices_nm(p//2))
+
+    return h.to_coo()
