@@ -1,10 +1,15 @@
 import pytest
+import sparse
 from coupled_cluster.matrix_elements.index_map import (
         get_indices_nm
 )
 
 from coupled_cluster.matrix_elements.coulomb_interface import (
         get_coulomb_element
+)
+
+from coupled_cluster.matrix_elements.generate_matrices import (
+        get_coulomb_elements, get_antisymmetrized_elements
 )
 
 def test_two_body_generation_one():
@@ -25,3 +30,17 @@ def test_two_body_generation_one():
                     )
 
                     assert abs(orbital_integrals[p, q, r, s] - gen_val) < 1e-5
+
+def test_two_body_generation():
+    orbital_integrals = pytest.orbital_integrals
+    l = pytest.l
+
+    sparse.utils.assert_eq(
+            orbital_integrals, get_coulomb_elements(l), atol=1e-5, rtol=1e-5)
+
+def test_two_body_antisymmetric_generation():
+    u = pytest.u
+    l = pytest.l
+
+    sparse.utils.assert_eq(
+            u, get_antisymmetrized_elements(l), atol=1e-5, rtol=1e-5)
