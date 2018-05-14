@@ -9,7 +9,8 @@ from coupled_cluster.matrix_elements.coulomb_interface import (
 )
 
 from coupled_cluster.matrix_elements.generate_matrices import (
-        get_coulomb_elements, get_antisymmetrized_elements
+        get_coulomb_elements, get_antisymmetrized_elements,
+        get_one_body_elements
 )
 
 def test_two_body_generation_one():
@@ -44,3 +45,10 @@ def test_two_body_antisymmetric_generation():
 
     sparse.utils.assert_eq(
             u, get_antisymmetrized_elements(l), atol=1e-5, rtol=1e-5)
+
+def test_one_body_generation():
+    h = pytest.h
+    l = pytest.l
+
+    sparse.utils.assert_eq(
+            h, get_one_body_elements(l), atol=1e-5, rtol=1e-5)
