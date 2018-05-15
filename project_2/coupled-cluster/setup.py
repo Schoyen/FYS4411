@@ -44,9 +44,13 @@ extensions = [
     )
 ]
 
+dirs = []
+for subdir in ["hartree_fock", "schemes", "matrix_elements"]:
+    dirs.append(os.path.join(*base_path, subdir))
+
 setup(
     name="Coupled Cluster",
     version="0.0.1",
-    packages=["coupled_cluster"],
+    packages=base_path + dirs,
     ext_modules=cythonize(extensions)
 )
