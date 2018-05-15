@@ -1,6 +1,16 @@
 import numpy as np
 import scipy.linalg
 
+def calculate_energy(F, W, D):
+    J = np.einsum("pqrs, sr -> pq", W, D)
+    K = np.einsum("psrq, sr -> pq", W, D)
+
+    energy = np.einsum("pq, qp ->", F, D)
+    energy -= 0.5*np.einsum("pq, qp ->", J, D)
+    energy += 0.25*np.einsum("pq, qp ->", K, D)
+
+    return energy
+
 def build_density_matrix(U, num_occupied):
     """Function building a density matrix.
 
@@ -118,4 +128,4 @@ def scf_rhf(H, W, S, num_orbitals, num_occupied, theta=0.01, tol=1e-7,
         counter += 1
 
     # Return the conversion matrix U
-    return U
+    return U, calculate_energy(F, W, D)
