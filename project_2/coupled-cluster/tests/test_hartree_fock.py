@@ -3,30 +3,42 @@ import pytest
 
 from coupled_cluster.schemes.ccd_sparse import CoupledClusterDoublesSparse
 from coupled_cluster.hartree_fock.scf_rhf import scf_rhf
-from coupled_cluster.matrix_elements.basis_transformation import (
-        transform_one_body_elements, transform_two_body_elements
+from coupled_cluster.matrix_elements.generate_matrices import (
+        get_one_body_elements, get_coulomb_elements,
+        get_antisymmetrized_elements, add_spin_to_one_body_elements
+)
+from coupled_cluster.hartree_fock.basis_transformation import (
+        transform_one_body_elements, transform_two_body_elements,
 )
 
 def test_hartree_fock_energy():
-    h = pytest.h
-    u = pytest.u
     l = pytest.l
     n = pytest.n
 
-    c, energy = scf_rhf(h.todense(), u, np.eye(l), l, n)
-    _h = transform_one_body_elements(h, c)
-    print (_h.todense())
+    h = get_one_body_elements(l)
+    u = get_coulomb_elements(l)
 
-    _u = transform_two_body_elements(u, c)
-
+    c, energy = scf_rhf(h.todense(), u, np.eye(l//2), n//2)
     print (energy)
 
-    ccd = CoupledClusterDoublesSparse(h, u, n)
+    hi = transform_one_body_elements(h, c)
+    oi = transform_two_body_elements(u, c)
 
-    print (ccd.compute_reference_energy())
+    _h = add_spin_to_one_body_elements(hi, l)
+    _u = get_antisymmetrized_elements(l, oi=oi)
+
+    #_u = transform_two_body_elements(u, c)
+
+    #print (energy)
 
     ccd = CoupledClusterDoublesSparse(_h, _u, n)
 
     print (ccd.compute_reference_energy())
+
+    print (ccd.compute_energy())
+
+    #ccd = CoupledClusterDoublesSparse(_h, _u, n)
+
+    #print (ccd.compute_reference_energy())
 
     wat
