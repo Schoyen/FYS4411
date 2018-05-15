@@ -19,7 +19,6 @@ def test_hartree_fock_energy():
     u = get_coulomb_elements(l)
 
     c, energy = scf_rhf(h.todense(), u, np.eye(l//2), n//2)
-    print (energy)
 
     hi = transform_one_body_elements(h, c)
     oi = transform_two_body_elements(u, c)
@@ -27,18 +26,5 @@ def test_hartree_fock_energy():
     _h = add_spin_to_one_body_elements(hi, l)
     _u = get_antisymmetrized_elements(l, oi=oi)
 
-    #_u = transform_two_body_elements(u, c)
-
-    #print (energy)
-
     ccd = CoupledClusterDoublesSparse(_h, _u, n)
-
-    print (ccd.compute_reference_energy())
-
-    print (ccd.compute_energy())
-
-    #ccd = CoupledClusterDoublesSparse(_h, _u, n)
-
-    #print (ccd.compute_reference_energy())
-
-    wat
+    assert abs(ccd.compute_reference_energy() - energy) < 1e-8
