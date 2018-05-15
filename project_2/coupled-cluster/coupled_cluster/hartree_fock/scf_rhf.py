@@ -60,12 +60,12 @@ def build_rhf_fock_matrix(H, W, D):
     Returns:
         np.ndarray: The RHF-Fock matrix.
     """
-    J = np.einsum('pqrs,sr->pq', W, D)
-    K = np.einsum('psrq,sr->pq', W, D)
+    J = np.einsum("sr, qrps -> qp", D, W)
+    K = np.einsum("sr, qrsp -> qp", D, W)
 
     return H + J - 0.5*K
 
-def scf_rhf(H, W, S, num_orbitals, num_occupied, theta=0.01, tol=1e-7,
+def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-7,
         max_iterations=1000):
     """The SCF-scheme for solving the RHF Roothan-Hall equations.
 
@@ -76,7 +76,6 @@ def scf_rhf(H, W, S, num_orbitals, num_occupied, theta=0.01, tol=1e-7,
             repulsion integrals as elements.
         S: A two-dimensional NumPy ndarray with the overlap between the atomic
             orbital basis as elements.
-        num_orbitals: The number of atomic orbitals in the basis.
         num_occupied: The number of occupied atomic orbitals (counting both spin
             directions).
         theta: A parameter to toggle mixing from the previous density matrix
@@ -100,7 +99,7 @@ def scf_rhf(H, W, S, num_orbitals, num_occupied, theta=0.01, tol=1e-7,
     energy_prev, U = scipy.linalg.eigh(H, S)
 
     # Get the density matrix from the occupied states in the U-matrix
-    D = 2*build_density_matrix(U, num_occupied // 2)
+    D = 2*build_density_matrix(U, num_occupied)
     # Build the Fock matrix from this system
     F = build_rhf_fock_matrix(H, W, D)
 
@@ -116,7 +115,7 @@ def scf_rhf(H, W, S, num_orbitals, num_occupied, theta=0.01, tol=1e-7,
 
         # Calculate the new density matrix adding in a theta-fraction of the
         # previous density matrix (if the need arises)
-        D = (1 - theta) * 2 * build_density_matrix(U, num_occupied // 2) \
+        D = (1 - theta) * 2 * build_density_matrix(U, num_occupied) \
             + theta * D
 
         # Build the updated Fock matrix
