@@ -73,9 +73,18 @@ def get_antisymmetrized_elements(l: int, filename="") -> sparse.COO:
     return u
 
 def get_one_body_elements(l: int) -> sparse.COO:
+    h = sparse.DOK((l//2, l//2))
+
+    for p in range(l//2):
+        h[p, p] = get_energy(*get_indices_nm(p))
+
+    return h.to_coo()
+
+def get_one_body_elements_spin(l: int) -> sparse.COO:
     h = sparse.DOK((l, l))
+    _h = get_one_body_elements(l)
 
     for p in range(l):
-        h[p, p] = get_energy(*get_indices_nm(p//2))
+        h[p, p] = _h[p//2, p//2]
 
     return h.to_coo()
