@@ -40,24 +40,22 @@ def get_coulomb_elements(l: int, filename="") -> sparse.COO:
 
     return ORBITAL_INTEGRALS
 
-def get_antisymmetrized_elements(l: int, filename="") -> sparse.COO:
-    global ORBITAL_INTEGRALS
+def get_antisymmetrized_elements(l: int, oi=ORBITAL_INTEGRALS,
+        filename="") -> sparse.COO:
 
     u = sparse.DOK((l, l, l, l))
 
-    if ORBITAL_INTEGRALS is None:
-        ORBITAL_INTEGRALS = get_coulomb_elements(l)
-
-    _oi = ORBITAL_INTEGRALS
+    if oi is None:
+        oi = get_coulomb_elements(l)
 
     for p in range(l):
         for q in range(l):
             for r in range(l):
                 for s in range(l):
                     u_pqrs = spin_delta(p, r) * spin_delta(q, s) \
-                            * _oi[p//2, q//2, r//2, s//2]
+                            * oi[p//2, q//2, r//2, s//2]
                     u_pqsr = spin_delta(p, s) * spin_delta(q, r) \
-                            * _oi[p//2, q//2, s//2, r//2]
+                            * oi[p//2, q//2, s//2, r//2]
 
                     u_as = u_pqrs - u_pqsr
                     if abs(u_as) < 1e-8:
@@ -77,6 +75,15 @@ def get_one_body_elements(l: int) -> sparse.COO:
 
     for p in range(l//2):
         h[p, p] = get_energy(*get_indices_nm(p))
+
+    return h.to_coo()
+
+def add_spin_to_one_body_elements(hi, l):
+    h = sparse.DOK((l, l))
+
+    for p in range(l):
+        for q in range(l):
+            h[p, q] = spin_delta(p, q) * hi[p//2, q//2]
 
     return h.to_coo()
 
