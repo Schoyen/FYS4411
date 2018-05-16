@@ -1,5 +1,6 @@
 import sparse
 import pickle
+import os
 import numba
 from .coulomb_interface import (
         get_coulomb_element, get_energy, _get_antisymmetrized_elements,
@@ -13,31 +14,35 @@ ORBITAL_INTEGRALS = None
 def spin_delta(p, q):
     return not ((p & 0x1) ^ (q & 0x1))
 
-def get_coulomb_elements(l: int, filename="") -> sparse.COO:
+def get_coulomb_elements(l: int, filename=None) -> sparse.COO:
     global ORBITAL_INTEGRALS
+
+    if filename is not None:
+        try:
+            with open(filename, "rb") as f:
+                ORBITAL_INTEGRALS = pickle.load(f)
+                return ORBITAL_INTEGRALS
+        except FileNotFoundError:
+            pass
 
     indices = {p: get_indices_nm(p) for p in range(l//2)}
     ORBITAL_INTEGRALS = sparse.COO(
             *_get_coulomb_elements(l, indices), shape=(l//2, l//2, l//2, l//2))
 
-    if filename:
-        with open(filename, "w") as f:
+    if filename is not None:
+        with open(filename, "wb") as f:
             pickle.dump(ORBITAL_INTEGRALS, f)
 
     return ORBITAL_INTEGRALS
 
 def get_antisymmetrized_elements(l: int, oi=ORBITAL_INTEGRALS,
-        filename="") -> sparse.COO:
+        filename=None) -> sparse.COO:
 
     if oi is None:
-        oi = get_coulomb_elements(l)
+        oi = get_coulomb_elements(l, filename=filename)
 
     u = sparse.COO(
             *_get_antisymmetrized_elements(l, oi.todense()), shape=(l, l, l, l))
-
-    if filename:
-        with open(filename, "w") as f:
-            pickle.dump(u, f)
 
     return u
 
