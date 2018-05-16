@@ -78,13 +78,14 @@ class CoupledClusterDoublesSparse(CoupledCluster):
     def _compute_energy(self):
         return self._compute_ccd_energy()
 
-    def _compute_amplitudes(self):
+    def _compute_amplitudes(self, theta):
         self._compute_intermediates()
 
         t_one_body = self._compute_one_body_amplitude()
         t_two_body = self._compute_two_body_amplitude()
 
-        self.t = (t_one_body + t_two_body) * self.d
+        self.t = (1 - theta) * (t_one_body + t_two_body) * self.d \
+                + theta * self.t
 
     def _compute_one_body_amplitude(self):
         h, t, o, v = self.h_sans_diag, self.t, self.o, self.v

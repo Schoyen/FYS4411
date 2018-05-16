@@ -25,7 +25,7 @@ class CoupledCluster:
     def _compute_energy(self):
         self.__err()
 
-    def _compute_amplitudes(self):
+    def _compute_amplitudes(self, theta):
         self.__err()
 
     def compute_reference_energy(self):
@@ -35,14 +35,14 @@ class CoupledCluster:
 
         return e_ref
 
-    def compute_energy(self, max_iterations=100, tol=1e-4):
+    def compute_energy(self, max_iterations=100, tol=1e-4, theta=0.9):
         iterations = 0
 
         energy_prev = 100
         energy = self._compute_energy()
 
         while abs(energy - energy_prev) > tol and iterations < max_iterations:
-            self._compute_amplitudes()
+            self._compute_amplitudes(theta)
             energy_prev = energy
             energy = self._compute_energy()
             iterations += 1
