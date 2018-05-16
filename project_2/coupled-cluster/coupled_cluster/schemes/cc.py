@@ -47,4 +47,4 @@ class CoupledCluster:
             energy = self._compute_energy()
             iterations += 1
 
-        return energy
+        return energy, iterations
