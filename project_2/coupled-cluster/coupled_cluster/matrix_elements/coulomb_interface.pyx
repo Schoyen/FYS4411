@@ -14,7 +14,8 @@ def get_coulomb_element(int n_p, int m_p, int n_q, int m_q, int n_r, int m_r,
 cdef int spin_delta(int p, int q):
     return not ((p & 0x1) ^ (q & 0x1))
 
-def _get_antisymmetrized_elements(int l, np.ndarray[double, ndim=4] oi):
+def _get_antisymmetrized_elements(int l, np.ndarray[double, ndim=4] oi,
+        double tol=1e-8):
     cdef list data, indices
     cdef int p, q, r, s
     cdef double u_pqrs, u_pqsr, u_as
@@ -33,7 +34,7 @@ def _get_antisymmetrized_elements(int l, np.ndarray[double, ndim=4] oi):
 
                     u_as = u_pqrs - u_pqsr
 
-                    if abs(u_as) < 1e-8:
+                    if abs(u_as) < tol:
                         continue
 
                     indices[0].append(p)
