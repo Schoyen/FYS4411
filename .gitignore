@@ -36,3 +36,6 @@ __pycache__
 .cache
 *.pyc
 .pytest_cache
+
+# Pickle files
+*.pkl
