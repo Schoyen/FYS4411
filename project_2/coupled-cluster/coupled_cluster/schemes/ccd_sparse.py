@@ -26,6 +26,8 @@ def loc_compute_d_matrix(h, m, n):
 class CoupledClusterDoublesSparse(CoupledCluster):
 
     def _initialize(self, initial_guess):
+        o, v = self.o, self.v
+
         self._compute_d_matrix()
 
         self.h_sans_diag = sparse.DOK(self.h.shape)
@@ -43,26 +45,35 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         else:
             self._compute_initial_guess()
 
-        self.u_bc = sparse.DOK((self.m, self.m))
-        self.u_kj = sparse.DOK((self.n, self.n))
+        tmp = np.einsum("bkck -> bc", self.u[v, o, v, o])
+        tmp[np.abs(tmp) < 1e-8] = 0
 
-        for b in range(self.m):
-            for c in range(self.m):
-                val = 0
-                for k in range(self.n):
-                    val += self.u[b + self.n, k, c + self.n, k]
-                self.u_bc[b, c] = val
+        self.u_bc = sparse.COO.from_numpy(tmp)
 
-        self.u_bc = self.u_bc.to_coo()
+        tmp = np.einsum("kljl -> kj", self.u[o, o, o, o])
+        tmp[np.abs(tmp) < 1e-8] = 0
+        self.u_kj = sparse.COO.from_numpy(tmp)
 
-        for k in range(self.n):
-            for j in range(self.n):
-                val = 0
-                for l in range(self.n):
-                    val += self.u[k, l, j, l]
-                self.u_kj[k, j] = val
+        #self.u_bc = sparse.DOK((self.m, self.m))
+        #self.u_kj = sparse.DOK((self.n, self.n))
 
-        self.u_kj = self.u_kj.to_coo()
+        #for b in range(self.m):
+        #    for c in range(self.m):
+        #        val = 0
+        #        for k in range(self.n):
+        #            val += self.u[b + self.n, k, c + self.n, k]
+        #        self.u_bc[b, c] = val
+
+        #self.u_bc = self.u_bc.to_coo()
+
+        #for k in range(self.n):
+        #    for j in range(self.n):
+        #        val = 0
+        #        for l in range(self.n):
+        #            val += self.u[k, l, j, l]
+        #        self.u_kj[k, j] = val
+
+        #self.u_kj = self.u_kj.to_coo()
 
     def _compute_d_matrix(self):
         self.d = sparse.COO.from_numpy(
