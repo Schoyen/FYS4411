@@ -2,8 +2,8 @@ import numpy as np
 import scipy.linalg
 
 def calculate_energy(F, W, D):
-    J = np.einsum("pqrs, sr -> pq", W, D)
-    K = np.einsum("psrq, sr -> pq", W, D)
+    J = np.einsum("sr, qrps -> qp", D, W)
+    K = np.einsum("sr, qrsp -> qp", D, W)
 
     energy = np.einsum("pq, qp ->", F, D)
     energy -= 0.5*np.einsum("pq, qp ->", J, D)
@@ -65,7 +65,7 @@ def build_rhf_fock_matrix(H, W, D):
 
     return H + J - 0.5*K
 
-def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-7,
+def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-4,
         max_iterations=1000):
     """The SCF-scheme for solving the RHF Roothan-Hall equations.
 
