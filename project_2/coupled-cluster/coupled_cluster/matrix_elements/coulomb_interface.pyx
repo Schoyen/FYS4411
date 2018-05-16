@@ -11,6 +11,37 @@ def get_coulomb_element(int n_p, int m_p, int n_q, int m_q, int n_r, int m_r,
 
     return coulomb_ho(n_p, m_p, n_q, m_q, n_r, m_r, n_s, m_s)
 
+def _get_coulomb_elements(int l, dict index_map, double tol=1e-8):
+    cdef list data, indices
+    cdef int p, q, r, s, _l
+    cdef double element
+
+    data = []
+    indices = [[], [], [], []]
+    _l = l // 2
+
+    for p in range(_l):
+        for q in range(_l):
+            for r in range(_l):
+                for s in range(_l):
+                    element = get_coulomb_element(
+                            *index_map[p],
+                            *index_map[q],
+                            *index_map[r],
+                            *index_map[s]
+                    )
+
+                    if abs(element) < tol:
+                        continue
+
+                    indices[0].append(p)
+                    indices[1].append(q)
+                    indices[2].append(r)
+                    indices[3].append(s)
+                    data.append(element)
+
+    return indices, data
+
 cdef int spin_delta(int p, int q):
     return not ((p & 0x1) ^ (q & 0x1))
 

@@ -2,7 +2,8 @@ import sparse
 import pickle
 import numba
 from .coulomb_interface import (
-        get_coulomb_element, get_energy, _get_antisymmetrized_elements
+        get_coulomb_element, get_energy, _get_antisymmetrized_elements,
+        _get_coulomb_elements
 )
 from .index_map import get_indices_nm
 
@@ -15,27 +16,10 @@ def spin_delta(p, q):
 def get_coulomb_elements(l: int, filename="") -> sparse.COO:
     global ORBITAL_INTEGRALS
 
-    ORBITAL_INTEGRALS = sparse.DOK((l//2, l//2, l//2, l//2))
-
     indices = {p: get_indices_nm(p) for p in range(l//2)}
+    ORBITAL_INTEGRALS = sparse.COO(
+            *_get_coulomb_elements(l, indices), shape=(l//2, l//2, l//2, l//2))
 
-    for p in range(l//2):
-        for q in range(l//2):
-            for r in range(l//2):
-                for s in range(l//2):
-                    element = get_coulomb_element(
-                            *indices[p],
-                            *indices[q],
-                            *indices[r],
-                            *indices[s]
-                    )
-
-                    if abs(element) < 1e-8:
-                        continue
-
-                    ORBITAL_INTEGRALS[p, q, r, s] = element
-
-    ORBITAL_INTEGRALS = ORBITAL_INTEGRALS.to_coo()
     if filename:
         with open(filename, "w") as f:
             pickle.dump(ORBITAL_INTEGRALS, f)
