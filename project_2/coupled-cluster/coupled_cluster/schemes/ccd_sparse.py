@@ -144,7 +144,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
                 + u[v, v, o, o]
 
     def _compute_intermediates(self):
-        h, u, t, o, v = self.h, self.u, self.t, self.o, self.v
+        u, t, o, v = self.u, self.t, self.o, self.v
 
         self.chi_klij = 0.25*sparse.tensordot(
                 t, u[o, o, v, v], axes=((0, 1), (2, 3)))
@@ -153,6 +153,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
 
         self.chi_bc = 0.5*sparse.tensordot(
                 t, u[o, o, v, v], axes=((1, 2, 3), (2, 0, 1)))
+
         self.chi_bc = self.chi_bc + self.u_bc
 
         self.chi_lj = 0.5*sparse.tensordot(
