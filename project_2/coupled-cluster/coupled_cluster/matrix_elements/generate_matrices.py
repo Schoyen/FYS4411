@@ -1,7 +1,9 @@
 import sparse
 import pickle
 import numba
-from .coulomb_interface import get_coulomb_element, get_energy
+from .coulomb_interface import (
+        get_coulomb_element, get_energy, _get_antisymmetrized_elements
+)
 from .index_map import get_indices_nm
 
 ORBITAL_INTEGRALS = None
@@ -43,27 +45,12 @@ def get_coulomb_elements(l: int, filename="") -> sparse.COO:
 def get_antisymmetrized_elements(l: int, oi=ORBITAL_INTEGRALS,
         filename="") -> sparse.COO:
 
-    u = sparse.DOK((l, l, l, l))
-
     if oi is None:
         oi = get_coulomb_elements(l)
 
-    for p in range(l):
-        for q in range(l):
-            for r in range(l):
-                for s in range(l):
-                    u_pqrs = spin_delta(p, r) * spin_delta(q, s) \
-                            * oi[p//2, q//2, r//2, s//2]
-                    u_pqsr = spin_delta(p, s) * spin_delta(q, r) \
-                            * oi[p//2, q//2, s//2, r//2]
+    u = sparse.COO(
+            *_get_antisymmetrized_elements(l, oi.todense()), shape=(l, l, l, l))
 
-                    u_as = u_pqrs - u_pqsr
-                    if abs(u_as) < 1e-8:
-                        continue
-
-                    u[p, q, r, s] = u_as
-
-    u = u.to_coo()
     if filename:
         with open(filename, "w") as f:
             pickle.dump(u, f)
