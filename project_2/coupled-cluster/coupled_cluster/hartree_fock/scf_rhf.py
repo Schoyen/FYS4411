@@ -65,8 +65,7 @@ def build_rhf_fock_matrix(H, W, D):
 
     return H + J - 0.5*K
 
-def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-4,
-        max_iterations=1000):
+def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-8, max_iterations=1000):
     """The SCF-scheme for solving the RHF Roothan-Hall equations.
 
     Args:
