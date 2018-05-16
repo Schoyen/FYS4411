@@ -26,7 +26,6 @@ def loc_compute_d_matrix(h, m, n):
 class CoupledClusterDoublesSparse(CoupledCluster):
 
     def _initialize(self, initial_guess):
-        #self.d = sparse.DOK((self.m, self.m, self.n, self.n))
         self._compute_d_matrix()
 
         self.h_sans_diag = sparse.DOK(self.h.shape)
