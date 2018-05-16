@@ -1,12 +1,32 @@
 import numpy as np
+import numba
 import sparse
 
 from .cc import CoupledCluster
 
+@numba.njit(cache=True)
+def loc_compute_d_matrix(h, m, n):
+    d = np.zeros((m, m, n, n))
+
+    for a in range(m):
+        for b in range(m):
+            for i in range(n):
+                for j in range(n):
+                    res = h[i, i] + h[j, j] \
+                            - (h[n + a, n + a] + h[n + b, n + b])
+
+                    if abs(res) < 1e-8:
+                        continue
+
+                    d[a, b, i, j] = 1.0/res
+
+    return d
+
+
 class CoupledClusterDoublesSparse(CoupledCluster):
 
     def _initialize(self, initial_guess):
-        self.d = sparse.DOK((self.m, self.m, self.n, self.n))
+        #self.d = sparse.DOK((self.m, self.m, self.n, self.n))
         self._compute_d_matrix()
 
         self.h_sans_diag = sparse.DOK(self.h.shape)
@@ -46,21 +66,8 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         self.u_kj = self.u_kj.to_coo()
 
     def _compute_d_matrix(self):
-        h, n, m = self.h, self.n, self.m
-
-        for a in range(m):
-            for b in range(m):
-                for i in range(n):
-                    for j in range(n):
-                        res = h[i, i] + h[j, j] \
-                                - (h[n + a, n + a] + h[n + b, n + b])
-
-                        if abs(res) < 1e-8:
-                            continue
-
-                        self.d[a, b, i, j] = 1.0/res
-
-        self.d = self.d.to_coo()
+        self.d = sparse.COO.from_numpy(
+                loc_compute_d_matrix(self.h.todense(), self.m, self.n))
 
     def _compute_initial_guess(self):
         u, d, o, v = self.u, self.d, self.o, self.v
