@@ -38,13 +38,14 @@ class CoupledCluster:
     def compute_energy(self, max_iterations=100, tol=1e-4, theta=0.9):
         iterations = 0
 
-        energy_prev = 100
+        diff = 100
         energy = self._compute_energy()
 
-        while abs(energy - energy_prev) > tol and iterations < max_iterations:
+        while diff > tol and iterations < max_iterations:
             self._compute_amplitudes(theta)
             energy_prev = energy
             energy = self._compute_energy()
+            diff = abs(energy - energy_prev)
             iterations += 1
 
         return energy, iterations
