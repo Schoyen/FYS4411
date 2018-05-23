@@ -52,3 +52,10 @@ def test_one_body_generation():
 
     sparse.utils.assert_eq(
             h, get_one_body_elements_spin(l), atol=1e-5, rtol=1e-5)
+
+def test_large_file():
+    l = pytest.large_l
+    orbital_integrals = pytest.large_oi
+
+    sparse.utils.assert_eq(
+            orbital_integrals, get_coulomb_elements(l), atol=1e-5, rtol=1e-5)

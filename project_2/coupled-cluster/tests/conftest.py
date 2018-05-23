@@ -4,7 +4,9 @@ import sparse
 
 n = 2
 l = 12
+large_l = 72
 filename = "tests/dat/coulomb.dat"
+large_filename = "tests/dat/coulomb_L_72.dat"
 
 def spin_delta(p, q):
     return not ((p & 0x1) ^ (q & 0x1))
@@ -12,9 +14,9 @@ def spin_delta(p, q):
 def pytest_namespace():
     return {
             "n": n, "l": l, "orbital_integrals": orbital_integrals, "u": u,
-            "h": h}
+            "h": h, "large_oi": large_oi, "large_l": large_l}
 
-def get_file_orbital_integrals():
+def get_file_orbital_integrals(l, filename, tol=1e-8):
     orbital_integrals = sparse.DOK((l//2, l//2, l//2, l//2))
 
     with open(filename, "r") as f:
@@ -26,14 +28,15 @@ def get_file_orbital_integrals():
 
             p, q, r, s, val = line
 
-            if abs(float(val)) < 1e-8:
+            if abs(float(val)) < tol:
                 continue
 
             orbital_integrals[int(p), int(q), int(r), int(s)] = float(val)
 
     return orbital_integrals.to_coo()
 
-orbital_integrals = get_file_orbital_integrals()
+orbital_integrals = get_file_orbital_integrals(l, filename)
+large_oi = get_file_orbital_integrals(large_l, large_filename)
 
 def get_file_antisymmetrized_integrals():
     u = sparse.DOK((l, l, l, l))
