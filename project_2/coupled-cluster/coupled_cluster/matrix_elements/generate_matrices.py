@@ -14,7 +14,7 @@ ORBITAL_INTEGRALS = None
 def spin_delta(p, q):
     return not ((p & 0x1) ^ (q & 0x1))
 
-def get_coulomb_elements(l: int, filename=None) -> sparse.COO:
+def get_coulomb_elements(l: int, filename=None, tol=1e-8) -> sparse.COO:
     global ORBITAL_INTEGRALS
 
     if filename is not None:
@@ -27,7 +27,8 @@ def get_coulomb_elements(l: int, filename=None) -> sparse.COO:
 
     indices = {p: get_indices_nm(p) for p in range(l//2)}
     ORBITAL_INTEGRALS = sparse.COO(
-            *_get_coulomb_elements(l, indices), shape=(l//2, l//2, l//2, l//2))
+            *_get_coulomb_elements(l, indices, tol=tol),
+            shape=(l//2, l//2, l//2, l//2))
 
     if filename is not None:
         with open(filename, "wb") as f:
@@ -36,13 +37,14 @@ def get_coulomb_elements(l: int, filename=None) -> sparse.COO:
     return ORBITAL_INTEGRALS
 
 def get_antisymmetrized_elements(l: int, oi=ORBITAL_INTEGRALS,
-        filename=None) -> sparse.COO:
+        filename=None, tol=1e-8) -> sparse.COO:
 
     if oi is None:
-        oi = get_coulomb_elements(l, filename=filename)
+        oi = get_coulomb_elements(l, filename=filename, tol=tol)
 
     u = sparse.COO(
-            *_get_antisymmetrized_elements(l, oi.todense()), shape=(l, l, l, l))
+            *_get_antisymmetrized_elements(l, oi.todense(), tol=tol),
+            shape=(l, l, l, l))
 
     return u
 
