@@ -54,27 +54,6 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         tmp[np.abs(tmp) < 1e-8] = 0
         self.u_kj = sparse.COO.from_numpy(tmp)
 
-        #self.u_bc = sparse.DOK((self.m, self.m))
-        #self.u_kj = sparse.DOK((self.n, self.n))
-
-        #for b in range(self.m):
-        #    for c in range(self.m):
-        #        val = 0
-        #        for k in range(self.n):
-        #            val += self.u[b + self.n, k, c + self.n, k]
-        #        self.u_bc[b, c] = val
-
-        #self.u_bc = self.u_bc.to_coo()
-
-        #for k in range(self.n):
-        #    for j in range(self.n):
-        #        val = 0
-        #        for l in range(self.n):
-        #            val += self.u[k, l, j, l]
-        #        self.u_kj[k, j] = val
-
-        #self.u_kj = self.u_kj.to_coo()
-
     def _compute_d_matrix(self):
         self.d = sparse.COO.from_numpy(
                 loc_compute_d_matrix(self.h.todense(), self.m, self.n))
