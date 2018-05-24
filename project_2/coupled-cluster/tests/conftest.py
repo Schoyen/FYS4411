@@ -4,7 +4,9 @@ import sparse
 
 n = 2
 l = 12
+num_shells = 3
 large_l = 72
+large_num_shells = 8
 filename = "tests/dat/coulomb.dat"
 large_filename = "tests/dat/coulomb_L_72.dat"
 
@@ -13,8 +15,10 @@ def spin_delta(p, q):
 
 def pytest_namespace():
     return {
-            "n": n, "l": l, "orbital_integrals": orbital_integrals, "u": u,
-            "h": h, "large_oi": large_oi, "large_l": large_l}
+            "n": n, "l": l, "num_shells": num_shells,
+            "orbital_integrals": orbital_integrals, "u": u,
+            "h": h, "large_oi": large_oi, "large_l": large_l,
+            "large_num_shells": large_num_shells}
 
 def get_file_orbital_integrals(l, filename, tol=1e-8):
     orbital_integrals = sparse.DOK((l//2, l//2, l//2, l//2))

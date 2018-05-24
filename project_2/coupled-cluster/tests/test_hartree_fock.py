@@ -10,11 +10,16 @@ from coupled_cluster.matrix_elements.generate_matrices import (
 from coupled_cluster.hartree_fock.basis_transformation import (
         transform_one_body_elements, transform_two_body_elements,
 )
+from coupled_cluster.matrix_elements.index_map import (
+        generate_index_map
+)
 
 def test_hartree_fock_energy():
     l = pytest.l
     n = pytest.n
+    num_shells = pytest.num_shells
 
+    generate_index_map(num_shells)
     h = get_one_body_elements(l)
     u = get_coulomb_elements(l)
 

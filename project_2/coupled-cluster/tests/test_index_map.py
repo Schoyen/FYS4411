@@ -1,8 +1,13 @@
+import pytest
+
 from coupled_cluster.matrix_elements.index_map import (
-        get_index_p, get_indices_nm
+        get_index_p, get_indices_nm, generate_index_map
 )
 
 def test_index_map(index_map):
+    num_shells = pytest.num_shells
+    generate_index_map(num_shells)
+
     for p in index_map:
         assert index_map[p] == get_indices_nm(p)
 
