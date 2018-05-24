@@ -1,44 +1,52 @@
-import pandas as pd
-from .coulomb_interface import get_energy
+import numpy as np
 
-INDEX_MAP = None
+P_LIST = []
+NM_DICT = {}
+SHELL_ARR = None
 
-def _generate_index_map(n_range: int, m_range: int) -> None:
-    global INDEX_MAP
+def generate_index_map(num_shells: int) -> None:
+    global P_LIST, NM_DICT, SHELL_ARR
 
-    INDEX_MAP = pd.DataFrame(
-            index=[(n, m) for n in range(n_range)
-                for m in range(-m_range, m_range + 1)],
-            columns=["energy", "n", "m", "p"])
-    INDEX_MAP.n = list(map(lambda x: x[0], INDEX_MAP.index))
-    INDEX_MAP.m = list(map(lambda x: x[1], INDEX_MAP.index))
-    INDEX_MAP.energy = list(map(lambda x: get_energy(*x), INDEX_MAP.index))
-    INDEX_MAP = INDEX_MAP.sort_values(by=["energy", "m"])
-    INDEX_MAP.p = list(range(len(INDEX_MAP)))
+    P_LIST = []
+    NM_DICT = {}
+    SHELL_ARR = np.cumsum(range(1, num_shells + 1)) * 2
+
+    counter = 0
+    decrease = False
+
+    for shell in range(num_shells + 1):
+        n_max = shell // 2
+        n = 0
+
+        for m in range(-shell, shell + 1, 2):
+            P_LIST.append((n, m))
+            NM_DICT[(n, m)] = counter
+            counter += 1
+
+            if not decrease and n < n_max:
+                n += 1
+            elif not decrease and n == n_max:
+                decrease = True
+                if shell % 2 == 0:
+                    n -= 1
+            elif decrease:
+                n -= 1
+            else:
+                raise Exception((
+                    "Invalid value: decrease = {0}, n = {1}, " \
+                            + "n_max = {2}").format(decrease, n, n_max))
 
 def get_index_p(n: int, m: int) -> int:
-    if INDEX_MAP is None:
-        _generate_index_map(n + 1, m + 1)
-
-    n_mask = INDEX_MAP.n == n
-    if not any(n_mask):
-        _generate_index_map(n + 1, m + 1)
-        n_mask = INDEX_MAP.n == n
-
-    m_mask = INDEX_MAP.m == m
-    if not any(m_mask):
-        _generate_index_map(n + 1, m + 1)
-        m_mask = INDEX_MAP.m == m
-
-    return int(INDEX_MAP[n_mask & m_mask].p)
+    try:
+        return NM_DICT[(n, m)]
+    except KeyError:
+        raise KeyError((
+            "Index map does not contain a p-value for " + \
+                    "(n = {0}, m = {1})").format(n, m))
 
 def get_indices_nm(p: int) -> int:
-    if INDEX_MAP is None:
-        _generate_index_map(p//2 + 1, p + 1)
-
-    mask = INDEX_MAP.p == p
-    if not any(mask):
-        _generate_index_map(p//2 + 1, p + 1)
-        mask = INDEX_MAP.p == p
-
-    return int(INDEX_MAP[mask].n), int(INDEX_MAP[mask].m)
+    try:
+        return P_LIST[p]
+    except IndexError:
+        raise IndexError(
+            "Index map does not contain a (n, m)-tuple for p = {0}".format(p))
