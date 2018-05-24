@@ -398,12 +398,50 @@
 		The CCD amplitude equation, from SymPy computation, is 
 		\begin{equation}
 		\begin{aligned}
-			0 =& u^{ab}_{ij} + t^{ac}_{ij} u^{bm}_{cm} P(ab) + t^{ab}_{ik} u^{mk}_{jsm} P(ij) \\
-				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{nm} u^{nm}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-				 -& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{nm}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-				 -& t^{ac}_{im} t^{bd}_{jn} u^{nm}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-				 +& \frac{1}{2}t^{ab}_{nm} u^{nm}_{ij}. 
+			0 =& u^{ab}_{ij} + f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij) \\
+				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+				 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}. 
+		\label{eq:CCD_amp_1}
 		\end{aligned}
+		\end{equation}
+		
+		\subsubsection{The Iterative Scheme}
+		Now we pick only diagonal elements of $f$ to be part of the unperturbed 
+		Hamiltonian and let the other parts be for a while as part of a perturbation. 
+		The second and third terms in \autoref{eq:CCD_amp_1} can now be 
+		rewritten,
+		\begin{equation}
+		\begin{aligned}
+			f_{bc}&t_{ij}^{ab}P(ab) - f_{kj}t_{ik}^{ab}P(ab) \\
+				&= f_{bb}t_{ij}^{ab} - f_{aa}t_{ij}^{ba} - f_{jj}t_{ij}^{ab} + f_{ii}t_{ji}^{ab} \\
+				&= (f_{aa} + f_{bb} - f_{ii} - f_{jj})t_{ij}^{ab} \\
+				&= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
+				&= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\				
+				&= -D_{ij}^{ab}t_{ij}^{ab}.
+		\end{aligned}
+		\end{equation}
+		
+		Now, we define a new function consisting of all of \autoref{eq:CCD_amp_1} 
+		except term number two and three,
+		\begin{equation}
+		\begin{aligned}		
+			g(u, \tau) =&
+				    \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+				 & \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+				 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}, 
+		\end{aligned}
+		\end{equation}
+		
+		so that $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$. This allows us to define an iterative scheme,
+		\begin{equation}
+			\tau^{(k + 1)} = \frac{g(u, \tau^{(k)})}{D_{ij}^{ab}},
+		\end{equation}
+		with the initial guess
+		\begin{equation}
+			\tau^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
 		\end{equation}
 		
     \subsection{Constructing the matrix elements}
@@ -782,12 +820,10 @@
 				 \ &- \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i k} \delta_{j l} + \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i l} \delta_{j k} \\
 				 \ &+ \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i k} \delta_{j l} - \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i l} \delta_{j k}) \\
 				 =& (f_{bc}t^{ac}_{ij} - f_{ac}t^{bc}_{ij}) - (f_{jk}t^{ab}_{ik} - f_{ik}t^{ab}_{jk}) \\
-				 =& f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik} \\
-				 =& (h^c_b + u_{cm}^{bm})t_{ij}^{ac}P(ab) + (h^j_m + u_{jm}^{mk})t_{ik}^{ab}P(ij)
+				 =& f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij)
 		\end{aligned}
 		\end{equation}		
-		Where in the last steps we have consigned the sums by Einstein summation notation,
-		and split the Fock operator into one- and two-body parts. 
+		Where in the last steps we have consigned the sums by Einstein summation notation. 
 
 \section{Coupled cluster doubles diagrams}
     In order to get an expression for the energy equation and the amplitude
