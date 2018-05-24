@@ -95,20 +95,19 @@ def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-8, max_iterations=1000):
 
     # Solve the initial generalized eigenvalue problem using the one-body
     # integrals as an approximation to the Fock matrix and the overlap matrix
-    energy_prev, U = scipy.linalg.eigh(H, S)
+    energy, U = scipy.linalg.eigh(H, S)
 
     # Get the density matrix from the occupied states in the U-matrix
     D = 2*build_density_matrix(U, num_occupied)
     # Build the Fock matrix from this system
     F = build_rhf_fock_matrix(H, W, D)
 
-    # Solve the generalized eigenvalue problem
-    energy, U = scipy.linalg.eigh(F, S)
+    # Set initial energy diff
+    diff = 100
 
     # Loop until the solution converges, i.e., until the change in the
     # eigen-energies are lower than the threshold tol
-    while (np.max(np.abs(energy_prev - energy)) > tol
-            and counter < max_iterations):
+    while diff > tol and counter < max_iterations:
         # Set the previous energy
         energy_prev = energy
 
@@ -121,6 +120,9 @@ def scf_rhf(H, W, S, num_occupied, theta=0.01, tol=1e-8, max_iterations=1000):
         F = build_rhf_fock_matrix(H, W, D)
         # Solve the new generalized eigenvalue problem
         energy, U = scipy.linalg.eigh(F, S)
+
+        # Compute new difference
+        diff = np.max(np.abs(energy - energy_prev))
 
         # Increment the counter
         counter += 1
