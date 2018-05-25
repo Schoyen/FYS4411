@@ -409,7 +409,7 @@
 		
 		\subsubsection{The Iterative Scheme}
 		Now we pick only diagonal elements of $f$ to be part of the unperturbed 
-		Hamiltonian and let the other parts be for a while as part of a perturbation. 
+		Hamiltonian and consider the rest of the terms a perturbation. 
 		The second and third terms in \autoref{eq:CCD_amp_1} can now be 
 		rewritten,
 		\begin{equation}
@@ -443,6 +443,31 @@
 		\begin{equation}
 			\tau^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
 		\end{equation}
+		
+		\subsubsection{Intermediate Computations}
+		Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
+		to realize that it contains that this equation contains many of the same structures in
+		several of the terms. This warrants the search for an algebraic transformation of the
+		CCD amplitude equation that has the potential to reduce the amount of floating point
+		operations needed to compute it. As it turns out, such terms exist and they will decrease
+		the computing time necessary by an order of magnitude. We will define the following
+		"intermediates",
+		\begin{align}
+			 \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
+    			 \chi^b_c &= u^{bm}_{cm} - \frac{1}{2} t^{bd}_{mn} u^{mn}_{cd} \\
+   			 \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} \\
+    			 \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd}.
+		\end{align}
+		These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
+		\begin{equation}
+		\begin{aligned}
+			0 =& \frac{1}{2}t^{ab}_{mn}u^{mn}_{ij} - t^{ab}_{im}u^{mn}_{jn}P(ij)
+      		+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ac}_{ij}\chi^b_c P(ab) \\
+      	  &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
+      		+ t^{ab}_{in}\chi^n_jP(ij) + u^{ab}_{ij}.
+		\end{aligned}
+		\end{equation}
+		The importance of this "trick" will become apparent in due time. 
 		
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
