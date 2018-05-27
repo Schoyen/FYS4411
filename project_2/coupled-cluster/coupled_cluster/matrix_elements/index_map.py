@@ -11,11 +11,11 @@ def generate_index_map(num_shells: int) -> None:
     IndexMap.shell_arr = np.cumsum(range(1, num_shells + 1)) * 2
 
     counter = 0
-    decrease = False
 
     for shell in range(num_shells + 1):
         n_max = shell // 2
         n = 0
+        decrease = False
 
         for m in range(-shell, shell + 1, 2):
             IndexMap.p_list.append((n, m))
