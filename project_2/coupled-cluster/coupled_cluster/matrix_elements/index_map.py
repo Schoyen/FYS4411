@@ -1,15 +1,14 @@
 import numpy as np
 
-P_LIST = []
-NM_DICT = {}
-SHELL_ARR = None
+class IndexMap:
+    p_list = []
+    nm_dict = {}
+    shell_arr = None
 
 def generate_index_map(num_shells: int) -> None:
-    global P_LIST, NM_DICT, SHELL_ARR
-
-    P_LIST = []
-    NM_DICT = {}
-    SHELL_ARR = np.cumsum(range(1, num_shells + 1)) * 2
+    IndexMap.p_list = []
+    IndexMap.nm_dict = {}
+    IndexMap.shell_arr = np.cumsum(range(1, num_shells + 1)) * 2
 
     counter = 0
     decrease = False
@@ -19,8 +18,8 @@ def generate_index_map(num_shells: int) -> None:
         n = 0
 
         for m in range(-shell, shell + 1, 2):
-            P_LIST.append((n, m))
-            NM_DICT[(n, m)] = counter
+            IndexMap.p_list.append((n, m))
+            IndexMap.nm_dict[(n, m)] = counter
             counter += 1
 
             if not decrease and n < n_max:
@@ -38,7 +37,7 @@ def generate_index_map(num_shells: int) -> None:
 
 def get_index_p(n: int, m: int) -> int:
     try:
-        return NM_DICT[(n, m)]
+        return IndexMap.nm_dict[(n, m)]
     except KeyError:
         raise KeyError((
             "Index map does not contain a p-value for " + \
@@ -46,7 +45,7 @@ def get_index_p(n: int, m: int) -> int:
 
 def get_indices_nm(p: int) -> int:
     try:
-        return P_LIST[p]
+        return IndexMap.p_list[p]
     except IndexError:
         raise IndexError(
             "Index map does not contain a (n, m)-tuple for p = {0}".format(p))
