@@ -12,7 +12,7 @@ def generate_index_map(num_shells: int) -> None:
 
     counter = 0
 
-    for shell in range(num_shells + 1):
+    for shell in range(num_shells):
         n_max = shell // 2
         n = 0
         decrease = False
