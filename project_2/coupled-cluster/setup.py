@@ -1,5 +1,5 @@
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup, find_packages
+from setuptools.extension import Extension
 from Cython.Build import cythonize
 
 import numpy as np
@@ -44,13 +44,9 @@ extensions = [
     )
 ]
 
-dirs = []
-for subdir in ["hartree_fock", "schemes", "matrix_elements"]:
-    dirs.append(os.path.join(*base_path, subdir))
-
 setup(
     name="Coupled Cluster",
     version="0.0.1",
-    packages=base_path + dirs,
+    packages=find_packages(),
     ext_modules=cythonize(extensions)
 )
