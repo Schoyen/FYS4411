@@ -72,23 +72,5 @@ def test_large_file():
 
     generate_index_map(num_shells)
 
-    #sparse.utils.assert_eq(
-    #        orbital_integrals, get_coulomb_elements(l), atol=1e-5, rtol=1e-5)
     u = get_coulomb_elements(l)
-
-    p, q, r, s = u.coords
-
-    with open("tests/dat/foo.dat", "w") as f:
-        for _p, _q, _r, _s in zip(p, q, r, s):
-            f.write(
-                    "{0} {1} {2} {3} {4}\n".format(
-                        _p, _q, _r, _s, u[_p, _q, _r, _s]))
-
-    #sparse.utils.assert_eq(orbital_integrals, u)
-
-    for _p, _q, _r, _s in zip(p, q, r, s):
-        assert abs(
-                u[_p, _q, _r, _s] - orbital_integrals[_p, _q, _r, _s]) < 1e-5, \
-                "(p, q, r, s) = ({0}, {1}, {2}, {3}), u = {4}, oi = {5}".format(
-                        _p, _q, _r, _s, u[_p, _q, _r, _s],
-                        orbital_integrals[_p, _q, _r, _s])
+    sparse.utils.assert_eq(orbital_integrals, u)
