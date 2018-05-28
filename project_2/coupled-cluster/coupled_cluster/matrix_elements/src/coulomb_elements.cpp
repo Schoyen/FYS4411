@@ -1,5 +1,12 @@
 #include "coulomb_elements.h"
 
+/* Implementation of two-body matrix elements for the two-dimensional quantum
+ * dots.
+ *
+ * Anisimovas, Matulis. J. Pys.: Condens. Matter 10, 601 (1998)
+ *
+ * */
+
 double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
         int ml)
 {
