@@ -4,32 +4,46 @@ import sparse
 
 from .cc import CoupledCluster
 
+#@numba.njit(cache=True)
+#def loc_compute_d_matrix(h, m, n):
+#    d = np.zeros((m, m, n, n))
+#
+#    for a in range(m):
+#        for b in range(m):
+#            for i in range(n):
+#                for j in range(n):
+#                    res = h[i, i] + h[j, j] \
+#                            - (h[n + a, n + a] + h[n + b, n + b])
+#
+#                    if abs(res) < 1e-8:
+#                        continue
+#
+#                    d[a, b, i, j] = 1.0/res
+#
+#    return d
+
 @numba.njit(cache=True)
-def loc_compute_d_matrix(h, m, n):
-    d = np.zeros((m, m, n, n))
+def _divide_amplitudes_by_d_matrix(indices, data, h, n):
+    data_index = 0
 
-    for a in range(m):
-        for b in range(m):
-            for i in range(n):
-                for j in range(n):
-                    res = h[i, i] + h[j, j] \
-                            - (h[n + a, n + a] + h[n + b, n + b])
+    for a, b, i, j in zip(indices[0], indices[1], indices[2], indices[3]):
+        divisor = h[i, i] + h[j, j] - h[n + a, n + a] - h[n + b, n + b]
 
-                    if abs(res) < 1e-8:
-                        continue
+        if abs(divisor) < 1e-10:
+            continue
 
-                    d[a, b, i, j] = 1.0/res
+        data[data_index] = data[data_index]/divisor
 
-    return d
-
+        data_index += 1
 
 class CoupledClusterDoublesSparse(CoupledCluster):
 
     def _initialize(self, initial_guess):
         o, v = self.o, self.v
 
-        self._compute_d_matrix()
+        #self._compute_d_matrix()
 
+        self.h_dense = self.h.todense()
         self.h_sans_diag = sparse.DOK(self.h.shape)
         for p in range(len(self.h)):
             for q in range(len(self.h[p])):
@@ -54,15 +68,22 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         tmp[np.abs(tmp) < 1e-8] = 0
         self.u_kj = sparse.COO.from_numpy(tmp)
 
-    def _compute_d_matrix(self):
-        self.d = sparse.COO.from_numpy(
-                loc_compute_d_matrix(self.h.todense(), self.m, self.n))
+    #def _compute_d_matrix(self):
+    #    self.d = sparse.COO.from_numpy(
+    #            loc_compute_d_matrix(self.h.todense(), self.m, self.n))
 
     def _compute_initial_guess(self):
-        u, d, o, v = self.u, self.d, self.o, self.v
+        h, u, o, v = self.h_dense, self.u, self.o, self.v
         n = self.n
 
-        self.t = u[v, v, o, o] * d
+        self.t = sparse.COO(
+                u[v, v, o, o].coords,
+                u[v, v, o, o].data,
+                shape=u[v, v, o, o].shape)
+        _divide_amplitudes_by_d_matrix(
+                self.t.coords, self.t.data, h, n)
+
+        #self.t = u[v, v, o, o] * d
 
     def _compute_ccd_energy(self):
         h, u, t, o, v = self.h, self.u, self.t, self.o, self.v
@@ -80,8 +101,13 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         t_one_body = self._compute_one_body_amplitude()
         t_two_body = self._compute_two_body_amplitude()
 
-        self.t = (1 - theta) * (t_one_body + t_two_body) * self.d \
-                + theta * self.t
+        _t = t_one_body + t_two_body
+        _divide_amplitudes_by_d_matrix(_t.coords, _t.data, self.h_dense, self.n)
+
+        self.t = (1 - theta) * _t + theta * self.t
+
+        #self.t = (1 - theta) * (t_one_body + t_two_body) * self.d \
+        #        + theta * self.t
 
     def _compute_one_body_amplitude(self):
         h, t, o, v = self.h_sans_diag, self.t, self.o, self.v
