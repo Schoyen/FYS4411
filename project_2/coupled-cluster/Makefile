@@ -1,7 +1,8 @@
 RM=rm -rf
 
 BDIR=build
-CYTHONDIR=coupled_cluster/matrix_elements
+COULOMBDIR=coupled_cluster/matrix_elements
+CCDIR=coupled_cluster/schemes
 
 build:
 	python3 setup.py build_ext
@@ -15,4 +16,4 @@ installr:
 .PHONY: clean
 
 clean:
-	$(RM) $(BDIR) $(CYTHONDIR)/*.cpp .cache
+	$(RM) $(BDIR) $(COULOMBDIR)/*.cpp $(CCDIR)/*.c .cache
