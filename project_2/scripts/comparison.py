@@ -19,13 +19,13 @@ import os
 file_path = os.path.join("..", "dat")
 filename = os.path.join(file_path, "coulomb_{0}.pkl")
 
-num_shells = 10
+num_shells = 8
 generate_index_map(num_shells)
 
-omega = 2.0
+omega = 1.0
 l = IndexMap.shell_arr[-1]
 n = 2
-theta = 0.9
+theta = 0.1
 
 filename = filename.format(l)
 
@@ -42,7 +42,7 @@ h = omega * get_one_body_elements(l)
 t0 = time.time()
 u = np.sqrt(omega) * get_coulomb_elements(l, filename=filename, tol=1e-12)
 t1 = time.time()
-print ("Time spent creating Coulomb elements: {0} sec".format(t1 - t0)) 
+print ("Time spent creating Coulomb elements: {0} sec".format(t1 - t0))
 
 t0 = time.time()
 c, energy = scf_rhf(h.todense(), u, np.eye(l//2), n//2)
