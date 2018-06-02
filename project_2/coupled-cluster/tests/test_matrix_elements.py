@@ -4,36 +4,10 @@ from coupled_cluster.matrix_elements.index_map import (
         get_indices_nm, generate_index_map
 )
 
-from coupled_cluster.matrix_elements.coulomb_interface import (
-        get_coulomb_element
-)
-
 from coupled_cluster.matrix_elements.generate_matrices import (
         get_coulomb_elements, get_antisymmetrized_elements,
         get_one_body_elements_spin
 )
-
-def test_two_body_generation_one():
-    orbital_integrals = pytest.orbital_integrals
-    l = pytest.l
-    num_shells = pytest.num_shells
-
-    generate_index_map(num_shells)
-
-    _p, _q, _r, _s = orbital_integrals.coords
-
-    for p in range(l//2):
-        for q in range(l//2):
-            for r in range(l//2):
-                for s in range(l//2):
-                    gen_val = get_coulomb_element(
-                            *get_indices_nm(p),
-                            *get_indices_nm(q),
-                            *get_indices_nm(r),
-                            *get_indices_nm(s)
-                    )
-
-                    assert abs(orbital_integrals[p, q, r, s] - gen_val) < 1e-5
 
 def test_two_body_generation():
     orbital_integrals = pytest.orbital_integrals
