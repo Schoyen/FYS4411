@@ -9,6 +9,7 @@ import platform
 
 os.environ["CFLAGS"] = "-std=c++11"
 os.environ["CC"] = "gcc-7"
+os.environ["CXX"] = "g++-7"
 
 #if platform.system() == "Darwin":
 #    os.environ["CFLAGS"] += " -stdlib=libc++"
@@ -54,7 +55,8 @@ extensions = [
         include_dirs=include_dirs["coulomb_interface"],
         libraries=libraries,
         define_macros=define_macros,
-        undef_macros=undef_macros
+        undef_macros=undef_macros,
+        extra_compile_args=["-fopenmp"]
     ),
     Extension(
         name="coupled_cluster.schemes.cc_interface",
@@ -63,9 +65,8 @@ extensions = [
         include_dirs=include_dirs["cc_interface"],
         libraries=libraries,
         define_macros=define_macros,
-        undef_macros=undef_macros
-        #extra_compile_args=["-fopenmp"],
-        #extra_link_args=["-fopenmp"]
+        undef_macros=undef_macros,
+        extra_compile_args=["-fopenmp"]
     )
 ]
 
