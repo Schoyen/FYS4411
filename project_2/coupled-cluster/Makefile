@@ -16,4 +16,4 @@ installr:
 .PHONY: clean
 
 clean:
-	$(RM) $(BDIR) $(COULOMBDIR)/*.cpp $(CCDIR)/*.c .cache
+	$(RM) $(BDIR) $(COULOMBDIR)/*.cpp $(CCDIR)/*.cpp .cache
