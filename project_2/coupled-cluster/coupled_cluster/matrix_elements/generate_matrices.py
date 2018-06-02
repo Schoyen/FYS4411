@@ -3,8 +3,7 @@ import pickle
 import os
 import numba
 from .coulomb_interface import (
-        get_coulomb_element, get_energy, _get_antisymmetrized_elements,
-        _get_coulomb_elements
+        get_energy, _get_antisymmetrized_elements, _get_coulomb_elements
 )
 from .index_map import get_indices_nm
 
