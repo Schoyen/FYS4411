@@ -10,42 +10,47 @@
 double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
         int ml)
 {
-    int g1, g2, g3, g4, G, L;
     double dir = 0.0;
-    double exch = 0.0;
-    double LogRatio1;
-    double LogProd2;
-    double LogRatio2;
-    double temp;
+
     if (mi + mj != mk + ml) {
         return 0.0;
     }
+
     for (int j1 = 0; j1 <= ni; ++j1) {
         for (int j2 = 0; j2 <= nj; ++j2) {
             for (int j3 = 0; j3 <= nl; ++j3) {
                 for (int j4 = 0; j4 <= nk; ++j4) {
-                    g1 = int(j1 + j4 + 0.5*(std::abs(mi) + mi) +
+
+                    int g1 = int(j1 + j4 + 0.5*(std::abs(mi) + mi) +
                             0.5*(std::abs(mk) - mk));
-                    g2 = int(j2 + j3 + 0.5*(std::abs(mj) + mj) +
+                    int g2 = int(j2 + j3 + 0.5*(std::abs(mj) + mj) +
                             0.5*(std::abs(ml) - ml));
-                    g3 = int(j3 + j2 + 0.5*(std::abs(ml) + ml) +
+                    int g3 = int(j3 + j2 + 0.5*(std::abs(ml) + ml) +
                             0.5*(std::abs(mj) - mj));
-                    g4 = int(j4 + j1 + 0.5*(std::abs(mk) + mk) +
+                    int g4 = int(j4 + j1 + 0.5*(std::abs(mk) + mk) +
                             0.5*(std::abs(mi) - mi));
-                    G = g1 + g2 + g3 + g4;
-                    LogRatio1 = logratio1(j1, j2, j3, j4);
-                    LogProd2 = logproduct2(ni, mi, nj, mj, nl, ml, nk, mk, j1,
-                            j2, j3, j4);
-                    LogRatio2 = logratio2(G);
-                    temp = 0.0;
+
+                    int G = g1 + g2 + g3 + g4;
+
+                    double LogRatio1 = logratio1(j1, j2, j3, j4);
+                    double LogProd2 = logproduct2(ni, mi, nj, mj, nl, ml, nk,
+                            mk, j1, j2, j3, j4);
+
+                    double LogRatio2 = logratio2(G);
+
+                    double temp = 0.0;
+
                     for (int l1 = 0; l1 <= g1; ++l1) {
                         for (int l2 = 0; l2 <= g2; ++l2) {
                             for (int l3 = 0; l3 <= g3; ++l3) {
                                 for (int l4 = 0; l4 <= g4; ++l4) {
+
                                     if(l1 + l2 != l3 + l4) {
                                         continue;
                                     }
-                                    L = l1 + l2 + l3 + l4;
+
+                                    int L = l1 + l2 + l3 + l4;
+
                                     temp += (-2*((g2 + g3 - l2 - l3)%2) + 1) *
                                         std::exp(logproduct3(l1, l2, l3, l4,
                                                     g1, g2, g3, g4) +
@@ -62,8 +67,10 @@ double coulomb_ho(int ni, int mi, int nj, int mj, int nk, int mk, int nl,
             }
         }
     }
+
     dir *= product1(ni, mi, nj, mj, nl, ml, nk, mk);
-    return dir - exch;
+
+    return dir;
 }
 
 double logfac(int &n) {
