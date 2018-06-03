@@ -1,5 +1,4 @@
 import numpy as np
-import numba
 import sparse
 
 from .cc import CoupledCluster
