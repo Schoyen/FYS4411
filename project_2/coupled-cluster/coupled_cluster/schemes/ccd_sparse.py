@@ -2,7 +2,7 @@ import numpy as np
 import sparse
 
 from .cc import CoupledCluster
-from .cc_interface import _amplitude_scaling_two_body
+from .cc_interface import _amplitude_scaling_two_body_sparse
 
 class CoupledClusterDoublesSparse(CoupledCluster):
 
@@ -40,7 +40,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
                 u[v, v, o, o].data,
                 shape=u[v, v, o, o].shape)
 
-        _amplitude_scaling_two_body(self.t.coords, self.t.data, h, n)
+        _amplitude_scaling_two_body_sparse(self.t.coords, self.t.data, h, n)
 
     def _compute_ccd_energy(self):
         h, u, t, o, v = self.h, self.u, self.t, self.o, self.v
