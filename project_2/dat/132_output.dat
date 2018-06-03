@@ -1,0 +1,22 @@
+Time spent creating Coulomb elements: 5452.6740934848785 sec
+Time spent in SCF RHF: 1.12123703956604 sec
+	RHF Energy: 3.1619086087918675
+Time spent transforming two body elements: 3.7690513134002686 sec
+Time spent antisymmetrizing two body elements: 7.551417350769043 sec
+Time spent setting up CCD code with HF basis: 3.938105344772339 sec
+Time spent computing CCD energy with HF basis: 54.66884732246399 sec
+	CCD (HF) Energy: 3.0066354348737003
+	Iterations: 5
+	Second/iteration: 10.933769464492798
+Time spent getting antisymmetric two body elements: 3.0097107887268066 sec
+Time spent setting up CCD code with HO basis: 1.8748879432678223 sec
+Time spent computing CCD energy with HO basis: 15.068398714065552 sec
+	CCD Energy: 3.09044766435279
+	Iterations: 7
+	Second/iteration: 2.15262838772365
+0.015151515151515152
+0.04200848960428224
+0.08352582613007106
+0.04591368227731864
+0.015581099520963032
+0.007575757575757576
