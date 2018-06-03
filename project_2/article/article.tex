@@ -367,15 +367,10 @@
         By employing the Baker-Campbell-Haussdorf (BCH) expansion,
         while setting $T= T_2$, we find
         \begin{equation}
-        \begin{aligned}
         		\bar{H} 
-        			=& \Big(
+        			= \Big(
         					H_N + H_NT_2 
-        					+ \frac{1}{2}H_NT_2^2 \\
-        				  	&\ + \frac{1}{6}H_NT_2^3 
-        				   + \frac{1}{24} H_NT_2^4
-        				 \Big)_C.
-        \end{aligned}
+        					+ \frac{1}{2}H_NT_2^2 \Big)_C.
         \label{eq:normal_order_expansion}
         \end{equation}
 		The subscript $c$ indicates that only those terms in which the 
@@ -398,7 +393,7 @@
 		The CCD amplitude equation, from SymPy computation, is 
 		\begin{equation}
 		\begin{aligned}
-			0 =& u^{ab}_{ij} + f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij) \\
+			0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
 				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
 				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
 				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
@@ -408,34 +403,38 @@
 		\end{equation}
 		
 		\subsubsection{The Iterative Scheme}
-		Now we pick only diagonal elements of $f$ to be part of the unperturbed 
+		At first, we pick only diagonal elements of $f$ to be part of the unperturbed 
 		Hamiltonian and consider the rest of the terms a perturbation. 
 		The second and third terms in \autoref{eq:CCD_amp_1} can now be 
 		rewritten,
 		\begin{equation}
 		\begin{aligned}
-			f_{bc}&t_{ij}^{ab}P(ab) - f_{kj}t_{ik}^{ab}P(ab) \\
-				&= f_{bb}t_{ij}^{ab} - f_{aa}t_{ij}^{ba} - f_{jj}t_{ij}^{ab} + f_{ii}t_{ji}^{ab} \\
-				&= (f_{aa} + f_{bb} - f_{ii} - f_{jj})t_{ij}^{ab} \\
+			f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
+				&\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba} - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
+				&= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
 				&= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
 				&= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\				
 				&= -D_{ij}^{ab}t_{ij}^{ab}.
 		\end{aligned}
 		\end{equation}
 		
-		Now, we define a new function consisting of all of \autoref{eq:CCD_amp_1} 
+		The we can define a new function consisting of all of \autoref{eq:CCD_amp_1} 
 		except term number two and three,
 		\begin{equation}
 		\begin{aligned}		
 			g(u, \tau) =&
-				    \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-				 & \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+					u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
+				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
 				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
 				 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}, 
 		\end{aligned}
 		\end{equation}
 		
-		so that $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$. This allows us to define an iterative scheme,
+		where $\tilde{t}$ are the non-diagonal parts of the Fock matrix. 
+		
+		Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$. 
+		This allows us to define an iterative scheme,
 		\begin{equation}
 			\tau^{(k + 1)} = \frac{g(u, \tau^{(k)})}{D_{ij}^{ab}},
 		\end{equation}
@@ -454,15 +453,16 @@
 		"intermediates",
 		\begin{align}
 			 \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
-    			 \chi^b_c &= u^{bm}_{cm} - \frac{1}{2} t^{bd}_{mn} u^{mn}_{cd} \\
+    			 \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
    			 \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} \\
     			 \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd}.
 		\end{align}
 		These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
+		THIS REMAINS TO BE CHECKED!! 
 		\begin{equation}
 		\begin{aligned}
 			0 =& \frac{1}{2}t^{ab}_{mn}u^{mn}_{ij} - t^{ab}_{im}u^{mn}_{jn}P(ij)
-      		+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ac}_{ij}\chi^b_c P(ab) \\
+      		+ t^{cd}_{ij}\chi^{ab}_{cd} - t^{bd}_{ij}\chi^a_d P(ab) \\
       	  &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
       		+ t^{ab}_{in}\chi^n_jP(ij) + u^{ab}_{ij}.
 		\end{aligned}
