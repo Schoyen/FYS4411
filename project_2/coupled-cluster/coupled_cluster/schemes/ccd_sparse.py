@@ -6,7 +6,7 @@ from .cc_interface import _amplitude_scaling_two_body
 
 class CoupledClusterDoublesSparse(CoupledCluster):
 
-    def _initialize(self, initial_guess):
+    def _initialize(self):
         o, v = self.o, self.v
 
         self.h_dense = self.h.todense()
@@ -20,10 +20,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
 
         self.h_sans_diag = self.h_sans_diag.to_coo()
 
-        if initial_guess is not None:
-            self.t = initial_guess
-        else:
-            self._compute_initial_guess()
+        self._compute_initial_guess()
 
         tmp = np.einsum("bkck -> bc", self.u[v, o, v, o])
         tmp[np.abs(tmp) < 1e-8] = 0

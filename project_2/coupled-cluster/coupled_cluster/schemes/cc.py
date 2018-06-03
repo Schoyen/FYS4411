@@ -2,7 +2,7 @@ import numpy as np
 
 class CoupledCluster:
 
-    def __init__(self, h, u, n, initial_guess=None):
+    def __init__(self, h, u, n):
         self.n = n
         self.l = len(h)
         self.m = self.l - self.n
@@ -14,12 +14,12 @@ class CoupledCluster:
         self.o = slice(0, self.n)
         self.v = slice(self.n, self.l)
 
-        self._initialize(initial_guess=initial_guess)
+        self._initialize()
 
     def __err(self):
         raise NotImplementedError("Use approximation subclass")
 
-    def _initialize(self, initial_guess):
+    def _initialize(self):
         self.__err()
 
     def _compute_energy(self):
