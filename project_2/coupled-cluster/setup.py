@@ -8,10 +8,13 @@ import glob
 import platform
 
 os.environ["CFLAGS"] = "-std=c++11"
-os.environ["CC"] = "gcc-7"
-os.environ["CXX"] = "g++-7"
 
-#if platform.system() == "Darwin":
+if platform.system() == "Darwin":
+    os.environ["CC"] = "gcc-7"
+    os.environ["CXX"] = "g++-7"
+    # Note that the flag '-stdlib=libc++' is only valid for clang. If you use
+    # the Brew installed version of gcc, you only need to specifically call
+    # gcc-x, where "x" is the version.
 #    os.environ["CFLAGS"] += " -stdlib=libc++"
 
 base_path = ["coupled_cluster"]
