@@ -59,7 +59,8 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         t_two_body = self._compute_two_body_amplitude()
 
         _t = t_one_body + t_two_body
-        _amplitude_scaling_two_body(_t.coords, _t.data, self.h_dense, self.n)
+        _amplitude_scaling_two_body_sparse(
+                _t.coords, _t.data, self.h_dense, self.n)
 
         self.t = (1 - theta) * _t + theta * self.t
 
