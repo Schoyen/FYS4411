@@ -58,8 +58,6 @@ class CoupledClusterDoubles(CoupledCluster):
         return self._compute_ccd_energy()
 
     def _compute_amplitudes(self, theta):
-        # TODO: Use DIIS
-
         self._t.fill(0)
 
         self._compute_one_body_amplitude()
