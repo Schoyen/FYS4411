@@ -64,7 +64,7 @@ def test_optimized_energy():
     _u = get_antisymmetrized_elements(l, oi=oi).todense()
 
     ccd = CoupledClusterDoubles(_h, _u, n)
-    ccd_opt = CoupledClusterDoublesOptimized(_h, _u, n)
+    ccd_opt = CoupledClusterDoublesOptimized(_h, _u, n, parallel=True)
 
     energy, iterations = ccd.compute_energy(tol=convergence_criteria)
     energy_opt, iterations_opt = ccd_opt.compute_energy(
