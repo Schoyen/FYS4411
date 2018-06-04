@@ -1,7 +1,7 @@
 import numpy as np
 
 from .cc import CoupledCluster
-from .cc_interface import _amplitude_scaling_two_body
+from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoubles(CoupledCluster):
 
@@ -41,7 +41,7 @@ class CoupledClusterDoubles(CoupledCluster):
         o, v = self.o, self.v
 
         self.t = self.u[v, v, o, o].copy()
-        _amplitude_scaling_two_body(self.t, self.f, self.m, self.n)
+        amplitude_scaling_two_body(self.t, self.f, self.m, self.n)
 
 
 
@@ -65,7 +65,7 @@ class CoupledClusterDoubles(CoupledCluster):
         self._compute_one_body_amplitude()
         self._compute_two_body_amplitude()
 
-        _amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
+        amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
 
         self.t = (1 - theta) * self._t + theta * self.t
 

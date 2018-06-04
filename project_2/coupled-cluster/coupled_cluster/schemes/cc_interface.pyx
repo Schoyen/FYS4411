@@ -9,7 +9,7 @@ from libc.math cimport fabs
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _amplitude_scaling_two_body(
+def amplitude_scaling_two_body(
         np.ndarray[double, ndim=4] t,
         np.ndarray[double, ndim=2] h, int m, int n, double tol=1e-10):
     cdef int a, b, i, j
@@ -30,7 +30,7 @@ def _amplitude_scaling_two_body(
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _amplitude_scaling_two_body_sparse(
+def amplitude_scaling_two_body_sparse(
         np.ndarray[unsigned char, ndim=2] indices,
         np.ndarray[double, ndim=1] data,
         np.ndarray[double, ndim=2] h, int n, double tol=1e-10):
