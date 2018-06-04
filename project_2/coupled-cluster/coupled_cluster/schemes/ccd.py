@@ -5,7 +5,7 @@ from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoubles(CoupledCluster):
 
-    def _initialize(self):
+    def _initialize(self, **kwargs):
         o, v = self.o, self.v
         n, m, l = self.n, self.m, self.l
 
@@ -18,7 +18,6 @@ class CoupledClusterDoubles(CoupledCluster):
 
         # Used for intermediate terms
         self.term = np.zeros(self.t.shape)
-
 
         self.off_diag_f_bc = np.zeros((m, m))
         self.off_diag_f_kj = np.zeros((n, n))
@@ -43,8 +42,6 @@ class CoupledClusterDoubles(CoupledCluster):
         self.t = self.u[v, v, o, o].copy()
         amplitude_scaling_two_body(self.t, self.f, self.m, self.n)
 
-
-
     def _compute_ccd_energy(self):
         f, u, t, o, v = self.f, self.u, self.t, self.o, self.v
 
@@ -65,7 +62,7 @@ class CoupledClusterDoubles(CoupledCluster):
 
         amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
 
-        self.t = (1 - theta) * self._t + theta * self.t
+        self.t = np.add((1 - theta) * self._t, theta * self.t, out=self.t)
 
     def _compute_one_body_amplitude(self):
         self.term = np.einsum(

@@ -6,7 +6,7 @@ from .cc_interface import amplitude_scaling_two_body_sparse
 
 class CoupledClusterDoublesSparse(CoupledCluster):
 
-    def _initialize(self):
+    def _initialize(self, **kwargs):
         o, v = self.o, self.v
 
         self.h_dense = self.h.todense()
