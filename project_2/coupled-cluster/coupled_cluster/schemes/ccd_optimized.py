@@ -5,7 +5,7 @@ from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
-    def _initialize(self, max_diis_size=100, **kwargs):
+    def _initialize(self, **kwargs):
         super(CoupledClusterDoublesOptimized, self)._initialize(**kwargs)
 
         # Allocate memory for the intermediates
@@ -15,8 +15,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         self.chi_nj = np.zeros((self.n, self.n))
 
     def _compute_amplitudes(self, theta):
-        # TODO: Use DIIS
-
         self._compute_intermediates()
         super(CoupledClusterDoublesOptimized, self)._compute_amplitudes(theta)
 
