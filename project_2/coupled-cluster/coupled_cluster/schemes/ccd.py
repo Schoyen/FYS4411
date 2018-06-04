@@ -5,7 +5,7 @@ from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoubles(CoupledCluster):
 
-    def _initialize(self):
+    def _initialize(self, **kwargs):
         o, v = self.o, self.v
         n, m, l = self.n, self.m, self.l
 
@@ -18,7 +18,6 @@ class CoupledClusterDoubles(CoupledCluster):
 
         # Used for intermediate terms
         self.term = np.zeros(self.t.shape)
-
 
         self.off_diag_f_bc = np.zeros((m, m))
         self.off_diag_f_kj = np.zeros((n, n))

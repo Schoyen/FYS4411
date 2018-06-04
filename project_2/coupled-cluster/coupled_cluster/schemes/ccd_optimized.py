@@ -5,8 +5,8 @@ from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
-    def _initialize(self):
-        super(CoupledClusterDoublesOptimized, self)._initialize()
+    def _initialize(self, max_diis_size=100, **kwargs):
+        super(CoupledClusterDoublesOptimized, self)._initialize(**kwargs)
 
         # Allocate memory for the intermediates
         self.chi_abcd = np.zeros((self.m, self.m, self.m, self.m))
