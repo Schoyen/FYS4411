@@ -62,7 +62,7 @@ class CoupledClusterDoubles(CoupledCluster):
 
         amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
 
-        self.t = (1 - theta) * self._t + theta * self.t
+        self.t = np.add((1 - theta) * self._t, theta * self.t, out=self.t)
 
     def _compute_one_body_amplitude(self):
         self.term = np.einsum(
