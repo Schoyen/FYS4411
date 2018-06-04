@@ -2,10 +2,11 @@ import numpy as np
 
 class CoupledCluster:
 
-    def __init__(self, h, u, n, **kwargs):
+    def __init__(self, h, u, n, parallel=False, **kwargs):
         self.n = n
         self.l = len(h)
         self.m = self.l - self.n
+        self.parallel = parallel
 
         self.h = h
         self.u = u
