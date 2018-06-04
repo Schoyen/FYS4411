@@ -43,8 +43,6 @@ class CoupledClusterDoubles(CoupledCluster):
         self.t = self.u[v, v, o, o].copy()
         amplitude_scaling_two_body(self.t, self.f, self.m, self.n)
 
-
-
     def _compute_ccd_energy(self):
         f, u, t, o, v = self.f, self.u, self.t, self.o, self.v
 
