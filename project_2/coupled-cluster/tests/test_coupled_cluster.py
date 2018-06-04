@@ -20,7 +20,7 @@ def test_compare_energy():
     n = pytest.n
     num_shells = pytest.num_shells
 
-    convergence_criteria = 1e-5
+    convergence_criteria = 1e-8
 
     generate_index_map(num_shells)
     h = get_one_body_elements(l)
@@ -38,6 +38,6 @@ def test_compare_energy():
     ccd_sparse = CoupledClusterDoublesSparse(_h, _u, n)
 
     energy, _ = ccd.compute_energy(tol=convergence_criteria)
-    energy_sparse, _ = ccd_sparse.compute_energy(tol=convergence_criteria)
+    energy_sparse, _sparse = ccd_sparse.compute_energy(tol=convergence_criteria)
 
     assert abs(energy_sparse - energy) < convergence_criteria
