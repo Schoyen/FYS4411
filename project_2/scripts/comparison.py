@@ -19,14 +19,13 @@ import os
 file_path = os.path.join("..", "dat")
 filename = os.path.join(file_path, "coulomb_{0}.pkl")
 
-num_shells = 12
+num_shells = 10
 generate_index_map(num_shells)
 
-omega = 1.0
+omega = 0.28
 l = IndexMap.shell_arr[-1]
-n = 2
-theta = 0.1
-#theta = 100
+n = 6
+theta = 0.9
 
 filename = filename.format(l)
 
