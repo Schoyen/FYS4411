@@ -19,6 +19,16 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         self._compute_intermediates()
 
         self._t.fill(0)
+
+        self._compute_one_body_amplitude()
+        self._compute_two_body_amplitude()
+
+    def _compute_one_body_amplitude(self):
+        pass
+
+    def _compute_two_body_amplitude(self):
+        pass
+
     def _compute_intermediates(self):
         o, v = self.o, self.v
 
