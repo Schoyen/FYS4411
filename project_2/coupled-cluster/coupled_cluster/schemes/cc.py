@@ -35,7 +35,7 @@ class CoupledCluster:
 
         return e_ref
 
-    def compute_energy(self, max_iterations=100, tol=1e-4, theta=0.9):
+    def compute_energy(self, max_iterations=100, tol=1e-4, theta=0.1):
         iterations = 0
 
         diff = 100
