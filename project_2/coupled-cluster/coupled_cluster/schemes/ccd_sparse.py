@@ -1,13 +1,12 @@
 import numpy as np
-import numba
 import sparse
 
 from .cc import CoupledCluster
-from .cc_interface import _amplitude_scaling_two_body
+from .cc_interface import amplitude_scaling_two_body_sparse
 
 class CoupledClusterDoublesSparse(CoupledCluster):
 
-    def _initialize(self, initial_guess):
+    def _initialize(self):
         o, v = self.o, self.v
 
         self.h_dense = self.h.todense()
@@ -21,10 +20,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
 
         self.h_sans_diag = self.h_sans_diag.to_coo()
 
-        if initial_guess is not None:
-            self.t = initial_guess
-        else:
-            self._compute_initial_guess()
+        self._compute_initial_guess()
 
         tmp = np.einsum("bkck -> bc", self.u[v, o, v, o])
         tmp[np.abs(tmp) < 1e-8] = 0
@@ -44,7 +40,7 @@ class CoupledClusterDoublesSparse(CoupledCluster):
                 u[v, v, o, o].data,
                 shape=u[v, v, o, o].shape)
 
-        _amplitude_scaling_two_body(self.t.coords, self.t.data, h, n)
+        amplitude_scaling_two_body_sparse(self.t.coords, self.t.data, h, n)
 
     def _compute_ccd_energy(self):
         h, u, t, o, v = self.h, self.u, self.t, self.o, self.v
@@ -63,7 +59,8 @@ class CoupledClusterDoublesSparse(CoupledCluster):
         t_two_body = self._compute_two_body_amplitude()
 
         _t = t_one_body + t_two_body
-        _amplitude_scaling_two_body(_t.coords, _t.data, self.h_dense, self.n)
+        amplitude_scaling_two_body_sparse(
+                _t.coords, _t.data, self.h_dense, self.n)
 
         self.t = (1 - theta) * _t + theta * self.t
 
