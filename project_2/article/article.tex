@@ -397,7 +397,7 @@
 				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
 				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
 				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-				 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}. 
+				 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}. 
 		\label{eq:CCD_amp_1}
 		\end{aligned}
 		\end{equation}
@@ -423,15 +423,15 @@
 		\begin{equation}
 		\begin{aligned}		
 			g(u, \tau) =&
-					u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
+					u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
 				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
 				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
 				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-				 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}, 
+				 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
 		\end{aligned}
 		\end{equation}
 		
-		where $\tilde{t}$ are the non-diagonal parts of the Fock matrix. 
+		where $\tilde{f}$ are the non-diagonal parts of the Fock matrix. 
 		
 		Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$. 
 		This allows us to define an iterative scheme,
@@ -452,21 +452,20 @@
 		the computing time necessary by an order of magnitude. We will define the following
 		"intermediates",
 		\begin{align}
-			 \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
-    			 \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-   			 \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} \\
-    			 \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd}.
+            \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
+            \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
+            \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
+            \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} 
 		\end{align}
 		These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
-		THIS REMAINS TO BE CHECKED!! 
 		\begin{equation}
 		\begin{aligned}
-			0 =& \frac{1}{2}t^{ab}_{mn}u^{mn}_{ij} - t^{ab}_{im}u^{mn}_{jn}P(ij)
-      		+ t^{cd}_{ij}\chi^{ab}_{cd} - t^{bd}_{ij}\chi^a_d P(ab) \\
-      	  &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
-      		+ t^{ab}_{in}\chi^n_jP(ij) + u^{ab}_{ij}.
-		\end{aligned}
-		\end{equation}
+            0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij) 
+               - t^{bd}_{ij}\chi^a_dP(ab) \\ 
+              &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
+        \end{aligned}
+	    \end{equation}
 		The importance of this "trick" will become apparent in due time. 
 		
     \subsection{Constructing the matrix elements}
@@ -849,6 +848,60 @@
 		\end{aligned}
 		\end{equation}		
 		Where in the last steps we have consigned the sums by Einstein summation notation. 
+\section{Finding Amplitude Equation Intermediates}     
+    Starting from the CCD amplitude equation we factor out terms that will have the same
+    indices if we contract them,
+    \begin{align}
+        &\begin{aligned}
+        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+		  &+ \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+		  &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+		  &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},            
+        \end{aligned}\\
+        &\begin{aligned}
+        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
+          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
+          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{bc}_{im} t^{ad}_{jn} u^{mn}_{cd} P(ij)\\
+          &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
+        \end{aligned} \\
+        &\begin{aligned}
+        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
+          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
+          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ab) P(ij) \\ 
+          &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
+        \end{aligned} \\
+        &\begin{aligned}
+        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
+          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
+          &+ t^{ac}_{im}\left(\frac{1}{2} t^{bd}_{jn} u^{mn}_{cd} + u^{bm}_{jc} \right)P(ab) P(ij) \\
+		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
+        \end{aligned}
+    \end{align}
+    Now we can introduce the intermediate $\chi$-terms,
+    \begin{align}
+        \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
+        \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
+        \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
+        \chi^{bm}_{jc} &= \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} + u^{bm}_{jc},  
+    \end{align}
+    this gives us,
+    \begin{equation}
+		\begin{aligned}
+            0 =& u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
+              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij) 
+               - t^{bd}_{ij}\chi^a_dP(ab) \\ 
+              &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
+        \end{aligned}
+	\end{equation}
 
 \section{Coupled cluster doubles diagrams}
     In order to get an expression for the energy equation and the amplitude
