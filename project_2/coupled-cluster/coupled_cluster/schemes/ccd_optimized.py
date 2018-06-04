@@ -20,15 +20,39 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         self._compute_intermediates()
         super(CoupledClusterDoublesOptimized, self)._compute_amplitudes(theta)
 
-
-        self._compute_one_body_amplitude()
-        self._compute_two_body_amplitude()
-
-    def _compute_one_body_amplitude(self):
-        pass
-
     def _compute_two_body_amplitude(self):
-        pass
+        o, v = self.o, self.v
+
+        self._t += self.u[v, v, o, o]
+
+        self.term = np.einsum(
+                "cdij, abcd -> abij", self.t, self.chi_abcd,
+                out=self.term, optimize="optimal")
+        self._t += self.term
+
+        self.term = np.einsum(
+                "abin, nj -> abij", self.t, self.chi_nj,
+                out=self.term, optimize="optimal")
+        self.term -= self.term.swapaxes(2, 3)
+        self._t += self.term
+
+        self.term = - np.einsum(
+                "bdij, ad -> abij", self.t, self.chi_ad,
+                out=self.term, optimize="optimal")
+        self.term -= self.term.swapaxes(0, 1)
+        self._t += self.term
+
+        self.term = np.einsum(
+                "acim, bmjc -> abij", self.t, self.chi_bmjc,
+                out=self.term, optimize="optimal")
+        self.term -= self.term.swapaxes(0, 1)
+        self.term -= self.term.swapaxes(2, 3)
+        self._t += self.term
+
+        self.term = 0.5 * np.einsum(
+                "abmn, mnij -> abij", self.t, self.u[o, o, o, o],
+                out=self.term, optimize="optimal")
+        self._t += self.term
 
     def _compute_intermediates(self):
         o, v = self.o, self.v
