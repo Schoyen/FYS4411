@@ -15,10 +15,12 @@ from coupled_cluster.matrix_elements.index_map import (
         generate_index_map
 )
 
-def test_energy():
+def test_compare_energy():
     l = pytest.l
     n = pytest.n
     num_shells = pytest.num_shells
+
+    convergence_criteria = 1e-5
 
     generate_index_map(num_shells)
     h = get_one_body_elements(l)
@@ -35,7 +37,7 @@ def test_energy():
     ccd = CoupledClusterDoubles(_h.todense(), _u.todense(), n)
     ccd_sparse = CoupledClusterDoublesSparse(_h, _u, n)
 
-    print (ccd.compute_energy())
-    print (ccd_sparse.compute_energy())
+    energy, _ = ccd.compute_energy(tol=convergence_criteria)
+    energy_sparse, _ = ccd_sparse.compute_energy(tol=convergence_criteria)
 
-    wat
+    assert abs(energy_sparse - energy) < convergence_criteria
