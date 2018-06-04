@@ -1,6 +1,7 @@
 import numpy as np
 
 from .ccd import CoupledClusterDoubles
+from .cc_interface import amplitude_scaling_two_body
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
@@ -17,8 +18,8 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         # TODO: Use DIIS
 
         self._compute_intermediates()
+        super(CoupledClusterDoublesOptimized, self)._compute_amplitudes(theta)
 
-        self._t.fill(0)
 
         self._compute_one_body_amplitude()
         self._compute_two_body_amplitude()
