@@ -56,9 +56,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         compute_chi_bmjc_contraction(
                 self.term, self.t, self.chi_bmjc, self.n, self.m)
-
-        self.term -= self.term.swapaxes(0, 1)
-        self.term -= self.term.swapaxes(2, 3)
         self._t += self.term
 
         compute_t_u_contraction(self.term, self.t, self.u, self.n, self.m)
