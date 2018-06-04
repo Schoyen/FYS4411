@@ -373,7 +373,6 @@
                             + \frac{1}{2}H_NT_2^2 \Big)_C.
         \label{eq:normal_order_expansion}
         \end{equation}
-<<<<<<< HEAD
 		The subscript $c$ indicates that only those terms in which the 
 		Hamiltonian is connected\footnote{In a Wick's theorem sense}
 		to every cluster operator on its right should be included. Since
@@ -469,110 +468,6 @@
 	    \end{equation}
 		The importance of this "trick" will become apparent in due time. 
 		
-=======
-        The subscript $c$ indicates that only those terms in which the
-        Hamiltonian is connected\footnote{In a Wick's theorem sense}
-        to every cluster operator on its right should be included. Since
-        the Hamiltonian contains at most four annihilation and creation
-        operators, $H_N$ can connect to at most four cluster operators
-        at once. Therefor, the BCH expansion must truncate at the
-        fourth-order terms.
-
-        Now comes the rather tedious task of evaluating all the terms
-        that arises from inserting \autoref{eq:normal_order_expansion}
-        into \autoref{eq:doubles_amplitude_1}. This can be done by applying
-        Wick's generalised theorem, but the task is a daunting and streneous one.
-        A few example computations of how this can be done is included in
-        \autoref{app:wickOnAmplitude}.
-         Instead of doing it in this manner, we employ the second quantisation library
-         from SymPy instead\footnote{This is also more in the spirit of this project,
-         as it is within the realm of \emph{Computational} Physics.}.
-        The CCD amplitude equation, from SymPy computation, is
-        \begin{equation}
-        \begin{aligned}
-            0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-                 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-                 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-                 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-                 +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij}.
-        \label{eq:CCD_amp_1}
-        \end{aligned}
-        \end{equation}
-
-        \subsubsection{The Iterative Scheme}
-            At first, we pick only diagonal elements of $f$ to be part of the unperturbed
-            Hamiltonian and consider the rest of the terms a perturbation.
-            The second and third terms in \autoref{eq:CCD_amp_1} can now be
-            rewritten,
-            \begin{equation}
-            \begin{aligned}
-                f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
-                    &\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba} - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
-                    &= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
-                    &= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
-                    &= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\
-                    &= -D_{ij}^{ab}t_{ij}^{ab}.
-            \end{aligned}
-            \end{equation}
-
-            The we can define a new function consisting of all of \autoref{eq:CCD_amp_1}
-            except term number two and three,
-            \begin{equation}
-            \begin{aligned}
-                g(u, t) =&
-                        u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
-                     +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-                     +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-                     +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-                     +& \frac{1}{2}t^{ab}_{mn} u^{mn}_{ij},
-            \end{aligned}
-            \end{equation}
-
-            where $\tilde{t}$ are the non-diagonal parts of the Fock matrix.
-
-            Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, t)$.
-            This allows us to define an iterative scheme,
-            \begin{equation}
-                t^{(k + 1)} = \frac{g(u, t^{(k)})}{D_{ij}^{ab}},
-            \end{equation}
-            with the initial guess
-            \begin{equation}
-                t^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
-            \end{equation}
-
-        \subsubsection{Intermediate Computations}
-            Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
-            to realize that it contains that this equation contains many of the same structures in
-            several of the terms. This warrants the search for an algebraic transformation of the
-            CCD amplitude equation that has the potential to reduce the amount of floating point
-            operations needed to compute it. As it turns out, such terms exist and they will decrease
-            the computing time necessary by an order of magnitude. We will define the following
-            "intermediates",
-            \begin{align}
-                 \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
-                     \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-                    \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} \\
-                     \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd}.
-            \end{align}
-            These intermediate structures will allow us to rewrite
-            \autoref{eq:CCD_amp_1} to
-            \begin{align}
-                0 &=
-                u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab)
-                - \tilde{f}^k_jt^{ab}_{ik}P(ij)
-                \nonumber\\
-                &\qquad
-                + t^{cd}_{ij}\chi^{ab}_{cd}
-                + t^{ab}_{in}\chi^n_jP(ij)
-                - t^{bd}_{ij}\chi^a_d P(ab)
-                \nonumber\\
-                &\qquad
-                + t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
-                + \frac{1}{2}t^{ab}_{mn}u^{mn}_{ij}.
-            \end{align}
-            The importance of this "trick" will become apparent in due time.
-
->>>>>>> 41c29ad5e5050fc201b6db695ac65e40c57f55a7
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
         ground state energy using the coupled cluster doubles approximation is a
