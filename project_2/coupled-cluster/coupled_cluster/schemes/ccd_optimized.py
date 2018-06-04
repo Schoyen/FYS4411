@@ -11,7 +11,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         # Allocate memory for the intermediates
         self.chi_abcd = np.zeros((self.m, self.m, self.m, self.m))
         self.chi_ad = np.zeros((self.m, self.m))
-        self.chi_bmjc = np.zeros((self.m, self.n, self.n, self.n))
+        self.chi_bmjc = np.zeros((self.m, self.n, self.n, self.m))
         self.chi_nj = np.zeros((self.n, self.n))
 
     def _compute_amplitudes(self, theta):
