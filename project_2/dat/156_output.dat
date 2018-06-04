@@ -1,0 +1,29 @@
+w = 1.0,
+num_shells = 12,
+l = 156,
+n = 2,
+theta = 0.1,
+filename = ../dat/coulomb_156.pkl
+
+Time spent creating Coulomb elements: 17883.887234449387 sec
+Time spent in SCF RHF: 1.8518664836883545 sec
+	RHF Energy: 3.1619086087918697
+Time spent transforming two body elements: 10.01538372039795 sec
+Time spent antisymmetrizing two body elements: 21.393919706344604 sec
+Time spent setting up CCD code with HF basis: 2.156191825866699 sec
+Time spent computing CCD energy with HF basis: 71.53246259689331 sec
+	CCD (HF) Energy: 3.006019285605037
+	Iterations: 5
+	Second/iteration: 14.306492519378661
+Time spent getting antisymmetric two body elements: 6.209820747375488 sec
+Time spent setting up CCD code with HO basis: 1.4488434791564941 sec
+Time spent computing CCD energy with HO basis: 17.552021741867065 sec
+	CCD Energy: 3.089313589038471
+	Iterations: 7
+	Second/iteration: 2.507431677409581
+0.01282051282051282
+0.0386008331312534
+0.08188282222239512
+0.044707429322813935
+0.014350018813965863
+0.00641025641025641
