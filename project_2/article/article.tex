@@ -31,6 +31,10 @@
 % Appendix
 \usepackage[toc, page]{appendix}
 \usepackage{simpler-wick}
+% Code listings
+\usepackage{listings, lstautogobble}
+% Colors
+\usepackage{xcolor}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -89,8 +93,16 @@
 \newcommand{\ecc}{E_{\text{CC}}}
 \newcommand{\eccd}{E_{\text{CCD}}}
 
+% Defining color
+\definecolor{light-gray}{gray}{0.9}
 
-
+% Bash language specifier
+\lstnewenvironment{bash}
+{\lstset{
+    basicstyle=\small\ttfamily, language=bash, keywordstyle=\color{blue},
+    backgroundcolor=\color{light-gray}, showstringspaces=false,
+    frame=single, autogobble=true, morekeywords={make, git}}}
+{}
 
 \begin{document}
 
@@ -659,6 +671,25 @@
             Hartree-Fock-Roothaan equations are often called the self-consistent-field 
             procedure.}.
 
+   \section{Implmentation}
+        We have costructed a flexible framework for making performing CCD computations,
+        consisting of package for python that is easy to install globally on any 
+        computer.
+        
+        \subsection{Installation}
+        The software is easy to install by first cloning the GitHub reopsitory,
+        \begin{bash}
+            git clone git@github.com:Schoyen/FYS4411.git
+        \end{bash}
+        Then all you need to do is change directory to the project code folder
+        where a \lstinline{MakeFile} is included so you only need to build and
+        install,
+        \begin{bash}
+            cd FYS4411/project_2/coupled-cluster
+            make build
+            make install
+        \end{bash}
+        
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
