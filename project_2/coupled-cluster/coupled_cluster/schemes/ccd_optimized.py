@@ -3,9 +3,10 @@ import numpy as np
 from .ccd import CoupledClusterDoubles
 from .cc_interface import amplitude_scaling_two_body
 from .helper_ccd import (
-        compute_chi_abcd, compute_chi_bmjc, compute_chi_abcd_contraction,
+        compute_chi_abcd, compute_chi_bmjc, compute_chi_ad, compute_chi_nj,
+        compute_chi_abcd_contraction,
         compute_chi_bmjc_contraction, compute_t_u_contraction,
-        compute_chi_ad, compute_chi_nj
+        compute_chi_nj_contraction
 )
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
@@ -43,10 +44,8 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 self.term, self.t, self.chi_abcd, self.n, self.m)
         self._t += self.term
 
-        self.term = np.einsum(
-                "abin, nj -> abij", self.t, self.chi_nj,
-                out=self.term, optimize="optimal")
-        self.term -= self.term.swapaxes(2, 3)
+        compute_chi_nj_contraction(
+                self.term, self.t, self.chi_nj, self.n, self.m)
         self._t += self.term
 
         self.term = - np.einsum(
