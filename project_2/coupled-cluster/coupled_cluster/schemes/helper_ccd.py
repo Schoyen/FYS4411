@@ -3,7 +3,7 @@ import numpy as np
 
 
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_abcd(chi_abcd, t, u_hhpp, u_pppp, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -13,10 +13,6 @@ def compute_chi_abcd(chi_abcd, t, u_hhpp, u_pppp, n_size, m_size):
                     val = 0
                     for m in range(n_size):
                         for n in range(n_size):
-                            # Due to the short size of this double for-loop, it
-                            # turns that optimizing _inversely_ in terms of
-                            # cache miss is better as c and d changes so
-                            # rapidly.
                             val += t[a, b, m, n] * u_hhpp[m, n, c, d]
 
                     val = 0.25 * val + 0.5 * u_pppp[a, b, c, d]
@@ -26,7 +22,7 @@ def compute_chi_abcd(chi_abcd, t, u_hhpp, u_pppp, n_size, m_size):
                     chi_abcd[a, b, d, c] = -val
                     chi_abcd[b, a, d, c] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_ad(chi_ad, t, u, n_size, m_size):
     for a in numba.prange(m_size):
         for d in range(m_size):
@@ -41,7 +37,7 @@ def compute_chi_ad(chi_ad, t, u, n_size, m_size):
 
             chi_ad[a, d] = 0.5 * val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_bmjc(chi_bmjc, t_iabj, u_hpph, u_phhp, n_size, m_size):
     for b in numba.prange(m_size):
         for m in range(n_size):
@@ -55,22 +51,7 @@ def compute_chi_bmjc(chi_bmjc, t_iabj, u_hpph, u_phhp, n_size, m_size):
 
                     chi_bmjc[b, m, j, c] = 0.5 * val + u_phhp[b, m, j, c]
 
-
-@numba.njit(nogil=True, parallel=True)
-def compute_chi_bjcm(chi_bjcm, t_aibj, u_phph, u_phph_2, n_size, m_size):
-    for b in numba.prange(m_size):
-        for j in range(n_size):
-            for c in range(m_size):
-                for m in range(n_size):
-
-                    val = 0
-                    for d in range(m_size):
-                        for n in range(n_size):
-                            val += t_aibj[b, j, d, n] * u_phph[c, m, d, n]
-
-                    chi_bjcm[b, j, c, m] = 0.5 * val + u_phph_2[b, j, c, m]
-
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_nj(chi_nj, t, u, n_size, m_size):
     for n in numba.prange(n_size):
         for j in range(n_size):
@@ -85,7 +66,7 @@ def compute_chi_nj(chi_nj, t, u, n_size, m_size):
 
             chi_nj[n, j] = 0.5 * val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_f_bc_t_contraction(term, f, t, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -102,7 +83,7 @@ def compute_f_bc_t_contraction(term, f, t, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_f_kj_t_contraction(term, f, t, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -119,7 +100,7 @@ def compute_f_kj_t_contraction(term, f, t, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_abcd_contraction(term, t_ijab, chi_abcd, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -136,7 +117,7 @@ def compute_chi_abcd_contraction(term, t_ijab, chi_abcd, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_nj_contraction(term, t, chi_nj, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -153,7 +134,7 @@ def compute_chi_nj_contraction(term, t, chi_nj, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_ad_contraction(term, t, chi_ad, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -170,7 +151,7 @@ def compute_chi_ad_contraction(term, t, chi_ad, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_chi_bmjc_contraction(term, t, chi_bmjc, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
@@ -190,7 +171,7 @@ def compute_chi_bmjc_contraction(term, t, chi_bmjc, n_size, m_size):
                     term[a, b, j, i] = -val
                     term[b, a, j, i] = val
 
-@numba.njit(nogil=True, parallel=True)
+@numba.njit(fastmath=True, nogil=True, parallel=True)
 def compute_t_u_contraction(term, t, u, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):

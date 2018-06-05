@@ -5,7 +5,6 @@ from .ccd import CoupledClusterDoubles
 from .cc_interface import amplitude_scaling_two_body
 from .helper_ccd import (
         compute_chi_abcd, compute_chi_bmjc, compute_chi_ad, compute_chi_nj,
-        compute_chi_bjcm,
         compute_chi_abcd_contraction, compute_f_bc_t_contraction,
         compute_f_kj_t_contraction, compute_chi_bmjc_contraction,
         compute_t_u_contraction, compute_chi_nj_contraction,
