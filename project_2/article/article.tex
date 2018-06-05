@@ -31,6 +31,13 @@
 % Appendix
 \usepackage[toc, page]{appendix}
 \usepackage{simpler-wick}
+% Code listings
+\usepackage{listings, lstautogobble}
+\usepackage{minted}
+% Colors
+\usepackage{xcolor}
+% Directory tree package
+\usepackage{dirtree, varwidth}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -89,8 +96,17 @@
 \newcommand{\ecc}{E_{\text{CC}}}
 \newcommand{\eccd}{E_{\text{CCD}}}
 
+% Defining color
+\definecolor{light-gray}{gray}{0.9}
 
-
+% Bash language specifier
+\lstnewenvironment{bash}
+{\lstset{
+    basicstyle=\small\ttfamily, language=bash, keywordstyle=\color{blue},
+    backgroundcolor=\color{light-gray}, showstringspaces=false,
+    frame=single, autogobble=true, morekeywords={make, git},
+    alsoletter={.}}}
+{}
 
 \begin{document}
 
@@ -620,6 +636,137 @@
             % See Step 3 in:
             % http://sirius.chem.vt.edu/wiki/doku.php?id=crawdad:programming:project4
 
+            The neatest, yet arguably the most abstract, way to write the Hartree-Fock
+            equations for electron $i$\footnote{This is weird, as electron
+            should be indistinguishable and therefor impossible to label.} is
+            \begin{equation}
+                f_i \varphi_i = \varepsilon_i \varphi_i,
+            \end{equation}               
+            where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock 
+            operator consiting of a set of one-electorn wave funcitons, called the
+            Hartree-Fock molecular orbitals, and $\varepsilon_i$ are the eigenenergies
+            of the Fock operator. The fock operator, in matrix notation, is given by
+            \begin{equation}
+                F_{pa} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
+            \end{equation}
+            where $h_i$ is the one-body operatore, while the two-body operator is 
+            divided into what we call a direct part,
+            \begin{equation}
+                J(D)_{pq} = \braket{pq}{rs}D_{sr},
+            \end{equation}
+            and an exchange part,
+            \begin{equation}
+                K(D)_{pq} = \braket{ps}{rq}D_{sr}.
+            \end{equation}
+            The direct part of the two-body operator is comparable to classical Coloumb
+            repulsion, while the exchange does not have a classical analog as it arises 
+            from the antisymmetry requirement of the wavefunction. $D_{sr}$ is the 
+            density matrix of the system. 
+
+            Introducing a basis set transforms the Hartree-Fock equations into the Rothaan
+            equations
+            \begin{equation}
+                FC = SC\varepsilon.
+            \end{equation}
+            This is a generalised eigenvalue problem where $S$ serves as an overlap matrix
+            that must be there in case of non-orthogonal basis. Since the Fock matrix $F$
+            depends on it's own solution through the orbitals, the eigenvalue problem must
+            be solved iteratively\footnote{This is also the reason why the
+            Hartree-Fock-Roothaan equations are often called the self-consistent-field 
+            procedure.}.
+
+   \section{Implmentation}
+        We have costructed a flexible framework for making performing CCD computations,
+        consisting of package for \lstinline{python} that is easy to install globally on any 
+        computer.
+        
+        \subsection{Installation}
+        The software is easy to install by first cloning the GitHub reopsitory,
+        \begin{bash}
+            git clone git@github.com:Schoyen/FYS4411.git
+        \end{bash}
+        Then all you need to do is change directory to the project code folder
+        where a \lstinline{MakeFile} is included so you only need to build and
+        install,
+        \begin{bash}
+            cd FYS4411/project_2/coupled-cluster
+            make build
+            make install
+        \end{bash}
+        Now everything should be able to run from anywhere on your computer.
+        To ensure that all requirements of the program are satified you can
+        install with \lstinline{make installr} instead. 
+
+        \subsection{Program Structure}
+            There are three main subsetions within our program structure,
+            given in the directory tree below.
+
+            %% NONE OF THIS WORKED AS INTENDED.
+            %\begin{figure}
+            %\centering
+            %\framebox[0.5\textwidth]{%
+            %\begin{minipage}{0.49\textwidth}
+            %\begin{center}
+            %\begin{varwidth}{0.49\textwidth}
+            %\dirtree{%
+            %.1 coupled\_cluster.
+            %    .2 matrix\_elements.
+            %        .3 generate\_matrices. 
+            %        .3 index\_map.
+            %    .2 hartree\_fock.
+            %        .3 scf\_rhf.
+            %        .3 basis\_transformation.
+            %    .2 schemes.
+            %        .3 ccd.
+            %        .3 ccd\_sparse.
+            %        .3 ccd\_optimized.
+            %}
+            %\end{varwidth}
+            %\end{center}
+            %\end{minipage}  
+            %}  
+            %\end{figure}
+
+            \vspace{10pt}
+            \dirtree{%
+            .1 coupled\_cluster.
+                .2 matrix\_elements.
+                    .3 generate\_matrices. 
+                    .3 index\_map.
+                .2 hartree\_fock.
+                    .3 scf\_rhf.
+                    .3 basis\_transformation.
+                .2 schemes.
+                    .3 ccd.
+                    .3 ccd\_sparse.
+                    .3 ccd\_optimized.
+            }
+            \vspace{10pt}
+
+            The first subsection, \mintinline{python}{matrix_elemtents},
+            contains methods for computing matrix elements in harmonic oscillator
+            basis from an analytical expression\cite{anisimovas1998energy}. 
+            Computing the matrix elements is a very intensive task, and the central
+            functions are therefore implemented in C++ with a Cython interface to
+            enable use in Python. 
+
+            The \mintinline{python}{hartree_fock} subsection contains methods for changing
+            from harmonic oscillator basis to Hartree-Fock basis as well as an 
+            implementation of the self-consistent-field algorithm to make this
+            transaction possible. 
+
+            The \mintinline{python}{schemes} subsection is arguably the most important part
+            of this project. The subsection has three different classes that perform
+            the exact same computations, but in different and increasingly intelligent
+            ways. First, \mintinline{python}{CoupledClusterDoubles} is the most 
+            straightforward and naïve way to solve the CCD amplitude equations.
+            Second, because an overbearing amount of the elements in the operator matrices
+            in this problem are zero, we have implemented a sparse matrix CDD solver in
+            \mintinline{python}{CoupledClusterDoublesSparse}. Third,
+            \mintinline{python}{CoupledClusterDoublesOptimized} takes advantage of 
+            sparse matrices as well, but is also parallellized and optimized with
+            memory use and number of floating point operations in mind. 
+
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
@@ -906,6 +1053,13 @@
 \section{Coupled cluster doubles diagrams}
     In order to get an expression for the energy equation and the amplitude
     equations we use a diagrammatic approach.
+
+\section{Example Script}
+
+    \vspace{10pt}
+    \begin{widetext}
+    \inputminted[]{python}{../scripts/comparison.py}
+    \end{widetext}
 
 
 \bibliography{references}
