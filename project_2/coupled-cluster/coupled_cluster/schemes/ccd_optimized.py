@@ -63,6 +63,14 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         self._t += self.term
 
+    def _compute_intermediates_parallel(self):
+        o, v = self.o, self.v
+
+        compute_chi_abcd(self.chi_abcd, self.t, self.u, self.n, self.m)
+        compute_chi_ad(self.chi_ad, self.t, self.u, self.n, self.m)
+        compute_chi_bmjc(self.chi_bmjc, self.t, self.u, self.n, self.m)
+        compute_chi_nj(self.chi_nj, self.t, self.u, self.n, self.m)
+
     def _compute_two_body_amplitude(self):
         o, v = self.o, self.v
 
@@ -96,14 +104,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 "abmn, mnij -> abij", self.t, self.u[o, o, o, o],
                 out=self.term, optimize="optimal")
         self._t += self.term
-
-    def _compute_intermediates_parallel(self):
-        o, v = self.o, self.v
-
-        compute_chi_abcd(self.chi_abcd, self.t, self.u, self.n, self.m)
-        compute_chi_ad(self.chi_ad, self.t, self.u, self.n, self.m)
-        compute_chi_bmjc(self.chi_bmjc, self.t, self.u, self.n, self.m)
-        compute_chi_nj(self.chi_nj, self.t, self.u, self.n, self.m)
 
     def _compute_intermediates(self):
         o, v = self.o, self.v
