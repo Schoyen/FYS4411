@@ -6,7 +6,7 @@ from .helper_ccd import (
         compute_chi_abcd, compute_chi_bmjc, compute_chi_ad, compute_chi_nj,
         compute_chi_abcd_contraction,
         compute_chi_bmjc_contraction, compute_t_u_contraction,
-        compute_chi_nj_contraction
+        compute_chi_nj_contraction, compute_chi_ad_contraction
 )
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
@@ -48,10 +48,8 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 self.term, self.t, self.chi_nj, self.n, self.m)
         self._t += self.term
 
-        self.term = - np.einsum(
-                "bdij, ad -> abij", self.t, self.chi_ad,
-                out=self.term, optimize="optimal")
-        self.term -= self.term.swapaxes(0, 1)
+        compute_chi_ad_contraction(
+                self.term, self.t, self.chi_ad, self.n, self.m)
         self._t += self.term
 
         compute_chi_bmjc_contraction(
