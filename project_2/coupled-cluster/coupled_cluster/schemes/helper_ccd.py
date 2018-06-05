@@ -41,7 +41,6 @@ def compute_chi_ad(chi_ad, t, u, n_size, m_size):
 
             chi_ad[a, d] = 0.5 * val
 
-
 @numba.njit(nogil=True, parallel=True)
 def compute_chi_bmjc(chi_bmjc, t, u, n_size, m_size):
     for b in numba.prange(m_size):
@@ -58,6 +57,21 @@ def compute_chi_bmjc(chi_bmjc, t, u, n_size, m_size):
                             val += t[b, d, j, n] * u[m, n, c_virt, d_virt]
 
                     chi_bmjc[b, m, j, c] = 0.5 * val + u[b_virt, m, j, c_virt]
+
+@numba.njit(nogil=True, parallel=True)
+def compute_chi_nj(chi_nj, t, u, n_size, m_size):
+    for n in numba.prange(n_size):
+        for j in range(n_size):
+
+            val = 0
+            for c in range(m_size):
+                c_virt = c + n_size
+                for d in range(m_size):
+                    d_virt = d + n_size
+                    for m in range(n_size):
+                        val += t[c, d, j, m] * u[m, n, c_virt, d_virt]
+
+            chi_nj[n, j] = 0.5 * val
 
 @numba.njit(nogil=True, parallel=True)
 def compute_chi_abcd_contraction(term, t, chi_abcd, n_size, m_size):
