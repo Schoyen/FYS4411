@@ -620,6 +620,45 @@
             % See Step 3 in:
             % http://sirius.chem.vt.edu/wiki/doku.php?id=crawdad:programming:project4
 
+            The neatest, yet arguably the most abstract, way to write the Hartree-Fock
+            equations for electron $i$\footnote{This is weird, as electron
+            should be indistinguishable and therefor impossible to label.} is
+            \begin{equation}
+                f_i \varphi_i = \varepsilon_i \varphi_i,
+            \end{equation}               
+            where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock 
+            operator consiting of a set of one-electorn wave funcitons, called the
+            Hartree-Fock molecular orbitals, and $\varepsilon_i$ are the eigenenergies
+            of the Fock operator. The fock operator, in matrix notation, is given by
+            \begin{equation}
+                F_{pa} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
+            \end{equation}
+            where $h_i$ is the one-body operatore, while the two-body operator is 
+            divided into what we call a direct part,
+            \begin{equation}
+                J(D)_{pq} = \braket{pq}{rs}D_{sr},
+            \end{equation}
+            and an exchange part,
+            \begin{equation}
+                K(D)_{pq} = \braket{ps}{rq}D_{sr}.
+            \end{equation}
+            The direct part of the two-body operator is comparable to classical Coloumb
+            repulsion, while the exchange does not have a classical analog as it arises 
+            from the antisymmetry requirement of the wavefunction. $D_{sr}$ is the 
+            density matrix of the system. 
+
+            Introducing a basis set transforms the Hartree-Fock equations into the Rothaan
+            equations
+            \begin{equation}
+                FC = SC\varepsilon.
+            \end{equation}
+            This is a generalised eigenvalue problem where $S$ serves as an overlap matrix
+            that must be there in case of non-orthogonal basis. Since the Fock matrix $F$
+            depends on it's own solution through the orbitals, the eigenvalue problem must
+            be solved iteratively\footnote{This is also the reason why the
+            Hartree-Fock-Roothaan equations are often called the self-consistent-field 
+            procedure.}.
+
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
