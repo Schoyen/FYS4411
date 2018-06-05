@@ -91,6 +91,23 @@ def compute_f_bc_t_contraction(term, f, t, n_size, m_size):
                     term[b, a, j, i] = val
 
 @numba.njit(nogil=True, parallel=True)
+def compute_f_kj_t_contraction(term, f, t, n_size, m_size):
+    for a in numba.prange(m_size):
+        for b in range(a, m_size):
+            for i in range(n_size):
+                for j in range(i, n_size):
+
+                    val = 0
+                    for k in range(n_size):
+                        val += f[k, j] * t[a, b, i, k]
+                        val -= f[k, i] * t[a, b, j, k]
+
+                    term[a, b, i, j] = val
+                    term[b, a, i, j] = -val
+                    term[a, b, j, i] = -val
+                    term[b, a, j, i] = val
+
+@numba.njit(nogil=True, parallel=True)
 def compute_chi_abcd_contraction(term, t, chi_abcd, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):
