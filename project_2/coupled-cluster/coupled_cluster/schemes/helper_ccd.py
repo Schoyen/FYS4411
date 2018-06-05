@@ -13,6 +13,10 @@ def compute_chi_abcd(chi_abcd, t, u_hhpp, u_pppp, n_size, m_size):
                     val = 0
                     for m in range(n_size):
                         for n in range(n_size):
+                            # Due to the short size of this double for-loop, it
+                            # turns that optimizing _inversely_ in terms of
+                            # cache miss is better as c and d changes so
+                            # rapidly.
                             val += t[a, b, m, n] * u_hhpp[m, n, c, d]
 
                     val = 0.25 * val + 0.5 * u_pppp[a, b, c, d]
