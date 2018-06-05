@@ -4,7 +4,8 @@ from .ccd import CoupledClusterDoubles
 from .cc_interface import amplitude_scaling_two_body
 from .helper_ccd import (
         compute_chi_abcd, compute_chi_bmjc, compute_chi_abcd_contraction,
-        compute_chi_bmjc_contraction, compute_t_u_contraction
+        compute_chi_bmjc_contraction, compute_t_u_contraction,
+        compute_chi_ad
 )
 
 class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
@@ -101,9 +102,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         compute_chi_abcd(self.chi_abcd, self.t, self.u, self.n, self.m)
 
-        self.chi_ad = 0.5 * np.einsum(
-                "acnm, nmcd -> ad", self.t, self.u[o, o, v, v],
-                out=self.chi_ad, optimize="optimal")
+        compute_chi_ad(self.chi_ad, self.t, self.u, self.n, self.m)
 
         compute_chi_bmjc(self.chi_bmjc, self.t, self.u, self.n, self.m)
 

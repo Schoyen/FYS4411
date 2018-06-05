@@ -27,6 +27,22 @@ def compute_chi_abcd(chi_abcd, t, u, n_size, m_size):
                     chi_abcd[b, a, d, c] = val
 
 @numba.njit(nogil=True, parallel=True)
+def compute_chi_ad(chi_ad, t, u, n_size, m_size):
+    for a in numba.prange(m_size):
+        for d in range(m_size):
+            d_virt = d + n_size
+
+            val = 0
+            for c in range(m_size):
+                c_virt = c + n_size
+                for n in range(n_size):
+                    for m in range(n_size):
+                        val += t[a, c, n, m] * u[n, m, c_virt, d_virt]
+
+            chi_ad[a, d] = 0.5 * val
+
+
+@numba.njit(nogil=True, parallel=True)
 def compute_chi_bmjc(chi_bmjc, t, u, n_size, m_size):
     for b in numba.prange(m_size):
         b_virt = b + n_size
