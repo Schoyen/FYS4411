@@ -33,8 +33,11 @@
 \usepackage{simpler-wick}
 % Code listings
 \usepackage{listings, lstautogobble}
+\usepackage{minted}
 % Colors
 \usepackage{xcolor}
+% Directory tree package
+\usepackage{dirtree, varwidth}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -101,7 +104,8 @@
 {\lstset{
     basicstyle=\small\ttfamily, language=bash, keywordstyle=\color{blue},
     backgroundcolor=\color{light-gray}, showstringspaces=false,
-    frame=single, autogobble=true, morekeywords={make, git}}}
+    frame=single, autogobble=true, morekeywords={make, git},
+    alsoletter={.}}}
 {}
 
 \begin{document}
@@ -673,7 +677,7 @@
 
    \section{Implmentation}
         We have costructed a flexible framework for making performing CCD computations,
-        consisting of package for python that is easy to install globally on any 
+        consisting of package for \lstinline{python} that is easy to install globally on any 
         computer.
         
         \subsection{Installation}
@@ -689,7 +693,80 @@
             make build
             make install
         \end{bash}
-        
+        Now everything should be able to run from anywhere on your computer.
+        To ensure that all requirements of the program are satified you can
+        install with \lstinline{make installr} instead. 
+
+        \subsection{Program Structure}
+            There are three main subsetions within our program structure,
+            given in the directory tree below.
+
+            %% NONE OF THIS WORKED AS INTENDED.
+            %\begin{figure}
+            %\centering
+            %\framebox[0.5\textwidth]{%
+            %\begin{minipage}{0.49\textwidth}
+            %\begin{center}
+            %\begin{varwidth}{0.49\textwidth}
+            %\dirtree{%
+            %.1 coupled\_cluster.
+            %    .2 matrix\_elements.
+            %        .3 generate\_matrices. 
+            %        .3 index\_map.
+            %    .2 hartree\_fock.
+            %        .3 scf\_rhf.
+            %        .3 basis\_transformation.
+            %    .2 schemes.
+            %        .3 ccd.
+            %        .3 ccd\_sparse.
+            %        .3 ccd\_optimized.
+            %}
+            %\end{varwidth}
+            %\end{center}
+            %\end{minipage}  
+            %}  
+            %\end{figure}
+
+            \vspace{10pt}
+            \dirtree{%
+            .1 coupled\_cluster.
+                .2 matrix\_elements.
+                    .3 generate\_matrices. 
+                    .3 index\_map.
+                .2 hartree\_fock.
+                    .3 scf\_rhf.
+                    .3 basis\_transformation.
+                .2 schemes.
+                    .3 ccd.
+                    .3 ccd\_sparse.
+                    .3 ccd\_optimized.
+            }
+            \vspace{10pt}
+
+            The first subsection, \mintinline{python}{matrix_elemtents},
+            contains methods for computing matrix elements in harmonic oscillator
+            basis from an analytical expression\cite{anisimovas1998energy}. 
+            Computing the matrix elements is a very intensive task, and the central
+            functions are therefore implemented in C++ with a Cython interface to
+            enable use in Python. 
+
+            The \mintinline{python}{hartree_fock} subsection contains methods for changing
+            from harmonic oscillator basis to Hartree-Fock basis as well as an 
+            implementation of the self-consistent-field algorithm to make this
+            transaction possible. 
+
+            The \mintinline{python}{schemes} subsection is arguably the most important part
+            of this project. The subsection has three different classes that perform
+            the exact same computations, but in different and increasingly intelligent
+            ways. First, \mintinline{python}{CoupledClusterDoubles} is the most 
+            straightforward and naïve way to solve the CCD amplitude equations.
+            Second, because an overbearing amount of the elements in the operator matrices
+            in this problem are zero, we have implemented a sparse matrix CDD solver in
+            \mintinline{python}{CoupledClusterDoublesSparse}. Third,
+            \mintinline{python}{CoupledClusterDoublesOptimized} takes advantage of 
+            sparse matrices as well, but is also parallellized and optimized with
+            memory use and number of floating point operations in mind. 
+
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
@@ -976,6 +1053,13 @@
 \section{Coupled cluster doubles diagrams}
     In order to get an expression for the energy equation and the amplitude
     equations we use a diagrammatic approach.
+
+\section{Example Script}
+
+    \vspace{10pt}
+    \begin{widetext}
+    \inputminted[]{python}{../scripts/comparison.py}
+    \end{widetext}
 
 
 \bibliography{references}
