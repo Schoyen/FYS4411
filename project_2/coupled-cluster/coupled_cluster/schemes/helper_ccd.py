@@ -74,6 +74,23 @@ def compute_chi_nj(chi_nj, t, u, n_size, m_size):
             chi_nj[n, j] = 0.5 * val
 
 @numba.njit(nogil=True, parallel=True)
+def compute_f_bc_t_contraction(term, f, t, n_size, m_size):
+    for a in numba.prange(m_size):
+        for b in range(a, m_size):
+            for i in range(n_size):
+                for j in range(i, n_size):
+
+                    val = 0
+                    for c in range(m_size):
+                        val += f[b, c] * t[a, c, i, j]
+                        val -= f[a, c] * t[b, c, i, j]
+
+                    term[a, b, i, j] = val
+                    term[b, a, i, j] = -val
+                    term[a, b, j, i] = -val
+                    term[b, a, j, i] = val
+
+@numba.njit(nogil=True, parallel=True)
 def compute_chi_abcd_contraction(term, t, chi_abcd, n_size, m_size):
     for a in numba.prange(m_size):
         for b in range(a, m_size):

@@ -4,7 +4,7 @@ from .ccd import CoupledClusterDoubles
 from .cc_interface import amplitude_scaling_two_body
 from .helper_ccd import (
         compute_chi_abcd, compute_chi_bmjc, compute_chi_ad, compute_chi_nj,
-        compute_chi_abcd_contraction,
+        compute_chi_abcd_contraction, compute_f_bc_t_contraction,
         compute_chi_bmjc_contraction, compute_t_u_contraction,
         compute_chi_nj_contraction, compute_chi_ad_contraction
 )
@@ -25,7 +25,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         if self.parallel:
             self._compute_intermediates_parallel()
-            self._compute_one_body_amplitude()
+            self._compute_one_body_amplitude_parallel()
             self._compute_two_body_amplitude_parallel()
         else:
             self._compute_intermediates()
@@ -34,6 +34,16 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
         self.t = np.add((1 - theta) * self._t, theta * self.t, out=self.t)
+
+    def _compute_one_body_amplitude_parallel(self):
+        compute_f_bc_t_contraction(
+                self.term, self.off_diag_f_bc, self.t, self.n, self.m)
+        self._t += self.term
+
+        self.term = np.einsum(
+                "kj, abik -> abij", self.off_diag_f_kj, self.t, out=self.term)
+        self.term -= self.term.swapaxes(2, 3)
+        self._t += self.term
 
     def _compute_two_body_amplitude_parallel(self):
         o, v = self.o, self.v
