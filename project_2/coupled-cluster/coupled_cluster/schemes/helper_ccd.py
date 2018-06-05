@@ -42,21 +42,33 @@ def compute_chi_ad(chi_ad, t, u, n_size, m_size):
             chi_ad[a, d] = 0.5 * val
 
 @numba.njit(nogil=True, parallel=True)
-def compute_chi_bmjc(chi_bmjc, t, u, n_size, m_size):
+def compute_chi_bmjc(chi_bmjc, t_iabj, u_hpph, u_phhp, n_size, m_size):
     for b in numba.prange(m_size):
-        b_virt = b + n_size
         for m in range(n_size):
             for j in range(n_size):
                 for c in range(m_size):
-                    c_virt = c + n_size
 
                     val = 0
                     for d in range(m_size):
-                        d_virt = d + n_size
                         for n in range(n_size):
-                            val += t[b, d, j, n] * u[m, n, c_virt, d_virt]
+                            val += t_iabj[j, b, d, n] * u_hpph[m, c, d, n]
 
-                    chi_bmjc[b, m, j, c] = 0.5 * val + u[b_virt, m, j, c_virt]
+                    chi_bmjc[b, m, j, c] = 0.5 * val + u_phhp[b, m, j, c]
+
+
+@numba.njit(nogil=True, parallel=True)
+def compute_chi_bjcm(chi_bjcm, t_aibj, u_phph, u_phph_2, n_size, m_size):
+    for b in numba.prange(m_size):
+        for j in range(n_size):
+            for c in range(m_size):
+                for m in range(n_size):
+
+                    val = 0
+                    for d in range(m_size):
+                        for n in range(n_size):
+                            val += t_aibj[b, j, d, n] * u_phph[c, m, d, n]
+
+                    chi_bjcm[b, j, c, m] = 0.5 * val + u_phph_2[b, j, c, m]
 
 @numba.njit(nogil=True, parallel=True)
 def compute_chi_nj(chi_nj, t, u, n_size, m_size):

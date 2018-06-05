@@ -5,6 +5,7 @@ from .ccd import CoupledClusterDoubles
 from .cc_interface import amplitude_scaling_two_body
 from .helper_ccd import (
         compute_chi_abcd, compute_chi_bmjc, compute_chi_ad, compute_chi_nj,
+        compute_chi_bjcm,
         compute_chi_abcd_contraction, compute_f_bc_t_contraction,
         compute_f_kj_t_contraction, compute_chi_bmjc_contraction,
         compute_t_u_contraction, compute_chi_nj_contraction,
@@ -16,14 +17,28 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
     def _initialize(self, **kwargs):
         super(CoupledClusterDoublesOptimized, self)._initialize(**kwargs)
 
+        o, v = self.o, self.v
+
         # Allocate memory for the intermediates
         self.chi_abcd = np.zeros((self.m, self.m, self.m, self.m))
         self.chi_ad = np.zeros((self.m, self.m))
         self.chi_bmjc = np.zeros((self.m, self.n, self.n, self.m))
+        self.chi_bjcm = np.zeros((self.m, self.n, self.m, self.n))
         self.chi_nj = np.zeros((self.n, self.n))
 
         self._t_ijab = np.zeros((self.n, self.n, self.m, self.m))
+        self._t_iabj = np.zeros((self.n, self.m, self.m, self.n))
+        self._t_aibj = np.zeros((self.m, self.n, self.m, self.n))
+        self._u_hpph = np.zeros((self.n, self.m, self.m, self.n))
+        self._u_phph = np.zeros((self.m, self.n, self.m, self.n))
+        self._u_phph_2 = np.zeros((self.m, self.n, self.m, self.n))
+
         self._t_ijab[:] = self.t.transpose(2, 3, 0, 1)
+        self._t_iabj[:] = self.t.transpose(2, 0, 1, 3)
+        self._t_aibj[:] = self.t.transpose(0, 2, 1, 3)
+        self._u_hpph[:] = self.u[o, o, v, v].transpose(0, 2, 3, 1)
+        self._u_phph[:] = self.u[o, o, v, v].transpose(2, 0, 3, 1)
+        self._u_phph_2[:] = self.u[v, o, o, v].transpose(0, 2, 3, 1)
 
     def _compute_amplitudes(self, theta):
         self._t.fill(0)
@@ -52,7 +67,10 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         amplitude_scaling_two_body(self._t, self.f, self.m, self.n)
         self.t = np.add((1 - theta) * self._t, theta * self.t, out=self.t)
+
         self._t_ijab[:] = self.t.transpose(2, 3, 0, 1)
+        self._t_iabj[:] = self.t.transpose(2, 0, 1, 3)
+        self._t_aibj[:] = self.t.transpose(0, 2, 1, 3)
 
     @profile
     def _compute_one_body_amplitude_parallel(self):
@@ -127,7 +145,16 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         print ("parallel chi_ad: {0} sec".format(t1 - t0))
 
         t0 = time.time()
-        compute_chi_bmjc(self.chi_bmjc, self.t, self.u, self.n, self.m)
+        compute_chi_bmjc(
+                self.chi_bmjc, self._t_iabj, self._u_hpph,
+                self.u[v, o, o, v], self.n, self.m)
+        t1 = time.time()
+        print ("parallel chi_bmjc: {0} sec".format(t1 - t0))
+
+        t0 = time.time()
+        compute_chi_bjcm(
+                self.chi_bjcm, self._t_aibj, self._u_phph,
+                self._u_phph_2, self.n, self.m)
         t1 = time.time()
         print ("parallel chi_bmjc: {0} sec".format(t1 - t0))
 
