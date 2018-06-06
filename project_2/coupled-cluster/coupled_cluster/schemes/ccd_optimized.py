@@ -35,6 +35,9 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         self.u_hhpp_phph = self.u[o, o, v, v]\
                 .transpose(3, 1, 2, 0)\
                 .reshape(m * n, m * n)
+        self.u_phhp_phph = self.u[v, o, o, v]\
+                .transpose(0, 2, 3, 1)\
+                .reshape(m * n, m * n)
         self.u_hhpp_h_pph = self.u[o, o, v, v]\
                 .transpose(1, 2, 3, 0)\
                 .reshape(n, m * m * n)
@@ -308,12 +311,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         t1 = time.time()
         print ("matmul chi_cmbj contraction: {0} sec".format(t1 - t0))
         self._t += self.term
-        term = np.einsum(
-                "aicm, cmbj -> abij", self.t.transpose(0, 2, 1, 3),
-                self._chi_cmbj)
-        term -= term.swapaxes(0, 1)
-        term -= term.swapaxes(2, 3)
-        np.testing.assert_allclose(self.term, term, atol=1e-8, rtol=1e-8)
 
 
         t0 = time.time()
@@ -386,19 +383,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 out=self.chi_cmbj
         )
         self.chi_cmbj *= 0.5
-        self.chi_cmbj += self.u_hhpp_phph
-        #np.testing.assert_allclose(
-        #        (0.5 * np.einsum(
-        #            "bdjn, mncd -> bjcm", self.t, self.u[o, o, v, v]) \
-        #                    + self.u[v, o, v, o]).reshape(m * n, m * n),
-        #        self.chi_cmbj,
-        #        atol=1e-8, rtol=1e-8)
-        self.chi_cmbj = (
-                0.5 * np.einsum(
-                    "bdjn, mncd -> bjcm", self.t, self.u[o, o, v, v]) \
-                            + self.u[v, o, v, o]
-        ).reshape(m * n, m * n)
-
+        self.chi_cmbj += self.u_phhp_phph
         self.chi_cmbj[:] = self.chi_cmbj.transpose(1, 0)
         t1 = time.time()
         print ("matmul chi_cmbj: {0} sec".format(t1 - t0))
