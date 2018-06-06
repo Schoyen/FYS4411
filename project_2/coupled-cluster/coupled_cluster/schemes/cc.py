@@ -43,6 +43,7 @@ class CoupledCluster:
         energy = self._compute_energy()
 
         while diff > tol and iterations < max_iterations:
+            print ("Iteration: {0}\tEnergy: {1}".format(iterations, energy))
             self._compute_amplitudes(theta)
             energy_prev = energy
             energy = self._compute_energy()
