@@ -928,6 +928,35 @@
         \label{tab:N20}        
     \end{table}
 
+\section{Discussion}
+
+	\subsection{Validity of results}
+        All of our results have been compared with the master thesis of M. P.
+        Lohne\cite{lohne2010coupled} for up to 10 shells. Lohne gets two sets of
+        energies, one set from RHF and one set from CCSD code with harmonic
+        oscillator basis functions. Our CCD code with Hartree-Fock basis will
+        for some configurations\footnote{By configurations we mean frequency
+        $\omega$ and number of particles $N$.} beat CCSD with plain harmonic
+        oscillator basis. For 12 shells we can compare with the results from M.
+        P. Lohne et al.\cite{lohne2011ab}, but in this article an
+        \emph{effective interaction} for the Hamiltonian with a CCSD code has
+        been used. These results are therefore significanlty better than ours,
+        but we can get a ``ball-park'' idea to benchmark against.
+
+    \subsection{Convergence trouble}
+        For a large number of particles and a low frequency the CCD-method get
+        trouble with convergence. This happens as the confining potential $v
+        \propto \omega^2$ will not be able to confine the particles when the
+        interaction gets too strong. The CCD-method will in particular get a
+        hard time keep the particles together as the excitation operator $t$
+        only excites pairs of particles leading too strong increase in the
+        interaction when the particles increase their energy level. This effect
+        can potentially be somewhat alleviated by including the singles
+        excitation, e.g., using the CCSD-method.
+
+
+	\subsection{Sparse implementation}
+
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
