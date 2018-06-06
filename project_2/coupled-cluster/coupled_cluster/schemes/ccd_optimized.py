@@ -208,14 +208,46 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
     @profile
     def _compute_one_body_amplitude(self):
+        m, n = self.m, self.n
+
+        t0 = time.time()
+        np.matmul(
+                self.off_diag_f_bc,
+                self.t_p_phh,
+                out=self.term.reshape(m, m * n * n)
+        )
+        self.term[:] = self.term.transpose(1, 0, 2, 3)
+        self.term -= self.term.swapaxes(0, 1)
+        t1 = time.time()
+        print ("matmul f_bc_t contraction: {0} sec".format(t1 - t0))
+        self._t += self.term
+        #term = np.einsum(
+        #        "bc, acij -> abij", self.off_diag_f_bc, self.t)
+        #term -= term.swapaxes(0, 1)
+        #np.testing.assert_allclose(self.term, term, atol=1e-8, rtol=1e-8)
+
         t0 = time.time()
         self.term = np.einsum(
                 "bc, acij -> abij", self.off_diag_f_bc, self.t,
                 out=self.term, optimize="optimal")
         self.term -= self.term.swapaxes(0, 1)
         t1 = time.time()
-        print ("f_bc_t contraction: {0} sec".format(t1 - t0))
+        print ("einsum f_bc_t contraction: {0} sec".format(t1 - t0))
+
+        t0 = time.time()
+        np.matmul(
+                self.t.reshape(m * m * n, n),
+                self.off_diag_f_kj,
+                out=self.term.reshape(m * m * n, n)
+        )
+        self.term *= -1
+        t1 = time.time()
+        print ("matmul f_kj_t contraction: {0} sec".format(t1 - t0))
         self._t += self.term
+        term = np.einsum(
+                "kj, abik -> abij", self.off_diag_f_kj, self.t)
+        term -= term.swapaxes(2, 3)
+        np.testing.assert_allclose(self.term, term, atol=1e-8, rtol=1e-8)
 
         t0 = time.time()
         self.term = np.einsum(
@@ -223,8 +255,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 out=self.term, optimize="optimal")
         self.term -= self.term.swapaxes(2, 3)
         t1 = time.time()
-        print ("f_kj_t contraction: {0} sec".format(t1 - t0))
-        self._t += self.term
+        print ("einsum f_kj_t contraction: {0} sec".format(t1 - t0))
 
     @profile
     def _compute_two_body_amplitude(self):
