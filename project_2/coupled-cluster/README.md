@@ -34,4 +34,4 @@ To check that the program is behaving the way it should you can run:
 py.test
 ```
 after the program has been installed/compiled. This will execute all the tests located in
-[tests](coupled-cluster/tests).
+[tests](tests).
