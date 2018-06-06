@@ -10,6 +10,9 @@
 *.blg
 *.toc
 
+# Minted output
+_minted-article
+
 # Avoid ignoring reference bibliography
 !references.bib
 
