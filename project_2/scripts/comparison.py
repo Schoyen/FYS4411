@@ -1,4 +1,4 @@
-from coupled_cluster.schemes.ccd_sparse import CoupledClusterDoublesSparseD
+from coupled_cluster.schemes.ccd_sparse import CoupledClusterDoublesSparse
 from coupled_cluster.schemes.ccd_optimized import CoupledClusterDoublesOptimized
 from coupled_cluster.hartree_fock.scf_rhf import scf_rhf
 from coupled_cluster.matrix_elements.generate_matrices import (
