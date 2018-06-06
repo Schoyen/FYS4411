@@ -363,7 +363,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         )
         self.term *= 0.5
         t1 = time.time()
-        print ("t_u contraction: {0} sec".format(t1 - t0))
+        print ("matmul t_u contraction: {0} sec".format(t1 - t0))
         self._t += self.term
         term = 0.5 * np.einsum(
                 "abmn, mnij -> abij", self.t, self.u[o, o, o, o])
@@ -374,7 +374,7 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
                 "abmn, mnij -> abij", self.t, self.u[o, o, o, o],
                 out=self.term, optimize="optimal")
         t1 = time.time()
-        print ("t_u contraction: {0} sec".format(t1 - t0))
+        print ("einsum t_u contraction: {0} sec".format(t1 - t0))
 
     @profile
     def _compute_intermediates(self):
