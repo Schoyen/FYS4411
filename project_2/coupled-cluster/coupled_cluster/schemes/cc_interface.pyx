@@ -13,19 +13,24 @@ def amplitude_scaling_two_body(
         np.ndarray[double, ndim=4] t,
         np.ndarray[double, ndim=2] h, int m, int n, double tol=1e-10):
     cdef int a, b, i, j
-    cdef double divisor
+    cdef double divisor, val
 
     for a in prange(m, nogil=True):
-        for b in range(m):
+        for b in range(a, m):
             for i in range(n):
-                for j in range(n):
+                for j in range(i, n):
                     divisor = h[i, i] + h[j, j] \
                             - h[a + n, a + n] - h[b + n, b + n]
 
                     if fabs(divisor) < tol:
                         continue
 
-                    t[a, b, i, j] /= divisor
+                    val = t[a, b, i, j] / divisor
+
+                    t[a, b, i, j] = val
+                    t[a, b, j, i] = -val
+                    t[b, a, i, j] = -val
+                    t[b, a, j, i] = val
 
 @cython.wraparound(False)
 @cython.boundscheck(False)

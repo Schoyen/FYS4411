@@ -25,7 +25,7 @@ generate_index_map(num_shells)
 
 omega = 1.0
 l = IndexMap.shell_arr[-1]
-n = 6
+n = 12
 theta = 0.3
 
 filename = filename.format(l)
@@ -64,21 +64,20 @@ _u = get_antisymmetrized_elements(l, oi=oi, tol=1e-12)
 t1 = time.time()
 print ("Time spent antisymmetrizing two body elements: {0} sec".format(t1 - t0))
 
-t0 = time.time()
-ccd_hf_sparse = CoupledClusterDoublesSparse(_h, _u, n)
-t1 = time.time()
-print ("Time spent setting up CCD code with HF basis: {0} sec".format(t1 - t0))
-
-t0 = time.time()
-energy, iterations = ccd_hf_sparse.compute_energy(tol=1e-4, theta=theta)
-t1 = time.time()
-print ("Time spent computing CCD energy with HF basis: {0} sec".format(t1 - t0))
-print ("\tCCD (HF) Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}"
-    .format(energy, iterations, (t1 - t0)/iterations))
+#t0 = time.time()
+#ccd_hf_sparse = CoupledClusterDoublesSparse(_h, _u, n)
+#t1 = time.time()
+#print ("Time spent setting up CCD code with HF basis: {0} sec".format(t1 - t0))
+#
+#t0 = time.time()
+#energy, iterations = ccd_hf_sparse.compute_energy(tol=1e-4, theta=theta)
+#t1 = time.time()
+#print ("Time spent computing CCD energy with HF basis: {0} sec".format(t1 - t0))
+#print ("\tCCD (HF) Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}".format(energy, iterations, (t1 - t0)/iterations))
 
 t0 = time.time()
 ccd_hf = CoupledClusterDoublesOptimized(
-        _h.todense(), _u.todense(), n, parallel=True)
+        _h.todense(), _u.todense(), n, parallel=False)
 t1 = time.time()
 print ("Time spent setting up CCD (opt, parallel) code with HF basis: {0} sec"
     .format(t1 - t0))
@@ -90,6 +89,8 @@ print ("Time spent computing CCD (opt, parallel) energy with HF basis: {0} sec"
    .format(t1 - t0))
 print ("\tCCD (HF) Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}"
     .format(energy, iterations, (t1 - t0)/iterations))
+
+__import__("sys").exit()
 
 __h = omega * get_one_body_elements_spin(l)
 t0 = time.time()
