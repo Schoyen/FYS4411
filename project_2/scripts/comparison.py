@@ -25,9 +25,9 @@ generate_index_map(num_shells)
 
 omega = 2.0
 l = IndexMap.shell_arr[-1]
-n = 2
-theta_hf = 0.3
-theta_ho = 0.3
+n = 12
+theta_hf = 0.1
+theta_ho = 0.1
 max_iterations = 1000
 
 filename = filename.format(l)
