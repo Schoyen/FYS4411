@@ -1011,10 +1011,24 @@
         \propto \omega^2$ will not be able to confine the particles when the
         interaction gets too strong. The CCD-method will in particular get a
         hard time keep the particles together as the excitation operator $t$
-        only excites pairs of particles leading too strong increase in the
+        only excites pairs of particles leading to a too strong increase in the
         interaction when the particles increase their energy level. This effect
         can potentially be somewhat alleviated by including the singles
         excitation, e.g., using the CCSD-method.
+
+        We can see this behaviour in our results. For $N = 2$ we get convergence
+        for all methods for $\omega = 0.1$ shown in \autoref{tab:N2}. By
+        increasing to $N = 6$ particles we immediately see how CCD with the HO
+        basis will get in trouble for small values of $\omega$. By increasing
+        the strength of the confinment even this method does converge.
+
+        For $N = 6$ none of the methods converged when $\omega =
+        0.1$\footnote{The RHF-method would probably have converged if we had
+        started tuning its mixing parameter, but as we have focused on CCD we did
+        not think it relevant to include these results.}. By increasing the
+        frequency we restored the convergence. For larger number of shells we
+        had to start increasing the value of $\theta \to 0.9$ in order to get
+        convergence within the threshold.
 
 
     \subsection{Sparse implementation}
