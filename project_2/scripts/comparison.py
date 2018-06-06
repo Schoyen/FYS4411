@@ -20,7 +20,7 @@ import os
 file_path = os.path.join("..", "dat")
 filename = os.path.join(file_path, "coulomb_{0}.pkl")
 
-num_shells = 8
+num_shells = 12
 generate_index_map(num_shells)
 
 omega = 1.0
@@ -77,7 +77,7 @@ print ("Time spent antisymmetrizing two body elements: {0} sec".format(t1 - t0))
 
 t0 = time.time()
 ccd_hf = CoupledClusterDoublesOptimized(
-        _h.todense(), _u.todense(), n, parallel=True)
+        _h.todense(), _u.todense(), n, parallel=False)
 t1 = time.time()
 print ("Time spent setting up CCD (opt, parallel) code with HF basis: {0} sec"
     .format(t1 - t0))
