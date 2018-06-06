@@ -117,7 +117,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         self._t_iabj[:] = self.t.transpose(2, 0, 1, 3)
         self._t_aibj[:] = self.t.transpose(0, 2, 1, 3)
 
-    @profile
     def _compute_one_body_amplitude_parallel(self):
         t0 = time.time()
         compute_f_bc_t_contraction(
@@ -133,7 +132,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         print ("parallel f_kj_t contraction: {0} sec".format(t1 - t0))
         self._t += self.term
 
-    @profile
     def _compute_two_body_amplitude_parallel(self):
         o, v = self.o, self.v
 
@@ -173,7 +171,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         print ("parallel t_u contraction: {0} sec".format(t1 - t0))
         self._t += self.term
 
-    @profile
     def _compute_intermediates_parallel(self):
         o, v = self.o, self.v
 
@@ -206,7 +203,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         t1 = time.time()
         print ("parallel chi_nj: {0} sec".format(t1 - t0))
 
-    @profile
     def _compute_one_body_amplitude(self):
         m, n = self.m, self.n
 
@@ -257,7 +253,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         t1 = time.time()
         print ("einsum f_kj_t contraction: {0} sec".format(t1 - t0))
 
-    @profile
     def _compute_two_body_amplitude(self):
         o, v = self.o, self.v
         n, m = self.n, self.m
@@ -376,7 +371,6 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         t1 = time.time()
         print ("einsum t_u contraction: {0} sec".format(t1 - t0))
 
-    @profile
     def _compute_intermediates(self):
         o, v = self.o, self.v
         n, m = self.n, self.m
