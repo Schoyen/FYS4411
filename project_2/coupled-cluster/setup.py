@@ -60,7 +60,7 @@ extensions = [
         define_macros=define_macros,
         undef_macros=undef_macros,
         extra_compile_args=["-fopenmp"],
-	    extra_link_args=["-fopenmp"]
+        extra_link_args=["-fopenmp"]
     ),
     Extension(
         name="coupled_cluster.schemes.cc_interface",
@@ -71,7 +71,7 @@ extensions = [
         define_macros=define_macros,
         undef_macros=undef_macros,
         extra_compile_args=["-fopenmp"],
-	    extra_link_args=["-fopenmp"]
+        extra_link_args=["-fopenmp"]
     )
 ]
 

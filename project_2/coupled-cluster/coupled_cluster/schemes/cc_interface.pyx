@@ -1,5 +1,5 @@
 import cython
-#from cython.parallel import prange
+from cython.parallel import prange
 
 import numpy as np
 cimport numpy as np
@@ -50,7 +50,7 @@ def amplitude_scaling_two_body_sparse(
 
     length = len(data)
 
-    for index in range(length):
+    for index in prange(length, nogil=True):
         a = a_arr[index]
         b = b_arr[index]
         i = i_arr[index]
