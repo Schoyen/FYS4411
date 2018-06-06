@@ -27,6 +27,8 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
 
         self.chi_cmbj = np.zeros((m * n, m * n))
 
+        self.u_hhhh = self.u[o, o, o, o]\
+                .reshape(n * n, n * n)
         self.u_hhpp = self.u[o, o, v, v]\
                 .reshape(n * n, m * m)
         self.u_hhpp_phh_p = self.u[o, o, v, v]\
@@ -323,12 +325,25 @@ class CoupledClusterDoublesOptimized(CoupledClusterDoubles):
         print ("einsum chi_bmjc contraction: {0} sec".format(t1 - t0))
 
         t0 = time.time()
+        np.matmul(
+                self.t.reshape(m * m, n * n),
+                self.u_hhhh,
+                out=self.term.reshape(m * m, n * n)
+        )
+        self.term *= 0.5
+        t1 = time.time()
+        print ("t_u contraction: {0} sec".format(t1 - t0))
+        self._t += self.term
+        term = 0.5 * np.einsum(
+                "abmn, mnij -> abij", self.t, self.u[o, o, o, o])
+        np.testing.assert_allclose(self.term, term, atol=1e-8, rtol=1e-8)
+
+        t0 = time.time()
         self.term = 0.5 * np.einsum(
                 "abmn, mnij -> abij", self.t, self.u[o, o, o, o],
                 out=self.term, optimize="optimal")
         t1 = time.time()
         print ("t_u contraction: {0} sec".format(t1 - t0))
-        self._t += self.term
 
     @profile
     def _compute_intermediates(self):
