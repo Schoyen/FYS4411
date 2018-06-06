@@ -394,102 +394,102 @@
                             + \frac{1}{2}H_NT_2^2 \Big)_C.
         \label{eq:normal_order_expansion}
         \end{equation}
-		The subscript $c$ indicates that only those terms in which the 
-		Hamiltonian is connected\footnote{In a Wick's theorem sense}
-		to every cluster operator on its right should be included. Since
-		the Hamiltonian contains at most four annihilation and creation 
-		operators, $H_N$ can connect to at most four cluster operators
-		at once. Therefor, the BCH expansion must truncate at the
-		fourth-order terms. 
-		
-		Now comes the rather tedious task of evaluating all the terms 
-		that arises from inserting \autoref{eq:normal_order_expansion}
-		into \autoref{eq:doubles_amplitude_1}. This can be done by applying
-		Wick's generalised theorem, but the task is a daunting and streneous one.
-		A few example computations of how this can be done is included in
-		\autoref{app:wickOnAmplitude}.
-	 	Instead of doing it in this manner, we employ the second quantisation library
-	 	from SymPy instead\footnote{This is also more in the spirit of this project,
-	 	as it is within the realm of \emph{Computational} Physics.}.
-		The CCD amplitude equation, from SymPy computation, is 
-		\begin{equation}
-		\begin{aligned}
-			0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-				 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}. 
-		\label{eq:CCD_amp_1}
-		\end{aligned}
-		\end{equation}
-		
-		\subsubsection{The Iterative Scheme}
-		At first, we pick only diagonal elements of $f$ to be part of the unperturbed 
-		Hamiltonian and consider the rest of the terms a perturbation. 
-		The second and third terms in \autoref{eq:CCD_amp_1} can now be 
-		rewritten,
-		\begin{equation}
-		\begin{aligned}
-			f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
-				&\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba} - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
-				&= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
-				&= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
-				&= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\				
-				&= -D_{ij}^{ab}t_{ij}^{ab}.
-		\end{aligned}
-		\end{equation}
-		
-		The we can define a new function consisting of all of \autoref{eq:CCD_amp_1} 
-		except term number two and three,
-		\begin{equation}
-		\begin{aligned}		
-			g(u, \tau) =&
-					u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-				 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-				 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-				 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-				 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
-		\end{aligned}
-		\end{equation}
-		
-		where $\tilde{f}$ are the non-diagonal parts of the Fock matrix. 
-		
-		Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$. 
-		This allows us to define an iterative scheme,
-		\begin{equation}
-			\tau^{(k + 1)} = \frac{g(u, \tau^{(k)})}{D_{ij}^{ab}},
+        The subscript $c$ indicates that only those terms in which the
+        Hamiltonian is connected\footnote{In a Wick's theorem sense}
+        to every cluster operator on its right should be included. Since
+        the Hamiltonian contains at most four annihilation and creation
+        operators, $H_N$ can connect to at most four cluster operators
+        at once. Therefor, the BCH expansion must truncate at the
+        fourth-order terms.
+
+        Now comes the rather tedious task of evaluating all the terms
+        that arises from inserting \autoref{eq:normal_order_expansion}
+        into \autoref{eq:doubles_amplitude_1}. This can be done by applying
+        Wick's generalised theorem, but the task is a daunting and streneous one.
+        A few example computations of how this can be done is included in
+        \autoref{app:wickOnAmplitude}.
+         Instead of doing it in this manner, we employ the second quantisation library
+         from SymPy instead\footnote{This is also more in the spirit of this project,
+         as it is within the realm of \emph{Computational} Physics.}.
+        The CCD amplitude equation, from SymPy computation, is
+        \begin{equation}
+        \begin{aligned}
+            0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+                 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+                 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+                 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+                 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
+        \label{eq:CCD_amp_1}
+        \end{aligned}
+        \end{equation}
+
+        \subsubsection{The Iterative Scheme}
+        At first, we pick only diagonal elements of $f$ to be part of the unperturbed
+        Hamiltonian and consider the rest of the terms a perturbation.
+        The second and third terms in \autoref{eq:CCD_amp_1} can now be
+        rewritten,
+        \begin{equation}
+        \begin{aligned}
+            f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
+                &\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba} - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
+                &= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
+                &= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
+                &= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\
+                &= -D_{ij}^{ab}t_{ij}^{ab}.
+        \end{aligned}
+        \end{equation}
+
+        The we can define a new function consisting of all of \autoref{eq:CCD_amp_1}
+        except term number two and three,
+        \begin{equation}
+        \begin{aligned}
+            g(u, \tau) =&
+                    u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+                 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+                 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+                 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+                 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
+        \end{aligned}
+        \end{equation}
+
+        where $\tilde{f}$ are the non-diagonal parts of the Fock matrix.
+
+        Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, \tau)$.
+        This allows us to define an iterative scheme,
+        \begin{equation}
+            \tau^{(k + 1)} = \frac{g(u, \tau^{(k)})}{D_{ij}^{ab}},
             \label{eq:iterative_amplitude}
-		\end{equation}
-		with the initial guess
-		\begin{equation}
-			\tau^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
-		\end{equation}
-		
-		\subsubsection{Intermediate Computations}
-		Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
-		to realize that it contains that this equation contains many of the same structures in
-		several of the terms. This warrants the search for an algebraic transformation of the
-		CCD amplitude equation that has the potential to reduce the amount of floating point
-		operations needed to compute it. As it turns out, such terms exist and they will decrease
-		the computing time necessary by an order of magnitude. We will define the following
-		"intermediates",
-		\begin{align}
+        \end{equation}
+        with the initial guess
+        \begin{equation}
+            \tau^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
+        \end{equation}
+
+        \subsubsection{Intermediate Computations}
+        Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
+        to realize that it contains that this equation contains many of the same structures in
+        several of the terms. This warrants the search for an algebraic transformation of the
+        CCD amplitude equation that has the potential to reduce the amount of floating point
+        operations needed to compute it. As it turns out, such terms exist and they will decrease
+        the computing time necessary by an order of magnitude. We will define the following
+        "intermediates",
+        \begin{align}
             \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
             \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
             \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-            \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} 
-		\end{align}
-		These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
-		\begin{equation}
-		\begin{aligned}
+            \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd}
+        \end{align}
+        These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
+        \begin{equation}
+        \begin{aligned}
             0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij) 
-               - t^{bd}_{ij}\chi^a_dP(ab) \\ 
+              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
+               - t^{bd}_{ij}\chi^a_dP(ab) \\
               &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
         \end{aligned}
-	    \end{equation}
-		The importance of this "trick" will become apparent in due time. 
-		
+        \end{equation}
+        The importance of this "trick" will become apparent in due time.
+
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
         ground state energy using the coupled cluster doubles approximation is a
@@ -647,15 +647,15 @@
             should be indistinguishable and therefor impossible to label.} is
             \begin{equation}
                 f_i \varphi_i = \varepsilon_i \varphi_i,
-            \end{equation}               
-            where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock 
+            \end{equation}
+            where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock
             operator consiting of a set of one-electorn wave funcitons, called the
             Hartree-Fock molecular orbitals, and $\varepsilon_i$ are the eigenenergies
             of the Fock operator. The fock operator, in matrix notation, is given by
             \begin{equation}
                 F_{pa} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
             \end{equation}
-            where $h_i$ is the one-body operatore, while the two-body operator is 
+            where $h_i$ is the one-body operatore, while the two-body operator is
             divided into what we call a direct part,
             \begin{equation}
                 J(D)_{pq} = \braket{pq}{rs}D_{sr},
@@ -665,9 +665,9 @@
                 K(D)_{pq} = \braket{ps}{rq}D_{sr}.
             \end{equation}
             The direct part of the two-body operator is comparable to classical Coloumb
-            repulsion, while the exchange does not have a classical analog as it arises 
-            from the antisymmetry requirement of the wavefunction. $D_{sr}$ is the 
-            density matrix of the system. 
+            repulsion, while the exchange does not have a classical analog as it arises
+            from the antisymmetry requirement of the wavefunction. $D_{sr}$ is the
+            density matrix of the system.
 
             Introducing a basis set transforms the Hartree-Fock equations into the Rothaan
             equations
@@ -678,14 +678,14 @@
             that must be there in case of non-orthogonal basis. Since the Fock matrix $F$
             depends on it's own solution through the orbitals, the eigenvalue problem must
             be solved iteratively\footnote{This is also the reason why the
-            Hartree-Fock-Roothaan equations are often called the self-consistent-field 
+            Hartree-Fock-Roothaan equations are often called the self-consistent-field
             procedure.}.
 
 \section{Implementation}
     We have costructed a flexible framework for making performing CCD
     computations, consisting of package for \lstinline{python} that is easy
     to install globally on any computer.
-    
+
     \subsection{Installation}
         The software is easy to install by first cloning the GitHub reopsitory,
         \begin{bash}
@@ -701,7 +701,7 @@
         \end{bash}
         Now everything should be able to run from anywhere on your computer.
         To ensure that all requirements of the program are satified you can
-        install with \lstinline{make installr} instead. 
+        install with \lstinline{make installr} instead.
 
     \subsection{Program Structure}
         There are three main subsetions within our program structure,
@@ -717,7 +717,7 @@
         %\dirtree{%
         %.1 coupled\_cluster.
         %    .2 matrix\_elements.
-        %        .3 generate\_matrices. 
+        %        .3 generate\_matrices.
         %        .3 index\_map.
         %    .2 hartree\_fock.
         %        .3 scf\_rhf.
@@ -729,15 +729,15 @@
         %}
         %\end{varwidth}
         %\end{center}
-        %\end{minipage}  
-        %}  
+        %\end{minipage}
+        %}
         %\end{figure}
 
         \vspace{10pt}
         \dirtree{%
         .1 coupled\_cluster.
             .2 matrix\_elements.
-                .3 generate\_matrices. 
+                .3 generate\_matrices.
                 .3 index\_map.
             .2 hartree\_fock.
                 .3 scf\_rhf.
@@ -755,12 +755,12 @@
         expression\cite{anisimovas1998energy}.  Computing the matrix
         elements is a very intensive task, and the central functions are
         therefore implemented in C++ with a Cython interface to enable use
-        in Python. 
+        in Python.
 
         The \mintinline{python}{hartree_fock} subsection contains methods
         for changing from harmonic oscillator basis to Hartree-Fock basis as
         well as an implementation of the self-consistent-field algorithm to
-        make this transaction possible. 
+        make this transaction possible.
 
         The \mintinline{python}{schemes} subsection is arguably the most
         important part of this project. The subsection has three different
@@ -774,7 +774,7 @@
         \mintinline{python}{CoupledClusterDoublesSparse}. Third,
         \mintinline{python}{CoupledClusterDoublesOptimized} takes advantage
         of sparse matrices as well, but is also parallellized and optimized
-        with memory use and number of floating point operations in mind. 
+        with memory use and number of floating point operations in mind.
 
     \subsection{Mixing}
         A way to try ``massage'' convergence out of the CCD-method is to use
@@ -793,17 +793,67 @@
 
 
 \section{Results}
-    
+
     \begin{table}
         \centering
         \caption{N = 2}
         \begin{ruledtabular}
             \begin{tabular}{c|c|ccc}
-                $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF)
-                
+                $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\ \hline
+                         &  1  & 0.596333 & 0.596333 & 0.596333 \\
+                         &  2  & 0.596333 & 0.512520 & 0.512520 \\
+                         &  3  & 0.526903 & 0.505972 & 0.442235 \\
+                         &  4  & 0.526903 & 0.499216 & 0.442011 \\
+                     0.1 &  5  & 0.525666 & 0.497172 & 0.443293 \\
+                         &  6  & 0.525666 & 0.494232 & 0.443145 \\
+                         &  7  & 0.525635 & 0.493142 & 0.443056 \\
+                         &  8  & 0.525635 & 0.491895 & 0.442981 \\
+                         &  9  & 0.525635 & 0.491262 & 0.491262 \\
+                         &  10 & 0.525635 & 0.490649 & 0.442886 \\
+                         &  11 & & & \\
+                         &  12 &  & & \\ \hline
+
+                         &  1  & 1.886227 & 1.886227 & 1.886227 \\
+                         &  2  & 1.886227 & 1.786914 & 1.786914 \\
+                         &  3  & 1.799856 & 1.778903 & 1.681979 \\
+                         &  4  & 1.799856 & 1.760117 & 1.673881 \\
+                     0.5 &  5  & 1.799748 & 1.754385 & 1.670053 \\
+                         &  6  & 1.799748 & 1.748232 & 1.667804 \\
+                         &  7  & 1.799745 & 1.745231 & 1.666474 \\
+                         &  8  & 1.799745 & 1.742548 & 1.665494 \\
+                         &  9  & 1.799743 & 1.740860 & 1.6648053 \\
+                         &  10 & 1.799743 & 1.739444 & 1.664270 \\
+                         &  11 & & & \\
+                         &  12 &  & & \\ \hline
+
+                         &  1  & 3.253314 & 3.253314 & 3.253314 \\
+                         &  2  & 3.253314 & 3.152328 & 3.152328 \\
+                         &  3  & 3.162691 & 3.141827 & 3.039048 \\
+                         &  4  & 3.162691 & 3.118679 & 3.025273 \\
+                     1.0 &  5  & 3.161921 & 3.110967 & 3.017944 \\
+                         &  6  & 3.161921 & 3.103338 & 3.013923 \\
+                         &  7  & 3.161909 & 3.099324 & 3.011405 \\
+                         &  8  & 3.161909 & 3.095916 & 3.009621 \\
+                         &  9  & 3.161909 & 3.093662 & 3.008343 \\
+                         &  10 & 3.161909 & 3.091818 & 3.007357 \\
+                         &  11 & & & \\
+                         &  12 &  & & \\ \hline
+
+                         &  1  & 5.772454 & 5.772454 & 5.772454 \\
+                         &  2  & 5.772454 & 5.671234 & 5.671234 \\
+                         &  3  & 5.679048 & 5.658272 & 5.553528 \\
+                         &  4  & 5.679048 & 5.631669 & 5.534333 \\
+                     2.0 &  5  & 5.677282 & 5.622092 & 5.523490 \\
+                         &  6  & 5.677282 & 5.613118 & 5.517552 \\
+                         &  7  & 5.677206 & 5.608130 & 5.513709 \\
+                         &  8  & 5.677206 & 5.604026 & 5.511012 \\
+                         &  9  & 5.677204 & 5.601216 & 5.509050 \\
+                         &  10 & 5.677204 & 5.598946 & 5.507540 \\
+                         &  11 &  & & \\
+                         &  12 &  & & \\
             \end{tabular}
         \end{ruledtabular}
-        \label{tab:N2}        
+        \label{tab:N2}
     \end{table}
 
     \begin{table}
@@ -812,10 +862,10 @@
         \begin{ruledtabular}
             \begin{tabular}{c|c|ccc}
                 $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF)
-                
+
             \end{tabular}
         \end{ruledtabular}
-        \label{tab:N6}        
+        \label{tab:N6}
     \end{table}
 
     \begin{table}
@@ -872,7 +922,7 @@
                       & $12$ & $234.190552$ & $241.068091$ & $232.948528$
             \end{tabular}
         \end{ruledtabular}
-        \label{tab:N12}        
+        \label{tab:N12}
     \end{table}
 
     \begin{table}
@@ -925,12 +975,12 @@
                        & $12$ & $947.403875$ & $970.978571$ & $945.339079$ \\
             \end{tabular}
         \end{ruledtabular}
-        \label{tab:N20}        
+        \label{tab:N20}
     \end{table}
 
 \section{Discussion}
 
-	\subsection{Validity of results}
+    \subsection{Validity of results}
         All of our results have been compared with the master thesis of M. P.
         Lohne\cite{lohne2010coupled} for up to 10 shells. Lohne gets two sets of
         energies, one set from RHF and one set from CCSD code with harmonic
@@ -955,7 +1005,7 @@
         excitation, e.g., using the CCSD-method.
 
 
-	\subsection{Sparse implementation}
+    \subsection{Sparse implementation}
 
 \appendix
 \section{The normal ordered Hamiltonian}
@@ -1102,125 +1152,125 @@
 
 \section{Amplitude Equations}
 
-	\label{app:wickOnAmplitude}
+    \label{app:wickOnAmplitude}
 
-	In this section we have provided a few sample computations of how one would
-	evaluate the amplitude equations using wicks theorem. Starting with the simplest
-	term including only the normal-ordered Hamiltonian, 
+    In this section we have provided a few sample computations of how one would
+    evaluate the amplitude equations using wicks theorem. Starting with the simplest
+    term including only the normal-ordered Hamiltonian,
 
-	\begin{equation}
-		\begin{aligned}
-			\bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0} \\
-			 =& \sum_{pq}f_{pq}\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa_q\}\ket{\Phi_0} \\
-			 &+\frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
-			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}.
-		\end{aligned}
-		\end{equation}
-		The one-electron component does not have any full contractions, while the
-		two-electron component produces one contributing integral,
-		\begin{equation}
-		\begin{aligned}
-			\bra{\Phi_{ij}^{ab}} &(V_N)\ket{\Phi_0} \\
-				=& \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
-			 \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0} \\
-			 	=& \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} \\ &\times\Big(
-			 		\{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
-			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
-			 		+
-			 		\{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c4 a_b \c3 a_a
-			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\} \\
-			 	  &\ +
-			 	 	\{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c3 a_b \c4 a_a
-			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
-			 		+
-			 		\{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c4 a_b \c3 a_a
-			 		\c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
-			 	\Big) \\
-			 	=&  \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} 
-			 	( \delta_{ap}\delta_{bq}\delta_{js}\delta_{ir}
-			 	 -\delta_{aq}\delta_{bp}\delta_{js}\delta_{ir} \\
-			     &\ -\delta_{ap}\delta_{bq}\delta_{jr}\delta_{is}
-			 	 +\delta_{aq}\delta_{bp}\delta_{jr}\delta_{is}) \\
-			 	 =& \bra{ab}\ket{ij} = u^{ab}_{ij}.
-		\end{aligned}
-		\end{equation}
-		
-		Next we would like to evaluate $\bra{\Phi_{ij}^{ab}}(F_N + V_N)T_2\ket{\Phi_0}$. Starting with the 
-		term involving the Fock operator $F_N$,
-		\begin{equation}
-		\begin{aligned}
-			\bra{\Phi_{ij}^{ab}}&F_NT_2\ket{\Phi_0} \\
-				=& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq}t_{kl}^{cd} \bra{\Phi_0}
-					\{a_i^\dagger a_j^\dagger a_b a_a \}(\{a^\dagger_pa_q \}\{a^\dagger_c a^\dagger_d a_l a_k \})_c \ket{\Phi_0} \\
-				=& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
-				\times \Big(
-					&\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c5 a_k } \}
-				 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c5 a_k } \}	\\
-			    + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c5 a_k } \}
-				 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c5 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c2 a_k } \}
-		          + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c2 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c1 a_k } \}
-		          + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c1 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c1 a_k } \}
-		     	 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c2 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c1 a_k } \}
-		          +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c2 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
-		          +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \} \\
-		        + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
-		          + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c3 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \}
-				\Big) \\
-				=& \sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
-				\times&( - \delta_{a c} \delta_{b d} \delta_{i k} \delta_{j q} \delta_{l p} + \delta_{a c} \delta_{b d} \delta_{i l} \delta_{j q} \delta_{k p}  \\
-				 \ &+ \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j k} \delta_{l p} - \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j l} \delta_{k p} \\
-				 \ &+ \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i k} \delta_{j l} - \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i l} \delta_{j k} \\
-				 \ & + \delta_{a d} \delta_{b c} \delta_{i k} \delta_{j q} \delta_{l p} - \delta_{a d} \delta_{b c} \delta_{i l} \delta_{j q} \delta_{k p} \\
-				 \ &- \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j k} \delta_{l p} + \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j l} \delta_{k p} \\
-				 \ &- \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i k} \delta_{j l} + \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i l} \delta_{j k} \\
-				 \ &- \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i k} \delta_{j l} + \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i l} \delta_{j k} \\
-				 \ &+ \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i k} \delta_{j l} - \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i l} \delta_{j k}) \\
-				 =& (f_{bc}t^{ac}_{ij} - f_{ac}t^{bc}_{ij}) - (f_{jk}t^{ab}_{ik} - f_{ik}t^{ab}_{jk}) \\
-				 =& f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij)
-		\end{aligned}
-		\end{equation}		
-		Where in the last steps we have consigned the sums by Einstein summation notation. 
-\section{Finding Amplitude Equation Intermediates}     
+    \begin{equation}
+        \begin{aligned}
+            \bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0} \\
+             =& \sum_{pq}f_{pq}\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa_q\}\ket{\Phi_0} \\
+             &+\frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+             \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}.
+        \end{aligned}
+        \end{equation}
+        The one-electron component does not have any full contractions, while the
+        two-electron component produces one contributing integral,
+        \begin{equation}
+        \begin{aligned}
+            \bra{\Phi_{ij}^{ab}} &(V_N)\ket{\Phi_0} \\
+                =& \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+             \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0} \\
+                 =& \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} \\ &\times\Big(
+                     \{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
+                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+                     +
+                     \{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c4 a_b \c3 a_a
+                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\} \\
+                   &\ +
+                      \{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c3 a_b \c4 a_a
+                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+                     +
+                     \{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c4 a_b \c3 a_a
+                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+                 \Big) \\
+                 =&  \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs}
+                 ( \delta_{ap}\delta_{bq}\delta_{js}\delta_{ir}
+                  -\delta_{aq}\delta_{bp}\delta_{js}\delta_{ir} \\
+                 &\ -\delta_{ap}\delta_{bq}\delta_{jr}\delta_{is}
+                  +\delta_{aq}\delta_{bp}\delta_{jr}\delta_{is}) \\
+                  =& \bra{ab}\ket{ij} = u^{ab}_{ij}.
+        \end{aligned}
+        \end{equation}
+
+        Next we would like to evaluate $\bra{\Phi_{ij}^{ab}}(F_N + V_N)T_2\ket{\Phi_0}$. Starting with the
+        term involving the Fock operator $F_N$,
+        \begin{equation}
+        \begin{aligned}
+            \bra{\Phi_{ij}^{ab}}&F_NT_2\ket{\Phi_0} \\
+                =& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq}t_{kl}^{cd} \bra{\Phi_0}
+                    \{a_i^\dagger a_j^\dagger a_b a_a \}(\{a^\dagger_pa_q \}\{a^\dagger_c a^\dagger_d a_l a_k \})_c \ket{\Phi_0} \\
+                =& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
+                \times \Big(
+                    &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c5 a_k } \}
+                 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c5 a_k } \}    \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c5 a_k } \}
+                 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c5 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c2 a_k } \}
+                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c2 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c1 a_k } \}
+                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c1 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c1 a_k } \}
+                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c2 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c1 a_k } \}
+                  +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c2 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
+                  +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \} \\
+                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
+                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c3 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \}
+                \Big) \\
+                =& \sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
+                \times&( - \delta_{a c} \delta_{b d} \delta_{i k} \delta_{j q} \delta_{l p} + \delta_{a c} \delta_{b d} \delta_{i l} \delta_{j q} \delta_{k p}  \\
+                 \ &+ \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j k} \delta_{l p} - \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j l} \delta_{k p} \\
+                 \ &+ \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i k} \delta_{j l} - \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i l} \delta_{j k} \\
+                 \ & + \delta_{a d} \delta_{b c} \delta_{i k} \delta_{j q} \delta_{l p} - \delta_{a d} \delta_{b c} \delta_{i l} \delta_{j q} \delta_{k p} \\
+                 \ &- \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j k} \delta_{l p} + \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j l} \delta_{k p} \\
+                 \ &- \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i k} \delta_{j l} + \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i l} \delta_{j k} \\
+                 \ &- \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i k} \delta_{j l} + \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i l} \delta_{j k} \\
+                 \ &+ \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i k} \delta_{j l} - \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i l} \delta_{j k}) \\
+                 =& (f_{bc}t^{ac}_{ij} - f_{ac}t^{bc}_{ij}) - (f_{jk}t^{ab}_{ik} - f_{ik}t^{ab}_{jk}) \\
+                 =& f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij)
+        \end{aligned}
+        \end{equation}
+        Where in the last steps we have consigned the sums by Einstein summation notation.
+\section{Finding Amplitude Equation Intermediates}
     Starting from the CCD amplitude equation we factor out terms that will have the same
     indices if we contract them,
     \begin{align}
         &\begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-		  &+ \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-		  &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-		  &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},            
+          &+ \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
+          &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
+          &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},
         \end{aligned}\\
         &\begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
           &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
           &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{bc}_{im} t^{ad}_{jn} u^{mn}_{cd} P(ij)\\
           &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
+          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
         \end{aligned} \\
         &\begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
           &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
-          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ab) P(ij) \\ 
+          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ab) P(ij) \\
           &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
+          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
         \end{aligned} \\
         &\begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-		  &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
+          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
           &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
           &+ t^{ac}_{im}\left(\frac{1}{2} t^{bd}_{jn} u^{mn}_{cd} + u^{bm}_{jc} \right)P(ab) P(ij) \\
-		  &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
+          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
         \end{aligned}
     \end{align}
     Now we can introduce the intermediate $\chi$-terms,
@@ -1228,17 +1278,17 @@
         \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
         \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
         \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-        \chi^{bm}_{jc} &= \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} + u^{bm}_{jc},  
+        \chi^{bm}_{jc} &= \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} + u^{bm}_{jc},
     \end{align}
     this gives us,
     \begin{equation}
-		\begin{aligned}
+        \begin{aligned}
             0 =& u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
-              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij) 
-               - t^{bd}_{ij}\chi^a_dP(ab) \\ 
+              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
+               - t^{bd}_{ij}\chi^a_dP(ab) \\
               &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
         \end{aligned}
-	\end{equation}
+    \end{equation}
 
 \section{Coupled cluster doubles diagrams}
     In order to get an expression for the energy equation and the amplitude
