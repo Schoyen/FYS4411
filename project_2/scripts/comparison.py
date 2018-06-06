@@ -20,12 +20,12 @@ import os
 file_path = os.path.join("..", "dat")
 filename = os.path.join(file_path, "coulomb_{0}.pkl")
 
-num_shells = 10
+num_shells = 1
 generate_index_map(num_shells)
 
-omega = 1.0
+omega = 2.0
 l = IndexMap.shell_arr[-1]
-n = 12
+n = 6
 theta = 0.3
 
 filename = filename.format(l)
@@ -46,7 +46,7 @@ t1 = time.time()
 print ("Time spent creating Coulomb elements: {0} sec".format(t1 - t0))
 
 t0 = time.time()
-c, energy = scf_rhf(h.todense(), u, np.eye(l//2), n//2)
+c, energy = scf_rhf(h.todense(), u, np.eye(l//2), n//2, tol=1e-6)
 t1 = time.time()
 print ("Time spent in SCF RHF: {0} sec".format(t1 - t0))
 
@@ -75,7 +75,6 @@ print ("Time spent antisymmetrizing two body elements: {0} sec".format(t1 - t0))
 #print ("Time spent computing CCD energy with HF basis: {0} sec".format(t1 - t0))
 #print ("\tCCD (HF) Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}".format(energy, iterations, (t1 - t0)/iterations))
 
-"""
 t0 = time.time()
 ccd_hf = CoupledClusterDoublesOptimized(
         _h.todense(), _u.todense(), n, parallel=False)
@@ -84,15 +83,14 @@ print ("Time spent setting up CCD (opt, parallel) code with HF basis: {0} sec"
     .format(t1 - t0))
 
 t0 = time.time()
-energy, iterations = ccd_hf.compute_energy(tol=1e-4, theta=theta)
+energy, iterations = ccd_hf.compute_energy(tol=1e-6, theta=theta)
 t1 = time.time()
 print ("Time spent computing CCD (opt, parallel) energy with HF basis: {0} sec"
    .format(t1 - t0))
 print ("\tCCD (HF) Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}"
     .format(energy, iterations, (t1 - t0)/iterations))
-"""
 
-__import__("sys").exit()
+#__import__("sys").exit()
 
 __h = omega * get_one_body_elements_spin(l)
 t0 = time.time()
@@ -101,11 +99,11 @@ t1 = time.time()
 print ("Time spent getting antisymmetric two body elements: {0} sec".format(t1 - t0))
 
 t0 = time.time()
-ccd = CoupledClusterDoublesSparse(__h, __u, n)
+ccd = CoupledClusterDoublesOptimized(__h.todense(), __u.todense(), n)
 t1 = time.time()
 print ("Time spent setting up CCD code with HO basis: {0} sec".format(t1 - t0))
 t0 = time.time()
-energy, iterations = ccd.compute_energy(theta=theta)
+energy, iterations = ccd.compute_energy(theta=theta, tol=1e-6)
 t1 = time.time()
 print ("Time spent computing CCD energy with HO basis: {0} sec".format(t1 - t0))
 print ("\tCCD Energy: {0}\n\tIterations: {1}\n\tSecond/iteration: {2}"

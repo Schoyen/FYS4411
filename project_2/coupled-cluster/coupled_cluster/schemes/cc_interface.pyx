@@ -1,5 +1,5 @@
 import cython
-from cython.parallel import prange
+#from cython.parallel import prange
 
 import numpy as np
 cimport numpy as np
@@ -15,7 +15,7 @@ def amplitude_scaling_two_body(
     cdef int a, b, i, j
     cdef double divisor, val
 
-    for a in prange(m, nogil=True):
+    for a in range(m):
         for b in range(a, m):
             for i in range(n):
                 for j in range(i, n):
@@ -50,7 +50,7 @@ def amplitude_scaling_two_body_sparse(
 
     length = len(data)
 
-    for index in prange(length, nogil=True):
+    for index in range(length):
         a = a_arr[index]
         b = b_arr[index]
         i = i_arr[index]
