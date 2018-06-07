@@ -1058,6 +1058,31 @@
             \label{tab:N20}
         \end{table}
 
+    \subsection{Running time}
+        Here we show how the three implementations of the CCD-method scales as a
+        function of the shell number $R$ for $N = 2$ and $N = 6$. The same
+        behaviour is shown for higher number of particles.
+
+        \begin{figure}
+            \centering
+            \includegraphics[width=244px]
+            {../dat/figures/iter_run_times_2.pdf}
+            \caption{In this figure we can see the running time per iteration
+            for $N = 2$ particles as a function of the shell number $R$. We did
+            not run the naïve implementation for $R = 12$.}
+            \label{fig:running_time_2}
+        \end{figure}
+
+        \begin{figure}
+            \centering
+            \includegraphics[width=244px]
+            {../dat/figures/iter_run_times_6.pdf}
+            \caption{Here we see the running time per iteration for $N = 6$
+            particles as a function of the shell number $R$. We did not run the
+            naïve implementation for $R > 9$ in this figure.}
+            \label{fig:running_time_6}
+        \end{figure}
+
 \section{Discussion}
 
     \subsection{Validity of results}
@@ -1079,6 +1104,19 @@
         \emph{effective interaction} for the Hamiltonian with a CCSD code has
         been used. These results are therefore significanlty better than ours,
         but we can get a ``ball-park'' idea to benchmark against.
+
+    \subsection{Running time}
+        Looking at the running times shown in \autoref{fig:running_time_2} and
+        \autoref{fig:running_time_6} we can see how the naïve implementation
+        blows up very fast. As both the sparse and the optimized version uses
+        intermediate calculations these running times scales on the order of
+        $\mathcal{O}(l^6)$ whereas the naïve implementation goes as
+        $\mathcal{O}(l^8)$. Another important factor is that the naïve
+        implementation uses \texttt{np.einsum} to calculate the tensor
+        contractions whereas the sparse and optimized version uses
+        \texttt{sparse.tensordot} and \texttt{np.matmul} respectively. The two
+        latter function calls uses BLAS's implementation of the matrix dot which
+        is way faster than Numpys \texttt{np.einsum}.
 
     \subsection{Convergence trouble}
         For a large number of particles and a low frequency the CCD-method get
