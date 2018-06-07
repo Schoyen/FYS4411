@@ -1130,6 +1130,24 @@
 
 \section{Discussion}
 
+    \subsection{Performance comparison}
+        Somewhat surprisingly, the Hartree-Fock method outperforms the coupled
+        cluster doubles when the harmonic oscillator basis is used. This
+        happens for almost any configuration except the smallest system
+        with $N=2$ particles. This comes from the fact that the HO basis is 
+        not very good at representing the states in the system. As we have
+        already stated, because the Hartree-Fock SCF iterations is a variational
+        methdod, the basis is varied in order to find the minimal energy. The new
+        basis states will be linear combinations of the old basis states. When
+        the iterations are finished, the new transformed HF basis will then be 
+        much better at representing the possible quantum configurations compared 
+        with the HO basis. This effect is only apparent in system with a larger
+        number of particles and/or low frequency. This is because in a system with 
+        a large number of particles relative to the frequency particle-particle
+        interaction will be more prominent than the harmonic oscillator potential
+        the particles are subject to. I other words, the HO basis fits rather
+        well. 
+
     \subsection{Validity of results}
         The analytical computed energy for $\omega=1.0a.u.$
         and $N=2$ is $3$\cite{taut1994two}. From our tables we see 
