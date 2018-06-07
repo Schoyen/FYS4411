@@ -44,7 +44,7 @@
 \usepackage{fontspec}
 \newfontfamily\DejaSans{DejaVu Sans}
 
-\newcommand{\nan}{\DejaSans 😱}
+\newcommand{\nan}{{\DejaSans 😱}}
 
 % Macro for latin-letter vectors
 \newcommand{\vf}{\mathbf}
@@ -822,9 +822,9 @@
 
         \begin{table}
             \centering
-            \caption{Results for N = 2 particles, where convergence was 
-                acchieved for all parameters. Taut's\cite{taut1994two}
-                analytic result for $\omega=1.0a.u.$ is $3$.}
+            \caption{Results for $N = 2$ particles, where convergence was
+            achieved for all parameters. Taut's\cite{taut1994two} analytic
+            result for $\omega = 1.0$ a.u. is $3$.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\
@@ -890,8 +890,9 @@
 
         \begin{table}
             \centering
-            \caption{Results for $N = 6$ particles. No convergence for HO
-                basis for low frequency and large number of shells.}
+            \caption{Results for $N = 6$ particles. No convergence is marked as
+            {\nan} in the table. For low frequencies the CCD-method using the HO
+            basis has a hard time achieving convergence.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\ \hline
@@ -952,7 +953,8 @@
             \centering
             \caption{Here we look at $N = 12$ particles ($R = 3$ shells).  We did
             not achieve convergence using the harmonic oscillator basis for the
-            lower frequency values and large number of shells.}
+            lower frequency values and large number of shells. No convergence is
+            marked as {\nan} in the table.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\
@@ -1007,9 +1009,10 @@
 
         \begin{table}
             \centering
-            \caption{In this table we look at $N = 20$ particles ($R = 4$ shells).
-            We did not achieve convergence using the harmonic oscillator basis for
-            the lower frequency values and large number of shells.}
+            \caption{In this table we look at $N = 20$ particles ($R = 4$
+            shells).  We did not achieve convergence using the harmonic
+            oscillator basis for the lower frequency values and large number of
+            shells. No convergence is marked as {\nan} in the table.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\
