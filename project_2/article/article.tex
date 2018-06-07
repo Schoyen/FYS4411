@@ -680,7 +680,7 @@
 
             The neatest, yet arguably the most abstract, way to write the Hartree-Fock
             equations for electron $i$\footnote{This is weird, as electron
-            should be indistinguishable and therefor impossible to label.} is
+            should be indistinguishable and therefore impossible to label.} is
             \begin{equation}
                 f_i \varphi_i = \varepsilon_i \varphi_i,
             \end{equation}
@@ -716,6 +716,18 @@
             be solved iteratively\footnote{This is also the reason why the
             Hartree-Fock-Roothaan equations are often called the self-consistent-field
             procedure.}
+
+            Because the Hartree-Fock method is a variational method, the initial
+            wavefunction made up of the single-partrice wavefunctions $\varphi_i$
+            is varied until the minimal energy is found. The transformations necessary
+            to make all these variations will now be contained in $C$. So if we start from
+            a Harmonic Oscillator (HO) basis we can transform into a better basis, called the
+            Hartree-Fock (HF) basis,
+            \begin{equation}
+                \ket{\Psi}^{\text{HF}}_p = \sum_{k=1}^L C_{kp} \ket{\Psi}_k^{\text{HO}}.
+            \end{equation}
+            We will see how the coupled cluster method with double excitations works with
+            both the HO basis and the HF basis.
 
 \section{Implementation}
     We have costructed a flexible framework for making performing Hartree-Fock 
