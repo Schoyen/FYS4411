@@ -150,13 +150,15 @@
     \begin{align}
         h(\vf{r}_i)
         &= -\half\nabla_i^2 + \half\omega^2 \vf{r}_i^2,
+        \label{eq:one_body_hamiltonian}
     \end{align}
     where we use natural units $\hbar = c = e = 1$ and set the mass to unity.
     % Why not write $\hbar = c = e = m = 1$?
-    The two-body part is the Coulomb interaction potential.
+    The two-body part is the Coulomb interaction potential,
     \begin{align}
         u(\vf{r}_i, \vf{r}_j)
         &= \frac{1}{\abs{\vf{r}_i - \vf{r}_j}}.
+        \label{eq:two_body_operator}
     \end{align}
     We thus get the total Hamiltonian
     \begin{align}
@@ -199,6 +201,34 @@
         \label{eq:excited_overlap}
     \end{align}
     for any excitation.
+
+    \subsection{Quantum Dots}
+
+        Some consideration should be given towards why the system described above
+        is a quantum dot, and why we should care about quantum dots.
+        There are at least two things we refer to as quantum dots. The
+        first one is a man-made device, also known as artificial atoms,
+        and the other is the simplest theoretical construct of such a device.
+
+        Aritifical atom quantum dots are semiconducting crystals, typically GaAs
+        relatively easy to build in a laboratory. Here, some free electrons are 
+        confined to a volume, either by a physical barrier like an insulator
+        or an electromagnetic field\cite{reimann2002electronic}. Due to the
+        confinement of the electrons, the energy levels of a quantum dot becomes
+        quantized, and they therefore hold many properties similar to naturally
+        occuring quantized systems, which is the reason why quantum dots have
+        attracted much interest.  
+
+        The theoretical approximation of a quantum dot is impossible to make perfectly
+        accurate, yet simple. There are some important effects that should be
+        included such the potential arising as a result of the confinement, and
+        the interaction between particles. We therefore model our system with an
+        electron-electron interaction, given by the two-body operator in
+        \autoref{eq:eq:two_body_operator}, and with we approximate the confining
+        potential by the harmonic oscillator potential, given by the second term
+        in the one-body Hamiltonian in \autoref{eq:eq:one_body_hamiltonian}. The
+        last term in the one-body Hamiltonian is the kinetic energy of particle
+        in question, essential in any system.  
 
     \subsection{Second quantization}
         Employing the creation operators, $\acr{p}$, and the destruction
