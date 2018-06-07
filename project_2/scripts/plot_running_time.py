@@ -23,6 +23,6 @@ del df["R"]
 df.plot()
 plt.xlabel(r"$R$")
 plt.ylabel(r"$t$ [s]")
-plt.title(r"Time spent per CCD iteration")
+plt.title(r"Time spent per CCD iteration for $N = {0}$ particles".format(n))
 plt.savefig(fig_name)
 plt.show()
