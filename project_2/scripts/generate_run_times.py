@@ -23,15 +23,15 @@ ccd_method = CoupledClusterDoublesOptimized
 file_path = os.path.join("..", "dat")
 filename = os.path.join(file_path, "coulomb_{0}.pkl")
 
-num_shells = 5
+num_shells = 12
 generate_index_map(num_shells)
 
 omega = 1.0
 l = IndexMap.shell_arr[-1]
-n = 2
+n = 6
 theta_hf = 0.1
 theta_ho = 0.1
-max_iterations = 1000
+max_iterations = 1
 convergence = 1e-2
 
 filename = filename.format(l)
@@ -72,6 +72,7 @@ t1 = time.time()
 print ("Time spent antisymmetrizing two body elements: {0} sec".format(t1 - t0))
 
 t0 = time.time()
+#ccd_hf = ccd_method(_h, _u, n)
 ccd_hf = ccd_method(_h.todense(), _u.todense(), n)
 t1 = time.time()
 print ("Time spent setting up {0} code with HF basis: {1} sec"
