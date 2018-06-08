@@ -127,7 +127,14 @@
 \date{\today}
 
 \begin{abstract}
-    Something about coupled-cluster... Preferably doubles.
+    The coupled cluster method for estimating the ground state energy of a many-body
+    system is arguably the most important post-Hartree-Fock method. We have implemented
+    the coupled cluster method with double excitations (CCD). We find that it does not
+    perform well with a simple harmonic oscillator basis, but the results vastly improve 
+    when it is provided a basis from a restricted Hatree-Fock self-consistent field method
+    run as a preliminary computation. For a system consisting of $N=2$ interacting
+    particles, using 12 orbital shells we get a ground stated energy of $3.005970$, very
+    close to the analytical ``true answer'' of $3$\cite{taut1994two}. 
 \end{abstract}
 
 \maketitle
@@ -136,12 +143,33 @@
 % FIXME: Replace the two-body matrix elements in bra-ket notation with u-tensor.
 
 \section{Introduction}
-    %TODO: Add explanation on why the many-body problem becomes intractable.
-    % This can be shown by demonstrating that the true wavefunction of the system
-    % must be a linear combination of all possible Slater detemerminants built up
-    % from permutations of the single particle functions in the basis. Thus the
-    % energy equation becomes too large.
-    In this project we will study the ground state energy of quantum dots.
+    In this project we will compute the ground state energy of quantum dots, a
+    construct that has become a popular area of study in recent decades, both from
+    a theoretical and an experimental point of view. We achieve the ground state
+    computation by implementing a coupled cluster amplitude equation solver
+    which is used in succession with a restricted Hartree-Fock self-consistent
+    field method. 
+    
+    Regardless of how sophisticated the method used, the many-body problem remains
+    quite intractable. The true wavefunction of any system will be a linear 
+    combination of all possible slater-type orbitals one can model. This means that
+    in order to represent a system correctly, one would need a basis set of infinite
+    size. This is an obvious problem when we solve problems numerically, because we
+    obviously need to limit the size of the basis we use because we have limitations
+    in memeory and computating power. Luckily, great minds have bestowed a wide 
+    selection of very god numerical methods upon the world, which the coupled cluster
+    is a part of. 
+
+    First, we provide a thorough theoretical outline of how we model a quantum dot, 
+    the mathematical formalism behind many-body problems and outline how the 
+    computational methods we employ both turn into iterative schemes that are 
+    easy to represent numerically. Second, we provide a brief overview of the
+    program we have constructed which is in the form an installable python package.
+    Third, we have employed the methods on a large parameter space presenting 
+    results for systems consisting of $N= \{2, 6, 12, 20\}$ particles. Fourth,
+    we discuss the most interesting aspects of the results and try to shed some
+    light over the shortcomings as well as the beneficial features of the different
+    metods. Lastly, we end on some summary remarks. 
 
 \section{Theory}
     In this project we will study a system of $N$ interacting electrons. We will
@@ -202,17 +230,20 @@
     \end{align}
     for any excitation.
 
-    \subsection{Quantum Dots}
+    \subsection{\emph{Motivational Interlude}: Quantum Dots}
 
-        Some consideration should be given towards why the system described above
-        is a quantum dot, and why we should care about quantum dots.
+        The system described above is a theoretical approximation of a
+        quantum dot. Some consideration should be given to an explanation of 
+        why the system described above is a quantum dot, and why we should
+        care about quantum dots.
         There are at least two things we refer to as quantum dots. The
         first one is a man-made device, also known as artificial atoms,
         and the other is the simplest theoretical construct of such a device.
 
-        Aritifical atom quantum dots are semiconducting crystals, typically GaAs
-        relatively easy to build in a laboratory. Here, some free electrons are 
-        confined to a volume, either by a physical barrier like an insulator
+        Aritifical atom quantum dots are semiconducting crystals, typically GaAs,
+        and they are
+        relatively easy to build in a laboratory. Some free electrons are 
+        confined to a volume, either by a physical barrier, like an insulator,
         or an electromagnetic field\cite{reimann2002electronic}. Due to the
         confinement of the electrons, the energy levels of a quantum dot becomes
         quantized, and they therefore hold many properties similar to naturally
@@ -224,9 +255,9 @@
         included such the potential arising as a result of the confinement, and
         the interaction between particles. We therefore model our system with an
         electron-electron interaction, given by the two-body operator in
-        \autoref{eq:eq:two_body_operator}, and with we approximate the confining
+        \autoref{eq:two_body_operator}, and with we approximate the confining
         potential by the harmonic oscillator potential, given by the second term
-        in the one-body Hamiltonian in \autoref{eq:eq:one_body_hamiltonian}. The
+        in the one-body Hamiltonian in \autoref{eq:one_body_hamiltonian}. The
         last term in the one-body Hamiltonian is the kinetic energy of particle
         in question, essential in any system.  
 
@@ -245,7 +276,7 @@
             h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
             \bra{pq}\ket{rs} \equiv \bra{pq}u\ket{rs} - \bra{pq}u\ket{sr}.
         \end{gather}
-        Note that we use the chemists notation to label the antisymmetric matrix
+        Note that we use the ``chemists notation'' to label the antisymmetric matrix
         elements.
 
     \subsection{The coupled cluster approximation}
@@ -271,7 +302,8 @@
             t_{ij}^{ab}\acr{a}\acr{b}\ade{i}\ade{j}
             + \dots.
         \end{align}
-        In the doubles approximation we limit the cluster operator to
+        In our approximation we limit the cluster operator to only include
+        double excitations,
         \begin{align}
             T \equiv T_2
             = \frac{1}{4}\sum_{ijab}t_{ij}^{ab}\acr{a}\acr{b}\ade{j}\ade{i}.
@@ -416,7 +448,8 @@
             \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
             \label{eq:doubles_amplitude_1}
         \end{align}
-        to find an expression that can be used to solve for $t_{ij}^{ab}$.
+        to find an expression that can be used to solve for the amplitudes 
+        $t_{ij}^{ab}$.
         By employing the Baker-Campbell-Haussdorf (BCH) expansion,
         while setting $T= T_2$, we find
         \begin{equation}
@@ -427,11 +460,11 @@
         \label{eq:normal_order_expansion}
         \end{equation}
         The subscript $c$ indicates that only those terms in which the
-        Hamiltonian is connected\footnote{In a Wick's theorem sense}
+        Hamiltonian is connected\footnote{Again, in aWick's theorem sense}
         to every cluster operator on its right should be included. Since
         the Hamiltonian contains at most four annihilation and creation
         operators, $H_N$ can connect to at most four cluster operators
-        at once. Therefor, the BCH expansion must truncate at the
+        at once. Therefore, the BCH expansion must truncate at the
         fourth-order terms.
 
         Now comes the rather tedious task of evaluating all the terms
@@ -471,12 +504,11 @@
         \end{aligned}
         \end{equation}
 
-        The we can define a new function consisting of all of \autoref{eq:CCD_amp_1}
-        except term number two and three,
+        Then we can define a new version of \autoref{eq:CCD_amp_1},
         \begin{equation}
         \begin{aligned}
             g(u, t) =&
-                    u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
+                    u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
                  +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
                  +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
                  +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
@@ -499,7 +531,7 @@
 
         \subsubsection{Intermediate Computations}
         Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
-        to realize that it contains that this equation contains many of the same structures in
+        to realize that this equation contains many of the same structures in
         several of the terms. This warrants the search for an algebraic transformation of the
         CCD amplitude equation that has the potential to reduce the amount of floating point
         operations needed to compute it. As it turns out, such terms exist and they will decrease
@@ -670,13 +702,10 @@
 
         \subsubsection{Constructing the Hartree-Fock basis}
             Having found the matrix elements of $h$ and $u$ we can now use the
-            \emph{self-consistent field iteration} method to construct $h$ and
-            $u$ in a \emph{restricted Hartree-Fock} basis. This will yield a
+            \emph{self-consistent field} (SCF) iteration method to construct $h$ and
+            $u$ in a \emph{restricted Hartree-Fock} (RHF) basis. This will yield a
             better estimate to the actual, unknown basis functions of the
             system.
-
-            % See Step 3 in:
-            % http://sirius.chem.vt.edu/wiki/doku.php?id=crawdad:programming:project4
 
             The neatest, yet arguably the most abstract, way to write the Hartree-Fock
             equations for electron $i$\footnote{This is weird, as electron
@@ -685,7 +714,7 @@
                 f_i \varphi_i = \varepsilon_i \varphi_i,
             \end{equation}
             where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock
-            operator consiting of a set of one-electorn wave funcitons, called the
+            operator consiting of a set of one-electorn wave funcitons called the
             Hartree-Fock molecular orbitals, and $\varepsilon_i$ are the eigenenergies
             of the Fock operator. The fock operator, in matrix notation, is given by
             \begin{equation}
@@ -717,17 +746,17 @@
             Hartree-Fock-Roothaan equations are often called the self-consistent-field
             procedure.}
 
-            Because the Hartree-Fock method is a variational method, the initial
-            wavefunction made up of the single-partrice wavefunctions $\varphi_i$
+            Because the RHF SCF method is a variational method, the initial
+            wavefunction made up of the single-particle wavefunctions $\varphi_i$
             is varied until the minimal energy is found. The transformations necessary
             to make all these variations will now be contained in $C$. So if we start from
-            a Harmonic Oscillator (HO) basis we can transform into a better basis, called the
+            a harmonic oscillator (HO) basis we can transform into a better basis, called a
             Hartree-Fock (HF) basis,
             \begin{equation}
                 \ket{\Psi}^{\text{HF}}_p = \sum_{k=1}^L C_{kp} \ket{\Psi}_k^{\text{HO}}.
             \end{equation}
             We will see how the coupled cluster method with double excitations works with
-            both the HO basis and the HF basis.
+            both the HO basis and the HF basis, but not equally well.
 
 \section{Implementation}
     We have costructed a flexible framework for making performing Hartree-Fock 
@@ -737,8 +766,15 @@
     
     Because we have employed a mixture of Python and C++ with Cython interfaces,
     the code sturcture may be difficult to undertand for someone without Cython
-    experience, but we have neverteless tried to make the usage of the software as
+    experience, but we have tried to make the actual usage of the software as
     painless as possible.
+
+    Most of the computations that are done in a coupled cluster algorithm
+    is linear algebra and we found that NumPy, relying on
+    BLAS and LAPACK, is most likely as fast as it gets and, at the very least,
+    efficient enough for our purposes. The quicker and easier scripting capabilities
+    Python provides is worth what little extra speed-up writing the entire
+    code base in C++ could have provided. 
     
     \subsection{Installation and Usage}
 
@@ -756,10 +792,11 @@
         \end{bash}
         Now everything should be able to run from anywhere on your computer.
         To ensure that all requirements of the program are satified you can
-        install with \lstinline{make installr} instead.
+        install with \mintinline{bash}{make installr} instead.
 
         We have included a sample python script in \autoref{app:sample_script}
-        that uses almost all methods and classes in the package. 
+        that uses almost all methods and classes in the package, and also compares
+        the time each methods takes to fininsh the computations.
 
     \subsection{Program Structure}
         There are three main subsetions within our program structure,
@@ -811,8 +848,21 @@
         Both in \mintinline{python}{CoupledClusterDoublesSparse} and
         \mintinline{python}{CoupledClusterDoublesOptimized} we make use
         of the intermediates in equations \ref{eq:intermediate1} to
-        \ref{eq:intermediate4}. In the optimized class, special care was
-        taken to compute
+        \ref{eq:intermediate4}. We have also relied upon implementations
+        in C++ for some of the heaviest computations. In the optimized
+        class special care was taken to ensure that every contraction
+        was computed in an optimal way, with the minimization of memory
+        use and CPU time as the overall goal. Moreover, several methods
+        in NumPy for doing linear algebra was tested, including but not limited
+        to \mintinline{python}{numpy.einsum()}, \mintinline{python}{numpy.tensordot},
+        and reshaping datastructures to two dimensions and using 
+        \mintinline{python}{numpy.dot}. Additionally, we tried to make use of 
+        the python package \mintinline{python}{dask} which allows for arrays that
+        are larger than the computer's memory buffer as well as automated
+        concurrency. We found that the dask arrays was a bad fit for our code
+        base, but we ended up using \mintinline{python}{numba} for automated
+        paralellization of some iterative loops as well as just-in-time
+        compialtion of some functions. 
 
     \subsection{Convergence Problems and Mixing}
 
@@ -859,8 +909,12 @@
         criteria to be $\num{1e-6}$ in our results for the sake of comparison
         with M. P. Lohne\cite{lohne2011ab}.
 
-        % TODO: Add short introduction to each table and link to them. Leave the
-        % discussion of the results in the discussion section.
+        All the results from our simulations are displayed in tables \ref{tab:N2},
+        \ref{tab:N6}, \ref{tab:N12} and \ref{tab:N20}. They show the ground state
+        energy as a result of restricted Hartree-Fock SCF iterations, and coupled
+        cluster doubles with harmonic oscillator basis and Hatree-Fock basis for 
+        systems of increasing size, $N=2$, $N=6$, $N=12$ and $N=20$ particles
+        respectively. The results are thoroughtly discussed in the next section.
 
         \begin{table}
             \centering
@@ -1034,11 +1088,11 @@
                           & $11$ & $113.245256$ & $119.430353$ & $112.109973$ \\
                           & $12$ & $113.245183$ & $119.394712$ & $112.085683$ \\
                     \hline
-                    $5.0$ & $3$ & $242.334879$ & $242.334879$ & $242.334879$ \\
+                          & $3$ & $242.334879$ & $242.334879$ & $242.334879$ \\
                           & $4$ & $238.739591$ & $241.927593$ & $238.394598$ \\
                           & $5$ & $234.352741$ & $241.663950$ & $233.680649$ \\
                           & $6$ & $234.282331$ & $241.507595$ & $233.425243$ \\
-                          & $7$ & $234.194820$ & $241.390525$ & $233.226529$ \\
+                    $5.0$ & $7$ & $234.194820$ & $241.390525$ & $233.226529$ \\
                           & $8$ & $234.194059$ & $241.293417$ & $233.137933$ \\
                           & $9$ & $234.190797$ & $241.221056$ & $233.070205$ \\
                           & $10$ & $234.190714$ & $241.158896$ & $233.020009$ \\
@@ -1059,41 +1113,41 @@
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\
                     \hline
-                    $1.0$ & $4$ & $177.963297$ & $177.963297$ & $177.963297$ \\
+                          & $4$ & $177.963297$ & $177.963297$ & $177.963297$ \\
                           & $5$ & $168.792442$ & $177.206536$ & $168.459124$ \\
                           & $6$ & $161.339721$ & \nan & $160.594507$ \\
                           & $7$ & $159.958722$ & \nan & $158.841120$ \\
-                          & $8$ & $158.400172$ & \nan & $157.038330$ \\
+                    $1.0$ & $8$ & $158.400172$ & \nan & $157.038330$ \\
                           & $9$ & $158.226030$ & \nan & $156.676039$ \\
                           & $10$ & $158.017667$ & \nan & $156.367930$ \\
                           & $11$ & $158.010276$ & \nan & $156.292422$ \\
                           & $12$ & $158.004951$ & \nan & $156.238258$ \\
                     \hline
-                    $2.0$ & $4$ & $286.825295$ & $286.825295$ & $286.825295$ \\
+                          & $4$ & $286.825295$ & $286.825295$ & $286.825295$ \\
                           & $5$ & $276.898196$ & $286.159148$ & $276.381708$ \\
                           & $6$ & $267.269712$ & $285.614958$ & $266.413122$ \\
                           & $7$ & $266.213200$ & \nan & $264.969415$ \\
-                          & $8$ & $264.933622$ & \nan & $263.434546$ \\
+                    $2.0$ & $8$ & $264.933622$ & \nan & $263.434546$ \\
                           & $9$ & $264.874009$ & \nan & $263.215451$ \\
                           & $10$ & $264.809954$ & \nan & $263.046195$ \\
                           & $11$ & $264.809901$ & \nan & $262.963703$ \\
                           & $12$ & $264.809306$ & \nan & $262.899698$ \\
                     \hline
-                    $5.0$ & $4$ & $563.773952$ & $563.773952$ & $563.773952$ \\
+                          & $4$ & $563.773952$ & $563.773952$ & $563.773952$ \\
                           & $5$ & $552.630093$ & $563.160136$ & $552.118708$ \\
                           & $6$ & $540.804720$ & $562.692231$ & $539.824400$ \\
                           & $7$ & $540.227793$ & $562.306123$ & $538.886074$ \\
-                          & $8$ & $539.499326$ & $562.114279$ & $537.925127$ \\
+                    $5.0$ & $8$ & $539.499326$ & $562.114279$ & $537.925127$ \\
                           & $9$ & $539.495941$ & \nan & $537.769045$ \\
                           & $10$ & $539.494611$ & \nan & $537.646668$ \\
                           & $11$ & $539.493513$ & \nan & $537.548828$ \\
                           & $12$ & $539.491764$ & \nan & $537.470616$ \\
                     \hline
-                    $10.0$ & $4$ & $973.032700$ & $973.032700$ & $973.032700$ \\
+                           & $4$ & $973.032700$ & $973.032700$ & $973.032700$ \\
                            & $5$ & $961.371081$ & $972.439478$ & $960.862053$ \\
                            & $6$ & $948.057077$ & $972.002302$ & $947.019789$ \\
                            & $7$ & $947.765474$ & $971.716015$ & $946.399546$ \\
-                           & $8$ & $947.410305$ & $971.508584$ & $945.827806$ \\
+                    $10.0$ & $8$ & $947.410305$ & $971.508584$ & $945.827806$ \\
                            & $9$ & $947.409440$ & $971.332133$ & $945.663820$ \\
                            & $10$ & $947.404930$ & $971.193592$ & $945.528489$ \\
                            & $11$ & $947.404361$ & $971.076617$ & $945.424175$ \\
@@ -1105,8 +1159,12 @@
 
     \subsection{Running time}
         Here we show how the three implementations of the CCD-method scales as a
-        function of the shell number $R$ for $N = 2$ and $N = 6$. The same
-        behaviour is shown for higher number of particles.
+        function of the shell number $R$ for $N = 2$ and $N = 6$, in table 
+        \ref{fig:running_time_2} and \ref{fig:running_time_6} respectively. The same
+        behaviour is shown for higher number of particles. In \autoref{fig:running_time_6_zoom}
+        we have plotted the computation time for $N=6$ particles again, but we
+        have excluded the naïve method for better comparison of the sparse and
+        optimized method.
 
         \begin{figure}
             \centering
@@ -1128,6 +1186,15 @@
             \label{fig:running_time_6}
         \end{figure}
 
+        \begin{figure}
+           \centering
+            \includegraphics[width=244px]
+            {../dat/figures/iter_run_times_zoom.pdf}
+            \caption{Run time for $N=6$ particles, only the faster methods are
+            included for better comparison.}
+            \label{fig:running_time_6_zoom}            
+        \end{figure}
+
 \section{Discussion}
 
     \subsection{Performance comparison}
@@ -1141,15 +1208,15 @@
         basis states will be linear combinations of the old basis states. When
         the iterations are finished, the new transformed HF basis will then be 
         much better at representing the possible quantum configurations compared 
-        with the HO basis. This effect is only apparent in system with a larger
+        to the HO basis. This effect is only apparent in system with a larger
         number of particles and/or low frequency. This is because in a system with 
         a large number of particles relative to the frequency particle-particle
         interaction will be more prominent than the harmonic oscillator potential
-        the particles are subject to. I other words, the HO basis fits rather
+        the particles are subject to. I other words, the HO basis would fit rather
         well. 
 
     \subsection{Validity of results}
-        The analytical computed energy for $\omega=1.0a.u.$
+        The analytical computed energy for $\omega=1.0$ a.u.
         and $N=2$ is $3$\cite{taut1994two}. From our tables we see 
         that RHF is least successful in reaching this value, CCD in
         HF basis is best, while CCD with HO basis is generally somewhere 
@@ -1209,8 +1276,42 @@
         CCD with HO basis experiences the same convergence problems also for,
         $N=12$ particles and for $N=20$ particles.
 
-    \subsection{Sparse implementation}
+    %\subsection{Sparse implementation}
+    % Did you want to write something about memory use, Oyvind? Memory problems?
 
+    \section{Summary Remarks}
+        
+        Our main product from this is a product that can do both computations with
+        restricted Hartree-Fock (RHF) self-consistent field and coupled cluster 
+        doubles (CCD). We have tried
+        to make a package in python that should be easy enough for anyone to test. 
+        Moreover we hav demonstrated that one can speed up the computation time with
+        a relatively simple algebraic transformation and finding the ``intermediates''.
+        The computational speed was further reduced using sparse matrices. It should
+        be noted, as a warning, that there are relatively few systems adequately sparese
+        for this to work. We added upon the program to increase it further with 
+        paralellization and optimal use of numerical functions.
+
+        In order to perform the computations we have constructed a harmonic oscillator
+        basis. We saw how the CCD method was outperformed RHF in most cases, and often
+        exhibited convergence problems. The remedy for these shortcomings is to use
+        the Hartree-Fock basis which is provided after successful convergence of 
+        SCF iterations. The results are improved markedly and classification of coupled
+        cluster methods as a post-Harte-Fock method is justified. 
+
+        The coupled cluster method provides surprisingly good results even
+        though one only includes double esctiations. The reason for this is that
+        particle-particle interactions is the amongt the most important thing that 
+        happens in a ferminon system, second only to no interaction at all, i.e 
+        what particles do on their own. The way to improve the computations is to
+        include other types of excitations like singles (CCSD) and triples (CCSDT),
+        add more basis functions, and/or supplement the coupled cluster method with 
+        another method like a perturbative one. All of this will, needless to say,
+        increase the compute time, which must be balanced against the accuracy needed
+        for the situation at hand. 
+
+\vfill
+\newpage
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
@@ -1424,7 +1525,11 @@
                   +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \} \\
                 + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
                   + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c3 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \}
-                \Big) \\
+                \Big)
+        \end{aligned}
+        \end{equation}
+        \begin{equation}
+        \begin{aligned}
                 =& \sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
                 \times&( - \delta_{a c} \delta_{b d} \delta_{i k} \delta_{j q} \delta_{l p} + \delta_{a c} \delta_{b d} \delta_{i l} \delta_{j q} \delta_{k p}  \\
                  \ &+ \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j k} \delta_{l p} - \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j l} \delta_{k p} \\
@@ -1442,15 +1547,17 @@
 \section{Finding Amplitude Equation Intermediates}
     Starting from the CCD amplitude equation we factor out terms that will have the same
     indices if we contract them,
-    \begin{align}
-        &\begin{aligned}
+    \begin{equation}
+        \begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
           &+ \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
           &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
           &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},
-        \end{aligned}\\
-        &\begin{aligned}
+        \end{aligned}        
+    \end{equation}
+    \begin{equation}
+        \begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
           &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
@@ -1458,8 +1565,10 @@
           &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{bc}_{im} t^{ad}_{jn} u^{mn}_{cd} P(ij)\\
           &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
-        \end{aligned} \\
-        &\begin{aligned}
+        \end{aligned}
+    \end{equation}        
+    \begin{equation}
+        \begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
           &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
@@ -1467,8 +1576,10 @@
           &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ab) P(ij) \\
           &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
-        \end{aligned} \\
-        &\begin{aligned}
+        \end{aligned}
+    \end{equation}
+    \begin{equation}
+        \begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
           &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
           &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
@@ -1476,7 +1587,7 @@
           &+ t^{ac}_{im}\left(\frac{1}{2} t^{bd}_{jn} u^{mn}_{cd} + u^{bm}_{jc} \right)P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
         \end{aligned}
-    \end{align}
+    \end{equation}
     Now we can introduce the intermediate $\chi$-terms,
     \begin{align}
         \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
@@ -1494,18 +1605,23 @@
         \end{aligned}
     \end{equation}
 
-\section{Coupled cluster doubles diagrams}
-    In order to get an expression for the energy equation and the amplitude
-    equations we use a diagrammatic approach.
+%\section{Coupled cluster doubles diagrams}
+%    In order to get an expression for the energy equation and the amplitude
+%    equations we use a diagrammatic approach.
 
+\vfill
+\clearpage
+\newpage
+\begin{widetext}
 \section{Example Script}
 
     \label{app:sample_script}
 
     \vspace{10pt}
-    \begin{widetext}
-    \inputminted[]{python}{../scripts/comparison.py}
-    \end{widetext}
+    
+    \inputminted[firstline=0, lastline=113]{python}{../scripts/comparison.py}
+
+\end{widetext}
 
 \bibliography{references}
 
