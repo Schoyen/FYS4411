@@ -127,14 +127,15 @@
 \date{\today}
 
 \begin{abstract}
-    The coupled cluster method for estimating the ground state energy of a many-body
-    system is arguably the most important post-Hartree-Fock method. We have implemented
-    the coupled cluster method with double excitations (CCD). We find that it does not
-    perform well with a simple harmonic oscillator basis, but the results vastly improve 
-    when it is provided a basis from a restricted Hatree-Fock self-consistent field method
-    run as a preliminary computation. For a system consisting of $N=2$ interacting
-    particles, using 12 orbital shells we get a ground stated energy of $3.005970$, very
-    close to the analytical ``true answer'' of $3$\cite{taut1994two}. 
+    The coupled cluster method for estimating the ground state energy of a
+    many-body system is arguably the most important post-Hartree-Fock method. We
+    have implemented the coupled cluster method with double excitations (CCD).
+    We find that it does not perform well with a simple harmonic oscillator
+    basis, but the results vastly improve when it is provided a basis from a
+    restricted Hatree-Fock self-consistent field method run as a preliminary
+    computation. For a system consisting of $N=2$ interacting particles, using
+    12 orbital shells we get a ground stated energy of $3.005970$, very close to
+    the analytical ``true answer'' of $3$\cite{taut1994two}.
 \end{abstract}
 
 \maketitle
@@ -144,32 +145,32 @@
 
 \section{Introduction}
     In this project we will compute the ground state energy of quantum dots, a
-    construct that has become a popular area of study in recent decades, both from
-    a theoretical and an experimental point of view. We achieve the ground state
-    computation by implementing a coupled cluster amplitude equation solver
-    which is used in succession with a restricted Hartree-Fock self-consistent
-    field method. 
-    
-    Regardless of how sophisticated the method used, the many-body problem remains
-    quite intractable. The true wavefunction of any system will be a linear 
-    combination of all possible slater-type orbitals one can model. This means that
-    in order to represent a system correctly, one would need a basis set of infinite
-    size. This is an obvious problem when we solve problems numerically, because we
-    obviously need to limit the size of the basis we use because we have limitations
-    in memeory and computating power. Luckily, great minds have bestowed a wide 
-    selection of very god numerical methods upon the world, which the coupled cluster
-    is a part of. 
+    construct that has become a popular area of study in recent decades, both
+    from a theoretical and an experimental point of view. We achieve the ground
+    state computation by implementing a coupled cluster amplitude equation
+    solver which is used in succession with a restricted Hartree-Fock
+    self-consistent field method.
 
-    First, we provide a thorough theoretical outline of how we model a quantum dot, 
-    the mathematical formalism behind many-body problems and outline how the 
-    computational methods we employ both turn into iterative schemes that are 
-    easy to represent numerically. Second, we provide a brief overview of the
-    program we have constructed which is in the form an installable python package.
-    Third, we have employed the methods on a large parameter space presenting 
-    results for systems consisting of $N= \{2, 6, 12, 20\}$ particles. Fourth,
-    we discuss the most interesting aspects of the results and try to shed some
-    light over the shortcomings as well as the beneficial features of the different
-    metods. Lastly, we end on some summary remarks. 
+    Regardless of how sophisticated the method used, the many-body problem
+    remains quite intractable. The true wavefunction of any system will be a
+    linear combination of all possible slater-type orbitals one can model. This
+    means that in order to represent a system correctly, one would need a basis
+    set of infinite size. This is an obvious problem when we solve problems
+    numerically, because we obviously need to limit the size of the basis we use
+    because we have limitations in memeory and computating power. Luckily, great
+    minds have bestowed a wide selection of very god numerical methods upon the
+    world, which the coupled cluster is a part of.
+
+    First, we provide a thorough theoretical outline of how we model a quantum
+    dot, the mathematical formalism behind many-body problems and outline how
+    the computational methods we employ both turn into iterative schemes that
+    are easy to represent numerically. Second, we provide a brief overview of
+    the program we have constructed which is in the form an installable python
+    package.  Third, we have employed the methods on a large parameter space
+    presenting results for systems consisting of $N= \{2, 6, 12, 20\}$
+    particles. Fourth, we discuss the most interesting aspects of the results
+    and try to shed some light over the shortcomings as well as the beneficial
+    features of the different metods. Lastly, we end on some summary remarks.
 
 \section{Theory}
     In this project we will study a system of $N$ interacting electrons. We will
@@ -232,34 +233,34 @@
 
     \subsection{\emph{Motivational Interlude}: Quantum Dots}
 
-        The system described above is a theoretical approximation of a
-        quantum dot. Some consideration should be given to an explanation of 
-        why the system described above is a quantum dot, and why we should
-        care about quantum dots.
-        There are at least two things we refer to as quantum dots. The
-        first one is a man-made device, also known as artificial atoms,
-        and the other is the simplest theoretical construct of such a device.
+        The system described above is a theoretical approximation of a quantum
+        dot. Some consideration should be given to an explanation of why the
+        system described above is a quantum dot, and why we should care about
+        quantum dots.  There are at least two things we refer to as quantum
+        dots. The first one is a man-made device, also known as artificial
+        atoms, and the other is the simplest theoretical construct of such a
+        device.
 
-        Aritifical atom quantum dots are semiconducting crystals, typically GaAs,
-        and they are
-        relatively easy to build in a laboratory. Some free electrons are 
-        confined to a volume, either by a physical barrier, like an insulator,
-        or an electromagnetic field\cite{reimann2002electronic}. Due to the
-        confinement of the electrons, the energy levels of a quantum dot becomes
-        quantized, and they therefore hold many properties similar to naturally
-        occuring quantized systems, which is the reason why quantum dots have
-        attracted much interest.  
+        Aritifical atom quantum dots are semiconducting crystals, typically
+        GaAs, and they are relatively easy to build in a laboratory. Some free
+        electrons are confined to a volume, either by a physical barrier, like
+        an insulator, or an electromagnetic field\cite{reimann2002electronic}.
+        Due to the confinement of the electrons, the energy levels of a quantum
+        dot becomes quantized, and they therefore hold many properties similar
+        to naturally occuring quantized systems, which is the reason why quantum
+        dots have attracted much interest.
 
-        The theoretical approximation of a quantum dot is impossible to make perfectly
-        accurate, yet simple. There are some important effects that should be
-        included such the potential arising as a result of the confinement, and
-        the interaction between particles. We therefore model our system with an
-        electron-electron interaction, given by the two-body operator in
-        \autoref{eq:two_body_operator}, and with we approximate the confining
-        potential by the harmonic oscillator potential, given by the second term
-        in the one-body Hamiltonian in \autoref{eq:one_body_hamiltonian}. The
-        last term in the one-body Hamiltonian is the kinetic energy of particle
-        in question, essential in any system.  
+        The theoretical approximation of a quantum dot is impossible to make
+        perfectly accurate, yet simple. There are some important effects that
+        should be included such the potential arising as a result of the
+        confinement, and the interaction between particles. We therefore model
+        our system with an electron-electron interaction, given by the two-body
+        operator in \autoref{eq:two_body_operator}, and with we approximate the
+        confining potential by the harmonic oscillator potential, given by the
+        second term in the one-body Hamiltonian in
+        \autoref{eq:one_body_hamiltonian}. The last term in the one-body
+        Hamiltonian is the kinetic energy of particle in question, essential in
+        any system.
 
     \subsection{Second quantization}
         Employing the creation operators, $\acr{p}$, and the destruction
@@ -267,16 +268,17 @@
         \begin{align}
             H
             &=
-            \sum_{pq}h_{q}^{p}\acr{p}\ade{q}
-            + \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}\acr{p}\acr{q}\ade{s}\ade{r},
+            h_{q}^{p}\acr{p}\ade{q}
+            + \frac{1}{4}u^{pq}_{rs}
+            \acr{p}\acr{q}\ade{s}\ade{r},
         \end{align}
-        where the sums are general indices over all $L$ basis states and the
-        matrix elements are defined as
+        where we have used the Einstein summation convention with repeated
+        indices having an implicit sum. The matrix elements are defined as
         \begin{gather}
             h^{p}_{q} \equiv \bra{p}h\ket{q}, \\
-            \bra{pq}\ket{rs} \equiv \bra{pq}u\ket{rs} - \bra{pq}u\ket{sr}.
+            u^{pq}_{rs} \equiv \bra{pq}u\ket{rs} - \bra{pq}u\ket{sr},
         \end{gather}
-        Note that we use the ``chemists notation'' to label the antisymmetric matrix
+        where the $u$-matrix consists of the the antisymmetric two-body
         elements.
 
     \subsection{The coupled cluster approximation}
@@ -297,8 +299,8 @@
         \begin{align}
             T &= T_1 + T_2 + \dots + T_p \\
             &=
-            \sum_{ia}t_i^a\acr{a}\ade{i}
-            + \para{\frac{1}{2!}}^2\sum_{ijab}
+            t_i^a\acr{a}\ade{i}
+            + \para{\frac{1}{2!}}^2
             t_{ij}^{ab}\acr{a}\acr{b}\ade{i}\ade{j}
             + \dots.
         \end{align}
@@ -306,7 +308,7 @@
         double excitations,
         \begin{align}
             T \equiv T_2
-            = \frac{1}{4}\sum_{ijab}t_{ij}^{ab}\acr{a}\acr{b}\ade{j}\ade{i}.
+            = \frac{1}{4}t_{ij}^{ab}\acr{a}\acr{b}\ade{j}\ade{i}.
             \label{eq:T_2}
         \end{align}
         The first part of the coupled cluster method consists of constructing
@@ -334,7 +336,7 @@
             = \ecc \kslat.
             \label{eq:clean_schrodinger}
         \end{align}
-        Projecting this equation on the reference state we get
+        Projecting this equation onto the reference state we get
         \begin{align}
             \ecc = \bslat e^{-T}H\kcc
             = \bslat e^{-T}He^{T}\kslat,
@@ -395,17 +397,27 @@
                 E_0
                 + \bslat e^{-T_2}H_N e^{T_2}\kslat.
             \end{align}
-            As the doubles cluster operator doubly excites the reference and
-            using the expansion in \autoref{eq:sim_norm_hamiltionian_expansion}
-            we see that we can write the energy equation as
+            The doubles cluster operator will excite a pair of single particle
+            functions in the reference state. As the single particle functions
+            are orthonormal we have that
+            \begin{align}
+                \braket{\Phi^{X}}{\Phi_0} = 0,
+            \end{align}
+            where $X$ is an excitation different from zero. This means that for
+            a term in the Baker-Campbell-Hausdorff expansion contribute with a
+            nonzero value to the energy equation it must leave the reference
+            state in its original state. The two-body part of the Hamiltonian is
+            only able to relax a pair of single particle functions in the
+            reference state whereas the doubles cluster operator will excite a
+            pair. This means that we are only left with the following
+            contributions to the energy equation.
             \begin{align}
                 \eccd
                 &=
                 E_0
-                + \bslat H_N \kslat + \bslat (H_N T_2)_c\kslat,
+                + \bslat H_N \kslat + \bslat (H_N T_2)_c\kslat.
             \end{align}
-            as the Hamiltonian is only able to relax one pair of single
-            particle functions. By construction we have that
+            Further, by construction we have that
             \begin{align}
                 \bslat H_N \kslat = 0.
             \end{align}
@@ -417,16 +429,18 @@
             overall expression.
             \begin{align}
                 \bslat (W_N T_2)_c \kslat
-                &= \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab}.
+                &= \frac{1}{4}u^{ij}_{ab}t^{ab}_{ij}.
             \end{align}
             In total the energy equation reduces to
             \begin{align}
                 \eccd
-                &= \sum_{i} h_i^i + \half \sum_{ij}\bra{ij}\ket{ij}
-                + \frac{1}{4}\sum_{ijab}\bra{ij}\ket{ab}t_{ij}^{ab},
+                &= h^i_i + \half u^{ij}_{ij}
+                + \frac{1}{4} u^{ij}_{ab}t^{ab}_{ij},
+                \label{eq:ccd_energy}
             \end{align}
-            where the first two terms come from the reference energy as shown in
-            \autoref{eq:reference_energy}.
+            where the first two terms come from the reference energy. See
+            Appendix \ref{app:energy_equation} for the calculation of this
+            expression.
 
     \subsection{Coupled cluster amplitude equations}
         In order for us to solve the energy equation using the coupled cluster
@@ -441,93 +455,108 @@
         normal ordered Hamiltonian. They are equal as the reference energy term
         disappears due to \autoref{eq:excited_overlap}. The order of the
         excitation in the projection determines the order of the amplitudes you
-        will find. In our case we are only interested in the second order
-        ampltiudes found in the doubles approximation, hence we will solve the
-        equation
-        \begin{align}
-            \bra{\Phi_{ij}^{ab}}e^{-T}H_N e^{T}\kslat = 0,
-            \label{eq:doubles_amplitude_1}
-        \end{align}
-        to find an expression that can be used to solve for the amplitudes 
-        $t_{ij}^{ab}$.
-        By employing the Baker-Campbell-Haussdorf (BCH) expansion,
-        while setting $T= T_2$, we find
-        \begin{equation}
-                \bar{H}
-                    = \Big(
-                            H_N + H_NT_2
-                            + \frac{1}{2}H_NT_2^2 \Big)_C.
-        \label{eq:normal_order_expansion}
-        \end{equation}
-        The subscript $c$ indicates that only those terms in which the
-        Hamiltonian is connected\footnote{Again, in aWick's theorem sense}
-        to every cluster operator on its right should be included. Since
-        the Hamiltonian contains at most four annihilation and creation
-        operators, $H_N$ can connect to at most four cluster operators
-        at once. Therefore, the BCH expansion must truncate at the
-        fourth-order terms.
+        will find. As in the case of the energy equation we use the
+        Baker-Campbell-Hausdorff expansion when expanding the exponentials in
+        the similarity transformed Hamiltonian. We only keep the terms which
+        excites the reference state to the same degree as the amplitudes we are
+        trying to find.
 
-        Now comes the rather tedious task of evaluating all the terms
-        that arises from inserting \autoref{eq:normal_order_expansion}
-        into \autoref{eq:doubles_amplitude_1}. This can be done by applying
-        Wick's generalised theorem, but the task is a daunting and streneous one.
-        A few example computations of how this can be done is included in
-        \autoref{app:wickOnAmplitude}.
-         Instead of doing it in this manner, we employ the second quantisation library
-         from SymPy instead\footnote{This is also more in the spirit of this project,
-         as it is within the realm of \emph{Computational} Physics.}.
-        The CCD amplitude equation, from SymPy computation, is
-        \begin{equation}
-        \begin{aligned}
-            0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-                 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-                 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-                 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-                 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
-        \label{eq:CCD_amp_1}
-        \end{aligned}
-        \end{equation}
+        \subsubsection{Coupled cluster doubles amplitude equations}
+            In our case we are only interested in the second order ampltiudes
+            found in the doubles approximation, hence we will solve the equation
+            \begin{align}
+                \bra{\Phi_{ij}^{ab}}e^{-T_2}H_N e^{T_2}\kslat = 0,
+                \label{eq:doubles_amplitude_1}
+            \end{align}
+            to find an expression that can be used to solve for the amplitudes
+            $t_{ij}^{ab}$. As the state we are projecting onto is doubly excited
+            we will only keep terms from the Baker-Campbell-Hausdorff expansions
+            which leaves the reference doubly excited.
+            \begin{equation}
+                \bar{H} = \para{
+                    H_N + H_NT_2 + \frac{1}{2}H_NT_2^2
+                }_c.
+                \label{eq:normal_order_expansion}
+            \end{equation}
+            Higher order terms will leave the reference in a too high excitation
+            state.
+
+            Now comes the rather tedious task of evaluating all the terms that
+            arises from inserting \autoref{eq:normal_order_expansion} into
+            \autoref{eq:doubles_amplitude_1}. This can be done by applying
+            Wick's generalised theorem, but the task is a daunting and streneous
+            one. A few example computations of how this can be done is included
+            in Appendix \ref{app:wick_on_amplitude}. Instead of doing it in this
+            manner, we employ the second quantization library from SymPy
+            \footnote{This is also more in the spirit of this project, as
+            it is within the realm of \emph{Computational} Physics.}.  The CCD
+            amplitude equation, from SymPy\footnote{Note that this is one of
+            many ways to write the amplitude equation as the ordering of the
+            indices can change drastically for every run of the SymPy-script.},
+            is
+            \begin{equation}
+                \begin{aligned}
+                    0 &= u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab)
+                    - f^k_jt^{ab}_{ik}P(ij)
+                    \\
+                    &\qquad
+                    + \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd}
+                    + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd}
+                    \\
+                    &\qquad
+                    + \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij)
+                    - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab)
+                    \\
+                    &\qquad
+                    + t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij)
+                    + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij)
+                    \\
+                    &\qquad
+                    - \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
+                    \label{eq:CCD_amp_1}
+                \end{aligned}
+            \end{equation}
+            Here $P(ij)$ is an exchange operator which interchanges two
+            particles with indices $i$ and $j$.
 
         \subsubsection{The Iterative Scheme}
-        At first, we pick only diagonal elements of $f$ to be part of the unperturbed
-        Hamiltonian and consider the rest of the terms a perturbation.
-        The second and third terms in \autoref{eq:CCD_amp_1} can now be
-        rewritten,
-        \begin{equation}
-        \begin{aligned}
-            f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
-                &\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba} - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
-                &= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
-                &= (\epsilon_a + \epsilon_b - \epsilon_i - \epsilon_j)t_{ij}^{ab} \\
-                &= -(\epsilon_i + \epsilon_j - \epsilon_a - \epsilon_b)t_{ij}^{ab} \\
-                &= -D_{ij}^{ab}t_{ij}^{ab}.
-        \end{aligned}
-        \end{equation}
+            In order to find the amplitude $t$ we have to start with an initial
+            guess and use an iterative procedure to improve on the initial
+            guess. We start by picking the diagonal elements of $f$ to be a part
+            of the unperturbed Hamiltonian and consider the rest of the terms a
+            perturbation. The second and third terms in \autoref{eq:CCD_amp_1}
+            can now be rewritten,
+            \begin{equation}
+            \begin{aligned}
+                f^b_c&t_{ij}^{ab}P(ab) - f^k_j t_{ik}^{ab}P(ij) \\
+                    &\to f^b_bt_{ij}^{ab} - f^a_at_{ij}^{ba}
+                    - f^j_jt_{ij}^{ab} + f^i_it_{ji}^{ab} \\
+                    &= (f^a_a + f^b_b - f^i_i - f^j_j)t_{ij}^{ab} \\
+                    &= (\epsilon_a + \epsilon_b - \epsilon_i
+                    - \epsilon_j)t_{ij}^{ab} \\
+                    &= -(\epsilon_i + \epsilon_j - \epsilon_a
+                    - \epsilon_b)t_{ij}^{ab} \\
+                    &= -D_{ij}^{ab}t_{ij}^{ab},
+            \end{aligned}
+            \end{equation}
+            where the arrow signifies that we only look at the diagonal elements
+            of $f$. We now define the right hand side of \autoref{eq:CCD_amp_1}
+            to $g(f, u, t)$ where we make sure that we only use the off-diagonal
+            elements of $f$ in the computations.
 
-        Then we can define a new version of \autoref{eq:CCD_amp_1},
-        \begin{equation}
-        \begin{aligned}
-            g(u, t) =&
-                    u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
-                 +& \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-                 +& \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-                 +& t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-                 -& \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
-        \end{aligned}
-        \end{equation}
-
-        where $\tilde{f}$ are the non-diagonal parts of the Fock matrix.
-
-        Now we have $D_{ij}^{ab}t_{ij}^{ab} = g(u, t)$.
-        This allows us to define an iterative scheme,
-        \begin{equation}
-            t^{(k + 1)} = \frac{g(u, t^{(k)})}{D_{ij}^{ab}},
-            \label{eq:iterative_amplitude}
-        \end{equation}
-        with the initial guess
-        \begin{equation}
-            t^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
-        \end{equation}
+            By moving $D^{ab}_{ij}t^{ab}_{ij}$ to the left hand side we we get
+            \begin{align}
+                D_{ij}^{ab}t_{ij}^{ab} = g(u, t).
+            \end{align}
+            This allows us to define an iterative scheme,
+            \begin{equation}
+                t^{(k + 1)} = \frac{g(u, t^{(k)})}{D_{ij}^{ab}},
+                \label{eq:iterative_amplitude}
+            \end{equation}
+            with the initial guess
+            \begin{equation}
+                t^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
+            \end{equation}
 
         \subsubsection{Intermediate Computations}
         Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
@@ -759,11 +788,11 @@
             both the HO basis and the HF basis, but not equally well.
 
 \section{Implementation}
-    We have costructed a flexible framework for making performing Hartree-Fock 
+    We have costructed a flexible framework for making performing Hartree-Fock
     self-consistednt field (SCF) and coupled cluster with double excitations (CCD)
     computations. The entire code base consists of package for \lstinline{python}
     that is easy to install globally on any computer.
-    
+
     Because we have employed a mixture of Python and C++ with Cython interfaces,
     the code sturcture may be difficult to undertand for someone without Cython
     experience, but we have tried to make the actual usage of the software as
@@ -774,8 +803,8 @@
     BLAS and LAPACK, is most likely as fast as it gets and, at the very least,
     efficient enough for our purposes. The quicker and easier scripting capabilities
     Python provides is worth what little extra speed-up writing the entire
-    code base in C++ could have provided. 
-    
+    code base in C++ could have provided.
+
     \subsection{Installation and Usage}
 
         The software is easy to install by first cloning the GitHub reopsitory,
@@ -855,27 +884,27 @@
         use and CPU time as the overall goal. Moreover, several methods
         in NumPy for doing linear algebra was tested, including but not limited
         to \mintinline{python}{numpy.einsum()}, \mintinline{python}{numpy.tensordot},
-        and reshaping datastructures to two dimensions and using 
-        \mintinline{python}{numpy.dot}. Additionally, we tried to make use of 
+        and reshaping datastructures to two dimensions and using
+        \mintinline{python}{numpy.dot}. Additionally, we tried to make use of
         the python package \mintinline{python}{dask} which allows for arrays that
         are larger than the computer's memory buffer as well as automated
         concurrency. We found that the dask arrays was a bad fit for our code
         base, but we ended up using \mintinline{python}{numba} for automated
         paralellization of some iterative loops as well as just-in-time
-        compialtion of some functions. 
+        compialtion of some functions.
 
     \subsection{Convergence Problems and Mixing}
 
         Iterative many-body methods are prone to convergence problems for some
         configurations. Since Hartree-Fock is a variational method, SCF convergence
-        is found when the energy is stationary with respect to inifitesimal 
-        variations in the orbitals. Unfortunately, the SCF iteration scheme does 
+        is found when the energy is stationary with respect to inifitesimal
+        variations in the orbitals. Unfortunately, the SCF iteration scheme does
         not always converge. Luckily, numerous techniques exist for controlling
-        and accelerating convergence\cite{schlegel1991you}. The same kind of 
+        and accelerating convergence\cite{schlegel1991you}. The same kind of
         methods have proven useful to ensure convergence of coupled cluster methods
         \cite{scuseria1986accelerating}.
 
-        The simplest way to try to ``massage'' convergence out of the CCD-method 
+        The simplest way to try to ``massage'' convergence out of the CCD-method
         is to use \emph{damping} where you include a part of the result from the
         previous iteration i.e.,
         \begin{align}
@@ -889,7 +918,7 @@
         a more gradual transition between the iterations. We now use
         $\tilde{t}^{k + 1}$ as our estimate of the new amplitude.
 
-        A more sophisticated mixing method is the direct inversion 
+        A more sophisticated mixing method is the direct inversion
         in the iterative subspace (DIIS), also known as Pulay mixing. While the
         common mixing method is used for many other applications
         \footnote{It is, for instance, called an alpha filter in data acquisition.},
@@ -912,7 +941,7 @@
         All the results from our simulations are displayed in tables \ref{tab:N2},
         \ref{tab:N6}, \ref{tab:N12} and \ref{tab:N20}. They show the ground state
         energy as a result of restricted Hartree-Fock SCF iterations, and coupled
-        cluster doubles with harmonic oscillator basis and Hatree-Fock basis for 
+        cluster doubles with harmonic oscillator basis and Hatree-Fock basis for
         systems of increasing size, $N=2$, $N=6$, $N=12$ and $N=20$ particles
         respectively. The results are thoroughtly discussed in the next section.
 
@@ -1159,7 +1188,7 @@
 
     \subsection{Running time}
         Here we show how the three implementations of the CCD-method scales as a
-        function of the shell number $R$ for $N = 2$ and $N = 6$, in table 
+        function of the shell number $R$ for $N = 2$ and $N = 6$, in table
         \ref{fig:running_time_2} and \ref{fig:running_time_6} respectively. The same
         behaviour is shown for higher number of particles. In \autoref{fig:running_time_6_zoom}
         we have plotted the computation time for $N=6$ particles again, but we
@@ -1189,10 +1218,10 @@
         \begin{figure}
            \centering
             \includegraphics[width=244px]
-            {../dat/figures/iter_run_times_zoom.pdf}
+            {../dat/figures/iter_run_times_zoom_6.pdf}
             \caption{Run time for $N=6$ particles, only the faster methods are
             included for better comparison.}
-            \label{fig:running_time_6_zoom}            
+            \label{fig:running_time_6_zoom}
         \end{figure}
 
 \section{Discussion}
@@ -1201,25 +1230,25 @@
         Somewhat surprisingly, the Hartree-Fock method outperforms the coupled
         cluster doubles when the harmonic oscillator basis is used. This
         happens for almost any configuration except the smallest system
-        with $N=2$ particles. This comes from the fact that the HO basis is 
+        with $N=2$ particles. This comes from the fact that the HO basis is
         not very good at representing the states in the system. As we have
         already stated, because the Hartree-Fock SCF iterations is a variational
         methdod, the basis is varied in order to find the minimal energy. The new
         basis states will be linear combinations of the old basis states. When
-        the iterations are finished, the new transformed HF basis will then be 
-        much better at representing the possible quantum configurations compared 
+        the iterations are finished, the new transformed HF basis will then be
+        much better at representing the possible quantum configurations compared
         to the HO basis. This effect is only apparent in system with a larger
-        number of particles and/or low frequency. This is because in a system with 
+        number of particles and/or low frequency. This is because in a system with
         a large number of particles relative to the frequency particle-particle
         interaction will be more prominent than the harmonic oscillator potential
         the particles are subject to. I other words, the HO basis would fit rather
-        well. 
+        well.
 
     \subsection{Validity of results}
         The analytical computed energy for $\omega=1.0$ a.u.
-        and $N=2$ is $3$\cite{taut1994two}. From our tables we see 
+        and $N=2$ is $3$\cite{taut1994two}. From our tables we see
         that RHF is least successful in reaching this value, CCD in
-        HF basis is best, while CCD with HO basis is generally somewhere 
+        HF basis is best, while CCD with HO basis is generally somewhere
         between the two. We see that we get even closer to the analytical
         ``truth'' by increasing the number of shells.
 
@@ -1280,35 +1309,35 @@
     % Did you want to write something about memory use, Oyvind? Memory problems?
 
     \section{Summary Remarks}
-        
+
         Our main product from this is a product that can do both computations with
-        restricted Hartree-Fock (RHF) self-consistent field and coupled cluster 
+        restricted Hartree-Fock (RHF) self-consistent field and coupled cluster
         doubles (CCD). We have tried
-        to make a package in python that should be easy enough for anyone to test. 
+        to make a package in python that should be easy enough for anyone to test.
         Moreover we hav demonstrated that one can speed up the computation time with
         a relatively simple algebraic transformation and finding the ``intermediates''.
         The computational speed was further reduced using sparse matrices. It should
         be noted, as a warning, that there are relatively few systems adequately sparese
-        for this to work. We added upon the program to increase it further with 
+        for this to work. We added upon the program to increase it further with
         paralellization and optimal use of numerical functions.
 
         In order to perform the computations we have constructed a harmonic oscillator
         basis. We saw how the CCD method was outperformed RHF in most cases, and often
         exhibited convergence problems. The remedy for these shortcomings is to use
-        the Hartree-Fock basis which is provided after successful convergence of 
+        the Hartree-Fock basis which is provided after successful convergence of
         SCF iterations. The results are improved markedly and classification of coupled
-        cluster methods as a post-Harte-Fock method is justified. 
+        cluster methods as a post-Harte-Fock method is justified.
 
         The coupled cluster method provides surprisingly good results even
         though one only includes double esctiations. The reason for this is that
-        particle-particle interactions is the amongt the most important thing that 
-        happens in a ferminon system, second only to no interaction at all, i.e 
+        particle-particle interactions is the amongt the most important thing that
+        happens in a ferminon system, second only to no interaction at all, i.e
         what particles do on their own. The way to improve the computations is to
         include other types of excitations like singles (CCSD) and triples (CCSDT),
-        add more basis functions, and/or supplement the coupled cluster method with 
+        add more basis functions, and/or supplement the coupled cluster method with
         another method like a perturbative one. All of this will, needless to say,
         increase the compute time, which must be balanced against the accuracy needed
-        for the situation at hand. 
+        for the situation at hand.
 
 \vfill
 \newpage
@@ -1455,9 +1484,105 @@
     \end{align}
     which is what we wanted to show.\cite{crawford2007introduction}
 
-\section{Amplitude Equations}
+\section{Energy equation}
+    \label{app:energy_equation}
+    Here we show how to compute the coupled cluster doubles energy from
+    \autoref{eq:ccd_energy}. The first two terms come from the reference energy
+    shown in \autoref{eq:reference_energy}. The last term we get by using Wick's
+    theorem.
+    \begin{align}
+        \bslat (H_N T_2)_c\kslat
+        &= \bslat (W_N T_2)_c\kslat,
+    \end{align}
+    as the normal ordered Fock operator can at most relax a single state, i.e.,
+    \begin{align}
+        \bslat (F_N T_2)_c\kslat = 0.
+    \end{align}
+    We are thus left with computing the contraction of the doubles cluster
+    operator and the normal ordered two-body operator. Note that we must keep
+    only the fully contracted terms.
+    \begin{align}
+        \bslat (W_N T_2)_c\kslat
+        &=
+        \frac{1}{16} u^{pq}_{rs} t^{ab}_{ij}
+        \bslat
+        A
+        \kslat,
+        \label{eq:third_term_ccd_energy}
+    \end{align}
+    where $A$ is the create and destruction operator strings. By using
+    generalized Wick's theorem we get
+    \begin{align}
+        A &=
+        \{\acr{p}\acr{q}\ade{s}\ade{r}\}
+        \{\acr{a}\acr{b}\ade{j}\ade{i}\}
+        \nonumber \\
+        &=
+        \{
+            \wick{
+                    \c4 a_p^{\dagger} \c3 a_q^{\dagger}
+                    \c2 a_s \c1 a_r
+                    \c1 a_a^{\dagger} \c2 a_b^{\dagger}
+                    \c3 a_j \c4 a_i
+            }
+        \}
+        +
+        \{
+            \wick{
+                    \c4 a_p^{\dagger} \c3 a_q^{\dagger}
+                    \c1 a_s \c2 a_r
+                    \c1 a_a^{\dagger} \c2 a_b^{\dagger}
+                    \c3 a_j \c4 a_i
+            }
+        \}
+        \nonumber \\
+        &\qquad
+        +
+        \{
+            \wick{
+                    \c3 a_p^{\dagger} \c4 a_q^{\dagger}
+                    \c2 a_s \c1 a_r
+                    \c1 a_a^{\dagger} \c2 a_b^{\dagger}
+                    \c3 a_j \c4 a_i
+            }
+        \}
+        +
+        \{
+            \wick{
+                    \c3 a_p^{\dagger} \c4 a_q^{\dagger}
+                    \c1 a_s \c2 a_r
+                    \c1 a_a^{\dagger} \c2 a_b^{\dagger}
+                    \c3 a_j \c4 a_i
+            }
+        \}
+        \nonumber \\
+        &=
+        \delta_{pi}\delta_{qj}\delta_{sb}\delta_{ra}
+        - \delta_{pi}\delta_{qj}\delta_{sa}\delta_{rb}
+        \nonumber \\
+        &\qquad
+        - \delta_{pj}\delta_{qi}\delta_{sb}\delta_{ra}
+        + \delta_{pj}\delta_{qi}\delta_{sa}\delta_{rb}.
+    \end{align}
+    Inserted back into \autoref{eq:third_term_ccd_energy} and summing the
+    indices in the Kronecker-Delta's we get
+    \begin{align}
+        \bslat (W_N T_2)_c\kslat
+        &=
+        \frac{1}{16}\para{
+            u^{ij}_{ab} - u^{ij}_{ba} - u^{ji}_{ab} + u^{ji}_{ba}
+        }
+        t^{ab}_{ij}
+        \nonumber \\
+        &=
+        \frac{1}{4}u^{ij}_{ab}t^{ab}_{ij},
+    \end{align}
+    where we have used the antisymmetry of the two-body matrix elements, thus
+    completing what we wanted to show.
 
-    \label{app:wickOnAmplitude}
+\section{Amplitude equations}
+
+    \label{app:wick_on_amplitude}
 
     In this section we have provided a few sample computations of how one would
     evaluate the amplitude equations using wicks theorem. Starting with the simplest
@@ -1554,7 +1679,7 @@
           &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
           &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},
-        \end{aligned}        
+        \end{aligned}
     \end{equation}
     \begin{equation}
         \begin{aligned}
@@ -1566,7 +1691,7 @@
           &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
           &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
         \end{aligned}
-    \end{equation}        
+    \end{equation}
     \begin{equation}
         \begin{aligned}
         0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
@@ -1618,7 +1743,7 @@
     \label{app:sample_script}
 
     \vspace{10pt}
-    
+
     \inputminted[firstline=0, lastline=113]{python}{../scripts/comparison.py}
 
 \end{widetext}
