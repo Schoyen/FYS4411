@@ -558,39 +558,51 @@
                 t^{(0)} = \frac{u_{ij}^{ab}}{D_{ij}^{ab}}.
             \end{equation}
 
-        \subsubsection{Intermediate Computations}
-        Looking closely at the amplitude equation in (\ref{eq:CCD_amp_1}) one might come
-        to realize that this equation contains many of the same structures in
-        several of the terms. This warrants the search for an algebraic transformation of the
-        CCD amplitude equation that has the potential to reduce the amount of floating point
-        operations needed to compute it. As it turns out, such terms exist and they will decrease
-        the computing time necessary by an order of magnitude. We will define the following
-        "intermediates",
-        \begin{align}
-            \label{eq:intermediate1}
-            \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
-            \label{eq:intermediate2}
-            \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
-            \label{eq:intermediate3}
-            \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-            \label{eq:intermediate4}
-            \chi^{bm}_{jc} &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd}
-        \end{align}
-        These intermediate structures will allow us to rewrite \autoref{eq:CCD_amp_1} to,
-        \begin{equation}
-        \begin{aligned}
-            0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
-               - t^{bd}_{ij}\chi^a_dP(ab) \\
-              &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
-        \end{aligned}
-        \end{equation}
-        The importance of this "trick" will become apparent in due time.
+        \subsubsection{Intermediate computations}
+            Looking closely at the tensors in \autoref{eq:CCD_amp_1} one might
+            come to realize that many of the terms share a common structure.
+            This warrants the search for an algebraic transformation of the
+            amplitude equation that has the potential to reduce the amount of
+            floating point operations needed to compute it. As it turns out,
+            such terms exist and they will decrease the computing time necessary
+            by two orders of magnitude for the price of higher storage costs.
+            We will define the following "intermediates"\footnote{Note that are
+            more than one way of defining the intermediates.},
+            \begin{align}
+                \label{eq:intermediate1}
+                \chi^{ab}_{cd}
+                &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd}
+                + \frac{1}{2}u^{ab}_{cd} \\
+                \label{eq:intermediate2}
+                \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
+                \label{eq:intermediate3}
+                \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
+                \label{eq:intermediate4}
+                \chi^{bm}_{jc}
+                &= u^{bm}_{jc} + \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd}
+            \end{align}
+            See Appendix \ref{app:intermediates} for the derivation.  These
+            intermediate structures will allow us to rewrite
+            \autoref{eq:CCD_amp_1} to,
+            \begin{equation}
+                \begin{aligned}
+                    0 &= u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab)
+                    - f^k_jt^{ab}_{ik}P(ij) \\
+                    &\qquad
+                    + t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
+                    - t^{bd}_{ij}\chi^a_dP(ab) \\
+                    &\qquad
+                    + t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
+                    + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
+                \end{aligned}
+            \end{equation}
+            We will discuss the importance of doing this in
+            \autoref{subsec:ccd_scaling}.
 
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
-        ground state energy using the coupled cluster doubles approximation is a
-        well and dandy. But, we need basis functions to create the matrix
+        ground state energy using the coupled cluster doubles approximation is
+        all well and dandy. But, we need basis functions to create the matrix
         elements needed to feed into the coupled cluster code.  Often these
         basis functions are not known and we have to use an approximation or
         utilize Hartree-Fock to create more optimized basis functions.
@@ -598,17 +610,18 @@
         \subsubsection{Harmonic oscillator basis}
             We will be looking at a system of two-dimensional quantum dots with
             a Coulomb repulsion.  If we assume, or make it so, that the
-            repulsive two-body part is small we can use eigenfunctions of the
-            one-body part our basis. In this case we have two-dimensional
-            harmonic oscillator functions as eigenfunctions. We can then compute
-            the matrix elements, $h_q^p$ and $u_{rs}^{pq}$, before feeding these
-            into the coupled cluster code.
+            repulsive two-body part is small we can use the eigenfunctions of
+            the one-body part as our basis of single particle functions. In this
+            case we have two-dimensional harmonic oscillator functions as
+            eigenfunctions. We can then pre-compute the matrix elements, $h_q^p$
+            and $u_{rs}^{pq}$, before feeding these into the coupled cluster
+            code.
 
             In polar coordinates we can write the harmonic oscillator
             wavefunction for a single particle in two dimensions
             as\footnote{Note that this is without spin. As we are looking at
             fermions this means that each mode of the harmonic oscillator
-            functions will be repeated twice.}.
+            function will be repeated twice.}.
             \begin{align}
                 \phi_{nm}(r, \theta)
                 &=
@@ -638,8 +651,8 @@
             Our next job is now to create a mapping from the three quantum
             numbers $n$, $m$ and $\sigma$ to a single quantum number $\alpha$ as
             the matrices $h$ and $u$ use single indices for each wavefunction.
-            In \autoref{fig:basis_states} we can see the energy levels that
-            needs to be mapped.
+            In \autoref{fig:basis_states} we can see the lowest three energy
+            levels that needs to be mapped.
             \begin{figure}
                 \begin{center}
                     \begin{tikzpicture}[scale=0.8]
@@ -685,7 +698,9 @@
                 \caption{In this plot we can see the energy degeneracy of the
                 lowest three energy levels in the two-dimensional quantum dot.
                 Each arrow representes a spin up or a spin down state with the
-                quantum numbers $n$ and $m$ as listed below.}
+                quantum numbers $n$ and $m$ as listed below. This pattern goes
+                on indefinitly with the addition of one bar (two oscillators)
+                per level.}
                 \label{fig:basis_states}
             \end{figure}
 
@@ -698,8 +713,8 @@
             \emph{shells}, i.e., we restrict our views to systems of $N$
             particles where $N$ will be a magic number which we get by counting
             all spin states for each energy level and the energy levels below.
-            In \autoref{fig:basis_states} we can see the magic number $N \in [2,
-            6, 12]$.
+            In \autoref{fig:basis_states} we can see the magic numbers $N \in [2,
+            6, 12]$ by counting the levels in increasing order.
 
             The normalization condition now reads
             \begin{align}
@@ -722,70 +737,90 @@
             the antisymmetric two-body matrix elements in the harmonic
             oscillator basis.
             \begin{align}
-                \bra{\alpha\beta}\ket{\gamma\delta}
-                &= \braket{\alpha\beta}{\gamma\delta}
-                - \braket{\alpha\beta}{\delta\gamma}.
+                u^{\alpha\beta}_{\gamma\delta}
+                &= \bra{\alpha\beta}u\ket{\gamma\delta}
+                - \bra{\alpha\beta}u\ket{\delta\gamma}.
             \end{align}
-            As we only need to compute these once it is a good idea to save all
-            non-zero values of $\bra{\alpha\beta}\ket{\gamma\delta}$ to a file.
+            Computing the Coulomb elements is an extremely costly operation and
+            we will thus only compute the non-zero orbital integrals, i.e., neglecting
+            spin and antisymmetry, before saving these to a file which we can
+            read several times.
 
         \subsubsection{Constructing the Hartree-Fock basis}
             Having found the matrix elements of $h$ and $u$ we can now use the
-            \emph{self-consistent field} (SCF) iteration method to construct $h$ and
-            $u$ in a \emph{restricted Hartree-Fock} (RHF) basis. This will yield a
-            better estimate to the actual, unknown basis functions of the
-            system.
+            \emph{self-consistent field} (SCF) iteration method to construct $h$
+            and $u$ in a \emph{restricted Hartree-Fock} (RHF) basis. This will
+            yield a better estimate to the actual, unknown basis functions of
+            the system.
 
-            The neatest, yet arguably the most abstract, way to write the Hartree-Fock
-            equations for electron $i$\footnote{This is weird, as electron
-            should be indistinguishable and therefore impossible to label.} is
+            The neatest, yet arguably the most abstract, way to write the
+            Hartree-Fock equations for electron $i$ is
             \begin{equation}
-                f_i \varphi_i = \varepsilon_i \varphi_i,
+                f \varphi_p = \varepsilon_p \varphi_p,
             \end{equation}
-            where $f_i$ is the Fock operator, $\varphi_i$ are eigenstates of the Fock
-            operator consiting of a set of one-electorn wave funcitons called the
-            Hartree-Fock molecular orbitals, and $\varepsilon_i$ are the eigenenergies
-            of the Fock operator. The fock operator, in matrix notation, is given by
+            where $f$ is the Fock operator, $\varphi_p$ are eigenstates of the
+            Fock operator consisting of a set of one-electron wave functions
+            called the Hartree-Fock molecular orbitals, and $\varepsilon_p$ are
+            the eigenenergies of the Fock operator. The Fock operator, in matrix
+            notation, is given by
             \begin{equation}
-                F_{pa} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
+                f^p_q = h^p_q + J(D)^p_q - \half K(D)^p_q,
+                %F_{pq} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
             \end{equation}
-            where $h_i$ is the one-body operatore, while the two-body operator is
-            divided into what we call a direct part,
+            where $h^p_q$ is the one-body operator, while the two-body operator
+            is divided into what we call a direct part,
             \begin{equation}
-                J(D)_{pq} = \braket{pq}{rs}D_{sr},
+                J(D)^p_q = \bra{pr}u\ket{qs}D_{sr},
             \end{equation}
             and an exchange part,
             \begin{equation}
-                K(D)_{pq} = \braket{ps}{rq}D_{sr}.
+                K(D)^p_q = \bra{pr}u\ket{sq}D_{sr}.
             \end{equation}
-            The direct part of the two-body operator is comparable to classical Coloumb
-            repulsion, while the exchange does not have a classical analog as it arises
-            from the antisymmetry requirement of the wavefunction. $D_{sr}$ is the
-            density matrix of the system.
+            Pay special attention to the non-antisymmetric two-body elements in
+            the direct and exchange part.  The direct part of the two-body
+            operator is comparable to classical Coloumb repulsion, while the
+            exchange does not have a classical analog as it arises from the
+            antisymmetry requirement of the wavefunction. The matrix $D_{sr}$ is
+            the density matrix of the system and will be defined shortly.
 
-            Introducing a basis set transforms the Hartree-Fock equations into the Rothaan
-            equations
+            Introducing a basis set transforms the Hartree-Fock equations into
+            the Rothaan equations
             \begin{equation}
                 FC = SC\varepsilon.
             \end{equation}
-            This is a generalised eigenvalue problem where $S$ serves as an overlap matrix
-            that must be there in case of non-orthogonal basis. Since the Fock matrix $F$
-            depends on it's own solution through the orbitals, the eigenvalue problem must
-            be solved iteratively\footnote{This is also the reason why the
-            Hartree-Fock-Roothaan equations are often called the self-consistent-field
-            procedure.}
+            This is a generalised eigenvalue problem where
+            \begin{align}
+                S^{p}_{q} = \braket{p}{q},
+            \end{align}
+            i.e., the \emph{overlap matrix}. We now define the density matrix
+            $D$ by
+            \begin{align}
+                D^{p}_{q} \equiv C^p_{\alpha}{C^{\alpha}_q}^{*},
+            \end{align}
+            Since the Fock matrix $F$ depends on it's own solution through the
+            orbitals, the eigenvalue problem must be solved
+            iteratively\footnote{This is also the reason why the Roothan-Hall
+            equations are often called the self-consistent-field procedure.}
 
             Because the RHF SCF method is a variational method, the initial
-            wavefunction made up of the single-particle wavefunctions $\varphi_i$
-            is varied until the minimal energy is found. The transformations necessary
-            to make all these variations will now be contained in $C$. So if we start from
-            a harmonic oscillator (HO) basis we can transform into a better basis, called a
-            Hartree-Fock (HF) basis,
+            wavefunction made up of the single-particle wavefunctions
+            $\varphi_i$ is varied until the minimal energy is found.
+            \begin{align}
+                E_{\text{RHF}}
+                &= \para{
+                    f^p_q - \half J(D)^p_q + \frac{1}{4}K(D)^p_q
+                }D^q_p.
+            \end{align}
+
+            The transformations necessary to make all these variations will now
+            be contained in $C$. So if we start from a harmonic oscillator (HO)
+            basis, $\ket{\alpha}$ we can transform into a better basis, called a
+            Hartree-Fock (HF) basis, $\ket{p}$.
             \begin{equation}
-                \ket{\Psi}^{\text{HF}}_p = \sum_{k=1}^L C_{kp} \ket{\Psi}_k^{\text{HO}}.
+                \ket{p} = C^p_\alpha\ket{\alpha}.
             \end{equation}
-            We will see how the coupled cluster method with double excitations works with
-            both the HO basis and the HF basis, but not equally well.
+            We will see how the coupled cluster method with double excitations
+            works with both the HO basis and the HF basis, but not equally well.
 
 \section{Implementation}
     We have costructed a flexible framework for making performing Hartree-Fock
@@ -892,6 +927,9 @@
         base, but we ended up using \mintinline{python}{numba} for automated
         paralellization of some iterative loops as well as just-in-time
         compialtion of some functions.
+
+    \subsection{Scaling of the coupled cluster doubles method}
+        \label{subsec:ccd_scaling}
 
     \subsection{Convergence Problems and Mixing}
 
@@ -1670,6 +1708,7 @@
         \end{equation}
         Where in the last steps we have consigned the sums by Einstein summation notation.
 \section{Finding Amplitude Equation Intermediates}
+    \label{app:intermediates}
     Starting from the CCD amplitude equation we factor out terms that will have the same
     indices if we contract them,
     \begin{equation}
