@@ -2,14 +2,10 @@ import numpy as np
 import scipy.linalg
 
 def calculate_energy(F, W, D):
-    J = np.einsum("sr, qrps -> qp", D, W)
-    K = np.einsum("sr, qrsp -> qp", D, W)
+    J = np.einsum("prqs, sr -> pq", W, D)
+    K = np.einsum("prsq, sr -> pq", W, D)
 
-    energy = np.einsum("pq, qp ->", F, D)
-    energy -= 0.5*np.einsum("pq, qp ->", J, D)
-    energy += 0.25*np.einsum("pq, qp ->", K, D)
-
-    return energy
+    return np.einsum("pq, qp -> ", F - 0.5 * J + 0.25 * K, D)
 
 def build_density_matrix(U, num_occupied):
     """Function building a density matrix.
@@ -41,11 +37,11 @@ def build_rhf_fock_matrix(H, W, D):
 
         F_{pq} = H_{pq} + J(D)_{pq} - 0.5*K(D)_{pq},
 
-    where we build J and K from the electron repulsion integrals (W) (using
-    Mulliken notation) and the density matrix D.
+    where we build J and K from the electron repulsion integrals (W) and the
+    density matrix D.
 
-        J(D)_{pq} = (pq|rs)*D_{sr} = W[p][q][r][s]*D[s][r],
-        K(D)_{pq} = (ps|rq)*D_{sr} = W[p][s][r][q]*D[s][r].
+        J(D)_{pq} = <pr|u|qs> * D_{sr} = W[p, q, r, s] * D[s, r],
+        K(D)_{pq} = <pr|u|sq> * D_{sr} = W[p, s, r, q] * D[s, r].
 
     The NumPy-function einsum does this in a form which resemble the
     mathematical-product.
@@ -60,8 +56,8 @@ def build_rhf_fock_matrix(H, W, D):
     Returns:
         np.ndarray: The RHF-Fock matrix.
     """
-    J = np.einsum("sr, qrps -> qp", D, W)
-    K = np.einsum("sr, qrsp -> qp", D, W)
+    J = np.einsum("prqs, sr -> pq", W, D)
+    K = np.einsum("prsq, sr -> pq", W, D)
 
     return H + J - 0.5*K
 
