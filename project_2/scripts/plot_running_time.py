@@ -30,3 +30,19 @@ plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
 plt.savefig(fig_name)
 plt.show()
+
+zoom_fig_name = "iter_run_times_zoom_{0}.pdf"
+zoom_fig_name = os.path.join(fig_path, zoom_fig_name.format(n))
+
+del df["CoupledClusterDoubles"]
+
+df.plot()
+plt.xlabel(r"$R$", fontsize=12)
+plt.ylabel(r"$t$ [s]", fontsize=12)
+plt.title(
+        r"Sparse and optimized CCD for $N = {0}$ particles".format(n),
+        fontsize=14)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.savefig(zoom_fig_name)
+plt.show()
