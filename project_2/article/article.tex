@@ -7,7 +7,7 @@
 % Automatic clickable links
 \usepackage{hyperref}
 % SI-units
-\usepackage{siunitx}
+\usepackage[binary-units]{siunitx}
 % Enhanced math formatting
 \usepackage{amsmath}
 % Extended math symbols
@@ -207,8 +207,9 @@
     they are contained in the Slater determinant.  We will denote the occupied
     indices with $i, j, k, l, \dots \in \{1, \dots, N\}$, the \emph{virtual}
     states with $a, b, c, d, \dots \in \{N + 1, \dots, L\}$ and general indices
-    with $p, q, r, s, \dots \in \{1, \dots, L\}$. In terms of sets of basis
-    functions we can write this as
+    with $p, q, r, s, \dots \in \{1, \dots, L\}$. We define $M = L - N$ as the
+    number of virtual states. In terms of sets of basis functions we can write
+    this as
     \begin{align}
         \{\ket{p}\}_{p = 1}^L
         = \{\ket{i}\}_{i = 1}^N
@@ -596,8 +597,19 @@
                     + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
                 \end{aligned}
             \end{equation}
-            We will discuss the importance of doing this in
-            \autoref{subsec:ccd_scaling}.
+            Doing this reduces the number of FLOPS from $\mathcal{O}(M^4N^4)$
+            for the heaviest contraction, i.e., the contraction
+            \begin{align}
+                g(f, u, t) \gets
+                \frac{1}{4}t^{cd}_{ij}t^{ab}_{nm}u^{mn}_{cd},
+            \end{align}
+            to $\mathcal{O}(M^4N^2)$ when using the largest intermediate to do
+            the contraction
+            \begin{align}
+                g(f, u, t) \gets t^{cd}_{ij}\chi^{ab}_{cd},
+            \end{align}
+            for the price of storing $M^4$ more matrix elements and
+            pre-computing the intermediate.
 
     \subsection{Constructing the matrix elements}
         Having found the equations needed in order to find an estimate to the
@@ -819,7 +831,7 @@
             \begin{equation}
                 \ket{p}
                 = \para{\ket{\alpha}\bra{\alpha}}\ket{p}
-                = C^p_\alpha\ket{\alpha}.
+                = C^{\alpha}_p\ket{\alpha}.
             \end{equation}
             We will see how the coupled cluster method with double excitations
             works with both the HO basis and the HF basis, but not equally well.
@@ -869,8 +881,8 @@
         and provides a good example on how to use the code base.
 
     \subsection{Program Structure}
-        There are three main subsetions within our program structure,
-        given in the directory tree below.
+        There are three main subsections within our program structure, given in
+        the directory tree below.
 
         \vspace{10pt}
         \dirtree{%
@@ -888,54 +900,227 @@
         }
         \vspace{10pt}
 
-        The first subsection, \mintinline{python}{matrix_elemtents},
+        The first subsection, \mintinline{bash}{matrix_elemtents},
         contains methods for computing matrix elements in harmonic
         oscillator basis from an analytical
         expression\cite{anisimovas1998energy}.  Computing the matrix
         elements is a very intensive task, and the central functions are
-        therefore implemented in C++ with a Cython interface to enable use
-        in Python.
+        therefore implemented in C++ with a Cython interface to enable use in
+        Python\footnote{The C++ code is inherited from Alocias Mariadason from
+        his project in FYS4411 last year with slight modifications. The original
+        source code can be found here
+        \url{https://github.com/Oo1Insane1oO/FYS4411/blob/master/project1/src/Coulomb_Functions.cpp}
+        and
+        \url{https://github.com/Oo1Insane1oO/FYS4411/blob/master/project1/src/Coulomb_Functions.hpp}.
+        }.
 
-        The \mintinline{python}{hartree_fock} subsection contains methods
+        The \mintinline{bash}{hartree_fock} subsection contains methods
         for changing from harmonic oscillator basis to Hartree-Fock basis as
         well as an implementation of the self-consistent-field algorithm to
         make this transaction possible.
 
-        The \mintinline{python}{schemes} subsection is arguably the most
-        important part of this project. The subsection has three different
-        classes that perform the exact same computations, but in different
-        and increasingly intelligent ways. First,
-        \mintinline{python}{CoupledClusterDoubles} is the most
-        straightforward and naïve way to solve the CCD amplitude equations.
-        Second, because an overbearing amount of the elements in the
-        operator matrices in this problem are zero, we have implemented a
-        sparse matrix CDD solver in
-        \mintinline{python}{CoupledClusterDoublesSparse}. Third,
-        \mintinline{python}{CoupledClusterDoublesOptimized} takes advantage
-        of sparse matrices as well, but is also parallellized and optimized
-        with memory use and number of floating point operations in mind.
+        The \mintinline{bash}{schemes} subsection is arguably the most important
+        part of this project. The subsection has three different classes that
+        perform the exact same computations, but in different and increasingly
+        intelligent ways. First, \mintinline{python}{CoupledClusterDoubles} is
+        the most straightforward and naïve way to solve the CCD amplitude
+        equations.  Second, because an overbearing amount of the elements in the
+        operator matrices in this problem are zero, we have implemented a sparse
+        matrix CCD solver in \mintinline{python}{CoupledClusterDoublesSparse}.
+        Third, \mintinline{python}{CoupledClusterDoublesOptimized} is
+        parallellized and optimized with memory use and number of floating point
+        operations in mind.
 
+    \subsection{Index mapping}
+        The index mapping generating a $(n, m) \mapsto p$ and $p \mapsto (n, m)$
+        is a Python adaption of the code found here:
+        \url{https://github.com/ManyBodyPhysics/LectureNotesPhysics/blob/master/Programs/Chapter8-programs/cpp/CCD/src/qDots2DSPBasis.cpp#L18-L68}.
+
+    \subsection{Generating the antisymmetric two-body elements}
+        Constructing the Coulomb elements is by far the most intensive task
+        that is done. Luckily, we only need to do this once for each basis size
+        as the elements do not change and can be reused. We therefore compute
+        the elements once and store all the non-zero elements as Python
+        pickle-objects. If we wish to do a new run we first look for the
+        relevant Coulomb elements in the \texttt{dat}-directory before
+        attempting to create them anew.
+
+        After the elements are created/read we have to scale them with the
+        current frequency, i.e.,
+        \begin{align}
+            \bra{\alpha\beta}u\ket{\gamma\delta}
+            = \sqrt{\omega}\bra{12}u\ket{34},
+        \end{align}
+        where $\bra{12}u\ket{34}$ is found from E. Anisimovas and A.  Matulis
+        (Equation A2)\cite{anisimovas1998energy}. Next we antisymmetrize the
+        two-body elements and include spin which doubles each dimension of the
+        orbital integrals.
+        \begin{align}
+            u^{\alpha\beta}_{\gamma\delta}
+            &=
+            \delta_{\sigma_{\alpha}\sigma_{\gamma}}
+            \delta_{\sigma_{\beta}\sigma_{\delta}}
+            \bra{\alpha\beta}u\ket{\gamma\delta}
+            \nonumber \\
+            &\qquad
+            -
+            \delta_{\sigma_{\alpha}\sigma_{\delta}}
+            \delta_{\sigma_{\beta}\sigma_{\gamma}}
+            \bra{\alpha\beta}u\ket{\delta\gamma}.
+        \end{align}
+        The antisymmetrization process uses four nested loops and is therefore
+        implemented in Cython to reduce the computation time.
+
+    \subsection{Reducing the complexity of the basis transformation}
+        Having computed the RHF energy and the basis transformation matrix $C$
+        we can transform from the HO basis to the HF basis. For the one-body
+        matrix elements this becomes
+        \begin{align}
+            \bra{p}h\ket{q}
+            &= {C^p_{\alpha}}^{\dagger}C^{\beta}_q\bra{\alpha}h\ket{\beta}.
+        \end{align}
+        Note the usage of the Hermitian conjugate and complex conjugate. We
+        define them in such a manner
+        \begin{align}
+            {C^p_{\alpha}}^{\dagger}
+            = {C^{\alpha}_p}^{*}.
+        \end{align}
+        For the two-body elements this is a more complicated
+        task\footnote{Imagine the poor fellows that needs to deal with
+        three-body elements...}.
+        \begin{align}
+            \bra{pq}u\ket{rs}
+            &=
+            {C^p_{\alpha}}^{\dagger}{C^q_{\beta}}^{\dagger}
+            C^{\gamma}_r C^{\delta}_s
+            \bra{\alpha\beta}u\ket{\gamma\delta},
+        \end{align}
+        which translates into eight nested loops when programming the
+        expression as it stands. Luckily, by noticing that no indices are
+        repeated more than twice we can do each loop separately viz.
+        \begin{align}
+            \bra{pq}u\ket{rs}
+            &=
+            {C^p_{\alpha}}^{\dagger}
+            \brak{
+                {C^q_{\beta}}^{\dagger}
+                \brak{
+                    C^{\gamma}_r
+                    \brak{
+                        C^{\delta}_s
+                        \bra{\alpha\beta}u\ket{\gamma\delta}
+                    }
+                }
+            }.
+        \end{align}
+        This reduces the computations to four quintuply nested
+        loops\footnote{This trick was made aware to us through
+        \url{http://sirius.chem.vt.edu/wiki/doku.php?id=crawdad:programming:project4}.
+        }.
+
+    \subsection{Implementation details}
         Both in \mintinline{python}{CoupledClusterDoublesSparse} and
-        \mintinline{python}{CoupledClusterDoublesOptimized} we make use
-        of the intermediates in equations \ref{eq:intermediate1} to
-        \ref{eq:intermediate4}. We have also relied upon implementations
-        in C++ for some of the heaviest computations. In the optimized
-        class special care was taken to ensure that every contraction
-        was computed in an optimal way, with the minimization of memory
-        use and CPU time as the overall goal. Moreover, several methods
-        in NumPy for doing linear algebra was tested, including but not limited
-        to \mintinline{python}{numpy.einsum()}, \mintinline{python}{numpy.tensordot},
-        and reshaping datastructures to two dimensions and using
-        \mintinline{python}{numpy.dot}. Additionally, we tried to make use of
-        the python package \mintinline{python}{dask} which allows for arrays that
-        are larger than the computer's memory buffer as well as automated
-        concurrency. We found that the dask arrays was a bad fit for our code
-        base, but we ended up using \mintinline{python}{numba} for automated
-        paralellization of some iterative loops as well as just-in-time
-        compialtion of some functions.
+        \mintinline{python}{CoupledClusterDoublesOptimized} we make use of the
+        intermediates in equations \ref{eq:intermediate1} to
+        \ref{eq:intermediate4}.  In the optimized class special care was taken
+        to ensure that every contraction was computed in an optimal way, with
+        the minimization of memory use and CPU time as the overall goal.
+        Moreover, several methods in NumPy for doing linear algebra was tested,
+        including but not limited to \mintinline{python}{numpy.einsum},
+        \mintinline{python}{numpy.tensordot}, and reshaping datastructures to
+        two dimensions and using \mintinline{python}{numpy.matmul}.
+        Additionally, we tried to make use of the python package
+        \mintinline{python}{dask} which allows for arrays that are larger than
+        the computer's memory buffer as well as automated concurrency. We found
+        that the dask arrays was a bad fit for our code base, but we ended up
+        using \mintinline{python}{numba} for paralellization of some
+        iterative loops as well as just-in-time compilation of some functions.
 
     \subsection{Scaling of the coupled cluster doubles method}
-        \label{subsec:ccd_scaling}
+        When talking about the scaling of the coupled cluster method there are
+        two aspects to consider.
+        \begin{enumerate}
+            \item The number of FLOPS to compute $g(f, u, t)$.
+            \item The number of bytes needed to store the arrays of matrix
+                elements.
+        \end{enumerate}
+        For the CCD method the naïve solution using the form of $g(f, u, t)$
+        without the intermediates results in $\mathcal{O}(M^4N^4)$ FLOPS each
+        iteration. Using the form of the intermediates we have set up this
+        reduces to $\mathcal{O}(M^4N^2)$, i.e., two order of magnitude less. The
+        effect of this is \emph{dramatic} and will be shown in the results
+        section in due time.
+
+        A downside of using the intermediates\footnote{Particularly our form for
+        the intermediates as we store $\chi^{ab}_{cd}$ instead of a rewriting
+        this intermediate as $\chi^{ij}_{kl}$ which is also possible.} is the
+        higher storage costs. Lucky enough for us, the largest storage cost
+        comes from storing $u^{pq}_{rs}$ and overshadows all other terms as it
+        scales as $L^4$. See \autoref{tab:memory_u} for some example storage
+        costs. For a normal desktop computer we quickly reach a threshold where
+        $u^{pq}_{rs}$ will eat up all memory and activate disk storage thus
+        triggering a massive slowdown in computational speed.
+
+        \begin{table}
+            \centering
+            \caption{Storage costs of $u^{pq}_{rs}$ in gigabytes for a given
+            shell $R$ and the corresponding number of basis functions $L$
+            assuming $\SI{8}{\byte}$ (\texttt{double}) precision.}
+            \begin{ruledtabular}
+                \begin{tabular}{ccc}
+                    $R$ & $L$ & $u^{pq}_{rs}$ $[\si{\giga\byte}]$ \\
+                    \hline
+                    $8$ & $72$ & $0.2$ \\
+                    $9$ & $90$ & $0.49$ \\
+                    $10$ & $110$ & $1.1$ \\
+                    $11$ & $132$ & $2.3$ \\
+                    $12$ & $156$ & $4.4$ \\
+                    $13$ & $182$ & $8.2$ \\
+                    $14$ & $210$ & $14.5$
+                \end{tabular}
+            \end{ruledtabular}
+            \label{tab:memory_u}
+        \end{table}
+
+        For larger shell values we have to be particularly careful in terms of
+        the memory usage. This can be semi-problematic when using a programming
+        language such as Python as memory usage is camouflaged. Using NumPy
+        allows us to reuse memory buffers quite efficiently, but we have to be
+        careful what type of operations we do and if they incur copying.
+
+        \subsubsection{Sparse implementation}
+            It turns out that most of the elements in both
+            $u^{\alpha\beta}_{\gamma\delta}$ (the HO basis) and $u^{pq}_{rs}$
+            (the HF basis) are zero. Roughly $0.014\%$ and $0.082\%$ of the
+            elements are non-zero respectively (for $R = 12$). This inspired us
+            to look for a way to do sparse CCD. Using the
+            \texttt{sparse}-library in Python\footnote{Found here:
+            \url{https://github.com/pydata/sparse}.} we were able to set up a
+            sparse implementation. Unfortunately being efficient in terms of
+            re-using memory is quite complicated and there are definitely
+            improvements to be made. Nonetheless the performance of the method
+            is comparable to the optimized code.
+
+        \subsubsection{Parallelizing the contractions}
+            The easiest way to parallelize the coupled cluster code is to use
+            OpenMP on the contractions. In particular the heavy contractions. We
+            solved this using Numba with the \texttt{prange} function which
+            essentially translates into an OpenMP directive. This turned out to
+            be slower than the built-in NumPy calls, especially since NumPy
+            comes with the option of running in parallel if the code is built
+            with BLAS by setting the environment variable
+            \texttt{OMP\_NUM\_THREADS}. For example:
+            \begin{bash}
+                export OMP_NUM_THREADS=4
+            \end{bash}
+
+            Therefore, our most optimized code uses the matrix multiplication
+            code (\texttt{np.matmul}) from NumPy which translates into the BLAS
+            call \texttt{DGEMM} for matrix-matrix multiplication. This requires
+            us to reshape the four-dimensional tensors as matrices and write
+            them in such a way that we can do the contraction using matrix
+            multiplication. Here NumPy comes to our rescue as a reshape is done
+            inplace and all memory is stored as a contiguous array.
 
     \subsection{Convergence Problems and Mixing}
 
