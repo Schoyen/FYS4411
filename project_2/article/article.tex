@@ -825,22 +825,21 @@
             works with both the HO basis and the HF basis, but not equally well.
 
 \section{Implementation}
-    We have costructed a flexible framework for making performing Hartree-Fock
-    self-consistednt field (SCF) and coupled cluster with double excitations (CCD)
-    computations. The entire code base consists of package for \lstinline{python}
-    that is easy to install globally on any computer.
+    We have costructed a flexible framework for performing Hartree-Fock
+    self-consistent field iterations and coupled cluster with double excitations
+    computations. The entire code base consists of package for
+    \lstinline{Python} that is easy to install globally on any computer.
 
     Because we have employed a mixture of Python and C++ with Cython interfaces,
-    the code sturcture may be difficult to undertand for someone without Cython
+    the code sturcture may be difficult to understand for someone without Cython
     experience, but we have tried to make the actual usage of the software as
     painless as possible.
 
-    Most of the computations that are done in a coupled cluster algorithm
-    is linear algebra and we found that NumPy, relying on
-    BLAS and LAPACK, is most likely as fast as it gets and, at the very least,
-    efficient enough for our purposes. The quicker and easier scripting capabilities
-    Python provides is worth what little extra speed-up writing the entire
-    code base in C++ could have provided.
+    Most of the computations that are done in a coupled cluster algorithm is
+    linear algebra and we found that NumPy, relying on BLAS and LAPACK, is quite
+    fast and at the very least, efficient enough for our purposes. The quicker
+    and easier scripting capabilities Python provides is worth what little extra
+    speed-up writing the entire code base in C++ could have provided.
 
     \subsection{Installation and Usage}
 
@@ -849,20 +848,25 @@
             git clone git@github.com:Schoyen/FYS4411.git
         \end{bash}
         Then all you need to do is change directory to the project code folder
-        where a \lstinline{MakeFile} is included so you only need to build and
+        where a \lstinline{Makefile} is included so you only need to build and
         install,
         \begin{bash}
             cd FYS4411/project_2/coupled-cluster
             make build
             make install
         \end{bash}
-        Now everything should be able to run from anywhere on your computer.
-        To ensure that all requirements of the program are satified you can
-        install with \mintinline{bash}{make installr} instead.
+        Now everything should be able to run from anywhere on your computer.  To
+        ensure that all requirements of the program are satisfied you can
+        install with \mintinline{bash}{make installr} instead. Running
+        \mintinline{bash}{py.test} on the command-line in the
+        top-directory\footnote{That is, in
+        \texttt{FYS4411/project\_2/coupled-cluster}.} will run the test scripts
+        located in the \texttt{tests}-directory to make sure that the
+        installation passed successfully.
 
-        We have included a sample python script in \autoref{app:sample_script}
-        that uses almost all methods and classes in the package, and also compares
-        the time each methods takes to fininsh the computations.
+        The script that is used to generate most of the data is located in
+        \url{https://github.com/Schoyen/FYS4411/blob/master/project_2/scripts/comparison.py}
+        and provides a good example on how to use the code base.
 
     \subsection{Program Structure}
         There are three main subsetions within our program structure,
@@ -1775,19 +1779,19 @@
 %    In order to get an expression for the energy equation and the amplitude
 %    equations we use a diagrammatic approach.
 
-\vfill
+%\vfill
 \clearpage
-\newpage
-\begin{widetext}
-\section{Example Script}
-
-    \label{app:sample_script}
-
-    \vspace{10pt}
-
-    \inputminted[firstline=0, lastline=113]{python}{../scripts/comparison.py}
-
-\end{widetext}
+%\newpage
+%\begin{widetext}
+%\section{Example Script}
+%
+%    \label{app:sample_script}
+%
+%    \vspace{10pt}
+%
+%    \inputminted[firstline=0, lastline=113]{python}{../scripts/comparison.py}
+%
+%\end{widetext}
 
 \bibliography{references}
 
