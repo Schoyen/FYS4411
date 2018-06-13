@@ -33,7 +33,7 @@
 \usepackage{simpler-wick}
 % Code listings
 \usepackage{listings, lstautogobble}
-\usepackage{minted}
+%\usepackage{minted}
 % Colors
 \usepackage{xcolor}
 % Directory tree package
@@ -869,8 +869,8 @@
         \end{bash}
         Now everything should be able to run from anywhere on your computer.  To
         ensure that all requirements of the program are satisfied you can
-        install with \mintinline{bash}{make installr} instead. Running
-        \mintinline{bash}{py.test} on the command-line in the
+        install with \texttt{make installr} instead. Running
+        \texttt{py.test} on the command-line in the
         top-directory\footnote{That is, in
         \texttt{FYS4411/project\_2/coupled-cluster}.} will run the test scripts
         located in the \texttt{tests}-directory to make sure that the
@@ -900,7 +900,7 @@
         }
         \vspace{10pt}
 
-        The first subsection, \mintinline{bash}{matrix_elemtents},
+        The first subsection, \texttt{matrix\_elements},
         contains methods for computing matrix elements in harmonic
         oscillator basis from an analytical
         expression\cite{anisimovas1998energy}.  Computing the matrix
@@ -914,20 +914,20 @@
         \url{https://github.com/Oo1Insane1oO/FYS4411/blob/master/project1/src/Coulomb_Functions.hpp}.
         }.
 
-        The \mintinline{bash}{hartree_fock} subsection contains methods
+        The \texttt{hartree\_fock} subsection contains methods
         for changing from harmonic oscillator basis to Hartree-Fock basis as
         well as an implementation of the self-consistent-field algorithm to
         make this transaction possible.
 
-        The \mintinline{bash}{schemes} subsection is arguably the most important
+        The \texttt{schemes} subsection is arguably the most important
         part of this project. The subsection has three different classes that
         perform the exact same computations, but in different and increasingly
-        intelligent ways. First, \mintinline{python}{CoupledClusterDoubles} is
+        intelligent ways. First, \texttt{CoupledClusterDoubles} is
         the most straightforward and naïve way to solve the CCD amplitude
         equations.  Second, because an overbearing amount of the elements in the
         operator matrices in this problem are zero, we have implemented a sparse
-        matrix CCD solver in \mintinline{python}{CoupledClusterDoublesSparse}.
-        Third, \mintinline{python}{CoupledClusterDoublesOptimized} is
+        matrix CCD solver in \texttt{CoupledClusterDoublesSparse}.
+        Third, \texttt{CoupledClusterDoublesOptimized} is
         parallellized and optimized with memory use and number of floating point
         operations in mind.
 
@@ -1019,21 +1019,21 @@
         }.
 
     \subsection{Implementation details}
-        Both in \mintinline{python}{CoupledClusterDoublesSparse} and
-        \mintinline{python}{CoupledClusterDoublesOptimized} we make use of the
+        Both in \texttt{CoupledClusterDoublesSparse} and
+        \texttt{CoupledClusterDoublesOptimized} we make use of the
         intermediates in equations \ref{eq:intermediate1} to
         \ref{eq:intermediate4}.  In the optimized class special care was taken
         to ensure that every contraction was computed in an optimal way, with
         the minimization of memory use and CPU time as the overall goal.
         Moreover, several methods in NumPy for doing linear algebra was tested,
-        including but not limited to \mintinline{python}{numpy.einsum},
-        \mintinline{python}{numpy.tensordot}, and reshaping datastructures to
-        two dimensions and using \mintinline{python}{numpy.matmul}.
+        including but not limited to \texttt{numpy.einsum},
+        \texttt{numpy.tensordot}, and reshaping datastructures to
+        two dimensions and using \texttt{numpy.matmul}.
         Additionally, we tried to make use of the python package
-        \mintinline{python}{dask} which allows for arrays that are larger than
+        \texttt{dask} which allows for arrays that are larger than
         the computer's memory buffer as well as automated concurrency. We found
         that the dask arrays was a bad fit for our code base, but we ended up
-        using \mintinline{python}{numba} for paralellization of some
+        using \texttt{numba} for paralellization of some
         iterative loops as well as just-in-time compilation of some functions.
 
     \subsection{Scaling of the coupled cluster doubles method}
@@ -1137,7 +1137,7 @@
         is to use \emph{damping} where you include a part of the result from the
         previous iteration i.e.,
         \begin{align}
-            \tilde{t}^{k + 1} = \theta t^{k + 1} + (1 - \theta)t^k,
+            \tilde{t}^{k + 1} = (1 - \theta) t^{k + 1} + \theta t^k,
             \label{eq:mixing}
         \end{align}
         where $t^{k + 1}$ is the current value computed using
@@ -1167,12 +1167,11 @@
         criteria to be $\num{1e-6}$ in our results for the sake of comparison
         with M. P. Lohne\cite{lohne2011ab}.
 
-        All the results from our simulations are displayed in tables \ref{tab:N2},
-        \ref{tab:N6}, \ref{tab:N12} and \ref{tab:N20}. They show the ground state
-        energy as a result of restricted Hartree-Fock SCF iterations, and coupled
-        cluster doubles with harmonic oscillator basis and Hatree-Fock basis for
-        systems of increasing size, $N=2$, $N=6$, $N=12$ and $N=20$ particles
-        respectively. The results are thoroughtly discussed in the next section.
+        All the results from our simulations are displayed in tables
+        \ref{tab:N2}, \ref{tab:N6}, \ref{tab:N12} and \ref{tab:N20}. The tables
+        show the results for systems of increasing size, $N=2$, $N=6$, $N=12$
+        and $N=20$ particles respectively. The results are thoroughtly discussed
+        in the next section.
 
         \begin{table}
             \centering
@@ -1305,9 +1304,9 @@
 
         \begin{table}
             \centering
-            \caption{Here we look at $N = 12$ particles ($R = 3$ shells).  We did
-            not achieve convergence using the harmonic oscillator basis for the
-            lower frequency values and large number of shells. No convergence is
+            \caption{Here we look at $N = 12$ particles.  We did not achieve
+            convergence using the harmonic oscillator basis for the lower
+            frequency values and large number of shells. No convergence is
             marked as {\nan} in the table.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
@@ -1363,10 +1362,10 @@
 
         \begin{table}
             \centering
-            \caption{In this table we look at $N = 20$ particles ($R = 4$
-            shells).  We did not achieve convergence using the harmonic
-            oscillator basis for the lower frequency values and large number of
-            shells. No convergence is marked as {\nan} in the table.}
+            \caption{In this table we look at $N = 20$ particles.  We did not
+            achieve convergence using the harmonic oscillator basis for the
+            lower frequency values and large number of shells. No convergence is
+            marked as {\nan} in the table.}
             \begin{ruledtabular}
                 \begin{tabular}{c|c|ccc}
                     $\omega$ & $R$ & RHF & CCD(HO) & CCD(HF) \\
@@ -1417,12 +1416,12 @@
 
     \subsection{Running time}
         Here we show how the three implementations of the CCD-method scales as a
-        function of the shell number $R$ for $N = 2$ and $N = 6$, in table
-        \ref{fig:running_time_2} and \ref{fig:running_time_6} respectively. The same
-        behaviour is shown for higher number of particles. In \autoref{fig:running_time_6_zoom}
-        we have plotted the computation time for $N=6$ particles again, but we
-        have excluded the naïve method for better comparison of the sparse and
-        optimized method.
+        function of the shell number $R$ for $N = 2$ and $N = 6$, in figures
+        \ref{fig:running_time_2} and \ref{fig:running_time_6} respectively. The
+        same behaviour is shown for higher number of particles. In
+        \autoref{fig:running_time_6_zoom} we have plotted the computation time
+        for $N=6$ particles again, but we have excluded the naïve method for
+        better comparison of the sparse and optimized method.
 
         \begin{figure}
             \centering
@@ -1457,21 +1456,29 @@
 
     \subsection{Performance comparison}
         Somewhat surprisingly, the Hartree-Fock method outperforms the coupled
-        cluster doubles when the harmonic oscillator basis is used. This
-        happens for almost any configuration except the smallest system
-        with $N=2$ particles. This comes from the fact that the HO basis is
-        not very good at representing the states in the system. As we have
-        already stated, because the Hartree-Fock SCF iterations is a variational
-        methdod, the basis is varied in order to find the minimal energy. The new
-        basis states will be linear combinations of the old basis states. When
-        the iterations are finished, the new transformed HF basis will then be
-        much better at representing the possible quantum configurations compared
-        to the HO basis. This effect is only apparent in system with a larger
-        number of particles and/or low frequency. This is because in a system with
-        a large number of particles relative to the frequency particle-particle
-        interaction will be more prominent than the harmonic oscillator potential
-        the particles are subject to. I other words, the HO basis would fit rather
-        well.
+        cluster doubles when the harmonic oscillator basis is used. This happens
+        for almost any configuration except the smallest system with $N=2$
+        particles. This comes from the fact that the HO basis is not very good
+        at representing the states in the system. Because the Hartree-Fock SCF
+        iterations is a variational method, the basis is varied in order to find
+        the minimal energy. The new basis states will be linear combinations of
+        the old basis states. When the iterations are finished, the new
+        transformed HF basis will then be much better at representing the
+        possible quantum configurations compared to the HO basis. This effect is
+        only apparent in systems with a larger number of particles and/or low
+        frequency. This is because in a system with a large number of particles
+        relative to the frequency will experience that the particle-particle
+        interaction will be more prominent than the harmonic oscillator
+        potential the particles are subject to. The trapped
+        particles in the harmonic oscillator potential will be pushed out of the
+        well unless we increase the frequency thus increasing the strength of
+        the trap.
+
+        In other words, our first guess using the harmonic oscillator basis
+        functions as an approximation to the exact eigenfunction of the quantum
+        dot Hamiltonian is only a good first attempt when the number of
+        particles is low and/or the frequency is very high. In those situations
+        we can treat the particle-particle interaction as a small perturbation.
 
     \subsection{Validity of results}
         The analytical computed energy for $\omega=1.0$ a.u.
@@ -1481,17 +1488,18 @@
         between the two. We see that we get even closer to the analytical
         ``truth'' by increasing the number of shells.
 
-        The rest of results have been compared with the master thesis of M. P.
-        Lohne\cite{lohne2010coupled} for up to 10 shells. Lohne gets two sets of
-        energies, one set from RHF and one set from CCSD code with harmonic
-        oscillator basis functions. Our CCD code with Hartree-Fock basis will
-        for some configurations\footnote{By configurations we mean frequency
-        $\omega$ and number of particles $N$.} beat CCSD with plain harmonic
-        oscillator basis. For 12 shells we can compare with the results from M.
-        P. Lohne et al.\cite{lohne2011ab}, but in this article an
-        \emph{effective interaction} for the Hamiltonian with a CCSD code has
-        been used. These results are therefore significanlty better than ours,
-        but we can get a ``ball-park'' idea to benchmark against.
+        The rest of the results have been compared with the master thesis of M.
+        P.  Lohne\cite{lohne2010coupled} for up to $R = 10$ shells. Lohne gets
+        two sets of energies, one set from RHF and one set from CCSD code with
+        harmonic oscillator basis functions. Our CCD code with Hartree-Fock
+        basis will for some configurations\footnote{By configurations we mean
+        frequency $\omega$ and number of particles $N$.} beat CCSD with plain
+        harmonic oscillator basis. For $R = 12$ shells we can compare with the
+        results from M. P. Lohne et al.\cite{lohne2011ab}, but in this article
+        an \emph{effective interaction} for the Hamiltonian with a CCSD code
+        using the HF basis has been used. These results are therefore
+        significantly better than ours, but we can get a ``ball-park'' idea to
+        benchmark against.
 
     \subsection{Running time}
         Looking at the running times shown in \autoref{fig:running_time_2} and
