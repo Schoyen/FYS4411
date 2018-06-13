@@ -765,7 +765,6 @@
             notation, is given by
             \begin{equation}
                 f^p_q = h^p_q + J(D)^p_q - \half K(D)^p_q,
-                %F_{pq} = H_{pq} +  J(D)_{pq} - \frac{1}{2}K(D)_{pq},
             \end{equation}
             where $h^p_q$ is the one-body operator, while the two-body operator
             is divided into what we call a direct part,
@@ -786,9 +785,10 @@
             Introducing a basis set transforms the Hartree-Fock equations into
             the Rothaan equations
             \begin{equation}
-                FC = SC\varepsilon.
+                FC = SC\varepsilon,
             \end{equation}
-            This is a generalised eigenvalue problem where
+            where $F$ is the Fock matrix constructed from $f^p_q$.  This is a
+            generalised eigenvalue problem where
             \begin{align}
                 S^{p}_{q} = \braket{p}{q},
             \end{align}
@@ -817,7 +817,9 @@
             basis, $\ket{\alpha}$ we can transform into a better basis, called a
             Hartree-Fock (HF) basis, $\ket{p}$.
             \begin{equation}
-                \ket{p} = C^p_\alpha\ket{\alpha}.
+                \ket{p}
+                = \para{\ket{\alpha}\bra{\alpha}}\ket{p}
+                = C^p_\alpha\ket{\alpha}.
             \end{equation}
             We will see how the coupled cluster method with double excitations
             works with both the HO basis and the HF basis, but not equally well.
