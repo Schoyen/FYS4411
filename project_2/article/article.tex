@@ -158,14 +158,14 @@
     set of infinite size. This is an obvious problem when we solve problems
     numerically, because we obviously need to limit the size of the basis we use
     because we have limitations in memeory and computating power. Luckily, great
-    minds have bestowed a wide selection of very god numerical methods upon the
+    minds have bestowed a wide selection of very good numerical methods upon the
     world, which the coupled cluster is a part of.
 
     First, we provide a thorough theoretical outline of how we model a quantum
     dot, the mathematical formalism behind many-body problems and outline how
     the computational methods we employ both turn into iterative schemes that
     are easy to represent numerically. Second, we provide a brief overview of
-    the program we have constructed which is in the form an installable python
+    the program we have constructed which is in the form an installable Python
     package.  Third, we have employed the methods on a large parameter space
     presenting results for systems consisting of $N= \{2, 6, 12, 20\}$
     particles. Fourth, we discuss the most interesting aspects of the results
@@ -253,13 +253,13 @@
 
         The theoretical approximation of a quantum dot is impossible to make
         perfectly accurate, yet simple. There are some important effects that
-        should be included such the potential arising as a result of the
+        should be included such as the potential arising as a result of the
         confinement, and the interaction between particles. We therefore model
         our system with an electron-electron interaction, given by the two-body
-        operator in \autoref{eq:two_body_operator}, and with we approximate the
-        confining potential by the harmonic oscillator potential, given by the
-        second term in the one-body Hamiltonian in
-        \autoref{eq:one_body_hamiltonian}. The last term in the one-body
+        operator in \autoref{eq:two_body_operator}, and with it we approximate
+        the confining potential by the harmonic oscillator potential, given by
+        the second term in the one-body Hamiltonian in
+        \autoref{eq:one_body_hamiltonian}. The first term in the one-body
         Hamiltonian is the kinetic energy of particle in question, essential in
         any system.
 
@@ -1029,7 +1029,7 @@
         including but not limited to \texttt{numpy.einsum},
         \texttt{numpy.tensordot}, and reshaping datastructures to
         two dimensions and using \texttt{numpy.matmul}.
-        Additionally, we tried to make use of the python package
+        Additionally, we tried to make use of the Python package
         \texttt{dask} which allows for arrays that are larger than
         the computer's memory buffer as well as automated concurrency. We found
         that the dask arrays was a bad fit for our code base, but we ended up
@@ -1044,7 +1044,7 @@
             \item The number of bytes needed to store the arrays of matrix
                 elements.
         \end{enumerate}
-        For the CCD method the naïve solution using the form of $g(f, u, t)$
+        For the CCD-method the naïve solution using the form of $g(f, u, t)$
         without the intermediates results in $\mathcal{O}(M^4N^4)$ FLOPS each
         iteration. Using the form of the intermediates we have set up this
         reduces to $\mathcal{O}(M^4N^2)$, i.e., two order of magnitude less. The
@@ -1481,16 +1481,29 @@
         we can treat the particle-particle interaction as a small perturbation.
 
     \subsection{Validity of results}
-        The analytical computed energy for $\omega=1.0$ a.u.
-        and $N=2$ is $3$\cite{taut1994two}. From our tables we see
-        that RHF is least successful in reaching this value, CCD in
-        HF basis is best, while CCD with HO basis is generally somewhere
-        between the two. We see that we get even closer to the analytical
-        ``truth'' by increasing the number of shells.
+        The analytical computed energy for $\omega=1.0$ a.u.  and $N=2$ is $3$,
+        from Taut\cite{taut1994two}. From our tables we see that RHF is the
+        least successful in reaching this value, CCD using the HF basis is best,
+        while CCD with the HO basis is generally somewhere between the two. We
+        see that we get even closer to the analytical ``truth'' by increasing
+        the number of shells.
+
+        As predicted in the previous subsection we see that the CCD-method using
+        the HO basis gradually deteroriates compared with RHF and CCD using the
+        HF basis as the number of particles increases. In fact, it quickly
+        reaches a point where we get trouble with convergence due to the
+        unstable states with a large number of particles packed together in a
+        too weak trap.
+
+        When the states become too unstable we have to increase the mixing
+        parameter $\theta \to 1$ in \autoref{eq:mixing}. This will sometimes
+        make the method converge, but it can be at the cost of a wrong value of
+        the energy as we might get trapped in unstable configurations which with
+        the help of mixing will converge for our criteria.
 
         The rest of the results have been compared with the master thesis of M.
         P.  Lohne\cite{lohne2010coupled} for up to $R = 10$ shells. Lohne gets
-        two sets of energies, one set from RHF and one set from CCSD code with
+        two sets of energies, one set from RHF and one set from CCSD code using
         harmonic oscillator basis functions. Our CCD code with Hartree-Fock
         basis will for some configurations\footnote{By configurations we mean
         frequency $\omega$ and number of particles $N$.} beat CCSD with plain
@@ -1506,8 +1519,9 @@
         \autoref{fig:running_time_6} we can see how the naïve implementation
         blows up very fast. As both the sparse and the optimized version uses
         intermediate calculations these running times scales on the order of
-        $\mathcal{O}(l^6)$ whereas the naïve implementation goes as
-        $\mathcal{O}(l^8)$. Another important factor is that the naïve
+        $\mathcal{O}(M^4N^2)$ whereas the naïve implementation goes as
+        $\mathcal{O}(M^4N^4)$. The exponential difference in scaling is readily
+        apparent from these plots. Another important factor is that the naïve
         implementation uses \texttt{np.einsum} to calculate the tensor
         contractions whereas the sparse and optimized version uses
         \texttt{sparse.tensordot} and \texttt{np.matmul} respectively. The two
@@ -1519,7 +1533,7 @@
         trouble with convergence. This happens as the confining potential $v
         \propto \omega^2$ will not be able to confine the particles when the
         interaction gets too strong. The CCD-method will in particular get a
-        hard time keep the particles together as the excitation operator $t$
+        hard time keeping the particles together as the excitation operator $t$
         only excites pairs of particles leading to a too strong increase in the
         interaction when the particles increase their energy level. This effect
         can potentially be somewhat alleviated by including the singles
@@ -1528,86 +1542,92 @@
         We can see this behaviour in our results. For $N = 2$ we get convergence
         for all methods for $\omega = 0.1$ shown in \autoref{tab:N2}. By
         increasing to $N = 6$ particles we immediately see how CCD with the HO
-        basis will get in trouble for small values of $\omega$. Even by increasing
-        the strength of the confinment this method does converge.
+        basis will get in trouble for small values of $\omega$. Even by
+        increasing the strength of the confinment this method does not always
+        converge.
 
         For $N = 6$ none of the methods converged when $\omega =
         0.1$\footnote{The RHF-method would probably have converged if we had
         started tuning its mixing parameter, but as we have focused on CCD we did
         not think it relevant to include these results.}. By increasing the
         frequency we restored the convergence. For larger number of shells we
-        had to start increasing the value of $\theta \to 0.9$ in order to get
+        had to start increasing the value of $\theta \to 1$ in order to get
         convergence within the threshold.
 
-        CCD with HO basis experiences the same convergence problems also for,
-        $N=12$ particles and for $N=20$ particles.
+        The CCD-method with the HO basis experiences the same convergence
+        problems also for, $N=12$ particles and for $N=20$ particles.
 
-    %\subsection{Sparse implementation}
-    % Did you want to write something about memory use, Oyvind? Memory problems?
+    \subsection{Sparse implementation}
+        From \autoref{fig:running_time_6_zoom} we can see that the sparse
+        implementation is close to the optimized version of the CCD-method. This
+        is a sobering idea as the sparse implementation is by no means optimized
+        properly and more resembles the naïve implementation. This brings faith
+        in the fact that a more optimized version of the sparse implementation
+        using block matrices will be able to achieve much better performance.
+        This is however something that will be experimented with in the future.
 
-    \section{Summary Remarks}
+\section{Summary Remarks}
+    Our main product from this project is a code that can do both computations
+    using the restricted Hartree-Fock (RHF) self-consistent field and coupled
+    cluster doubles (CCD). We have tried to make a package in Python that should
+    be easy enough for anyone to test.  Moreover we have demonstrated that one
+    can speed up the computation time with a relatively simple algebraic
+    transformation and finding the ``intermediates''. The computational speed
+    was further reduced using sparse matrices. It should be noted, as a warning,
+    that not all systems are sparse enough for a sparse implementation to make
+    sense.  We added upon the program to increase it further with
+    paralellization and optimal use of numerical functions.
 
-        Our main product from this is a product that can do both computations with
-        restricted Hartree-Fock (RHF) self-consistent field and coupled cluster
-        doubles (CCD). We have tried
-        to make a package in python that should be easy enough for anyone to test.
-        Moreover we hav demonstrated that one can speed up the computation time with
-        a relatively simple algebraic transformation and finding the ``intermediates''.
-        The computational speed was further reduced using sparse matrices. It should
-        be noted, as a warning, that there are relatively few systems adequately sparese
-        for this to work. We added upon the program to increase it further with
-        paralellization and optimal use of numerical functions.
+    In order to perform the computations we have constructed a harmonic
+    oscillator basis. We saw how the CCD-method using this basis was
+    outperformed by RHF in most cases, and often exhibited convergence problems.
+    The remedy for these shortcomings is to use the Hartree-Fock basis which is
+    provided after successful convergence of SCF iterations. The results are
+    improved markedly and the classification of coupled cluster methods as a
+    post-Harte-Fock method is justified.
 
-        In order to perform the computations we have constructed a harmonic oscillator
-        basis. We saw how the CCD method was outperformed RHF in most cases, and often
-        exhibited convergence problems. The remedy for these shortcomings is to use
-        the Hartree-Fock basis which is provided after successful convergence of
-        SCF iterations. The results are improved markedly and classification of coupled
-        cluster methods as a post-Harte-Fock method is justified.
-
-        The coupled cluster method provides surprisingly good results even
-        though one only includes double esctiations. The reason for this is that
-        particle-particle interactions is the amongt the most important thing that
-        happens in a ferminon system, second only to no interaction at all, i.e
-        what particles do on their own. The way to improve the computations is to
-        include other types of excitations like singles (CCSD) and triples (CCSDT),
-        add more basis functions, and/or supplement the coupled cluster method with
-        another method like a perturbative one. All of this will, needless to say,
-        increase the compute time, which must be balanced against the accuracy needed
-        for the situation at hand.
+    The coupled cluster method provides surprisingly good results even though
+    one only includes double exitations. The reason for this is that
+    particle-particle interactions is among the most important thing that
+    happens in a fermionic system, second only to no interaction at all, i.e
+    what particles do on their own. The way to improve the computations is to
+    include other types of excitations like singles (CCSD) and triples (CCSDT),
+    add more basis functions, and/or supplement the coupled cluster method with
+    another method like perturbation theory. All of this will, needless to say,
+    increase the compute time, which must be balanced against the accuracy
+    needed for the situation at hand.
 
 \vfill
 \newpage
 \appendix
 \section{The normal ordered Hamiltonian}
     When constructing the normal ordered Hamiltonian we use Wick's theorem to
-    write the one-body, $h$, and the two-body, $u$, operators onto a normal
-    ordered form. Specifically we define the normal ordered form in terms of the
-    \emph{Fermi vacuum}\footnote{Fermi vacuum defines the reference state, i.e.,
-    $\kslat$, as the vacuum.}. That is, an operator on normal ordered form
-    destroys the reference Slater determinant.
+    write $h$ and $u$ onto a normal ordered form. Specifically we define the
+    normal ordered form in terms of the \emph{Fermi vacuum}\footnote{Fermi
+    vacuum defines the reference state, i.e., $\kslat$, as the vacuum.}. That
+    is, an operator on normal ordered form destroys the reference Slater
+    determinant.
 
-    We start by writing the one-body operator, $h$, to its normal-ordered form.
+    We start by writing the one-body operator $h$, to its normal-ordered form.
     \begin{align}
-        h &= \sum_{pq}h^p_q\acr{p}\ade{q}
-        = \sum_{pq}h^p_q\para{
+        h &= h^p_q\acr{p}\ade{q}
+        = h^p_q\para{
             \{\acr{p}\ade{q}\}
             + \{
                 \wick{\c a_{p}^{\dagger} \c a_{q}}
             \}
         }
         \\
-        &= \sum_{pq}h^p_q\{
+        &= h^p_q\{
             \acr{p}\ade{q}
         \}
-        + \sum_{pq}h^p_q\delta_{p \in i}\delta_{pq}
+        + h^p_q\delta_{p \in i}\delta_{pq}
         \\
-        &= h_N + \sum_{i}h^i_i,
+        &= h_N + h^i_i,
     \end{align}
     where we have used $\delta_{p \in i}$ to mean that $p$ must be an occupied
     index. Doing the same for the two-body operator is a slightly more tedious
-    endeavor. For brevity we will only write out the operator strings and only
-    keep the non-zero contributions.
+    endeavor. For brevity we will only write out the operator strings.
     \begin{align}
         \acr{p}\acr{q}\ade{s}\ade{r}
         &=
@@ -1652,46 +1672,46 @@
     \begin{align}
         u
         &=
-        \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
+        \frac{1}{4}u^{pq}_{rs}
         \{\acr{p}\acr{q}\ade{s}\ade{r}\}
-        - \frac{1}{4}\sum_{iqr}\bra{iq}\ket{ri}\{\acr{q}\ade{r}\}
+        - \frac{1}{4}u^{iq}_{ri}\{\acr{q}\ade{r}\}
         \nonumber \\
         &\qquad
-        + \frac{1}{4}\sum_{iqs}\bra{iq}\ket{is}\{\acr{q}\ade{s}\}
-        + \frac{1}{4}\sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
+        + \frac{1}{4}u^{iq}_{is}\{\acr{q}\ade{s}\}
+        + \frac{1}{4}u^{pi}_{ri}\{\acr{p}\ade{r}\}
         \nonumber \\
         &\qquad
-        - \frac{1}{4}\sum_{pis}\bra{pi}\ket{is}\{\acr{p}\ade{s}\}
-        - \frac{1}{4}\sum_{ij}\bra{ij}\ket{ji}
+        - \frac{1}{4}u^{pi}_{is}\{\acr{p}\ade{s}\}
+        - \frac{1}{4}u^{ij}_{ji}
         \nonumber \\
         &\qquad
-        + \frac{1}{4}\sum_{ij}\bra{ij}\ket{ij}.
+        + \frac{1}{4}u^{ij}_{ij}.
     \end{align}
     Using the antisymmetric properties of the two-body matrix elements,
     \begin{align}
-        \bra{pq}\ket{rs}
-        = - \bra{pq}\ket{sr}
-        = - \bra{qp}\ket{rs}
-        = \bra{qp}\ket{sr},
+        u^{pq}_{rs}
+        = - u^{pq}_{sr}
+        = - u^{qp}_{rs}
+        = u^{qp}_{sr},
     \end{align}
     and relabeling of the indices we can rearrange and collect some terms.
     \begin{align}
         u
         &=
-        W_N + \sum_{pir}\bra{pi}\ket{ri}\{\acr{p}\ade{r}\}
-        + \half\sum_{ij}\bra{ij}\ket{ij},
+        W_N + u^{pi}_{ri}\{\acr{p}\ade{r}\}
+        + \half u^{ij}_{ij},
     \end{align}
     where the normal ordered two-body operator is
     \begin{align}
-        W_N = \frac{1}{4}\sum_{pqrs}
-        \bra{pq}\ket{rs}\{\acr{p}\acr{q}\ade{s}\ade{r}\}.
+        W_N = \frac{1}{4}
+        u^{pq}_{rs}\{\acr{p}\acr{q}\ade{s}\ade{r}\}.
     \end{align}
     When we now construct the full Hamiltonian we can collect some terms. The
-    constants in both the one-body and the two-body operator in total constitues
-    the reference energy.
+    constants in both the one-body and the two-body operator in total
+    constitutes the reference energy.
     \begin{align}
         E_0 \equiv \bslat H\kslat
-        = \sum_{i}h_i^i + \frac{1}{2}\sum_{ij}\bra{ij}\ket{ij}.
+        = h_i^i + \frac{1}{2}u^{ij}_{ij}.
         \label{eq:reference_energy}
     \end{align}
     Combining the normal ordered one-body operator and the second term in the
@@ -1700,16 +1720,16 @@
     \begin{align}
         F_N
         &=
-        \sum_{pq}h_{q}^{p}\{\acr{p}\ade{q}\}
-        + \sum_{pqi}\bra{pi}\ket{qi}\{\acr{p}\ade{q}\}
+        h_{q}^{p}\{\acr{p}\ade{q}\}
+        + u^{pi}_{qi}\{\acr{p}\ade{q}\}
         \\
-        &= \sum_{pq}f_{q}^{p}\{\acr{p}\ade{q}\},
+        &= f_{q}^{p}\{\acr{p}\ade{q}\},
     \end{align}
     where we have defined the Fock matrix elements as
     \begin{align}
         f_{q}^{p}
         &=
-        h_q^p + \sum_{i}\bra{pi}\ket{qi}.
+        h_q^p + u^{pi}_{qi}.
     \end{align}
     In total we get the full Hamiltonian
     \begin{align}
@@ -1747,7 +1767,7 @@
         \kslat,
         \label{eq:third_term_ccd_energy}
     \end{align}
-    where $A$ is the create and destruction operator strings. By using
+    where $A$ is the creation and destruction operator strings. By using the
     generalized Wick's theorem we get
     \begin{align}
         A &=
@@ -1822,149 +1842,304 @@
     \label{app:wick_on_amplitude}
 
     In this section we have provided a few sample computations of how one would
-    evaluate the amplitude equations using wicks theorem. Starting with the simplest
-    term including only the normal-ordered Hamiltonian,
+    evaluate the amplitude equations using Wick's theorem. Starting with the
+    simplest term including only the normal-ordered Hamiltonian,
 
     \begin{equation}
         \begin{aligned}
-            \bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0} \\
-             =& \sum_{pq}f_{pq}\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa_q\}\ket{\Phi_0} \\
-             &+\frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
-             \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}.
+            \bra{\Phi_{ij}^{ab}} &(F_N + V_N)\ket{\Phi_0}
+             = f^p_q\bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}
+             \{a^\dagger_pa_q\}\ket{\Phi_0} \\
+             &\qquad
+             + \frac{1}{4}u^{pq}_{rs}
+             \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}
+             \{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0}.
         \end{aligned}
-        \end{equation}
-        The one-electron component does not have any full contractions, while the
-        two-electron component produces one contributing integral,
-        \begin{equation}
+    \end{equation}
+    The one-electron component does not have any full contractions, while the
+    two-electron component produces one contributing integral,
+    \begin{equation}
         \begin{aligned}
-            \bra{\Phi_{ij}^{ab}} &(V_N)\ket{\Phi_0} \\
-                =& \frac{1}{4}\sum_{pqrs}\bra{pq}\ket{rs}
-             \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}\{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0} \\
-                 =& \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs} \\ &\times\Big(
+            \bra{\Phi_{ij}^{ab}} &(V_N)\ket{\Phi_0}
+            = \frac{1}{4}u^{pq}_{rs}
+            \bra{\Phi_0}\{a_i^\dagger a_j^\dagger a_ba_a\}
+            \{a^\dagger_pa^\dagger_qa_sa_r\}\ket{\Phi_0} \\
+                 &= \frac{1}{4} u^{pq}_{rs} \\
+                 &\times
+                 \Biggl(
                      \{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
                      \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
                      +
                      \{ \wick{\c1 a^\dagger_i \c2 a^\dagger_j \c4 a_b \c3 a_a
-                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\} \\
-                   &\ +
+                     \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
+                     \\
+                     &+
                       \{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c3 a_b \c4 a_a
                      \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
                      +
                      \{ \wick{\c2 a^\dagger_i \c1 a^\dagger_j \c4 a_b \c3 a_a
                      \c4 a^\dagger_p \c3 a^\dagger_q \c2 a_s \c1 a_r}\}
-                 \Big) \\
-                 =&  \frac{1}{4} \sum_{pqrs} \bra{pq}\ket{rs}
-                 ( \delta_{ap}\delta_{bq}\delta_{js}\delta_{ir}
-                  -\delta_{aq}\delta_{bp}\delta_{js}\delta_{ir} \\
-                 &\ -\delta_{ap}\delta_{bq}\delta_{jr}\delta_{is}
-                  +\delta_{aq}\delta_{bp}\delta_{jr}\delta_{is}) \\
-                  =& \bra{ab}\ket{ij} = u^{ab}_{ij}.
+                 \Biggr) \\
+                 &=  \frac{1}{4} u^{pq}_{rs}
+                 \biggl( \delta_{ap}\delta_{bq}\delta_{js}\delta_{ir}
+                 -\delta_{aq}\delta_{bp}\delta_{js}\delta_{ir} \\
+                 & -\delta_{ap}\delta_{bq}\delta_{jr}\delta_{is}
+                 + \delta_{aq}\delta_{bp}\delta_{jr}\delta_{is}\biggr) \\
+                &= u^{ab}_{ij}.
         \end{aligned}
         \end{equation}
 
-        Next we would like to evaluate $\bra{\Phi_{ij}^{ab}}(F_N + V_N)T_2\ket{\Phi_0}$. Starting with the
-        term involving the Fock operator $F_N$,
-        \begin{equation}
-        \begin{aligned}
-            \bra{\Phi_{ij}^{ab}}&F_NT_2\ket{\Phi_0} \\
-                =& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq}t_{kl}^{cd} \bra{\Phi_0}
-                    \{a_i^\dagger a_j^\dagger a_b a_a \}(\{a^\dagger_pa_q \}\{a^\dagger_c a^\dagger_d a_l a_k \})_c \ket{\Phi_0} \\
-                =& \frac{1}{4}\sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
-                \times \Big(
-                    &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c5 a_k } \}
-                 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c5 a_k } \}    \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c5 a_k } \}
-                 + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c5 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c2 a_k } \}
-                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c2 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c \c4 a^\dagger_d \c5 a_l \c1 a_k } \}
-                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c1 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c1 a_k } \}
-                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c2 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c2 a_l \c1 a_k } \}
-                  +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c \c3 a^\dagger_d \c1 a_l \c2 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
-                  +\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \} \\
-                + &\{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c \c5 a^\dagger_d \c1 a_l \c2 a_k } \}
-                  + \{\wick{\c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a \c4 a^\dagger_p \c5 a_q \c3 a^\dagger_c \c5 a^\dagger_d \c2 a_l \c1 a_k } \}
-                \Big)
-        \end{aligned}
-        \end{equation}
-        \begin{equation}
-        \begin{aligned}
-                =& \sum_{pq}\sum_{klcd}f_{pq} t_{kl}^{cd} \\
-                \times&( - \delta_{a c} \delta_{b d} \delta_{i k} \delta_{j q} \delta_{l p} + \delta_{a c} \delta_{b d} \delta_{i l} \delta_{j q} \delta_{k p}  \\
-                 \ &+ \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j k} \delta_{l p} - \delta_{a c} \delta_{b d} \delta_{i q} \delta_{j l} \delta_{k p} \\
-                 \ &+ \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i k} \delta_{j l} - \delta_{a c} \delta_{b p} \delta_{d q} \delta_{i l} \delta_{j k} \\
-                 \ & + \delta_{a d} \delta_{b c} \delta_{i k} \delta_{j q} \delta_{l p} - \delta_{a d} \delta_{b c} \delta_{i l} \delta_{j q} \delta_{k p} \\
-                 \ &- \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j k} \delta_{l p} + \delta_{a d} \delta_{b c} \delta_{i q} \delta_{j l} \delta_{k p} \\
-                 \ &- \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i k} \delta_{j l} + \delta_{a d} \delta_{b p} \delta_{c q} \delta_{i l} \delta_{j k} \\
-                 \ &- \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i k} \delta_{j l} + \delta_{a p} \delta_{b c} \delta_{d q} \delta_{i l} \delta_{j k} \\
-                 \ &+ \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i k} \delta_{j l} - \delta_{a p} \delta_{b d} \delta_{c q} \delta_{i l} \delta_{j k}) \\
-                 =& (f_{bc}t^{ac}_{ij} - f_{ac}t^{bc}_{ij}) - (f_{jk}t^{ab}_{ik} - f_{ik}t^{ab}_{jk}) \\
-                 =& f_{bc}t^{ac}_{ij}P(ab) - f_{kj}t^{ab}_{ik}P(ij)
-        \end{aligned}
-        \end{equation}
-        Where in the last steps we have consigned the sums by Einstein summation notation.
-\section{Finding Amplitude Equation Intermediates}
+        \begin{widetext}
+            Next we would like to evaluate the normal ordered Hamiltonian connected
+            with a single doubles cluster operator. Starting with the term involving
+            the Fock operator $F_N$,
+            \begin{align}
+                \bra{\Phi_{ij}^{ab}}(F_NT_2)_c\ket{\Phi_0}
+                    &= \frac{1}{4}f^p_qt_{kl}^{cd} \bra{\Phi_0}
+                    \{a_i^\dagger a_j^\dagger a_b a_a \}
+                    \para{
+                        \{a^\dagger_pa_q \}\{a^\dagger_c a^\dagger_d a_l a_k \}
+                    }_c \ket{\Phi_0}
+                    \nonumber \\
+                    &= \frac{1}{4}f^p_q t_{kl}^{cd}
+                    \Biggl(
+                        \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c
+                                \c4 a^\dagger_d \c1 a_l \c5 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c
+                                \c4 a^\dagger_d \c2 a_l \c5 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
+                                \c5 a^\dagger_p \c2 a_q \c4 a^\dagger_c
+                                \c3 a^\dagger_d \c1 a_l \c5 a_k
+                            }
+                        \}
+                        \nonumber \\
+                        &\qquad
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c
+                                \c3 a^\dagger_d \c2 a_l \c5 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c1 a_q \c3 a^\dagger_c
+                                \c4 a^\dagger_d \c5 a_l \c2 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c1 a_q \c4 a^\dagger_c
+                                \c3 a^\dagger_d \c5 a_l \c2 a_k
+                            }
+                        \}
+                        \nonumber \\
+                        &\qquad
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c2 a_q \c3 a^\dagger_c
+                                \c4 a^\dagger_d \c5 a_l \c1 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c5 a^\dagger_p \c2 a_q
+                                \c4 a^\dagger_c \c3 a^\dagger_d \c5 a_l \c1 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c3 a^\dagger_p \c5 a_q
+                                \c5 a^\dagger_c \c4 a^\dagger_d \c2 a_l \c1 a_k
+                            }
+                        \}
+                        \nonumber \\
+                        &\qquad
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c3 a^\dagger_p \c5 a_q
+                                \c5 a^\dagger_c \c4 a^\dagger_d \c1 a_l \c2 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c
+                                \c3 a^\dagger_d \c2 a_l \c1 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c4 a^\dagger_p \c5 a_q \c5 a^\dagger_c
+                                \c3 a^\dagger_d \c1 a_l \c2 a_k
+                            }
+                        \}
+                        \nonumber \\
+                        &\qquad
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b \c4 a_a
+                                \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c
+                                \c5 a^\dagger_d \c1 a_l \c2 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c
+                                \c5 a^\dagger_d \c2 a_l \c1 a_k
+                            }
+                        \}
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c3 a^\dagger_p \c5 a_q \c4 a^\dagger_c
+                                \c5 a^\dagger_d \c1 a_l \c2 a_k
+                            }
+                        \}
+                        \nonumber \\
+                        &\qquad
+                        + \{
+                            \wick{
+                                \c1 a^\dagger_i \c2 a^\dagger_j \c3 a_b
+                                \c4 a_a \c4 a^\dagger_p \c5 a_q \c3 a^\dagger_c
+                                \c5 a^\dagger_d \c2 a_l \c1 a_k
+                            }
+                        \}
+                    \Biggr)
+                    \nonumber \\
+                    &= f^p_q t_{kl}^{cd}
+                    \Bigl(
+                        - \delta_{a c} \delta_{b d} \delta_{i k}
+                        \delta_{j q} \delta_{l p}
+                        + \delta_{a c} \delta_{b d} \delta_{i l}
+                        \delta_{j q} \delta_{k p}
+                        + \delta_{a c} \delta_{b d} \delta_{i q}
+                        \delta_{j k} \delta_{l p}
+                        - \delta_{a c} \delta_{b d} \delta_{i q}
+                        \delta_{j l} \delta_{k p}
+                        \nonumber \\
+                        &\qquad
+                        + \delta_{a c} \delta_{b p} \delta_{d q}
+                        \delta_{i k} \delta_{j l}
+                        - \delta_{a c} \delta_{b p} \delta_{d q}
+                        \delta_{i l} \delta_{j k}
+                        + \delta_{a d} \delta_{b c} \delta_{i k}
+                        \delta_{j q} \delta_{l p}
+                        - \delta_{a d} \delta_{b c} \delta_{i l}
+                        \delta_{j q} \delta_{k p}
+                        \nonumber \\
+                        &\qquad
+                        - \delta_{a d} \delta_{b c} \delta_{i q}
+                        \delta_{j k} \delta_{l p}
+                        + \delta_{a d} \delta_{b c} \delta_{i q}
+                        \delta_{j l} \delta_{k p}
+                        - \delta_{a d} \delta_{b p} \delta_{c q}
+                        \delta_{i k} \delta_{j l}
+                        + \delta_{a d} \delta_{b p} \delta_{c q}
+                        \delta_{i l} \delta_{j k}
+                        \nonumber \\
+                        &\qquad
+                        - \delta_{a p} \delta_{b c} \delta_{d q}
+                        \delta_{i k} \delta_{j l}
+                        + \delta_{a p} \delta_{b c} \delta_{d q}
+                        \delta_{i l} \delta_{j k}
+                        + \delta_{a p} \delta_{b d} \delta_{c q}
+                        \delta_{i k} \delta_{j l}
+                        - \delta_{a p} \delta_{b d} \delta_{c q}
+                        \delta_{i l} \delta_{j k}
+                    \Big)
+                    \nonumber \\
+                    &= (f^b_c t^{ac}_{ij} - f^a_c t^{bc}_{ij})
+                    - (f^j_k t^{ab}_{ik} - f^i_k t^{ab}_{jk})
+                    \nonumber \\
+                    &= f^b_c t^{ac}_{ij}P(ab) - f^k_j t^{ab}_{ik}P(ij).
+            \end{align}
+            This procedure can be repeated for the remaining steps, or one can
+            resort to using SymPy.
+        \end{widetext}
+
+
+\section{Finding amplitude equation intermediates}
     \label{app:intermediates}
-    Starting from the CCD amplitude equation we factor out terms that will have the same
-    indices if we contract them,
-    \begin{equation}
-        \begin{aligned}
-        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-          &+ \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd} \\
-          &+ \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab) \\
-          &+ t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn},
-        \end{aligned}
-    \end{equation}
-    \begin{equation}
-        \begin{aligned}
-        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
-          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
-          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
-          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij) - \frac{1}{2}t^{bc}_{im} t^{ad}_{jn} u^{mn}_{cd} P(ij)\\
-          &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
-        \end{aligned}
-    \end{equation}
-    \begin{equation}
-        \begin{aligned}
-        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
-          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
-          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
-          &+ \frac{1}{2}t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ab) P(ij) \\
-          &+ t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
-          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}
-        \end{aligned}
-    \end{equation}
-    \begin{equation}
-        \begin{aligned}
-        0 =& u^{ab}_{ij} + f^b_c t^{ac}_{ij}P(ab) - f^k_jt^{ab}_{ik}P(ij) \\
-          &+ t^{cd}_{ij} \left(\frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd} \right) \\
-          &+  t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij) \\
-          &- t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab) \\
-          &+ t^{ac}_{im}\left(\frac{1}{2} t^{bd}_{jn} u^{mn}_{cd} + u^{bm}_{jc} \right)P(ab) P(ij) \\
-          &+ \frac{1}{2}t^{ab}_{im} u^{mn}_{jn}.
-        \end{aligned}
-    \end{equation}
-    Now we can introduce the intermediate $\chi$-terms,
+    Starting from the CCD amplitude equation we factor out terms to create
+    pre-computed intermediates. We are particularly interested in all terms
+    where there is a contraction between three tensors as they are the
+    computationaly most intensive.
     \begin{align}
-        \chi^{ab}_{cd} &= \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2}u^{ab}_{cd} \\
-        \chi^n_j &= \frac{1}{2}t^{cd}_{jm} u^{mn}_{cd} \\
-        \chi^a_d &= \frac{1}{2} t^{ac}_{nm} u^{nm}_{cd} \\
-        \chi^{bm}_{jc} &= \frac{1}{2}t^{bd}_{jn}u^{mn}_{cd} + u^{bm}_{jc},
+        g(f, u, t) &\gets
+        \frac{1}{4}t^{cd}_{ij} t^{ab}_{mn} u^{mn}_{cd}
+        + \frac{1}{2}t^{cd}_{ij} u^{ab}_{cd}
+        \\
+        &= t^{cd}_{ij} \para{
+            \frac{1}{4}t^{ab}_{mn} u^{mn}_{cd} + \frac{1}{2} u^{ab}_{cd}
+        } \\
+        &= t^{cd}_{ij}\chi^{ab}_{cd}.
     \end{align}
-    this gives us,
+    The two next intermediates only consists of pre-computing contractions in a
+    single term instead of combining two terms.
+    \begin{align}
+        g(f, u, t) &\gets
+        \frac{1}{2}t^{cd}_{jm} t^{ab}_{in} u^{mn}_{cd} P(ij)
+        \\
+        &= t^{ab}_{in} \left(\frac{1}{2} t^{cd}_{jm} u^{mn}_{cd}\right) P(ij)
+        \\
+        &= t^{ab}_{in}\chi^n_j P(ij),
+        \\
+        g(f, u, t) &\gets
+        \frac{1}{2}t^{ac}_{nm} t^{bd}_{ij} u^{nm}_{cd} P(ab)
+        \\
+        &=
+        t^{bd}_{ij} \left(\frac{1}{2}t^{ac}_{nm}  u^{nm}_{cd}\right) P(ab)
+        \\
+        &= t^{bd}_{ij}\chi^a_d P(ab).
+    \end{align}
+    The last intermediate is not so straight-forward. We have insert an extra
+    exchange operator in order to group two terms into an intermediate.
+    \begin{align}
+        g(f, u, t) &\gets
+        t^{ac}_{im} t^{bd}_{jn} u^{mn}_{cd} P(ij)
+        \nonumber \\
+        &\qquad
+        + t^{ac}_{im} u^{bm}_{jc} P(ab) P(ij) \\
+        &=
+        t^{ac}_{im}\left(\frac{1}{2} t^{bd}_{jn} u^{mn}_{cd}
+        + u^{bm}_{jc} \right)P(ab) P(ij) \\
+        &=
+        t^{ac}_{im}\chi^{bm}_{jc} P(ab)P(ij).
+    \end{align}
+    The total expression for $g(f, u, t)$ is then
     \begin{equation}
         \begin{aligned}
-            0 =& u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab) - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
-              &+ t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
-               - t^{bd}_{ij}\chi^a_dP(ab) \\
-              &+ t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij) + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
+            g(f, u, t) &=
+            u^{ab}_{ij} + \tilde{f}^b_c t^{ac}_{ij}P(ab)
+            - \tilde{f}^k_jt^{ab}_{ik}P(ij) \\
+            &\qquad
+            + t^{cd}_{ij}\chi^{ab}_{cd} + t^{ab}_{in}\chi^n_jP(ij)
+            - t^{bd}_{ij}\chi^a_dP(ab)
+            \\
+            &\qquad
+            + t^{ac}_{im}\chi^{bm}_{jc}P(ab)P(ij)
+            + \frac{1}{2}t^{ab}_{im}u^{mn}_{jn}.
         \end{aligned}
     \end{equation}
 
@@ -1973,7 +2148,7 @@
 %    equations we use a diagrammatic approach.
 
 %\vfill
-\clearpage
+%\clearpage
 %\newpage
 %\begin{widetext}
 %\section{Example Script}
